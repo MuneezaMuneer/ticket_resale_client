@@ -11,4 +11,7 @@ class AppColors {
   static const paleGrey = Color.fromARGB(255, 233, 236, 246);
   static const vibrantGreen = Color(0Xff19CC7F);
   static const yellow = Color(0XffF7DF8A);
+  static const darkpurple = Color(0Xff6e4cee);
+  static const blueGrey = Color(0Xff6B779A);
+  static const electricBlue = Color(0Xff2294FD);
 }

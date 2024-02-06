@@ -14,7 +14,7 @@ class HomeFirstScreen extends StatelessWidget {
     final double height = size.height;
     final double width = size.width;
     return Scaffold(
-      body: AuthBackGround(
+      body: AuthBackgroundView(
           imagePath: AppImages.concert,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 28),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:ticket_resale/screens/home_first_screen.dart';
+import 'package:google_fonts/google_fonts.dart';
 
+import 'package:ticket_resale/screens/splash_screen.dart';
+import 'package:ticket_resale/utils/app_routes.dart';
 
 void main() {
   runApp(const TicketResale());
@@ -12,13 +14,12 @@ class TicketResale extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Ticket Resale',
-      debugShowCheckedModeBanner: false,
+      onGenerateRoute: onGenerateRoute,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+        fontFamily: GoogleFonts.openSans().fontFamily,
       ),
-      home: const HomeFirstScreen(),
+      debugShowCheckedModeBanner: false,
+      home: const SplashScreen(),
     );
   }
 }

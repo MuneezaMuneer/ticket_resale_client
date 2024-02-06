@@ -7,12 +7,14 @@ class CustomTextField extends StatelessWidget {
   final Widget? suffixIcon;
   final Widget? prefixIcon;
   final String? hintText;
+  final double? height;
   final OnChanged onChanged;
   final ValidatorFormField? validator;
   final TextInputType? keyBoardType;
   final Color borderColor;
   final Color? fillColor;
   final bool isFilled;
+  final FontWeight? weight;
   final TextStyle? hintStyle;
   final bool readOnly;
   final TextStyle? suffixStyle;
@@ -26,9 +28,11 @@ class CustomTextField extends StatelessWidget {
     this.onChanged,
     this.keyBoardType,
     this.suffixIcon,
+    this.weight,
     this.hintStyle,
     this.suffixStyle,
     this.validator,
+    this.height = 56,
     this.isVisibleText = false,
     this.readOnly = false,
     required this.borderColor,
@@ -44,8 +48,6 @@ class CustomTextField extends StatelessWidget {
     final double height = size.height;
     final double width = size.width;
     return SizedBox(
-      height: height * 0.07,
-      width: width * 0.8,
       child: TextFormField(
         controller: controller,
         readOnly: readOnly,
@@ -80,7 +82,7 @@ class CustomTextField extends StatelessWidget {
           hintStyle: const TextStyle(
             color: AppColors.silver,
             fontSize: AppSize.xmedium,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w400,
           ),
           suffixStyle: suffixStyle,
         ),
