@@ -16,69 +16,37 @@ class HomeFirstScreen extends StatelessWidget {
     return Scaffold(
       body: AuthBackGround(
           imagePath: AppImages.concert,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 28),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const CustomText(
-                  title: 'Happy Holiday Music Concert Golbal Village',
-                  size: AppSize.large,
-                  weight: FontWeight.w600,
-                  color: AppColors.jetBlack,
-                  textAlign: TextAlign.start,
-                ),
-                const Gap(10),
-                Container(
-                  height: height * 0.07,
-                  width: width,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(56),
-                    color: AppColors.white,
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.only(
+                  left: 28, right: 28, top: 40, bottom: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const CustomText(
+                    title: 'Happy Holiday Music Concert Golbal Village',
+                    size: AppSize.large,
+                    weight: FontWeight.w600,
+                    color: AppColors.jetBlack,
+                    textAlign: TextAlign.start,
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          const Gap(10),
-                          Container(
-                            height: 30,
-                            width: 30,
-                            decoration: const BoxDecoration(
-                                color: AppColors.paleGrey,
-                                shape: BoxShape.circle),
-                            child: Padding(
-                              padding: const EdgeInsets.all(3.0),
-                              child: SvgPicture.asset(
-                                AppSvgs.clock,
-                                height: 25,
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 14, top: 10),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                CustomText(
-                                  title: '25th Janurary 2024',
-                                  color: AppColors.lightGrey.withOpacity(0.6),
-                                  size: AppSize.xsmall,
-                                  weight: FontWeight.w400,
-                                ),
-                                const CustomText(
-                                  title: '8:00 AM - 12:00 AM',
-                                  color: AppColors.jetBlack,
-                                  size: AppSize.small,
-                                  weight: FontWeight.w600,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      Padding(
+                  const Gap(10),
+                  _tileContainer(
+                      height: height * 0.07,
+                      width: width * 0.9,
+                      isSvg: true,
+                      imagePath: AppSvgs.clock,
+                      backgroundColor: AppColors.white,
+                      avatarBg: AppColors.paleGrey,
+                      title: '25th Janurary 2024',
+                      titleColor: AppColors.lightGrey.withOpacity(0.6),
+                      titleSize: AppSize.xsmall,
+                      titleWeight: FontWeight.w400,
+                      subTitle: '8:00 AM - 12:00 AM',
+                      subTitleColor: AppColors.jetBlack,
+                      subTitleSize: AppSize.small,
+                      subTitleWeight: FontWeight.w600,
+                      child: Padding(
                         padding: const EdgeInsets.only(right: 12),
                         child: Container(
                           height: 40,
@@ -91,64 +59,37 @@ class HomeFirstScreen extends StatelessWidget {
                             child: SvgPicture.asset(AppSvgs.man),
                           ),
                         ),
-                      )
-                    ],
+                      )),
+                  const Gap(10),
+                  const CustomText(
+                    title: 'About Event',
+                    size: AppSize.xmedium,
+                    weight: FontWeight.w600,
+                    color: AppColors.jetBlack,
                   ),
-                ),
-                const Gap(10),
-                const CustomText(
-                  title: 'About Event',
-                  size: AppSize.xmedium,
-                  weight: FontWeight.w600,
-                  color: AppColors.jetBlack,
-                ),
-                const CustomText(
-                  title:
-                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
-                  size: AppSize.small,
-                  weight: FontWeight.w400,
-                  color: AppColors.lightGrey,
-                ),
-                const Gap(10),
-                Container(
-                  height: height * 0.06,
-                  width: width,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(56),
-                    color: AppColors.white,
+                  const CustomText(
+                    title:
+                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
+                    size: AppSize.small,
+                    weight: FontWeight.w400,
+                    color: AppColors.lightGrey,
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          const Gap(10),
-                          const CircleAvatar(
-                            backgroundImage: AssetImage(AppImages.profile),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 14, top: 7),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                CustomText(
-                                  title: 'Post by',
-                                  color: AppColors.lightGrey.withOpacity(0.6),
-                                  size: AppSize.xsmall,
-                                  weight: FontWeight.w400,
-                                ),
-                                CustomText(
-                                  title: 'Cameron Walliamson',
-                                  color: AppColors.lightGrey.withOpacity(0.8),
-                                  size: 13,
-                                  weight: FontWeight.w600,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      Padding(
+                  const Gap(10),
+                  _tileContainer(
+                      height: height * 0.07,
+                      width: width * 0.9,
+                      imagePath: AppImages.profile,
+                      backgroundColor: AppColors.white,
+                      avatarBg: AppColors.paleGrey,
+                      title: 'Post by',
+                      titleColor: AppColors.lightGrey.withOpacity(0.6),
+                      titleSize: AppSize.xsmall,
+                      titleWeight: FontWeight.w400,
+                      subTitle: 'Cameron Walliamson',
+                      subTitleColor: AppColors.lightGrey.withOpacity(0.8),
+                      subTitleSize: 13,
+                      subTitleWeight: FontWeight.w600,
+                      child: Padding(
                           padding: const EdgeInsets.only(right: 12),
                           child: Row(
                             children: [
@@ -161,74 +102,121 @@ class HomeFirstScreen extends StatelessWidget {
                                 weight: FontWeight.w600,
                               ),
                             ],
-                          ))
-                    ],
-                  ),
-                ),
-                const Gap(25),
-                Container(
-                  height: height * 0.07,
-                  width: width,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(56),
-                    color: const Color(0XffF7F5FF),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          const Gap(10),
-                          Container(
-                            height: 40,
-                            width: 40,
-                            decoration: const BoxDecoration(
-                                color: AppColors.white, shape: BoxShape.circle),
-                            child: Padding(
-                              padding: const EdgeInsets.all(6.0),
-                              child: SvgPicture.asset(
-                                AppSvgs.ticket,
-                                height: 15,
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 12, top: 10),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const CustomText(
-                                  title: 'VIP PLUS TICKET AVAILABLE',
-                                  color: AppColors.jetBlack,
-                                  size: AppSize.small,
-                                  weight: FontWeight.w600,
-                                ),
-                                CustomText(
-                                  title: 'VIP Seats + Exclusive braclets',
-                                  color: AppColors.lightGrey.withOpacity(0.6),
-                                  size: AppSize.xsmall,
-                                  weight: FontWeight.w400,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      const Padding(
+                          ))),
+                  const Gap(25),
+                  _tileContainer(
+                      height: height * 0.07,
+                      width: width * 0.9,
+                      isSvg: true,
+                      imagePath: AppSvgs.ticket,
+                      backgroundColor: const Color(0XffF7F5FF),
+                      avatarBg: AppColors.white,
+                      title: 'VIP PLUS TICKET AVAILABLE',
+                      titleColor: AppColors.jetBlack,
+                      titleSize: AppSize.small,
+                      titleWeight: FontWeight.w600,
+                      subTitle: 'VIP Seats + Exclusive braclets',
+                      subTitleColor: AppColors.lightGrey.withOpacity(0.6),
+                      subTitleSize: AppSize.xsmall,
+                      subTitleWeight: FontWeight.w400,
+                      child: const Padding(
                         padding: EdgeInsets.only(right: 12),
                         child: CustomText(
                           title: '\$ 500',
                           color: Color(0XffAC8AF7),
-                          size: 20,
+                          size: 18,
                           weight: FontWeight.w600,
                         ),
-                      )
-                    ],
+                      )),
+                  SizedBox(
+                    height: height * 0.02,
                   ),
-                ),
-              ],
+
+                  SizedBox(
+                    height: height * 0.07,
+                    width: width * 0.9,
+                    child: CustomButton(
+                      onPressed: () {},
+                      textColor: AppColors.white,
+                      textSize: AppSize.xmedium,
+                      btnText: 'Start Conversation',
+                      gradient: customGradient,
+                      weight: FontWeight.w700,
+                    ),
+                  )
+                ],
+              ),
             ),
           )),
+    );
+  }
+
+  Widget _tileContainer({
+    double? height,
+    double? width,
+    String? imagePath,
+    bool isSvg = false,
+    Color? backgroundColor,
+    Color? avatarBg,
+    String? title,
+    FontWeight? titleWeight,
+    Color? titleColor,
+    double? titleSize,
+    String? subTitle,
+    double? subTitleSize,
+    FontWeight? subTitleWeight,
+    Color? subTitleColor,
+    required Widget child,
+  }) {
+    return Container(
+      height: height,
+      width: width,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(56), color: backgroundColor),
+      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 8),
+          child: Row(
+            children: [
+              CircleAvatar(
+                  backgroundColor: avatarBg,
+                  radius: 15,
+                  child: isSvg
+                      ? SvgPicture.asset(
+                          "$imagePath",
+                          height: 25,
+                        )
+                      : Image.asset(
+                          '$imagePath',
+                          fit: BoxFit.cover,
+                        )),
+              Padding(
+                padding: const EdgeInsets.only(left: 8, top: 4),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CustomText(
+                      title: '$title',
+                      color: titleColor,
+                      size: titleSize,
+                      weight: titleWeight,
+                    ),
+                    CustomText(
+                      title: '$subTitle',
+                      color: subTitleColor,
+                      size: subTitleSize,
+                      weight: subTitleWeight,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(
+          child: child,
+        )
+      ]),
     );
   }
 }

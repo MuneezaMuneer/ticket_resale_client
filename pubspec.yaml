@@ -37,8 +37,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   svg_flutter: ^0.0.1
   gap: ^3.0.1
-  device_preview: ^1.1.0
   avatar_stack: ^1.2.0
+  device_preview: ^1.1.0
 
 dev_dependencies:
   flutter_test:

@@ -11,4 +11,5 @@ class AppColors {
   static const paleGrey = Color.fromARGB(255, 233, 236, 246);
   static const vibrantGreen = Color(0Xff19CC7F);
   static const yellow = Color(0XffF7DF8A);
+  static const red = Color(0XffFF4B4B);
 }
