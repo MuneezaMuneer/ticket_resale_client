@@ -17,13 +17,15 @@ class CustomTextField extends StatelessWidget {
   final bool isFilled;
   final FontWeight? weight;
   final TextStyle? hintStyle;
+  final int? maxLines;
   final bool readOnly;
+  final bool isCommentField;
+
   final TextStyle? suffixStyle;
   final bool isVisibleText;
   final String obscuringCharacter;
   final String? trailingText;
   final bool isTrailingText;
-
   const CustomTextField({
     super.key,
     this.controller,
@@ -45,6 +47,8 @@ class CustomTextField extends StatelessWidget {
     this.isFilled = false,
     this.trailingText,
     this.isTrailingText = false,
+    this.isCommentField = false,
+    this.maxLines,
   });
 
   @override
@@ -60,6 +64,7 @@ class CustomTextField extends StatelessWidget {
         cursorColor: AppColors.jetBlack.withOpacity(0.3),
         obscureText: isVisibleText,
         onChanged: onChanged,
+        maxLines: maxLines,
         validator: validator,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         decoration: InputDecoration(
@@ -80,17 +85,23 @@ class CustomTextField extends StatelessWidget {
           fillColor: fillColor,
           filled: isFilled,
           enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(42),
+              borderRadius: isCommentField
+                  ? BorderRadius.circular(12)
+                  : BorderRadius.circular(42),
               borderSide: BorderSide(
                 color: borderColor,
               )),
           focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(42),
+              borderRadius: isCommentField
+                  ? BorderRadius.circular(12)
+                  : BorderRadius.circular(42),
               borderSide: BorderSide(
                 color: borderColor,
               )),
           border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(42),
+              borderRadius: isCommentField
+                  ? BorderRadius.circular(12)
+                  : BorderRadius.circular(42),
               borderSide: BorderSide(
                 color: borderColor,
               )),

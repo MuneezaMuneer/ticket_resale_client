@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:svg_flutter/svg_flutter.dart';
+import 'package:svg_flutter/svg.dart';
+import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/widgets/custom_gradient.dart';
 import 'package:ticket_resale/widgets/custom_text.dart';
-import '../constants/constants.dart';
 
 class CustomAppBar extends StatelessWidget {
   final String? title;

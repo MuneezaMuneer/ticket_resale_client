@@ -1,10 +1,12 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
-import 'package:ticket_resale/components/auth_background_view.dart';
+import 'package:ticket_resale/components/app_background.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/screens/routes.dart';
 
+import '../widgets/custom_text.dart';
 import '../widgets/widgets.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -21,11 +23,11 @@ class _SignInScreenState extends State<SignInScreen> {
 
     double height = size.height;
     return Scaffold(
-      body: AuthBackgroundView(
+      body: AppBackground(
         imagePath: AppImages.authImage,
         isBackButton: true,
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
           child: Column(
             children: [
               RichText(
@@ -64,6 +66,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   color: AppColors.silver,
                 ),
               ),
+              const Gap(10),
               const Align(
                 alignment: Alignment.centerRight,
                 child: CustomText(
@@ -74,7 +77,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 ),
               ),
               SizedBox(
-                height: height * 0.01,
+                height: height * 0.03,
               ),
               CustomButton(
                 backgroundColor: AppColors.white,
@@ -86,7 +89,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 onPressed: () {},
               ),
               SizedBox(
-                height: height * 0.06,
+                height: height * 0.2,
               ),
               RichText(
                 text: TextSpan(

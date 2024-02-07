@@ -1,2 +1,2 @@
 export 'call_back_funs.dart';
-export 'auth_background_view.dart';
+export 'app_background.dart';

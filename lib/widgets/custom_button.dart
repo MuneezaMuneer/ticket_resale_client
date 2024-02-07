@@ -1,27 +1,29 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:svg_flutter/svg.dart';
-
-import '../constants/constants.dart';
-import 'widgets.dart';
+import 'package:ticket_resale/widgets/custom_text.dart';
+import 'package:ticket_resale/widgets/widgets.dart';
 
 class CustomButton extends StatelessWidget {
   final bool isSocial;
   final bool isSvgImage;
   final String? socialText;
+  final Color? socialTextColor;
+  final double? socialTextSize;
+  final FontWeight? socialTextWeight;
   final String? imagePath;
   final VoidCallback onPressed;
   final String? btnText;
   final double? textSize;
+  final LinearGradient? socialGradient;
+  final Color? socialWhiteBg;
+  final bool isSocialWhiteBg;
   final Color? backgroundColor;
   final Color borderColor;
+  final bool isRounded;
   final LinearGradient? gradient;
   final Color? textColor;
   final double fixedHeight;
-
-  final double fixedWidth;
   final FontWeight? weight;
   final bool isLoading;
   const CustomButton({
@@ -34,20 +36,24 @@ class CustomButton extends StatelessWidget {
     this.textColor,
     this.borderColor = Colors.transparent,
     this.fixedHeight = 50,
-    this.fixedWidth = 0,
     this.isLoading = false,
     this.isSvgImage = true,
     this.weight,
     this.isSocial = false,
     this.socialText,
     this.imagePath,
+    this.socialTextColor,
+    this.socialTextSize,
+    this.socialTextWeight,
+    this.socialGradient,
+    this.socialWhiteBg,
+    this.isSocialWhiteBg = false,
+    this.isRounded = true,
   });
 
   @override
   Widget build(BuildContext context) {
-    log('................ImagePAth............${isSvgImage}');
     Size size = MediaQuery.of(context).size;
-
     double width = size.width;
     double height = size.height;
     return GestureDetector(
@@ -55,17 +61,26 @@ class CustomButton extends StatelessWidget {
       child: Container(
         height: fixedHeight,
         decoration: ShapeDecoration(
+          color:
+              isSocialWhiteBg ? socialWhiteBg ?? Colors.white : backgroundColor,
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(25),
-              side: const BorderSide(color: AppColors.silver, width: 1)),
+              borderRadius: isRounded
+                  ? BorderRadius.circular(45)
+                  : const BorderRadius.only(
+                      bottomLeft: Radius.circular(10),
+                      bottomRight: Radius.circular(10)),
+              side: BorderSide(color: borderColor, width: 1)),
         ),
         child: Container(
           width: width,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            gradient: isSocial ? null : gradient,
-            borderRadius: BorderRadius.circular(25),
-          ),
+              gradient: isSocial ? gradient : gradient,
+              borderRadius: isRounded
+                  ? BorderRadius.circular(45)
+                  : const BorderRadius.only(
+                      bottomLeft: Radius.circular(10),
+                      bottomRight: Radius.circular(10))),
           child: isSocial
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -87,9 +102,9 @@ class CustomButton extends StatelessWidget {
                     ),
                     CustomText(
                       title: '$socialText',
-                      size: AppSize.regular,
-                      color: AppColors.jetBlack,
-                      weight: FontWeight.w400,
+                      size: socialTextSize,
+                      color: socialTextColor,
+                      weight: socialTextWeight,
                     )
                   ],
                 )

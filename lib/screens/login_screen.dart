@@ -1,9 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:ticket_resale/screens/routes.dart';
-
 import '../components/components.dart';
 import '../constants/constants.dart';
+import '../widgets/custom_text.dart';
 import '../widgets/widgets.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -21,37 +21,39 @@ class _LoginScreenState extends State<LoginScreen> {
     double height = size.height;
 
     return Scaffold(
-      body: AuthBackgroundView(
+      body: AppBackground(
         imagePath: AppImages.authImage,
         isBackButton: false,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
           child: Column(
             children: [
               RichText(
                 text: TextSpan(
-                    text: 'Login to ',
-                    style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: AppSize.large,
-                        fontWeight: FontWeight.w700),
-                    children: <TextSpan>[
-                      TextSpan(
-                          text: 'Rave Trade',
-                          style: const TextStyle(
-                              color: AppColors.darkpurple,
-                              fontSize: AppSize.large,
-                              fontWeight: FontWeight.w700),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              // navigate to desired screen
-                            })
-                    ]),
+                  text: 'Login to ',
+                  style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: AppSize.xxlarge,
+                      fontWeight: FontWeight.w700),
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: 'Rave Trade',
+                      style: const TextStyle(
+                          color: AppColors.darkpurple,
+                          fontSize: AppSize.xxlarge,
+                          fontWeight: FontWeight.w700),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          // navigate to desired screen
+                        },
+                    )
+                  ],
+                ),
               ),
               const CustomText(
                 title: 'to get started',
                 weight: FontWeight.w700,
-                size: AppSize.large,
+                size: AppSize.xxlarge,
                 color: AppColors.jetBlack,
               ),
               SizedBox(
@@ -61,6 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 isSvgImage: false,
                 backgroundColor: AppColors.white,
                 socialText: 'Sign in with Gmail',
+                socialTextWeight: FontWeight.w400,
                 imagePath: AppImages.google,
                 isSocial: true,
                 onPressed: () {},
@@ -72,6 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 backgroundColor: AppColors.white,
                 socialText: 'Sign in with Facebook',
                 imagePath: AppSvgs.facebook,
+                socialTextWeight: FontWeight.w400,
                 isSocial: true,
                 onPressed: () {},
               ),
@@ -82,6 +86,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 backgroundColor: AppColors.white,
                 socialText: 'Sign in with Apple ID',
                 imagePath: AppSvgs.apple,
+                socialTextWeight: FontWeight.w400,
                 isSocial: true,
                 onPressed: () {},
               ),
@@ -100,7 +105,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 },
               ),
               SizedBox(
-                height: height * 0.04,
+                height: height * 0.1,
               ),
               RichText(
                 text: TextSpan(

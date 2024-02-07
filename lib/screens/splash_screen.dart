@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:svg_flutter/svg.dart';
-
 import '../constants/constants.dart';
 import 'routes.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
-
   @override
   State<SplashScreen> createState() => _SplashScreenState();
 }

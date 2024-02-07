@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:svg_flutter/svg.dart';
 import 'package:ticket_resale/constants/constants.dart';
-import 'package:ticket_resale/widgets/custom_gradient.dart';
-import 'package:ticket_resale/widgets/custom_text.dart';
-import 'package:ticket_resale/widgets/custom_text_field.dart';
+import 'package:ticket_resale/widgets/widgets.dart';
+
+import '../widgets/custom_text.dart';
+import '../widgets/custom_tile_container.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -35,8 +36,8 @@ class HomeScreen extends StatelessWidget {
                         bottomLeft: Radius.circular(40),
                         bottomRight: Radius.circular(40))),
                 child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
+                  padding: const EdgeInsets.only(
+                      left: 20, right: 20, top: 40, bottom: 0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -55,13 +56,13 @@ class HomeScreen extends StatelessWidget {
                                       title: 'Good Morning,',
                                       color: AppColors.white,
                                       weight: FontWeight.w400,
-                                      size: AppSize.large,
+                                      size: AppSize.small,
                                     ),
                                     CustomText(
                                       title: 'Kathrine Margot',
                                       color: AppColors.white,
                                       weight: FontWeight.w700,
-                                      size: AppSize.large,
+                                      size: AppSize.regular,
                                     )
                                   ],
                                 ),
@@ -78,7 +79,7 @@ class HomeScreen extends StatelessWidget {
                       const CustomText(
                         title: 'Discover Amazing',
                         color: AppColors.white,
-                        size: AppSize.large,
+                        size: AppSize.regular,
                         weight: FontWeight.w400,
                       ),
                       const CustomText(
@@ -100,34 +101,39 @@ class HomeScreen extends StatelessWidget {
                   ),
                   Align(
                     alignment: Alignment.center,
-                    child: CustomTextField(
-                      borderColor: AppColors.silver.withOpacity(0.3),
-                      hintText: 'Search Event & Tickets',
-                      fillColor: AppColors.white,
-                      isFilled: true,
-                      suffixIcon: Padding(
-                        padding: const EdgeInsets.only(right: 8),
-                        child: Container(
-                          height: 35,
-                          width: 35,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            gradient: customGradient,
-                          ),
-                          child: const Center(
-                            child: Icon(
-                              Icons.search,
-                              color: AppColors.white,
+                    child: SizedBox(
+                      height: height * 0.07,
+                      width: width * 0.8,
+                      child: CustomTextField(
+                        borderColor: AppColors.silver.withOpacity(0.3),
+                        hintText: 'Search Event & Tickets',
+                        fillColor: AppColors.white,
+                        isFilled: true,
+                        suffixIcon: Padding(
+                          padding: const EdgeInsets.only(right: 8),
+                          child: Container(
+                            height: 35,
+                            width: 35,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              gradient: customGradient,
+                            ),
+                            child: const Center(
+                              child: Icon(
+                                Icons.search,
+                                color: AppColors.white,
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
                   ),
+                  const Gap(15),
                   const CustomText(
                     title: 'Upcoming Event Tickets',
                     color: AppColors.jetBlack,
-                    size: AppSize.large,
+                    size: AppSize.regular,
                     weight: FontWeight.w600,
                   ),
                   const Gap(15),
@@ -164,55 +170,32 @@ class HomeScreen extends StatelessWidget {
                                   color: AppColors.silver.withOpacity(0.3)),
                               color: AppColors.white,
                               borderRadius: BorderRadius.circular(10)),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 15, horizontal: 20),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const CustomText(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.only(top: 10, left: 15),
+                                child: CustomText(
                                   title: 'Event Name Here',
                                   color: AppColors.jetBlack,
                                   size: 15,
                                   weight: FontWeight.w700,
                                 ),
-                                const Gap(11),
-                                Row(
+                              ),
+                              const Gap(5),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 15),
+                                child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Row(
-                                      children: [
-                                        SvgPicture.asset(AppSvgs.calender),
-                                        const Padding(
-                                          padding: EdgeInsets.only(left: 7),
-                                          child: CustomText(
-                                            title: '25th jan - 31st jan',
-                                            color: AppColors.lightGrey,
-                                            size: AppSize.large,
-                                            weight: FontWeight.w400,
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        SvgPicture.asset(AppSvgs.calender),
-                                        const Padding(
-                                          padding: EdgeInsets.only(left: 7),
-                                          child: CustomText(
-                                            title: '8:00 PM - 11:00 PM',
-                                            color: AppColors.lightGrey,
-                                            size: AppSize.large,
-                                            weight: FontWeight.w400,
-                                          ),
-                                        )
-                                      ],
-                                    )
+                                    rowText('25th jan - 31st jan'),
+                                    rowText('8:00 PM - 11:00 PM')
                                   ],
-                                )
-                              ],
-                            ),
+                                ),
+                              )
+                            ],
                           ),
                         ),
                       ),
@@ -224,7 +207,7 @@ class HomeScreen extends StatelessWidget {
                   const CustomText(
                     title: 'Popular DJS',
                     color: AppColors.jetBlack,
-                    size: AppSize.large,
+                    size: AppSize.regular,
                     weight: FontWeight.w600,
                   ),
                   const Gap(15),
@@ -271,22 +254,22 @@ class HomeScreen extends StatelessWidget {
                   ),
                   const Gap(20),
                   SizedBox(
-                    height: height * 0.42,
+                    height: height * 0.43,
                     width: width,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: 3,
                       itemBuilder: (context, index) {
                         return Padding(
-                          padding: const EdgeInsets.only(right: 10),
-                          child: buildContainer(
-                              width * 0.65,
-                              AppImages.concert,
-                              '25th Janurary 8:00 AM - 12:00 AM',
-                              'Happy Holiday Music Concert Global Village',
-                              AppImages.profile,
-                              'Jacob Jones'),
-                        );
+                            padding: const EdgeInsets.only(right: 10),
+                            child: CustomTileContainer(
+                              width: width * 0.65,
+                              dateTime: '25th Janurary 8:00 AM - 12:00 AM',
+                              posttitle:
+                                  'Happy Holiday Music Concert Global Village',
+                              postBy: 'Jacob Jones',
+                              imagePath: AppImages.profile,
+                            ));
                       },
                     ),
                   ),
@@ -301,125 +284,6 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-Widget buildContainer(double width, String postImage, String dateTime,
-    String posttitle, String userProfile, String postBy) {
-  return Stack(
-    children: [
-      Container(
-        width: width,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            color: AppColors.silver.withOpacity(0.7),
-          ),
-          color: AppColors.white,
-        ),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 12, right: 12, top: 12),
-              child: Column(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Image.asset(AppImages.concert),
-                  ),
-                  const Gap(10),
-                  Container(
-                    height: 25,
-                    width: width,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(56),
-                      color: AppColors.lightGrey.withOpacity(0.1),
-                    ),
-                    child: Center(
-                      child: Row(
-                        children: [
-                          const Gap(10),
-                          SvgPicture.asset(AppSvgs.clock),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 10),
-                            child: CustomText(
-                              title: dateTime,
-                              color: const Color(0Xff6E4CEE),
-                              size: AppSize.verySmall,
-                              weight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const Gap(5),
-                  CustomText(
-                    title: posttitle,
-                    color: AppColors.jetBlack,
-                    size: AppSize.verylarge,
-                    weight: FontWeight.w600,
-                  ),
-                  const Gap(8),
-                  Row(
-                    children: [
-                      circleAvatar(30, 30, AppImages.profile),
-                      const Gap(10),
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            const TextSpan(
-                              text: 'Posted by ',
-                              style: TextStyle(
-                                color: AppColors.lightGrey,
-                                fontSize: AppSize.verySmall,
-                                fontWeight: FontWeight.w300,
-                              ),
-                            ),
-                            TextSpan(
-                              text: postBy,
-                              style: const TextStyle(
-                                color: AppColors.lightGrey,
-                                fontSize: AppSize.verySmall,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            const Gap(10),
-          ],
-        ),
-      ),
-      Positioned(
-        bottom: 0,
-        left: 0,
-        right: 0,
-        child: Container(
-          height: 45,
-          decoration: BoxDecoration(
-            gradient: customGradient,
-            borderRadius: const BorderRadius.only(
-              bottomLeft: Radius.circular(10),
-              bottomRight: Radius.circular(10),
-            ),
-          ),
-          child: const Center(
-            child: CustomText(
-              title: 'Explore More',
-              size: AppSize.large,
-              weight: FontWeight.w600,
-              color: AppColors.white,
-            ),
-          ),
-        ),
-      ),
-    ],
-  );
-}
-
 Widget circleAvatar(double height, double width, String imagePath) {
   return SizedBox(
     height: height,
@@ -427,5 +291,22 @@ Widget circleAvatar(double height, double width, String imagePath) {
     child: CircleAvatar(
       backgroundImage: AssetImage(imagePath),
     ),
+  );
+}
+
+Widget rowText(String title) {
+  return Row(
+    children: [
+      SvgPicture.asset(AppSvgs.calender),
+      Padding(
+        padding: const EdgeInsets.only(left: 7),
+        child: CustomText(
+          title: title,
+          color: AppColors.lightGrey,
+          size: AppSize.xsmall,
+          weight: FontWeight.w400,
+        ),
+      )
+    ],
   );
 }

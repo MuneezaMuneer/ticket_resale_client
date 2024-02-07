@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:svg_flutter/svg.dart';
 import 'package:ticket_resale/constants/app_colors.dart';
 import 'package:ticket_resale/constants/app_textsize.dart';
-
 import 'widgets.dart';
 
 class CustomProfileRow extends StatelessWidget {
@@ -39,46 +38,54 @@ class CustomProfileRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15),
-      child: Row(
+      child: Column(
         children: [
-          Container(
-            height: 48,
-            width: 48,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: AppColors.silver)),
-            child: isSvg
-                ? Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: SvgPicture.asset('$svgImage'),
-                  )
-                : Icon(
-                    leadingIcon,
-                    size: 20,
-                    color: leadingColor,
-                  ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 20),
-            child: Text(
-              '$title',
-              style: TextStyle(
-                fontSize: AppSize.regular,
-                fontWeight: FontWeight.w400,
-                color: color,
+          Row(
+            children: [
+              Container(
+                height: 48,
+                width: 48,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: AppColors.silver)),
+                child: isSvg
+                    ? Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: SvgPicture.asset('$svgImage'),
+                      )
+                    : Icon(
+                        leadingIcon,
+                        size: 20,
+                        color: leadingColor,
+                      ),
               ),
-            ),
+              Padding(
+                padding: const EdgeInsets.only(left: 20),
+                child: Text(
+                  '$title',
+                  style: TextStyle(
+                    fontSize: AppSize.regular,
+                    fontWeight: FontWeight.w400,
+                    color: color,
+                  ),
+                ),
+              ),
+              const Spacer(),
+              SizedBox(
+                child: arrowBack
+                    ? Icon(
+                        trailingIcon,
+                        size: 15,
+                        color: iconColor,
+                      )
+                    : const CustomSwitch(),
+              ),
+            ],
           ),
-          Spacer(),
-          SizedBox(
-            child: arrowBack
-                ? Icon(
-                    trailingIcon,
-                    size: 15,
-                    color: iconColor,
-                  )
-                : const CustomSwitch(),
-          )
+          const CustomDivider(),
+          const SizedBox(
+            height: 3,
+          ),
         ],
       ),
     );

@@ -20,11 +20,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     double height = size.height;
     return Scaffold(
-      body: AuthBackgroundView(
+      body: AppBackground(
         imagePath: AppImages.authImage,
         isBackButton: true,
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
           child: SingleChildScrollView(
             child: Column(
               children: [
@@ -165,7 +165,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ),
                 SizedBox(
-                  height: height * 0.02,
+                  height: height * 0.04,
                 ),
                 RichText(
                   text: TextSpan(

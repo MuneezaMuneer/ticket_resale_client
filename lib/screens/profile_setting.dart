@@ -3,6 +3,7 @@ import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:svg_flutter/svg_flutter.dart';
 
 import '../constants/constants.dart';
+import '../widgets/custom_text.dart';
 import '../widgets/widgets.dart';
 
 class ProfileSettings extends StatefulWidget {
@@ -74,7 +75,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                         fontSize: AppSize.small),
                   ),
                   const SizedBox(
-                    height: 5,
+                    height: 12,
                   ),
                   const CustomText(
                     title: 'Instagram Username',
@@ -93,9 +94,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                         fontWeight: FontWeight.w400,
                         fontSize: AppSize.small),
                   ),
-                  const SizedBox(
-                    height: 5,
-                  ),
+                  const SizedBox(height: 12),
                   const CustomText(
                     title: 'Email ID',
                     color: AppColors.blueGrey,
@@ -116,7 +115,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                         fontSize: AppSize.small),
                   ),
                   const SizedBox(
-                    height: 5,
+                    height: 12,
                   ),
                   const CustomText(
                     title: 'Phone No',
@@ -187,7 +186,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                     ],
                   ),
                   const SizedBox(
-                    height: 5,
+                    height: 12,
                   ),
                   const CustomText(
                     title: 'DOB',
@@ -207,7 +206,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                         fontSize: AppSize.small),
                   ),
                   const SizedBox(
-                    height: 5,
+                    height: 12,
                   ),
                   const CustomText(
                     title: 'Country',
@@ -228,7 +227,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                         fontSize: AppSize.small),
                   ),
                   const SizedBox(
-                    height: 5,
+                    height: 12,
                   ),
                   const CustomText(
                     title: 'State',
@@ -249,7 +248,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                         fontSize: AppSize.small),
                   ),
                   const SizedBox(
-                    height: 5,
+                    height: 12,
                   ),
                   const CustomText(
                     title: 'City',
@@ -270,7 +269,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                         fontSize: AppSize.small),
                   ),
                   const SizedBox(
-                    height: 5,
+                    height: 12,
                   ),
                   const CustomText(
                     title: 'Zip Code',
@@ -290,7 +289,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                         fontSize: AppSize.small),
                   ),
                   const SizedBox(
-                    height: 15,
+                    height: 25,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 25, right: 25),

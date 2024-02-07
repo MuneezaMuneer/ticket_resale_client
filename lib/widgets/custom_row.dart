@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:ticket_resale/constants/app_colors.dart';
+
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/widgets/custom_text.dart';
 
@@ -9,11 +8,11 @@ class CustomRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return const SizedBox(
       width: 160,
       child: Row(
         children: [
-          const Icon(
+          Icon(
             Icons.star,
             color: AppColors.amber,
             size: 20,
@@ -22,10 +21,9 @@ class CustomRow extends StatelessWidget {
             title: '4.7 ',
             weight: FontWeight.w600,
             size: AppSize.large,
-            style: GoogleFonts.getFont('Nunito'),
             color: AppColors.charcoal,
           ),
-          const Padding(
+          Padding(
             padding: EdgeInsets.only(top: 8),
             child: CustomText(
               title: '(23 Transactions) ',
@@ -33,7 +31,7 @@ class CustomRow extends StatelessWidget {
               size: AppSize.small,
               color: AppColors.charcoal,
             ),
-          )
+          ),
         ],
       ),
     );
