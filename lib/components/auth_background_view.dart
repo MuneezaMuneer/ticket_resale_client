@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:svg_flutter/svg_flutter.dart';
 import 'package:ticket_resale/constants/app_colors.dart';
+import 'package:ticket_resale/constants/app_images.dart';
 
 class AuthBackgroundView extends StatelessWidget {
   final String imagePath;
   final Widget child;
+  final bool isBackButton;
   const AuthBackgroundView(
-      {super.key, required this.child, required this.imagePath});
+      {super.key,
+      required this.child,
+      required this.imagePath,
+      required this.isBackButton});
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +28,12 @@ class AuthBackgroundView extends StatelessWidget {
               imagePath,
               fit: BoxFit.cover,
             )),
+        Positioned(
+            top: 70,
+            left: 20,
+            child: isBackButton
+                ? SvgPicture.asset(AppSvgs.back)
+                : SizedBox.shrink()),
         Align(
           alignment: Alignment.bottomCenter,
           child: Container(

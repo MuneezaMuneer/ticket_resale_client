@@ -4,7 +4,9 @@ class AppImages {
   static const homeConcert = 'assets/images/home_concert.jpeg';
   static const concert = 'assets/images/concert.jpeg';
   static const authImage = 'assets/images/authimage.png';
+
   static const google = 'assets/images/google_icon.png';
+  static const profileImage = 'assets/images/profileImage.png';
 }
 
 class AppSvgs {
@@ -17,4 +19,11 @@ class AppSvgs {
   static const facebook = 'assets/svgs/facebook.svg';
   static const logo = 'assets/svgs/logo.svg';
   static const eye = 'assets/svgs/eye.svg';
+  static const level = 'assets/svgs/level.svg';
+  static const sms = 'assets/svgs/sms.svg';
+  static const termOfUse = 'assets/svgs/termOfUse.svg';
+  static const level1 = 'assets/svgs/level1.svg';
+  static const camera = 'assets/svgs/camera.svg';
+  static const verify = 'assets/svgs/verify.svg';
+  static const back = 'assets/svgs/icon_back.svg';
 }

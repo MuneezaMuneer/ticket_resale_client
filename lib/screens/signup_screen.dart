@@ -22,6 +22,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return Scaffold(
       body: AuthBackgroundView(
         imagePath: AppImages.authImage,
+        isBackButton: true,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
           child: SingleChildScrollView(
@@ -32,14 +33,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       text: 'Register to ',
                       style: const TextStyle(
                           color: AppColors.jetBlack,
-                          fontSize: AppSize.large,
+                          fontSize: AppSize.verylarge,
                           fontWeight: FontWeight.w700),
                       children: <TextSpan>[
                         TextSpan(
                             text: 'Rave Trade',
                             style: const TextStyle(
                                 color: AppColors.darkpurple,
-                                fontSize: AppSize.large,
+                                fontSize: AppSize.verylarge,
                                 fontWeight: FontWeight.w700),
                             recognizer: TapGestureRecognizer()..onTap = () {})
                       ]),
@@ -157,7 +158,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     weight: FontWeight.w700,
                     textColor: AppColors.white,
                     gradient: customGradient,
-                    textSize: AppSize.xmedium,
+                    textSize: AppSize.regular,
                     onPressed: () {
                       Navigator.pushNamed(context, AppRoutes.homeScreen);
                     },
@@ -171,14 +172,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     text: 'Don\'t have an account?  ',
                     style: const TextStyle(
                         color: AppColors.blueGrey,
-                        fontSize: AppSize.small,
+                        fontSize: AppSize.medium,
                         fontWeight: FontWeight.w400),
                     children: <TextSpan>[
                       TextSpan(
                         text: 'Sign in ',
                         style: const TextStyle(
                             color: AppColors.electricBlue,
-                            fontSize: AppSize.small,
+                            fontSize: AppSize.medium,
                             fontWeight: FontWeight.w400),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {

@@ -23,6 +23,7 @@ class _SignInScreenState extends State<SignInScreen> {
     return Scaffold(
       body: AuthBackgroundView(
         imagePath: AppImages.authImage,
+        isBackButton: true,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
           child: Column(
@@ -32,14 +33,14 @@ class _SignInScreenState extends State<SignInScreen> {
                     text: 'Sign in ',
                     style: const TextStyle(
                         color: AppColors.darkpurple,
-                        fontSize: AppSize.large,
+                        fontSize: AppSize.verylarge,
                         fontWeight: FontWeight.w700),
                     children: <TextSpan>[
                       TextSpan(
                           text: 'to Continue',
                           style: const TextStyle(
                               color: AppColors.jetBlack,
-                              fontSize: AppSize.large,
+                              fontSize: AppSize.verylarge,
                               fontWeight: FontWeight.w700),
                           recognizer: TapGestureRecognizer()..onTap = () {})
                     ]),
@@ -69,7 +70,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   title: 'Forgot Password?',
                   color: AppColors.electricBlue,
                   weight: FontWeight.w400,
-                  size: AppSize.small,
+                  size: AppSize.medium,
                 ),
               ),
               SizedBox(
@@ -81,7 +82,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 weight: FontWeight.w700,
                 textColor: AppColors.white,
                 gradient: customGradient,
-                textSize: AppSize.xmedium,
+                textSize: AppSize.regular,
                 onPressed: () {},
               ),
               SizedBox(
@@ -92,14 +93,14 @@ class _SignInScreenState extends State<SignInScreen> {
                   text: 'Not a member? ',
                   style: const TextStyle(
                       color: AppColors.blueGrey,
-                      fontSize: AppSize.small,
+                      fontSize: AppSize.medium,
                       fontWeight: FontWeight.w400),
                   children: <TextSpan>[
                     TextSpan(
                       text: 'Register Now ',
                       style: const TextStyle(
                           color: AppColors.electricBlue,
-                          fontSize: AppSize.small,
+                          fontSize: AppSize.medium,
                           fontWeight: FontWeight.w400),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {

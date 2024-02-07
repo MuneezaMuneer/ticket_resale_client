@@ -14,4 +14,8 @@ class AppColors {
   static const darkpurple = Color(0Xff6e4cee);
   static const blueGrey = Color(0Xff6B779A);
   static const electricBlue = Color(0Xff2294FD);
+  static const amber = Color(0XffFAD03B);
+  static const charcoal = Color(0Xff424242);
+  static const raddishPink = Color(0XffFA6A68);
+  static const springGreen = Color(0Xff3FDD75);
 }

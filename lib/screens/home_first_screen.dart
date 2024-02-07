@@ -16,6 +16,7 @@ class HomeFirstScreen extends StatelessWidget {
     return Scaffold(
       body: AuthBackgroundView(
           imagePath: AppImages.concert,
+          isBackButton: true,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 28),
             child: Column(
@@ -23,7 +24,7 @@ class HomeFirstScreen extends StatelessWidget {
               children: [
                 const CustomText(
                   title: 'Happy Holiday Music Concert Golbal Village',
-                  size: AppSize.large,
+                  size: AppSize.verylarge,
                   weight: FontWeight.w600,
                   color: AppColors.jetBlack,
                   textAlign: TextAlign.start,
@@ -64,13 +65,13 @@ class HomeFirstScreen extends StatelessWidget {
                                 CustomText(
                                   title: '25th Janurary 2024',
                                   color: AppColors.lightGrey.withOpacity(0.6),
-                                  size: AppSize.xsmall,
+                                  size: AppSize.large,
                                   weight: FontWeight.w400,
                                 ),
                                 const CustomText(
                                   title: '8:00 AM - 12:00 AM',
                                   color: AppColors.jetBlack,
-                                  size: AppSize.small,
+                                  size: AppSize.verylarge,
                                   weight: FontWeight.w600,
                                 ),
                               ],
@@ -98,14 +99,14 @@ class HomeFirstScreen extends StatelessWidget {
                 const Gap(10),
                 const CustomText(
                   title: 'About Event',
-                  size: AppSize.xmedium,
+                  size: AppSize.large,
                   weight: FontWeight.w600,
                   color: AppColors.jetBlack,
                 ),
                 const CustomText(
                   title:
                       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
-                  size: AppSize.small,
+                  size: AppSize.verylarge,
                   weight: FontWeight.w400,
                   color: AppColors.lightGrey,
                 ),
@@ -134,7 +135,7 @@ class HomeFirstScreen extends StatelessWidget {
                                 CustomText(
                                   title: 'Post by',
                                   color: AppColors.lightGrey.withOpacity(0.6),
-                                  size: AppSize.xsmall,
+                                  size: AppSize.large,
                                   weight: FontWeight.w400,
                                 ),
                                 CustomText(
@@ -157,7 +158,7 @@ class HomeFirstScreen extends StatelessWidget {
                               const CustomText(
                                 title: 'Level 3 Varified',
                                 color: AppColors.yellow,
-                                size: AppSize.xxsmall,
+                                size: AppSize.verySmall,
                                 weight: FontWeight.w600,
                               ),
                             ],
@@ -200,13 +201,13 @@ class HomeFirstScreen extends StatelessWidget {
                                 const CustomText(
                                   title: 'VIP PLUS TICKET AVAILABLE',
                                   color: AppColors.jetBlack,
-                                  size: AppSize.small,
+                                  size: AppSize.verylarge,
                                   weight: FontWeight.w600,
                                 ),
                                 CustomText(
                                   title: 'VIP Seats + Exclusive braclets',
                                   color: AppColors.lightGrey.withOpacity(0.6),
-                                  size: AppSize.xsmall,
+                                  size: AppSize.large,
                                   weight: FontWeight.w400,
                                 ),
                               ],

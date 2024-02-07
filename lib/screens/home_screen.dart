@@ -55,13 +55,13 @@ class HomeScreen extends StatelessWidget {
                                       title: 'Good Morning,',
                                       color: AppColors.white,
                                       weight: FontWeight.w400,
-                                      size: AppSize.xsmall,
+                                      size: AppSize.large,
                                     ),
                                     CustomText(
                                       title: 'Kathrine Margot',
                                       color: AppColors.white,
                                       weight: FontWeight.w700,
-                                      size: AppSize.xmedium,
+                                      size: AppSize.large,
                                     )
                                   ],
                                 ),
@@ -78,13 +78,13 @@ class HomeScreen extends StatelessWidget {
                       const CustomText(
                         title: 'Discover Amazing',
                         color: AppColors.white,
-                        size: AppSize.xmedium,
+                        size: AppSize.large,
                         weight: FontWeight.w400,
                       ),
                       const CustomText(
                         title: 'Events Ticket Now',
                         color: AppColors.white,
-                        size: AppSize.large,
+                        size: AppSize.verylarge,
                         weight: FontWeight.w700,
                       ),
                     ],
@@ -127,7 +127,7 @@ class HomeScreen extends StatelessWidget {
                   const CustomText(
                     title: 'Upcoming Event Tickets',
                     color: AppColors.jetBlack,
-                    size: AppSize.xmedium,
+                    size: AppSize.large,
                     weight: FontWeight.w600,
                   ),
                   const Gap(15),
@@ -189,7 +189,7 @@ class HomeScreen extends StatelessWidget {
                                           child: CustomText(
                                             title: '25th jan - 31st jan',
                                             color: AppColors.lightGrey,
-                                            size: AppSize.xsmall,
+                                            size: AppSize.large,
                                             weight: FontWeight.w400,
                                           ),
                                         )
@@ -203,7 +203,7 @@ class HomeScreen extends StatelessWidget {
                                           child: CustomText(
                                             title: '8:00 PM - 11:00 PM',
                                             color: AppColors.lightGrey,
-                                            size: AppSize.xsmall,
+                                            size: AppSize.large,
                                             weight: FontWeight.w400,
                                           ),
                                         )
@@ -224,7 +224,7 @@ class HomeScreen extends StatelessWidget {
                   const CustomText(
                     title: 'Popular DJS',
                     color: AppColors.jetBlack,
-                    size: AppSize.xmedium,
+                    size: AppSize.large,
                     weight: FontWeight.w600,
                   ),
                   const Gap(15),
@@ -258,7 +258,7 @@ class HomeScreen extends StatelessWidget {
                                   CustomText(
                                     title: namesDJS[index],
                                     color: AppColors.jetBlack.withOpacity(0.7),
-                                    size: AppSize.xxsmall,
+                                    size: AppSize.verySmall,
                                     weight: FontWeight.w600,
                                   )
                                 ],
@@ -342,7 +342,7 @@ Widget buildContainer(double width, String postImage, String dateTime,
                             child: CustomText(
                               title: dateTime,
                               color: const Color(0Xff6E4CEE),
-                              size: AppSize.xxsmall,
+                              size: AppSize.verySmall,
                               weight: FontWeight.w600,
                             ),
                           ),
@@ -354,7 +354,7 @@ Widget buildContainer(double width, String postImage, String dateTime,
                   CustomText(
                     title: posttitle,
                     color: AppColors.jetBlack,
-                    size: AppSize.small,
+                    size: AppSize.verylarge,
                     weight: FontWeight.w600,
                   ),
                   const Gap(8),
@@ -369,7 +369,7 @@ Widget buildContainer(double width, String postImage, String dateTime,
                               text: 'Posted by ',
                               style: TextStyle(
                                 color: AppColors.lightGrey,
-                                fontSize: AppSize.xxsmall,
+                                fontSize: AppSize.verySmall,
                                 fontWeight: FontWeight.w300,
                               ),
                             ),
@@ -377,7 +377,7 @@ Widget buildContainer(double width, String postImage, String dateTime,
                               text: postBy,
                               style: const TextStyle(
                                 color: AppColors.lightGrey,
-                                fontSize: AppSize.xxsmall,
+                                fontSize: AppSize.verySmall,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -409,7 +409,7 @@ Widget buildContainer(double width, String postImage, String dateTime,
           child: const Center(
             child: CustomText(
               title: 'Explore More',
-              size: AppSize.xsmall,
+              size: AppSize.large,
               weight: FontWeight.w600,
               color: AppColors.white,
             ),

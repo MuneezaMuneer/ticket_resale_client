@@ -5,3 +5,5 @@ export 'home_first_screen.dart';
 export 'routes.dart';
 export 'signin_screen.dart';
 export 'signup_screen.dart';
+export 'profile_screen.dart';
+export 'profile_setting.dart';

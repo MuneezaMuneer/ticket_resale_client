@@ -87,7 +87,7 @@ class CustomButton extends StatelessWidget {
                     ),
                     CustomText(
                       title: '$socialText',
-                      size: AppSize.xmedium,
+                      size: AppSize.regular,
                       color: AppColors.jetBlack,
                       weight: FontWeight.w400,
                     )

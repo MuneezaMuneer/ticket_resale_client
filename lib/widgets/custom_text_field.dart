@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ticket_resale/components/call_back_funs.dart';
 import 'package:ticket_resale/constants/constants.dart';
+import 'package:ticket_resale/widgets/custom_text.dart';
 
 class CustomTextField extends StatelessWidget {
   final TextEditingController? controller;
@@ -20,6 +21,8 @@ class CustomTextField extends StatelessWidget {
   final TextStyle? suffixStyle;
   final bool isVisibleText;
   final String obscuringCharacter;
+  final String? trailingText;
+  final bool isTrailingText;
 
   const CustomTextField({
     super.key,
@@ -40,6 +43,8 @@ class CustomTextField extends StatelessWidget {
     this.prefixIcon,
     this.fillColor,
     this.isFilled = false,
+    this.trailingText,
+    this.isTrailingText = false,
   });
 
   @override
@@ -60,7 +65,17 @@ class CustomTextField extends StatelessWidget {
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.only(top: 10, left: 10),
           hintText: hintText,
-          suffixIcon: suffixIcon,
+          suffixIcon: isTrailingText
+              ? Padding(
+                  padding: const EdgeInsets.only(top: 10, right: 20),
+                  child: CustomText(
+                    title: '$trailingText',
+                    color: AppColors.springGreen,
+                    weight: FontWeight.w600,
+                    size: AppSize.medium,
+                  ),
+                )
+              : suffixIcon,
           prefixIcon: prefixIcon,
           fillColor: fillColor,
           filled: isFilled,
@@ -81,7 +96,7 @@ class CustomTextField extends StatelessWidget {
               )),
           hintStyle: const TextStyle(
             color: AppColors.silver,
-            fontSize: AppSize.xmedium,
+            fontSize: AppSize.medium,
             fontWeight: FontWeight.w400,
           ),
           suffixStyle: suffixStyle,

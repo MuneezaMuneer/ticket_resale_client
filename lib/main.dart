@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ticket_resale/screens/profile_screen.dart';
+import 'package:ticket_resale/screens/screens.dart';
 
 import 'package:ticket_resale/screens/splash_screen.dart';
 import 'package:ticket_resale/utils/app_routes.dart';
