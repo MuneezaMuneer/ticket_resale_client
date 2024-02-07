@@ -120,20 +120,30 @@ class CustomTileContainer extends StatelessWidget {
             ],
           ),
         ),
-        // Positioned(
-        //   bottom: 0,
-        //   left: 0,
-        //   right: 0,
-        //   child: CustomContainer(
-        //     height: 40,
-        //     isRounded: false,
-        //     width: width,
-        //     text: 'Explore More',
-        //     color: AppColors.white,
-        //     weight: FontWeight.w600,
-        //     size: AppSize.xsmall,
-        //   ),
-        // ),
+       
+        Positioned(
+          bottom: 0,
+          left: 0,
+          right: 0,
+          child: SizedBox(
+            height: 40,
+            child: CustomButton(
+              onPressed: () {},
+              textColor: AppColors.white,
+              textSize: AppSize.xmedium,
+              isSocial: true,
+              gradient: customGradient,
+              isRounded: false,
+              isSvgImage: true,
+              imagePath: AppSvgs.paypalIcon,
+              socialText: 'Connect your account',
+              socialTextColor: AppColors.white,
+              socialTextWeight: FontWeight.w700,
+              socialTextSize: AppSize.xmedium,
+              weight: FontWeight.w700,
+            ),
+          ),
+        )
       ],
     );
   }

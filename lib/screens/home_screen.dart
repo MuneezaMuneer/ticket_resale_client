@@ -187,34 +187,10 @@ class HomeScreen extends StatelessWidget {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Row(
-                                      children: [
-                                        SvgPicture.asset(AppSvgs.calender),
-                                        const Padding(
-                                          padding: EdgeInsets.only(left: 7),
-                                          child: CustomText(
-                                            title: '25th jan - 31st jan',
-                                            color: AppColors.lightGrey,
-                                            size: AppSize.xsmall,
-                                            weight: FontWeight.w400,
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        SvgPicture.asset(AppSvgs.calender),
-                                        const Padding(
-                                          padding: EdgeInsets.only(left: 7),
-                                          child: CustomText(
-                                            title: '8:00 PM - 11:00 PM',
-                                            color: AppColors.lightGrey,
-                                            size: AppSize.xsmall,
-                                            weight: FontWeight.w400,
-                                          ),
-                                        )
-                                      ],
-                                    )
+                                  
+                                    rowText('25th jan - 31st jan'),
+                                    rowText('8:00 PM - 11:00 PM')
+                                  
                                   ],
                                 ),
                               )
@@ -314,5 +290,22 @@ Widget circleAvatar(double height, double width, String imagePath) {
     child: CircleAvatar(
       backgroundImage: AssetImage(imagePath),
     ),
+  );
+}
+
+Widget rowText(String title) {
+  return Row(
+    children: [
+      SvgPicture.asset(AppSvgs.calender),
+      Padding(
+        padding: const EdgeInsets.only(left: 7),
+        child: CustomText(
+          title: title,
+          color: AppColors.lightGrey,
+          size: AppSize.xsmall,
+          weight: FontWeight.w400,
+        ),
+      )
+    ],
   );
 }

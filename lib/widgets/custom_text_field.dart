@@ -18,6 +18,8 @@ class CustomTextField extends StatelessWidget {
   final TextStyle? suffixStyle;
   final bool isVisibleText;
   final String obscuringCharacter;
+  final bool isCommentField;
+  final bool commentFieldPadding;
 
   const CustomTextField({
     super.key,
@@ -36,6 +38,8 @@ class CustomTextField extends StatelessWidget {
     this.prefixIcon,
     this.fillColor,
     this.isFilled = false,
+    this.isCommentField = false,
+    this.commentFieldPadding = false,
   });
 
   @override
@@ -48,19 +52,25 @@ class CustomTextField extends StatelessWidget {
       obscureText: isVisibleText,
       onChanged: onChanged,
       validator: validator,
+      maxLines: 5,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       decoration: InputDecoration(
-        contentPadding: const EdgeInsets.only(top: 10, left: 10),
+        contentPadding: commentFieldPadding
+            ? const EdgeInsets.symmetric(horizontal: 16, vertical: 16)
+            : const EdgeInsets.only(top: 10, left: 10),
         hintText: hintText,
         suffixIcon: suffixIcon,
         prefixIcon: prefixIcon,
         fillColor: fillColor,
         filled: isFilled,
         enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(42),
-            borderSide: BorderSide(
-              color: borderColor,
-            )),
+          borderRadius: isCommentField
+              ? BorderRadius.circular(20)
+              : BorderRadius.circular(42),
+          borderSide: BorderSide(
+            color: borderColor,
+          ),
+        ),
         focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(42),
             borderSide: BorderSide(

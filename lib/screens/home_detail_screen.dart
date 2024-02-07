@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:svg_flutter/svg_flutter.dart';
-import 'package:ticket_resale/components/auth_background_view.dart';
+import 'package:ticket_resale/components/app_background_view.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
-class HomeFirstScreen extends StatelessWidget {
-  const HomeFirstScreen({super.key});
+class HomeDetailScreen extends StatelessWidget {
+  const HomeDetailScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,7 @@ class HomeFirstScreen extends StatelessWidget {
     final double height = size.height;
     final double width = size.width;
     return Scaffold(
-      body: AuthBackGround(
+      body: AppBackGround(
           imagePath: AppImages.concert,
           child: SingleChildScrollView(
             child: Padding(
@@ -131,7 +131,6 @@ class HomeFirstScreen extends StatelessWidget {
                   SizedBox(
                     height: height * 0.02,
                   ),
-
                   SizedBox(
                     height: height * 0.07,
                     width: width * 0.9,
@@ -191,7 +190,7 @@ class HomeFirstScreen extends StatelessWidget {
                           fit: BoxFit.cover,
                         )),
               Padding(
-                padding: const EdgeInsets.only(left: 8, top: 4),
+                padding: const EdgeInsets.only(left: 8, top: 9),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

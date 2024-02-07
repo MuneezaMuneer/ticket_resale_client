@@ -57,16 +57,7 @@ class PaymentConnectScreen extends StatelessWidget {
               softWrap: true,
             ),
             SizedBox(height: height * 0.07),
-            // CustomContainer(
-            //   height: height * 0.07,
-            //   width: width * 0.8,
-            //   isSocial: true,
-            //   socialText: 'Connect your account',
-            //   imagePath: AppSvgs.paypalIcon,
-            //   color: AppColors.white,
-            //   weight: FontWeight.w700,
-            //   size: AppSize.xmedium,
-            // ),
+           
             SizedBox(
               height: height * 0.07,
               width: width * 0.8,
@@ -79,6 +70,9 @@ class PaymentConnectScreen extends StatelessWidget {
                 isSvgImage: true,
                 imagePath: AppSvgs.paypalIcon,
                 socialText: 'Connect your account',
+                socialTextColor: AppColors.white,
+                socialTextWeight: FontWeight.w700,
+                socialTextSize: AppSize.xmedium,
                 weight: FontWeight.w700,
               ),
             )

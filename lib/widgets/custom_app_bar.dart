@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:ticket_resale/constants/app_colors.dart';
-import 'package:ticket_resale/constants/app_textsize.dart';
+import 'package:svg_flutter/svg.dart';
+import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/widgets/custom_gradient.dart';
 import 'package:ticket_resale/widgets/custom_text.dart';
 
@@ -48,12 +48,9 @@ class CustomAppBar extends StatelessWidget {
                 ],
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.only(right: 25),
-              child: Icon(
-                Icons.menu,
-                color: AppColors.white,
-              ),
+            Padding(
+              padding: const EdgeInsets.only(right: 25),
+              child: SvgPicture.asset(AppSvgs.sms),
             )
           ],
         ),

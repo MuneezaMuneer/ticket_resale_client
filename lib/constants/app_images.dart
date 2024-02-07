@@ -5,6 +5,7 @@ class AppImages {
   static const concert = 'assets/images/concert.jpeg';
   static const creditCard = 'assets/images/credit_card.png';
   static const personBold = 'assets/images/person_bold.png';
+  static const ticket = 'assets/images/ticket.png';
 }
 
 class AppSvgs {
@@ -15,5 +16,9 @@ class AppSvgs {
   static const verified = 'assets/svgs/verified.svg';
   static const paypalIcon = 'assets/svgs/paypal_icon.svg';
   static const paypal = 'assets/svgs/paypal.svg';
+  static const send = 'assets/svgs/send.svg';
+  static const sms = 'assets/svgs/sms.svg';
+  static const fillStar = 'assets/svgs/filled_star.svg';
+  static const star = 'assets/svgs/star.svg';
 
 }

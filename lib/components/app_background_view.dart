@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:ticket_resale/constants/app_colors.dart';
 
-class AuthBackGround extends StatelessWidget {
+class AppBackGround extends StatelessWidget {
   final String imagePath;
   final Widget child;
-  const AuthBackGround(
+  const AppBackGround(
       {super.key, required this.child, required this.imagePath});
 
   @override
@@ -15,6 +15,7 @@ class AuthBackGround extends StatelessWidget {
     double height = size.height;
     return Stack(
       children: [
+       
         SizedBox(
             height: height * 0.5,
             width: width,
