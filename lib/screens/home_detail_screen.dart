@@ -5,7 +5,7 @@ import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
 import '../components/components.dart';
-import '../widgets/custom_text.dart';
+
 
 class HomeDetailScreen extends StatelessWidget {
   const HomeDetailScreen({super.key});

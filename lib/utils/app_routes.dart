@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ticket_resale/screens/signin_screen.dart';
-import 'package:ticket_resale/screens/signup_screen.dart';
-
-import '../screens/routes.dart';
+import 'package:ticket_resale/constants/aapp_routes.dart';
 import '../screens/screens.dart';
 
 Route onGenerateRoute(RouteSettings settings) {

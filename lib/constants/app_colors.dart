@@ -19,4 +19,5 @@ class AppColors {
   static const raddishPink = Color(0XffFA6A68);
   static const springGreen = Color(0Xff3FDD75);
   static const red = Color(0XffFF4B4B);
+  static const tealBlue = Color(0Xff49C5B6);
 }

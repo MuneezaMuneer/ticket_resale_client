@@ -4,8 +4,6 @@ import 'package:gap/gap.dart';
 import 'package:svg_flutter/svg.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
-
-import '../widgets/custom_text.dart';
 import '../widgets/custom_tile_container.dart';
 
 class HomeScreen extends StatelessWidget {

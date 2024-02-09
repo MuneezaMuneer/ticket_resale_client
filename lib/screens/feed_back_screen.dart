@@ -6,7 +6,6 @@ import 'package:ticket_resale/constants/constants.dart';
 
 import 'package:ticket_resale/widgets/widgets.dart';
 
-import '../widgets/custom_text.dart';
 
 class FeedBackScreen extends StatelessWidget {
   const FeedBackScreen({super.key});

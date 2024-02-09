@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:svg_flutter/svg.dart';
 import 'package:ticket_resale/constants/constants.dart';
-import '../widgets/custom_text.dart';
+
 import '../widgets/widgets.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -33,7 +33,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
                 Positioned(
-                    left: 90, top: 70, child: SvgPicture.asset(AppSvgs.level1))
+                    left: 90,
+                    top: 70,
+                    child: SvgPicture.asset(AppSvgs.levelOne))
               ],
             ),
             const SizedBox(
@@ -50,7 +52,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             const CustomRow(),
             const SizedBox(
-              height: 3,
+              height: 25,
             ),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 15),

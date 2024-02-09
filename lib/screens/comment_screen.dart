@@ -7,7 +7,7 @@ import 'package:ticket_resale/utils/app_dialouge.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
 import '../components/components.dart';
-import '../widgets/custom_text.dart';
+
 
 class CommentScreen extends StatelessWidget {
   const CommentScreen({super.key});

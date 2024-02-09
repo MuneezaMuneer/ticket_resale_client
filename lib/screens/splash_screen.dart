@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:svg_flutter/svg.dart';
 import '../constants/constants.dart';
-import 'routes.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -10,12 +9,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  @override
-  void initState() {
-    Future.delayed(const Duration(seconds: 3)).then((value) {
-      Navigator.pushNamed(context, AppRoutes.logIn);
-    });
-  }
+
 
   @override
   Widget build(BuildContext context) {
