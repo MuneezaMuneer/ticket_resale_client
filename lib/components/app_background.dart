@@ -29,7 +29,7 @@ class AppBackground extends StatelessWidget {
               fit: BoxFit.cover,
             )),
         Positioned(
-            top: 70,
+            top: 50,
             left: 20,
             child: isBackButton
                 ? SvgPicture.asset(AppSvgs.back)

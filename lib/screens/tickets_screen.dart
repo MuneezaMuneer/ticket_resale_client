@@ -192,7 +192,10 @@ class TicketsScreen extends StatelessWidget {
                                   height: 30,
                                   width: width,
                                   child: CustomButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Navigator.pushNamed(
+                                          context, AppRoutes.newTicketScreen);
+                                    },
                                     textColor: AppColors.white,
                                     textSize: AppSize.regular,
                                     isSocial: true,

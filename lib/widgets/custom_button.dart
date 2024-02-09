@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:svg_flutter/svg.dart';
 import 'package:ticket_resale/widgets/custom_text.dart';
-import 'package:ticket_resale/widgets/widgets.dart';
+
 
 class CustomButton extends StatelessWidget {
   final bool isSocial;

@@ -25,16 +25,26 @@ class AppSvgs {
   static const fillStar = 'assets/svgs/star_fill.svg';
   static const star = 'assets/svgs/star.svg';
   static const share = 'assets/svgs/share.svg';
+
+  static const profile = 'assets/svgs/profile.svg';
+
+  static const home = 'assets/svgs/home.svg';
   static const apple = 'assets/svgs/apple.svg';
   static const facebook = 'assets/svgs/facebook.svg';
   static const logo = 'assets/svgs/logo.svg';
   static const eye = 'assets/svgs/eye.svg';
   static const level = 'assets/svgs/level.svg';
   static const termOfUse = 'assets/svgs/termOfUse.svg';
-  static const level1 = 'assets/svgs/level1.svg';
+  static const levelOne = 'assets/svgs/level_one.svg';
+  static const levelTwo = 'assets/svgs/level_two.svg';
+  static const levelThree = 'assets/svgs/level_three.svg';
+  static const levelFour = 'assets/svgs/level_four.svg';
+  static const levelFive = 'assets/svgs/level_five.svg';
+  static const levelSix = 'assets/svgs/level_six.svg';
   static const camera = 'assets/svgs/camera.svg';
   static const verify = 'assets/svgs/verify.svg';
   static const back = 'assets/svgs/icon_back.svg';
   static const image = 'assets/svgs/image.svg';
   static const date = 'assets/svgs/date.svg';
+  static const plus = 'assets/svgs/plus.svg';
 }

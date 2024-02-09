@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:svg_flutter/svg_flutter.dart';
-
 import '../constants/constants.dart';
-
 import '../widgets/widgets.dart';
 
 class ProfileSettings extends StatefulWidget {

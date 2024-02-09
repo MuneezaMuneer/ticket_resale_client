@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:svg_flutter/svg.dart';
 import 'package:ticket_resale/constants/constants.dart';
-
+import 'package:ticket_resale/utils/app_dialouge.dart';
 import '../widgets/widgets.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -33,7 +33,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
                 Positioned(
-                    left: 90, top: 70, child: SvgPicture.asset(AppSvgs.level1))
+                    left: 90,
+                    top: 70,
+                    child: SvgPicture.asset(AppSvgs.levelOne))
               ],
             ),
             const SizedBox(
@@ -52,48 +54,64 @@ class _ProfileScreenState extends State<ProfileScreen> {
             const SizedBox(
               height: 3,
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Column(
                 children: [
-                  CustomProfileRow(
-                    leadingIcon: Icons.person_2_outlined,
-                    title: 'Profile Settings',
-                    color: AppColors.jetBlack,
-                    trailingIcon: Icons.arrow_forward_ios,
-                    iconColor: AppColors.lightGrey,
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, AppRoutes.profileSettings);
+                    },
+                    child: const CustomProfileRow(
+                      leadingIcon: Icons.person_2_outlined,
+                      title: 'Profile Settings',
+                      color: AppColors.jetBlack,
+                      trailingIcon: Icons.arrow_forward_ios,
+                      iconColor: AppColors.lightGrey,
+                    ),
                   ),
-                  CustomProfileRow(
-                    svgImage: AppSvgs.level,
-                    isSvg: true,
-                    title: 'Your Level',
-                    color: AppColors.jetBlack,
-                    trailingIcon: Icons.arrow_forward_ios,
-                    iconColor: AppColors.lightGrey,
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(
+                          context, AppRoutes.profileLevelScreen);
+                    },
+                    child: const CustomProfileRow(
+                      svgImage: AppSvgs.level,
+                      isSvg: true,
+                      title: 'Your Level',
+                      color: AppColors.jetBlack,
+                      trailingIcon: Icons.arrow_forward_ios,
+                      iconColor: AppColors.lightGrey,
+                    ),
                   ),
-                  CustomProfileRow(
+                  const CustomProfileRow(
                     leadingIcon: Icons.notifications_none,
                     title: 'Notification',
                     color: AppColors.jetBlack,
                     trailingIcon: Icons.arrow_forward_ios,
                     iconColor: AppColors.lightGrey,
                   ),
-                  CustomProfileRow(
-                    leadingIcon: Icons.paypal,
-                    leadingColor: AppColors.electricBlue,
-                    title: 'Connect paypal',
-                    color: AppColors.electricBlue,
-                    trailingIcon: Icons.arrow_forward_ios,
-                    iconColor: AppColors.electricBlue,
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, AppRoutes.connectScreen);
+                    },
+                    child: const CustomProfileRow(
+                      leadingIcon: Icons.paypal,
+                      leadingColor: AppColors.electricBlue,
+                      title: 'Connect paypal',
+                      color: AppColors.electricBlue,
+                      trailingIcon: Icons.arrow_forward_ios,
+                      iconColor: AppColors.electricBlue,
+                    ),
                   ),
-                  CustomProfileRow(
+                  const CustomProfileRow(
                     leadingIcon: Icons.privacy_tip_outlined,
                     title: 'Privacy Policy',
                     color: AppColors.jetBlack,
                     trailingIcon: Icons.arrow_forward_ios,
                     iconColor: AppColors.lightGrey,
                   ),
-                  CustomProfileRow(
+                  const CustomProfileRow(
                     svgImage: AppSvgs.termOfUse,
                     isSvg: true,
                     title: 'Term of Use',
@@ -101,7 +119,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     trailingIcon: Icons.arrow_forward_ios,
                     iconColor: AppColors.lightGrey,
                   ),
-                  CustomProfileRow(
+                  const CustomProfileRow(
                     leadingIcon: Icons.logout,
                     leadingColor: AppColors.blueViolet,
                     title: 'Logout',
@@ -109,13 +127,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     trailingIcon: Icons.arrow_forward_ios,
                     iconColor: AppColors.blueViolet,
                   ),
-                  CustomProfileRow(
-                    leadingIcon: Icons.delete_outline,
-                    leadingColor: AppColors.raddishPink,
-                    title: 'Delete Account',
-                    color: AppColors.raddishPink,
-                    trailingIcon: Icons.arrow_forward_ios,
-                    iconColor: AppColors.raddishPink,
+                  GestureDetector(
+                    onTap: () {
+                      deleteDialog(context: context);
+                    },
+                    child: const CustomProfileRow(
+                      leadingIcon: Icons.delete_outline,
+                      leadingColor: AppColors.raddishPink,
+                      title: 'Delete Account',
+                      color: AppColors.raddishPink,
+                      trailingIcon: Icons.arrow_forward_ios,
+                      iconColor: AppColors.raddishPink,
+                    ),
                   ),
                 ],
               ),

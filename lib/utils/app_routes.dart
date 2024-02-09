@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ticket_resale/widgets/custom_navigation.dart';
 import '../screens/screens.dart';
 
 Route onGenerateRoute(RouteSettings settings) {
@@ -8,6 +9,8 @@ Route onGenerateRoute(RouteSettings settings) {
     return navigatePage(const SignInScreen());
   } else if (settings.name == AppRoutes.signUp) {
     return navigatePage(const SignUpScreen());
+  } else if (settings.name == AppRoutes.navigationScreen) {
+    return navigatePage(const CustomNavigation());
   } else if (settings.name == AppRoutes.homeScreen) {
     return navigatePage(const HomeScreen());
   } else if (settings.name == AppRoutes.commentScreen) {
@@ -26,8 +29,10 @@ Route onGenerateRoute(RouteSettings settings) {
     return navigatePage(const ProfileScreen());
   } else if (settings.name == AppRoutes.profileSettings) {
     return navigatePage(const ProfileSettings());
-  } else if (settings.name == AppRoutes.ticketScreen) {
-    return navigatePage(const TicketsScreen());
+  } else if (settings.name == AppRoutes.notificationScreen) {
+    return navigatePage(const NotificationScreen());
+  } else if (settings.name == AppRoutes.profileLevelScreen) {
+    return navigatePage(const ProfileLevelScreen());
   } else {
     return navigatePage(const SplashScreen());
   }

@@ -151,7 +151,9 @@ class HomeDetailScreen extends StatelessWidget {
                   height: height * 0.07,
                   width: width * 0.9,
                   child: CustomButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushNamed(context, AppRoutes.commentScreen);
+                    },
                     textColor: AppColors.white,
                     textSize: AppSize.regular,
                     btnText: 'Start Conversation',

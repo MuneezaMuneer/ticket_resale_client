@@ -53,7 +53,9 @@ deleteDialog({required BuildContext context}) {
                 height: 50,
                 width: 110,
                 child: CustomButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
                   btnText: 'Cancel',
                   backgroundColor: AppColors.white,
                   borderColor: AppColors.jetBlack,
@@ -66,7 +68,9 @@ deleteDialog({required BuildContext context}) {
                 height: 50,
                 width: 110,
                 child: CustomButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
                   btnText: 'Delete',
                   backgroundColor: AppColors.raddishPink,
                   borderColor: AppColors.raddishPink,
@@ -171,7 +175,9 @@ ticketSellDialog({required BuildContext context}) {
                 height: 50,
                 width: 120,
                 child: CustomButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
                   btnText: 'Cancel',
                   backgroundColor: AppColors.white,
                   borderColor: AppColors.jetBlack,
@@ -184,7 +190,9 @@ ticketSellDialog({required BuildContext context}) {
                 height: 50,
                 width: 120,
                 child: CustomButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
                   textColor: AppColors.white,
                   textSize: AppSize.medium,
                   btnText: 'Confirm',

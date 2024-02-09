@@ -34,10 +34,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               padding: const EdgeInsets.only(left: 25),
               child: Row(
                 children: [
-                  const Icon(
-                    Icons.arrow_back_ios,
-                    color: AppColors.white,
-                    size: 18,
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Icon(
+                      Icons.arrow_back_ios,
+                      color: AppColors.white,
+                      size: 18,
+                    ),
                   ),
                   const Gap(10),
                   CustomText(
@@ -51,7 +56,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
             Padding(
               padding: const EdgeInsets.only(right: 25),
-              child: SvgPicture.asset(AppSvgs.sms),
+              child: GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, AppRoutes.notificationScreen);
+                  },
+                  child: SvgPicture.asset(AppSvgs.sms)),
             )
           ],
         ),

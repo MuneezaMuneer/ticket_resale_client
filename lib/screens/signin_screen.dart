@@ -1,7 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-
 import 'package:ticket_resale/components/app_background.dart';
 import 'package:ticket_resale/constants/constants.dart';
 

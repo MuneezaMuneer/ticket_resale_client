@@ -12,6 +12,9 @@ class AppRoutes {
   static const connectScreen = '/connectScreen';
   static const profileScreen = '/profileScreen';
   static const disconnectScreen = '/disconnectScreen';
+  static const notificationScreen = '/notificationScreen';
   static const profileSettings = '/profileSettingsScreen';
   static const ticketScreen = '/ticketScreen';
+  static const profileLevelScreen = '/profileLevelScreen';
+  static const navigationScreen = '/navigationScreen';
 }

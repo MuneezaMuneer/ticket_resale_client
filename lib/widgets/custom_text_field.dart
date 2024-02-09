@@ -53,67 +53,62 @@ class CustomTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    final double height = size.height;
-    final double width = size.width;
-    return SizedBox(
-      child: TextFormField(
-        controller: controller,
-        readOnly: readOnly,
-        obscuringCharacter: obscuringCharacter,
-        cursorColor: AppColors.jetBlack.withOpacity(0.3),
-        obscureText: isVisibleText,
-        onChanged: onChanged,
-        maxLines: maxLines,
-        validator: validator,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        decoration: InputDecoration(
-          contentPadding: const EdgeInsets.only(top: 10, left: 10),
-          hintText: hintText,
-          suffixIcon: isTrailingText
-              ? Padding(
-                  padding: const EdgeInsets.only(top: 10, right: 20),
-                  child: CustomText(
-                    title: '$trailingText',
-                    color: AppColors.springGreen,
-                    weight: FontWeight.w600,
-                    size: AppSize.medium,
-                  ),
-                )
-              : suffixIcon,
-          prefixIcon: prefixIcon,
-          fillColor: fillColor,
-          filled: isFilled,
-          enabledBorder: OutlineInputBorder(
-              borderRadius: isCommentField
-                  ? BorderRadius.circular(12)
-                  : BorderRadius.circular(42),
-              borderSide: BorderSide(
-                color: borderColor,
-              )),
-          focusedBorder: OutlineInputBorder(
-              borderRadius: isCommentField
-                  ? BorderRadius.circular(12)
-                  : BorderRadius.circular(42),
-              borderSide: BorderSide(
-                color: borderColor,
-              )),
-          border: OutlineInputBorder(
-              borderRadius: isCommentField
-                  ? BorderRadius.circular(12)
-                  : BorderRadius.circular(42),
-              borderSide: BorderSide(
-                color: borderColor,
-              )),
-          hintStyle: const TextStyle(
-            color: AppColors.silver,
-            fontSize: AppSize.medium,
-            fontWeight: FontWeight.w400,
-          ),
-          suffixStyle: suffixStyle,
+    return TextFormField(
+      controller: controller,
+      readOnly: readOnly,
+      obscuringCharacter: obscuringCharacter,
+      cursorColor: AppColors.jetBlack.withOpacity(0.3),
+      obscureText: isVisibleText,
+      onChanged: onChanged,
+      maxLines: maxLines,
+      validator: validator,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      decoration: InputDecoration(
+        contentPadding: const EdgeInsets.only(top: 10, left: 10),
+        hintText: hintText,
+        suffixIcon: isTrailingText
+            ? Padding(
+                padding: const EdgeInsets.only(top: 10, right: 20),
+                child: CustomText(
+                  title: '$trailingText',
+                  color: AppColors.springGreen,
+                  weight: FontWeight.w600,
+                  size: AppSize.medium,
+                ),
+              )
+            : suffixIcon,
+        prefixIcon: prefixIcon,
+        fillColor: fillColor,
+        filled: isFilled,
+        enabledBorder: OutlineInputBorder(
+            borderRadius: isCommentField
+                ? BorderRadius.circular(12)
+                : BorderRadius.circular(42),
+            borderSide: BorderSide(
+              color: borderColor,
+            )),
+        focusedBorder: OutlineInputBorder(
+            borderRadius: isCommentField
+                ? BorderRadius.circular(12)
+                : BorderRadius.circular(42),
+            borderSide: BorderSide(
+              color: borderColor,
+            )),
+        border: OutlineInputBorder(
+            borderRadius: isCommentField
+                ? BorderRadius.circular(12)
+                : BorderRadius.circular(42),
+            borderSide: BorderSide(
+              color: borderColor,
+            )),
+        hintStyle: const TextStyle(
+          color: AppColors.silver,
+          fontSize: AppSize.medium,
+          fontWeight: FontWeight.w400,
         ),
-        keyboardType: keyBoardType,
+        suffixStyle: suffixStyle,
       ),
+      keyboardType: keyBoardType,
     );
   }
 }

@@ -21,4 +21,5 @@ class AppColors {
   static const red = Color(0XffFF4B4B);
   static const skyBlue = Color(0Xffe4eafe);
   static const gryishBlue = Color(0Xff403B4E);
+  static const tealBlue = Color(0Xff49C5B6);
 }

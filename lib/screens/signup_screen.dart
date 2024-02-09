@@ -160,7 +160,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     gradient: customGradient,
                     textSize: AppSize.regular,
                     onPressed: () {
-                      Navigator.pushNamed(context, AppRoutes.homeScreen);
+                      Navigator.pushNamed(context, AppRoutes.navigationScreen);
                     },
                   ),
                 ),

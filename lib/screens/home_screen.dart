@@ -261,13 +261,19 @@ class HomeScreen extends StatelessWidget {
                       itemBuilder: (context, index) {
                         return Padding(
                           padding: const EdgeInsets.only(right: 10),
-                          child: CustomTileContainer(
-                            width: width * 0.65,
-                            dateTime: '25th Janurary 8:00 AM - 12:00 AM',
-                            posttitle:
-                                'Happy Holiday Music Concert Global Village',
-                            postBy: 'Jacob Jones',
-                            imagePath: AppImages.profile,
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.pushNamed(
+                                  context, AppRoutes.detailScreen);
+                            },
+                            child: CustomTileContainer(
+                              width: width * 0.65,
+                              dateTime: '25th Janurary 8:00 AM - 12:00 AM',
+                              posttitle:
+                                  'Happy Holiday Music Concert Global Village',
+                              postBy: 'Jacob Jones',
+                              imagePath: AppImages.profile,
+                            ),
                           ),
                         );
                       },
