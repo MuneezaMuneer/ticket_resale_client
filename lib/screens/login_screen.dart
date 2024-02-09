@@ -1,9 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:ticket_resale/screens/routes.dart';
 import '../components/components.dart';
 import '../constants/constants.dart';
-import '../widgets/custom_text.dart';
 import '../widgets/widgets.dart';
 
 class LoginScreen extends StatefulWidget {

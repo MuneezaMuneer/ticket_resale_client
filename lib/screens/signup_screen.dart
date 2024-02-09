@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
-import 'package:ticket_resale/screens/routes.dart';
+
 import '../components/components.dart';
 import '../constants/constants.dart';
 import '../widgets/widgets.dart';

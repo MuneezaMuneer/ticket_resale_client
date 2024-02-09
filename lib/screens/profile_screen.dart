@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:svg_flutter/svg.dart';
 import 'package:ticket_resale/constants/constants.dart';
-import '../widgets/custom_text.dart';
+
 import '../widgets/widgets.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -14,12 +14,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const CustomAppBar(
+        title: 'Profile',
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const CustomAppBar(
-              title: 'Profile',
-            ),
             const SizedBox(
               height: 15,
             ),

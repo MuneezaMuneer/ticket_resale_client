@@ -5,9 +5,10 @@ import 'package:ticket_resale/widgets/custom_gradient.dart';
 import 'package:ticket_resale/widgets/custom_text.dart';
 import '../constants/constants.dart';
 
-class CustomAppBar extends StatelessWidget {
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
-  const CustomAppBar({super.key, this.title});
+  final Widget? child;
+  const CustomAppBar({super.key, this.title, this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -57,4 +58,7 @@ class CustomAppBar extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  Size get preferredSize => Size.fromHeight(kToolbarHeight);
 }

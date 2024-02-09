@@ -5,8 +5,6 @@ import 'package:ticket_resale/constants/app_images.dart';
 import 'package:ticket_resale/constants/app_textsize.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
-import '../widgets/custom_text.dart';
-
 deleteDialog({required BuildContext context}) {
   return showDialog(
     context: context,

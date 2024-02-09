@@ -22,9 +22,9 @@ class AppSvgs {
   static const paypal = 'assets/svgs/paypal.svg';
   static const send = 'assets/svgs/send.svg';
   static const sms = 'assets/svgs/sms.svg';
-  static const fillStar = 'assets/svgs/filled_star.svg';
+  static const fillStar = 'assets/svgs/star_fill.svg';
   static const star = 'assets/svgs/star.svg';
-
+  static const share = 'assets/svgs/share.svg';
   static const apple = 'assets/svgs/apple.svg';
   static const facebook = 'assets/svgs/facebook.svg';
   static const logo = 'assets/svgs/logo.svg';
@@ -35,4 +35,6 @@ class AppSvgs {
   static const camera = 'assets/svgs/camera.svg';
   static const verify = 'assets/svgs/verify.svg';
   static const back = 'assets/svgs/icon_back.svg';
+  static const image = 'assets/svgs/image.svg';
+  static const date = 'assets/svgs/date.svg';
 }

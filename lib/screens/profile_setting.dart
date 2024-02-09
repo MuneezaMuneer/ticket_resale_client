@@ -3,7 +3,7 @@ import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:svg_flutter/svg_flutter.dart';
 
 import '../constants/constants.dart';
-import '../widgets/custom_text.dart';
+
 import '../widgets/widgets.dart';
 
 class ProfileSettings extends StatefulWidget {
@@ -17,12 +17,12 @@ class _ProfileSettingsState extends State<ProfileSettings> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const CustomAppBar(
+        title: 'Profile Settings',
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const CustomAppBar(
-              title: 'Profile',
-            ),
             const SizedBox(
               height: 15,
             ),

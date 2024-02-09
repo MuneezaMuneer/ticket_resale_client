@@ -4,9 +4,7 @@ import 'package:gap/gap.dart';
 
 import 'package:ticket_resale/components/app_background.dart';
 import 'package:ticket_resale/constants/constants.dart';
-import 'package:ticket_resale/screens/routes.dart';
 
-import '../widgets/custom_text.dart';
 import '../widgets/widgets.dart';
 
 class SignInScreen extends StatefulWidget {

@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:svg_flutter/svg_flutter.dart';
-
 import 'package:ticket_resale/constants/constants.dart';
-
 import 'package:ticket_resale/widgets/widgets.dart';
-
-import '../widgets/custom_text.dart';
 
 class FeedBackScreen extends StatelessWidget {
   const FeedBackScreen({super.key});
@@ -17,14 +13,14 @@ class FeedBackScreen extends StatelessWidget {
     final double height = size.height;
     final double width = size.width;
     return Scaffold(
+      appBar: const CustomAppBar(
+        title: 'Feedback',
+      ),
       body: Stack(
         children: [
           SingleChildScrollView(
             child: Column(
               children: [
-                const CustomAppBar(
-                  title: 'Feedback',
-                ),
                 const Gap(25),
                 SizedBox(
                   width: width * 0.64,
