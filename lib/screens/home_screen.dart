@@ -4,7 +4,6 @@ import 'package:gap/gap.dart';
 import 'package:svg_flutter/svg.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
-import '../widgets/custom_tile_container.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -190,7 +189,7 @@ class HomeScreen extends StatelessWidget {
                               const Gap(5),
                               Padding(
                                 padding:
-                                    const EdgeInsets.symmetric(horizontal: 15),
+                                    const EdgeInsets.symmetric(horizontal: 10),
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -286,7 +285,7 @@ class HomeScreen extends StatelessWidget {
                       },
                     ),
                   ),
-                  const Gap(20),
+                  const Gap(10),
                 ],
               ),
             )

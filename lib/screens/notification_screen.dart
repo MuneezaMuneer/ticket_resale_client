@@ -14,7 +14,7 @@ class NotificationScreen extends StatelessWidget {
     final double width = size.width;
 
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 230, 234, 248),
+      backgroundColor: const Color.fromARGB(255, 230, 234, 248),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -48,7 +48,7 @@ class NotificationScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                  height: height * 0.42,
+                  height: height * 0.36,
                   child:
                       _builderWidget(FontWeight.w300, AppColors.vibrantGreen))
             ],
@@ -64,7 +64,7 @@ class NotificationScreen extends StatelessWidget {
       itemCount: 5,
       itemBuilder: (context, index) {
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           child: Row(
             children: [
               Container(

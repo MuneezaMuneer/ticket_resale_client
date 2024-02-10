@@ -11,7 +11,7 @@ class PaymentConnectScreen extends StatelessWidget {
     final double height = size.height;
     final double width = size.width;
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 230, 234, 248),
+      backgroundColor: const Color.fromARGB(255, 230, 234, 248),
       appBar: const CustomAppBar(
         title: 'Payment Method',
       ),

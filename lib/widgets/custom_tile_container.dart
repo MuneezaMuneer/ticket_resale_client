@@ -40,7 +40,7 @@ class CustomTileContainer extends StatelessWidget {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 12, right: 12, top: 12),
+                padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
                 child: Column(
                   children: [
                     ClipRRect(
@@ -73,7 +73,7 @@ class CustomTileContainer extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const Gap(5),
+                    const Gap(10),
                     CustomText(
                       title: '$posttitle',
                       softWrap: true,
@@ -81,7 +81,7 @@ class CustomTileContainer extends StatelessWidget {
                       size: AppSize.regular,
                       weight: FontWeight.w600,
                     ),
-                    const Gap(8),
+                    const Gap(5),
                     Row(
                       children: [
                         SizedBox(

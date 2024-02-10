@@ -168,7 +168,7 @@ class ProfileLevelScreen extends StatelessWidget {
           children: [
             Row(
               children: [
-                const Gap(8),
+                const Gap(2),
                 SizedBox(
                     height: 30, width: 30, child: SvgPicture.asset(svgPath)),
                 const Gap(2),
@@ -180,7 +180,7 @@ class ProfileLevelScreen extends StatelessWidget {
               ],
             ),
             Padding(
-              padding: const EdgeInsets.only(right: 8),
+              padding: const EdgeInsets.only(right: 2),
               child: Row(
                 children: [
                   SvgPicture.asset(
@@ -191,7 +191,7 @@ class ProfileLevelScreen extends StatelessWidget {
                   CustomText(
                     title: leveltext,
                     size: AppSize.verySmall,
-                    weight: FontWeight.w600,
+                    weight: FontWeight.w400,
                     color: textColor,
                   ),
                 ],

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:svg_flutter/svg.dart';
 import 'package:ticket_resale/widgets/custom_text.dart';
 
-
 class CustomButton extends StatelessWidget {
   final bool isSocial;
   final bool isSvgImage;
@@ -55,7 +54,7 @@ class CustomButton extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     double width = size.width;
-    double height = size.height;
+    //   double height = size.height;
     return GestureDetector(
       onTap: onPressed,
       child: Container(

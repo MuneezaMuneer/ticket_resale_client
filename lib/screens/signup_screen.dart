@@ -1,7 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
-
 import '../components/components.dart';
 import '../constants/constants.dart';
 import '../widgets/widgets.dart';
@@ -94,7 +93,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   height: 12,
                 ),
                 SizedBox(
-                  height: height * 0.08,
+                  height: 70,
                   child: IntlPhoneField(
                     flagsButtonPadding: const EdgeInsets.all(8),
                     dropdownIcon: const Icon(

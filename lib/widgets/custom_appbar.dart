@@ -61,8 +61,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     Navigator.pushNamed(context, AppRoutes.notificationScreen);
                   },
                   child: Container(
-                      height: 45,
-                      width: 45,
+                      height: 40,
+                      width: 40,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: AppColors.white.withOpacity(0.1),

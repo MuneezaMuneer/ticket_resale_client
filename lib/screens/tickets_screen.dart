@@ -83,7 +83,7 @@ class TicketsScreen extends StatelessWidget {
                             children: [
                               Padding(
                                 padding: const EdgeInsets.only(
-                                    left: 5, right: 5, top: 5),
+                                    left: 2, right: 5, top: 5),
                                 child: Column(
                                   children: [
                                     ClipRRect(
