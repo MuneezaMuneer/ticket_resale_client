@@ -12,7 +12,6 @@ class CustomTextField extends StatelessWidget {
   final OnChanged onChanged;
   final ValidatorFormField? validator;
   final TextInputType? keyBoardType;
-  final Color borderColor;
   final Color? fillColor;
   final bool isFilled;
   final FontWeight? weight;
@@ -39,7 +38,6 @@ class CustomTextField extends StatelessWidget {
     this.height = 56,
     this.isVisibleText = false,
     this.readOnly = false,
-    required this.borderColor,
     this.obscuringCharacter = '●',
     this.prefixIcon,
     this.fillColor,
@@ -83,22 +81,22 @@ class CustomTextField extends StatelessWidget {
             borderRadius: isCommentField
                 ? BorderRadius.circular(12)
                 : BorderRadius.circular(42),
-            borderSide: BorderSide(
-              color: borderColor,
+            borderSide: const BorderSide(
+              color: AppColors.pastelBlue,
             )),
         focusedBorder: OutlineInputBorder(
             borderRadius: isCommentField
                 ? BorderRadius.circular(12)
                 : BorderRadius.circular(42),
-            borderSide: BorderSide(
-              color: borderColor,
+            borderSide: const BorderSide(
+              color: AppColors.pastelBlue,
             )),
         border: OutlineInputBorder(
             borderRadius: isCommentField
                 ? BorderRadius.circular(12)
                 : BorderRadius.circular(42),
-            borderSide: BorderSide(
-              color: borderColor,
+            borderSide: const BorderSide(
+              color: AppColors.pastelBlue,
             )),
         hintStyle: const TextStyle(
           color: AppColors.silver,

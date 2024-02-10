@@ -65,7 +65,6 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                     height: 5,
                   ),
                   const CustomTextField(
-                    borderColor: AppColors.silver,
                     hintText: 'Samantha Pate',
                     hintStyle: TextStyle(
                         color: AppColors.blueGrey,
@@ -85,7 +84,6 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                     height: 5,
                   ),
                   const CustomTextField(
-                    borderColor: AppColors.silver,
                     hintText: '@SamanthaPate',
                     hintStyle: TextStyle(
                         color: AppColors.blueGrey,
@@ -103,7 +101,6 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                     height: 5,
                   ),
                   const CustomTextField(
-                    borderColor: AppColors.silver,
                     hintText: 'Email',
                     trailingText: 'Verify',
                     isTrailingText: true,
@@ -196,7 +193,6 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                     height: 5,
                   ),
                   const CustomTextField(
-                    borderColor: AppColors.silver,
                     hintText: 'date of birth',
                     hintStyle: TextStyle(
                         color: AppColors.blueGrey,
@@ -216,7 +212,6 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                     height: 5,
                   ),
                   const CustomTextField(
-                    borderColor: AppColors.silver,
                     hintText: 'country',
                     suffixIcon: Icon(Icons.keyboard_arrow_down_rounded),
                     hintStyle: TextStyle(
@@ -237,7 +232,6 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                     height: 5,
                   ),
                   const CustomTextField(
-                    borderColor: AppColors.silver,
                     hintText: 'state',
                     suffixIcon: Icon(Icons.keyboard_arrow_down_rounded),
                     hintStyle: TextStyle(
@@ -258,7 +252,6 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                     height: 5,
                   ),
                   const CustomTextField(
-                    borderColor: AppColors.silver,
                     hintText: 'city',
                     suffixIcon: Icon(Icons.keyboard_arrow_down_rounded),
                     hintStyle: TextStyle(
@@ -279,7 +272,6 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                     height: 5,
                   ),
                   const CustomTextField(
-                    borderColor: AppColors.silver,
                     hintText: 'code',
                     hintStyle: TextStyle(
                         color: AppColors.blueGrey,

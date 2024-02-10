@@ -133,7 +133,7 @@ class CommentScreen extends StatelessWidget {
                   height: height * 0.07,
                   width: width * 0.9,
                   child: CustomTextField(
-                    borderColor: AppColors.silver.withOpacity(0.3),
+                  
                     hintText: 'Enter your comment here',
                     fillColor: AppColors.white,
                     isFilled: true,

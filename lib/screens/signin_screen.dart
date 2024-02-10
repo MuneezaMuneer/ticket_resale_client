@@ -48,7 +48,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 height: height * 0.02,
               ),
               const CustomTextField(
-                borderColor: AppColors.silver,
+              
                 hintText: 'Email ID',
                 keyBoardType: TextInputType.emailAddress,
               ),
@@ -56,7 +56,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 height: height * 0.02,
               ),
               const CustomTextField(
-                borderColor: AppColors.silver,
+              
                 hintText: 'Password',
                 suffixIcon: Icon(
                   Icons.remove_red_eye_outlined,

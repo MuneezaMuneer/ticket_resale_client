@@ -21,7 +21,7 @@ class TicketsScreen extends StatelessWidget {
         children: [
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -29,7 +29,6 @@ class TicketsScreen extends StatelessWidget {
                     child: SizedBox(
                       width: width * 0.9,
                       child: CustomTextField(
-                        borderColor: AppColors.silver.withOpacity(0.5),
                         hintText: 'Search Event & Tickets',
                         fillColor: AppColors.white,
                         isFilled: true,
@@ -66,8 +65,8 @@ class TicketsScreen extends StatelessWidget {
                       padding: EdgeInsets.zero,
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
-                              mainAxisSpacing: 5,
-                              crossAxisSpacing: 4,
+                              mainAxisSpacing: 10,
+                              crossAxisSpacing: 10,
                               crossAxisCount: 2,
                               mainAxisExtent: 250),
                       itemCount: 10,
@@ -76,7 +75,7 @@ class TicketsScreen extends StatelessWidget {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: AppColors.silver.withOpacity(0.7),
+                              color: const Color(0XffEAE6F4),
                             ),
                             color: AppColors.white,
                           ),
@@ -209,13 +208,13 @@ class TicketsScreen extends StatelessWidget {
                                     socialTextSize: AppSize.xsmall,
                                   ),
                                 ),
-                              )
+                              ),
                             ],
                           ),
                         );
                       },
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
