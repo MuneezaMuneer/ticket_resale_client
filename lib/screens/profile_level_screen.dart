@@ -14,14 +14,11 @@ class ProfileLevelScreen extends StatelessWidget {
     final double width = size.width;
     return Scaffold(
       backgroundColor: AppColors.pastelBlue.withOpacity(0.3),
+      appBar: const CustomAppBar(
+        title: 'Profile',
+      ),
       body: Column(
         children: [
-          SizedBox(
-            height: height * 0.11,
-            child: const CustomAppBar(
-              title: 'Profile',
-            ),
-          ),
           const SizedBox(
             height: 15,
           ),

@@ -22,9 +22,9 @@ class _SignInScreenState extends State<SignInScreen> {
       body: AppBackground(
         imagePath: AppImages.authImage,
         isBackButton: true,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
-          child: SingleChildScrollView(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
             child: Column(
               children: [
                 RichText(

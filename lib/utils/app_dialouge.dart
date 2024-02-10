@@ -173,7 +173,7 @@ ticketSellDialog({required BuildContext context}) {
             children: [
               SizedBox(
                 height: 50,
-                width: 120,
+                width: 110,
                 child: CustomButton(
                   onPressed: () {
                     Navigator.pop(context);
@@ -188,7 +188,7 @@ ticketSellDialog({required BuildContext context}) {
               ),
               SizedBox(
                 height: 50,
-                width: 120,
+                width: 110,
                 child: CustomButton(
                   onPressed: () {
                     Navigator.pop(context);

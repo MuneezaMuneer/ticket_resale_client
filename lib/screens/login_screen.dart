@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import '../components/components.dart';
 import '../constants/constants.dart';
 import '../widgets/widgets.dart';
@@ -22,9 +23,9 @@ class _LoginScreenState extends State<LoginScreen> {
       body: AppBackground(
         imagePath: AppImages.authImage,
         isBackButton: false,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-          child: SingleChildScrollView(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
             child: Column(
               children: [
                 RichText(

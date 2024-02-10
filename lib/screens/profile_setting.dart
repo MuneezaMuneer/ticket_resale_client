@@ -110,50 +110,53 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                   ),
                   Stack(
                     children: [
-                      IntlPhoneField(
-                        flagsButtonPadding: const EdgeInsets.all(8),
-                        dropdownIcon: const Icon(
-                          Icons.keyboard_arrow_down_sharp,
-                          color: Color(0xFF9E9E9E),
-                        ),
-                        dropdownIconPosition: IconPosition.trailing,
-                        cursorColor: AppColors.silver,
-                        decoration: InputDecoration(
-                          hintText: 'eg. 2324 1231 4230',
-                          hintStyle: const TextStyle(
-                              color: Color(0xFF9E9E9E),
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400),
-                          contentPadding: const EdgeInsets.only(
-                              left: 10, top: 15, bottom: 15),
-                          enabled: true,
-                          fillColor: AppColors.silver,
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                              width: 1,
-                              color: AppColors.pastelBlue,
+                      SizedBox(
+                        height: 70,
+                        child: IntlPhoneField(
+                          flagsButtonPadding: const EdgeInsets.all(8),
+                          dropdownIcon: const Icon(
+                            Icons.keyboard_arrow_down_sharp,
+                            color: Color(0xFF9E9E9E),
+                          ),
+                          dropdownIconPosition: IconPosition.trailing,
+                          cursorColor: AppColors.silver,
+                          decoration: InputDecoration(
+                            hintText: 'eg. 2324 1231 4230',
+                            hintStyle: const TextStyle(
+                                color: Color(0xFF9E9E9E),
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400),
+                            contentPadding: const EdgeInsets.only(
+                                left: 10, top: 15, bottom: 15),
+                            enabled: true,
+                            fillColor: AppColors.silver,
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                width: 1,
+                                color: AppColors.pastelBlue,
+                              ),
+                              borderRadius: BorderRadius.circular(25),
                             ),
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                              width: 1,
-                              color: AppColors.pastelBlue,
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                width: 1,
+                                color: AppColors.pastelBlue,
+                              ),
+                              borderRadius: BorderRadius.circular(25),
                             ),
-                            borderRadius: BorderRadius.circular(25),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(25),
+                            ),
                           ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(25),
-                          ),
+                          validator: (phone) {
+                            if (phone == null || phone.number.isEmpty) {
+                              return 'Please enter a phone number';
+                            } else {
+                              return null;
+                            }
+                          },
+                          onChanged: (phone) {},
                         ),
-                        validator: (phone) {
-                          if (phone == null || phone.number.isEmpty) {
-                            return 'Please enter a phone number';
-                          } else {
-                            return null;
-                          }
-                        },
-                        onChanged: (phone) {},
                       ),
                       const Positioned(
                         right: 20,
