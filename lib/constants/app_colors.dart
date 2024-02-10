@@ -20,4 +20,6 @@ class AppColors {
   static const springGreen = Color(0Xff3FDD75);
   static const red = Color(0XffFF4B4B);
   static const tealBlue = Color(0Xff49C5B6);
-}
+  static const pastelBlue = Color(0XffCDD9FF);
+
+} 

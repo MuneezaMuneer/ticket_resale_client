@@ -22,6 +22,7 @@ class HomeScreen extends StatelessWidget {
     final double height = size.height;
     final double width = size.width;
     return Scaffold(
+      backgroundColor: AppColors.pastelBlue,
       body: SingleChildScrollView(
         child: Stack(
           children: [

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:ticket_resale/providers/navigation_provider.dart';
+import 'package:ticket_resale/screens/screens.dart';
 import 'package:ticket_resale/utils/app_routes.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
@@ -29,7 +30,7 @@ class TicketResale extends StatelessWidget {
             fontFamily: GoogleFonts.openSans().fontFamily,
           ),
           debugShowCheckedModeBanner: false,
-          home: const CustomNavigation()),
+          home: const SplashScreen()),
     );
   }
 }

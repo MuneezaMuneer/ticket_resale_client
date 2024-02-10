@@ -20,7 +20,6 @@ class CustomTextField extends StatelessWidget {
   final int? maxLines;
   final bool readOnly;
   final bool isCommentField;
-
   final TextStyle? suffixStyle;
   final bool isVisibleText;
   final String obscuringCharacter;
