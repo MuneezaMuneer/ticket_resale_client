@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:ticket_resale/providers/navigation_provider.dart';
 import 'package:ticket_resale/screens/screens.dart';
 import 'package:ticket_resale/utils/app_routes.dart';
-import 'package:ticket_resale/widgets/widgets.dart';
+
 
 void main() => runApp(
       const TicketResale(),

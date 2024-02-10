@@ -14,6 +14,7 @@ class HomeDetailScreen extends StatelessWidget {
     final double height = size.height;
     final double width = size.width;
     return Scaffold(
+      backgroundColor: AppColors.pastelBlue.withOpacity(0.3),
       body: AppBackground(
         imagePath: AppImages.concert,
         isBackButton: true,
@@ -50,6 +51,7 @@ class HomeDetailScreen extends StatelessWidget {
                     imagePath: AppSvgs.clock,
                     backgroundColor: AppColors.white,
                     avatarBg: AppColors.paleGrey,
+                    containerBorderColor: AppColors.white,
                     title: '25th Janurary 2024',
                     titleColor: AppColors.lightGrey.withOpacity(0.6),
                     titleSize: AppSize.xsmall,
@@ -93,6 +95,7 @@ class HomeDetailScreen extends StatelessWidget {
                   width: width * 0.9,
                   imagePath: AppImages.profile,
                   backgroundColor: AppColors.white,
+                  containerBorderColor: AppColors.white,
                   avatarBg: AppColors.paleGrey,
                   title: 'Post by',
                   titleColor: AppColors.lightGrey.withOpacity(0.6),
@@ -122,6 +125,7 @@ class HomeDetailScreen extends StatelessWidget {
                 _tileContainer(
                   height: height * 0.07,
                   width: width * 0.9,
+                  containerBorderColor: AppColors.blueViolet.withOpacity(0.8),
                   isSvg: true,
                   imagePath: AppSvgs.ticket,
                   backgroundColor: const Color(0XffF7F5FF),
@@ -172,6 +176,7 @@ class HomeDetailScreen extends StatelessWidget {
   Widget _tileContainer({
     double? height,
     double? width,
+    Color? containerBorderColor,
     String? imagePath,
     bool isSvg = false,
     Color? backgroundColor,
@@ -190,7 +195,9 @@ class HomeDetailScreen extends StatelessWidget {
       height: height,
       width: width,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(56), color: backgroundColor),
+          border: Border.all(color: containerBorderColor!),
+          borderRadius: BorderRadius.circular(56),
+          color: backgroundColor),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

@@ -49,11 +49,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   height: height * 0.02,
                 ),
                 const Row(
-                  // mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Expanded(
                       child: CustomTextField(
-                        borderColor: AppColors.silver,
                         hintText: 'First Name',
                       ),
                     ),
@@ -61,8 +59,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       width: 10,
                     ),
                     Expanded(
-                      child: CustomTextField(
-                          borderColor: AppColors.silver, hintText: 'Last Name'),
+                      child: CustomTextField(hintText: 'Last Name'),
                     )
                   ],
                 ),
@@ -70,7 +67,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   height: 12,
                 ),
                 const CustomTextField(
-                  borderColor: AppColors.silver,
                   hintText: 'Email',
                   keyBoardType: TextInputType.emailAddress,
                 ),
@@ -78,7 +74,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   height: 12,
                 ),
                 const CustomTextField(
-                  borderColor: AppColors.silver,
                   hintText: 'Password',
                   suffixIcon: Icon(
                     Icons.remove_red_eye_outlined,
@@ -89,7 +84,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   height: 12,
                 ),
                 const CustomTextField(
-                  borderColor: AppColors.silver,
                   hintText: 'Confirm Password',
                   suffixIcon: Icon(
                     Icons.remove_red_eye_outlined,

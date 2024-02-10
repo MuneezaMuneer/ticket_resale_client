@@ -16,7 +16,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     final double height = size.height;
     final double width = size.width;
     return Container(
-      height: height * 0.12,
+      height: height * 0.13,
       width: width,
       decoration: BoxDecoration(
           gradient: customGradient,
@@ -55,12 +55,22 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(right: 25),
+              padding: const EdgeInsets.only(right: 25, top: 10),
               child: GestureDetector(
                   onTap: () {
                     Navigator.pushNamed(context, AppRoutes.notificationScreen);
                   },
-                  child: SvgPicture.asset(AppSvgs.sms)),
+                  child: Container(
+                      height: 45,
+                      width: 45,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: AppColors.white.withOpacity(0.1),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: SvgPicture.asset(AppSvgs.sms),
+                      ))),
             )
           ],
         ),
@@ -69,5 +79,5 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

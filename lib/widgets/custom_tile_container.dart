@@ -33,7 +33,7 @@ class CustomTileContainer extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
-              color: AppColors.silver.withOpacity(0.7),
+              color: const Color(0XffEAE6F4),
             ),
             color: AppColors.white,
           ),

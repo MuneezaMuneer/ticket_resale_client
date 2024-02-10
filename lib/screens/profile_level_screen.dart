@@ -13,10 +13,14 @@ class ProfileLevelScreen extends StatelessWidget {
     final double height = size.height;
     final double width = size.width;
     return Scaffold(
+      backgroundColor: AppColors.pastelBlue.withOpacity(0.3),
       body: Column(
         children: [
-          const CustomAppBar(
-            title: 'Profile',
+          SizedBox(
+            height: height * 0.11,
+            child: const CustomAppBar(
+              title: 'Profile',
+            ),
           ),
           const SizedBox(
             height: 15,
@@ -60,8 +64,9 @@ class ProfileLevelScreen extends StatelessWidget {
                       topLeft: Radius.circular(40),
                       topRight: Radius.circular(40))),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30),
+                padding: const EdgeInsets.fromLTRB(30, 30, 30, 0),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const CustomText(
                       title: 'Your Profile Level',
@@ -69,68 +74,72 @@ class ProfileLevelScreen extends StatelessWidget {
                       weight: FontWeight.w600,
                       color: AppColors.jetBlack,
                     ),
-                    SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CustomText(
-                            title:
-                                'Complete below mentioned steps to get higher trust level badge for you profile.',
-                            size: AppSize.medium,
-                            weight: FontWeight.w400,
-                            softWrap: true,
-                            color: AppColors.jetBlack.withOpacity(0.7),
-                          ),
-                          const Gap(20),
-                          InkWell(
-                            onTap: () {
-                              Navigator.pushNamed(
-                                  context, AppRoutes.feedbackScreen);
-                            },
-                            child: _buildContainer(
-                                AppSvgs.levelOne,
-                                'Verify your email',
-                                'Level 1 verified',
+                    CustomText(
+                      title:
+                          'Complete below mentioned steps to get higher trust level badge for you profile.',
+                      size: AppSize.medium,
+                      weight: FontWeight.w400,
+                      softWrap: true,
+                      color: AppColors.jetBlack.withOpacity(0.7),
+                    ),
+                    const Gap(7),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.vertical,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Gap(20),
+                            InkWell(
+                              onTap: () {
+                                Navigator.pushNamed(
+                                    context, AppRoutes.feedbackScreen);
+                              },
+                              child: _buildContainer(
+                                  AppSvgs.levelOne,
+                                  'Verify your email',
+                                  'Level 1 verified',
+                                  width,
+                                  AppColors.yellow,
+                                  AppColors.yellow),
+                            ),
+                            _buildContainer(
+                                AppSvgs.levelTwo,
+                                'Verify your Phone No',
+                                'Level 2 verified',
                                 width,
                                 AppColors.yellow,
                                 AppColors.yellow),
-                          ),
-                          _buildContainer(
-                              AppSvgs.levelTwo,
-                              'Verify your Phone No',
-                              'Level 2 verified',
-                              width,
-                              AppColors.yellow,
-                              AppColors.yellow),
-                          _buildContainer(
-                              AppSvgs.levelThree,
-                              'Connect you PayPal',
-                              'Verify for Level 3',
-                              width,
-                              AppColors.blueViolet,
-                              AppColors.blueViolet),
-                          _buildContainer(
-                              AppSvgs.levelFour,
-                              'Add Instagram profile',
-                              'Verify for Level 4',
-                              width,
-                              AppColors.blueViolet,
-                              AppColors.blueViolet),
-                          _buildContainer(
-                              AppSvgs.levelFive,
-                              'Post your 1st Ticket',
-                              'Verify for Level 5',
-                              width,
-                              AppColors.blueViolet,
-                              AppColors.blueViolet),
-                          _buildContainer(
-                              AppSvgs.levelSix,
-                              'Make your 1st transaction',
-                              'Verify for Level 6',
-                              width,
-                              AppColors.blueViolet,
-                              AppColors.blueViolet),
-                        ],
+                            _buildContainer(
+                                AppSvgs.levelThree,
+                                'Connect you PayPal',
+                                'Verify for Level 3',
+                                width,
+                                AppColors.blueViolet,
+                                AppColors.blueViolet),
+                            _buildContainer(
+                                AppSvgs.levelFour,
+                                'Add Instagram profile',
+                                'Verify for Level 4',
+                                width,
+                                AppColors.blueViolet,
+                                AppColors.blueViolet),
+                            _buildContainer(
+                                AppSvgs.levelFive,
+                                'Post your 1st Ticket',
+                                'Verify for Level 5',
+                                width,
+                                AppColors.blueViolet,
+                                AppColors.blueViolet),
+                            _buildContainer(
+                                AppSvgs.levelSix,
+                                'Make your 1st transaction',
+                                'Verify for Level 6',
+                                width,
+                                AppColors.blueViolet,
+                                AppColors.blueViolet),
+                          ],
+                        ),
                       ),
                     ),
                   ],
@@ -176,7 +185,7 @@ class ProfileLevelScreen extends StatelessWidget {
                 children: [
                   SvgPicture.asset(
                     AppSvgs.verified,
-                    color: svgColor,
+                    colorFilter: ColorFilter.mode(svgColor, BlendMode.srcIn),
                   ),
                   const Gap(2),
                   CustomText(

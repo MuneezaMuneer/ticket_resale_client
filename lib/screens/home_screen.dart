@@ -22,6 +22,7 @@ class HomeScreen extends StatelessWidget {
     final double height = size.height;
     final double width = size.width;
     return Scaffold(
+      backgroundColor: AppColors.pastelBlue.withOpacity(0.3),
       body: SingleChildScrollView(
         child: Stack(
           children: [
@@ -67,10 +68,17 @@ class HomeScreen extends StatelessWidget {
                             ),
                           ],
                         ),
-                        const Icon(
-                          Icons.menu,
-                          color: AppColors.white,
-                        )
+                        Container(
+                            height: 45,
+                            width: 45,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: AppColors.white.withOpacity(0.1),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: SvgPicture.asset(AppSvgs.sms),
+                            ))
                       ],
                     ),
                     SizedBox(height: height * 0.03),
@@ -101,10 +109,9 @@ class HomeScreen extends StatelessWidget {
                   Align(
                     alignment: Alignment.center,
                     child: SizedBox(
-                      height: height * 0.07,
-                      width: width * 0.8,
+                      height: height * 0.08,
+                      width: width * 0.85,
                       child: CustomTextField(
-                        borderColor: AppColors.silver.withOpacity(0.3),
                         hintText: 'Search Event & Tickets',
                         fillColor: AppColors.white,
                         isFilled: true,
@@ -165,8 +172,7 @@ class HomeScreen extends StatelessWidget {
                           height: height * 0.1,
                           width: width * 0.8,
                           decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: AppColors.silver.withOpacity(0.3)),
+                              border: Border.all(color: AppColors.pastelBlue),
                               color: AppColors.white,
                               borderRadius: BorderRadius.circular(10)),
                           child: Column(
@@ -223,11 +229,12 @@ class HomeScreen extends StatelessWidget {
                             padding: const EdgeInsets.only(right: 10),
                             child: Container(
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
                                   border: Border.all(
                                       color:
-                                          AppColors.lightGrey.withOpacity(0.2)),
-                                  color: AppColors.paleGrey.withOpacity(0.2)),
+                                          AppColors.pastelBlue.withOpacity(0.7),
+                                      width: 2),
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: const Color(0XffF7F5FF)),
                               child: Column(
                                 children: [
                                   Padding(

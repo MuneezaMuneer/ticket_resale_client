@@ -40,10 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           color: AppColors.darkpurple,
                           fontSize: AppSize.xxlarge,
                           fontWeight: FontWeight.w700),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          // navigate to desired screen
-                        },
+                      recognizer: TapGestureRecognizer()..onTap = () {},
                     )
                   ],
                 ),

@@ -32,9 +32,9 @@ class _CustomNavigationState extends State<CustomNavigation> {
           body: _widgetOptions[indexValue.selectedIndex],
           bottomNavigationBar: Container(
             height: 70,
-            decoration: const BoxDecoration(
-              color: AppColors.white,
-            ),
+            decoration: const BoxDecoration(color: AppColors.white, boxShadow: [
+              BoxShadow(color: AppColors.purple, blurRadius: 10)
+            ]),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [

@@ -12,7 +12,6 @@ class CustomTextField extends StatelessWidget {
   final OnChanged onChanged;
   final ValidatorFormField? validator;
   final TextInputType? keyBoardType;
-  final Color borderColor;
   final Color? fillColor;
   final bool isFilled;
   final FontWeight? weight;
@@ -20,7 +19,6 @@ class CustomTextField extends StatelessWidget {
   final int? maxLines;
   final bool readOnly;
   final bool isCommentField;
-
   final TextStyle? suffixStyle;
   final bool isVisibleText;
   final String obscuringCharacter;
@@ -40,7 +38,6 @@ class CustomTextField extends StatelessWidget {
     this.height = 56,
     this.isVisibleText = false,
     this.readOnly = false,
-    required this.borderColor,
     this.obscuringCharacter = '●',
     this.prefixIcon,
     this.fillColor,

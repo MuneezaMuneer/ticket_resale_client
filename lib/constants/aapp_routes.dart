@@ -1,4 +1,4 @@
-import 'package:ticket_resale/screens/profile_setting.dart';
+
 
 class AppRoutes {
   static const logIn = '/loginScreen';

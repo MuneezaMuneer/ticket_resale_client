@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:ticket_resale/components/app_background.dart';
 import 'package:ticket_resale/constants/constants.dart';
-
 import '../widgets/widgets.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -48,7 +47,6 @@ class _SignInScreenState extends State<SignInScreen> {
                 height: height * 0.02,
               ),
               const CustomTextField(
-                borderColor: AppColors.silver,
                 hintText: 'Email ID',
                 keyBoardType: TextInputType.emailAddress,
               ),
@@ -56,7 +54,6 @@ class _SignInScreenState extends State<SignInScreen> {
                 height: height * 0.02,
               ),
               const CustomTextField(
-                borderColor: AppColors.silver,
                 hintText: 'Password',
                 suffixIcon: Icon(
                   Icons.remove_red_eye_outlined,

@@ -66,7 +66,6 @@ class _AddNewTicketState extends State<AddNewTicket> {
                 height: 15,
               ),
               CustomTextField(
-                borderColor: AppColors.skyBlue,
                 hintText: 'Festival Name',
                 weight: FontWeight.w400,
                 hintStyle: _buildHintStyle(),
@@ -84,7 +83,6 @@ class _AddNewTicketState extends State<AddNewTicket> {
                 height: 15,
               ),
               CustomTextField(
-                borderColor: AppColors.skyBlue,
                 hintText: 'Date',
                 suffixIcon: Padding(
                   padding: const EdgeInsets.all(10),
@@ -107,7 +105,6 @@ class _AddNewTicketState extends State<AddNewTicket> {
                 height: 15,
               ),
               CustomTextField(
-                borderColor: AppColors.skyBlue,
                 hintText: 'Select Type',
                 suffixIcon: const Icon(Icons.keyboard_arrow_down_rounded),
                 hintStyle: _buildHintStyle(),
@@ -125,7 +122,6 @@ class _AddNewTicketState extends State<AddNewTicket> {
                 height: 15,
               ),
               CustomTextField(
-                borderColor: AppColors.skyBlue,
                 hintText: 'Enter Ticket Price',
                 hintStyle: _buildHintStyle(),
               ),
@@ -144,7 +140,6 @@ class _AddNewTicketState extends State<AddNewTicket> {
               CustomTextField(
                 maxLines: 5,
                 isCommentField: true,
-                borderColor: AppColors.skyBlue,
                 hintText: 'Enter Your Description Here',
                 hintStyle: _buildHintStyle(),
               ),

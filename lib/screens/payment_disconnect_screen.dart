@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:svg_flutter/svg.dart';
 import 'package:ticket_resale/constants/constants.dart';
-import 'package:ticket_resale/utils/app_dialouge.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
 class PaymentDisconnectScreen extends StatelessWidget {
@@ -13,6 +12,7 @@ class PaymentDisconnectScreen extends StatelessWidget {
     final double height = size.height;
     final double width = size.width;
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 230, 234, 248),
       appBar: const CustomAppBar(
         title: 'Payment Method',
       ),

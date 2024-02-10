@@ -136,7 +136,6 @@ class FeedBackScreen extends StatelessWidget {
                         fillColor: AppColors.white,
                         maxLines: 5,
                         isFilled: true,
-                        borderColor: AppColors.silver,
                         hintText: 'Enter your comment here',
                         isCommentField: true,
                       ),
