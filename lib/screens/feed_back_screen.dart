@@ -13,6 +13,7 @@ class FeedBackScreen extends StatelessWidget {
     final double height = size.height;
     final double width = size.width;
     return Scaffold(
+      backgroundColor: AppColors.pastelBlue.withOpacity(0.3),
       appBar: const CustomAppBar(
         title: 'Feedback',
       ),
@@ -151,7 +152,8 @@ class FeedBackScreen extends StatelessWidget {
                           gradient: customGradient,
                           weight: FontWeight.w700,
                         ),
-                      )
+                      ),
+                      const Gap(20),
                     ],
                   ),
                 ),

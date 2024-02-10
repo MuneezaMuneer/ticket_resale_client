@@ -15,6 +15,7 @@ class CommentScreen extends StatelessWidget {
     final double height = size.height;
     final double width = size.width;
     return Scaffold(
+      backgroundColor: AppColors.pastelBlue.withOpacity(0.3),
       body: AppBackground(
         imagePath: AppImages.concert,
         isBackButton: true,

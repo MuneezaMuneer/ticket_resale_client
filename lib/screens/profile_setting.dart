@@ -15,6 +15,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.pastelBlue.withOpacity(0.3),
       appBar: const CustomAppBar(
         title: 'Profile Settings',
       ),
@@ -55,31 +56,24 @@ class _ProfileSettingsState extends State<ProfileSettings> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const CustomText(
-                    title: 'FullName',
-                    color: AppColors.blueGrey,
-                    weight: FontWeight.w600,
-                    size: AppSize.medium,
+                  Text(
+                    'FullName',
+                    style: _buildstyle(),
                   ),
                   const SizedBox(
                     height: 5,
                   ),
-                  const CustomTextField(
+                  CustomTextField(
                     borderColor: AppColors.silver,
                     hintText: 'Samantha Pate',
-                    hintStyle: TextStyle(
-                        color: AppColors.blueGrey,
-                        fontWeight: FontWeight.w400,
-                        fontSize: AppSize.small),
+                    hintStyle: _buildTextFieldstyle(),
                   ),
                   const SizedBox(
                     height: 12,
                   ),
-                  const CustomText(
-                    title: 'Instagram Username',
-                    color: AppColors.blueGrey,
-                    weight: FontWeight.w600,
-                    size: AppSize.medium,
+                  Text(
+                    'Instagram Username',
+                    style: _buildstyle(),
                   ),
                   const SizedBox(
                     height: 5,
@@ -93,33 +87,26 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                         fontSize: AppSize.small),
                   ),
                   const SizedBox(height: 12),
-                  const CustomText(
-                    title: 'Email ID',
-                    color: AppColors.blueGrey,
-                    weight: FontWeight.w600,
-                    size: AppSize.medium,
+                  Text(
+                    'Email ID',
+                    style: _buildstyle(),
                   ),
                   const SizedBox(
                     height: 5,
                   ),
-                  const CustomTextField(
+                  CustomTextField(
                     borderColor: AppColors.silver,
                     hintText: 'Email',
                     trailingText: 'Verify',
                     isTrailingText: true,
-                    hintStyle: TextStyle(
-                        color: AppColors.blueGrey,
-                        fontWeight: FontWeight.w400,
-                        fontSize: AppSize.small),
+                    hintStyle: _buildTextFieldstyle(),
                   ),
                   const SizedBox(
                     height: 12,
                   ),
-                  const CustomText(
-                    title: 'Phone No',
-                    color: AppColors.blueGrey,
-                    weight: FontWeight.w600,
-                    size: AppSize.medium,
+                  Text(
+                    'Phone No',
+                    style: _buildstyle(),
                   ),
                   const SizedBox(
                     height: 5,
@@ -147,14 +134,14 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                           enabledBorder: OutlineInputBorder(
                             borderSide: const BorderSide(
                               width: 1,
-                              color: AppColors.silver,
+                              color: AppColors.pastelBlue,
                             ),
                             borderRadius: BorderRadius.circular(25),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderSide: const BorderSide(
                               width: 1,
-                              color: AppColors.silver,
+                              color: AppColors.pastelBlue,
                             ),
                             borderRadius: BorderRadius.circular(25),
                           ),
@@ -186,106 +173,78 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                   const SizedBox(
                     height: 12,
                   ),
-                  const CustomText(
-                    title: 'DOB',
-                    color: AppColors.blueGrey,
-                    weight: FontWeight.w600,
-                    size: AppSize.medium,
+                  Text(
+                    'DOB',
+                    style: _buildstyle(),
                   ),
                   const SizedBox(
                     height: 5,
                   ),
-                  const CustomTextField(
+                  CustomTextField(
                     borderColor: AppColors.silver,
                     hintText: 'date of birth',
-                    hintStyle: TextStyle(
-                        color: AppColors.blueGrey,
-                        fontWeight: FontWeight.w400,
-                        fontSize: AppSize.small),
+                    hintStyle: _buildTextFieldstyle(),
                   ),
                   const SizedBox(
                     height: 12,
                   ),
-                  const CustomText(
-                    title: 'Country',
-                    color: AppColors.blueGrey,
-                    weight: FontWeight.w600,
-                    size: AppSize.medium,
+                  Text(
+                    'Country',
+                    style: _buildstyle(),
                   ),
                   const SizedBox(
                     height: 5,
                   ),
-                  const CustomTextField(
+                  CustomTextField(
                     borderColor: AppColors.silver,
                     hintText: 'country',
-                    suffixIcon: Icon(Icons.keyboard_arrow_down_rounded),
-                    hintStyle: TextStyle(
-                        color: AppColors.blueGrey,
-                        fontWeight: FontWeight.w400,
-                        fontSize: AppSize.small),
+                    suffixIcon: const Icon(Icons.keyboard_arrow_down_rounded),
+                    hintStyle: _buildTextFieldstyle(),
                   ),
                   const SizedBox(
                     height: 12,
                   ),
-                  const CustomText(
-                    title: 'State',
-                    color: AppColors.blueGrey,
-                    weight: FontWeight.w600,
-                    size: AppSize.medium,
+                  Text(
+                    'State',
+                    style: _buildstyle(),
                   ),
                   const SizedBox(
                     height: 5,
                   ),
-                  const CustomTextField(
-                    borderColor: AppColors.silver,
-                    hintText: 'state',
-                    suffixIcon: Icon(Icons.keyboard_arrow_down_rounded),
-                    hintStyle: TextStyle(
-                        color: AppColors.blueGrey,
-                        fontWeight: FontWeight.w400,
-                        fontSize: AppSize.small),
-                  ),
+                  CustomTextField(
+                      borderColor: AppColors.silver,
+                      hintText: 'state',
+                      suffixIcon: const Icon(Icons.keyboard_arrow_down_rounded),
+                      hintStyle: _buildTextFieldstyle()),
                   const SizedBox(
                     height: 12,
                   ),
-                  const CustomText(
-                    title: 'City',
-                    color: AppColors.blueGrey,
-                    weight: FontWeight.w600,
-                    size: AppSize.medium,
+                  Text(
+                    'City',
+                    style: _buildstyle(),
                   ),
                   const SizedBox(
                     height: 5,
                   ),
-                  const CustomTextField(
-                    borderColor: AppColors.silver,
-                    hintText: 'city',
-                    suffixIcon: Icon(Icons.keyboard_arrow_down_rounded),
-                    hintStyle: TextStyle(
-                        color: AppColors.blueGrey,
-                        fontWeight: FontWeight.w400,
-                        fontSize: AppSize.small),
-                  ),
+                  CustomTextField(
+                      borderColor: AppColors.silver,
+                      hintText: 'city',
+                      suffixIcon: const Icon(Icons.keyboard_arrow_down_rounded),
+                      hintStyle: _buildTextFieldstyle()),
                   const SizedBox(
                     height: 12,
                   ),
-                  const CustomText(
-                    title: 'Zip Code',
-                    color: AppColors.blueGrey,
-                    weight: FontWeight.w600,
-                    size: AppSize.medium,
+                  Text(
+                    'Zip Code',
+                    style: _buildstyle(),
                   ),
                   const SizedBox(
                     height: 5,
                   ),
-                  const CustomTextField(
-                    borderColor: AppColors.silver,
-                    hintText: 'code',
-                    hintStyle: TextStyle(
-                        color: AppColors.blueGrey,
-                        fontWeight: FontWeight.w400,
-                        fontSize: AppSize.small),
-                  ),
+                  CustomTextField(
+                      borderColor: AppColors.silver,
+                      hintText: 'code',
+                      hintStyle: _buildTextFieldstyle()),
                   const SizedBox(
                     height: 25,
                   ),
@@ -308,5 +267,20 @@ class _ProfileSettingsState extends State<ProfileSettings> {
         ),
       ),
     );
+  }
+
+  TextStyle _buildstyle() {
+    return const TextStyle(
+      color: AppColors.blueGrey,
+      fontWeight: FontWeight.w600,
+      fontSize: AppSize.medium,
+    );
+  }
+
+  TextStyle _buildTextFieldstyle() {
+    return const TextStyle(
+        color: AppColors.blueGrey,
+        fontWeight: FontWeight.w400,
+        fontSize: AppSize.small);
   }
 }

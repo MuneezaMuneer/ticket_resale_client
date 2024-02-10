@@ -10,8 +10,8 @@ class CustomSwitch extends StatelessWidget {
       scale: 0.8,
       child: CupertinoSwitch(
         activeColor: Colors.pink.shade200,
-        thumbColor: AppColors.lightGrey,
-        trackColor: Colors.black12,
+        thumbColor: AppColors.white,
+        trackColor: AppColors.pastelBlue,
         value: false,
         onChanged: (bool value) {},
       ),

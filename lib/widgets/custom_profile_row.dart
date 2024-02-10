@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:svg_flutter/svg.dart';
 import 'package:ticket_resale/constants/app_colors.dart';
@@ -7,12 +6,12 @@ import 'widgets.dart';
 
 class CustomProfileRow extends StatelessWidget {
   final IconData? leadingIcon;
-  final IconData? trailingIcon;
   final Color? iconColor;
   final Color? leadingColor;
   final String? title;
   final Color? color;
   final double? size;
+  final bool? isLastRow;
   final TextStyle? style;
   final bool arrowBack;
   final String? svgImage;
@@ -28,8 +27,8 @@ class CustomProfileRow extends StatelessWidget {
       this.iconColor,
       this.weight,
       this.arrowBack = true,
+      this.isLastRow = false,
       this.leadingIcon,
-      this.trailingIcon,
       this.svgImage,
       this.isSvg = false,
       this.leadingColor});
@@ -47,7 +46,7 @@ class CustomProfileRow extends StatelessWidget {
                 width: 48,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: AppColors.silver)),
+                    border: Border.all(color: AppColors.pastelBlue)),
                 child: isSvg
                     ? Padding(
                         padding: const EdgeInsets.all(12),
@@ -74,7 +73,7 @@ class CustomProfileRow extends StatelessWidget {
               SizedBox(
                 child: arrowBack
                     ? Icon(
-                        trailingIcon,
+                        Icons.arrow_forward_ios,
                         size: 15,
                         color: iconColor,
                       )
@@ -82,7 +81,11 @@ class CustomProfileRow extends StatelessWidget {
               ),
             ],
           ),
-          const CustomDivider(),
+          if (!isLastRow!) const CustomDivider(),
+          if (isLastRow!)
+            const SizedBox(
+              height: 20,
+            ),
           const SizedBox(
             height: 3,
           ),

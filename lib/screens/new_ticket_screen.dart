@@ -30,17 +30,19 @@ class _AddNewTicketState extends State<AddNewTicket> {
               ),
               Container(
                 height: 150,
-                width: 364,
                 decoration: BoxDecoration(
                   color: AppColors.white,
                   borderRadius: BorderRadius.circular(15),
                   border: Border.all(color: AppColors.skyBlue, width: 1),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 30),
+                child: Center(
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Center(child: SvgPicture.asset(AppSvgs.image)),
+                      SvgPicture.asset(AppSvgs.image),
+                      const SizedBox(
+                        height: 10,
+                      ),
                       const CustomText(
                         title: 'Add Ticket Image Thumbnail',
                         color: AppColors.silver,
@@ -63,13 +65,11 @@ class _AddNewTicketState extends State<AddNewTicket> {
               const SizedBox(
                 height: 15,
               ),
-              const CustomTextField(
+              CustomTextField(
                 borderColor: AppColors.skyBlue,
                 hintText: 'Festival Name',
                 weight: FontWeight.w400,
-                hintStyle: TextStyle(
-                  color: AppColors.silver,
-                ),
+                hintStyle: _buildHintStyle(),
               ),
               const SizedBox(
                 height: 15,
@@ -92,10 +92,7 @@ class _AddNewTicketState extends State<AddNewTicket> {
                     AppSvgs.date,
                   ),
                 ),
-                hintStyle: const TextStyle(
-                    color: AppColors.blueGrey,
-                    fontWeight: FontWeight.w400,
-                    fontSize: AppSize.medium),
+                hintStyle: _buildHintStyle(),
               ),
               const SizedBox(
                 height: 15,
@@ -109,14 +106,11 @@ class _AddNewTicketState extends State<AddNewTicket> {
               const SizedBox(
                 height: 15,
               ),
-              const CustomTextField(
+              CustomTextField(
                 borderColor: AppColors.skyBlue,
                 hintText: 'Select Type',
-                suffixIcon: Icon(Icons.keyboard_arrow_down_rounded),
-                hintStyle: TextStyle(
-                    color: AppColors.blueGrey,
-                    fontWeight: FontWeight.w400,
-                    fontSize: AppSize.medium),
+                suffixIcon: const Icon(Icons.keyboard_arrow_down_rounded),
+                hintStyle: _buildHintStyle(),
               ),
               const SizedBox(
                 height: 15,
@@ -130,13 +124,10 @@ class _AddNewTicketState extends State<AddNewTicket> {
               const SizedBox(
                 height: 15,
               ),
-              const CustomTextField(
+              CustomTextField(
                 borderColor: AppColors.skyBlue,
                 hintText: 'Enter Ticket Price',
-                hintStyle: TextStyle(
-                    color: AppColors.blueGrey,
-                    fontWeight: FontWeight.w400,
-                    fontSize: AppSize.medium),
+                hintStyle: _buildHintStyle(),
               ),
               const SizedBox(
                 height: 15,
@@ -150,15 +141,12 @@ class _AddNewTicketState extends State<AddNewTicket> {
               const SizedBox(
                 height: 15,
               ),
-              const CustomTextField(
+              CustomTextField(
                 maxLines: 5,
                 isCommentField: true,
                 borderColor: AppColors.skyBlue,
                 hintText: 'Enter Your Description Here',
-                hintStyle: TextStyle(
-                    color: AppColors.blueGrey,
-                    fontWeight: FontWeight.w400,
-                    fontSize: AppSize.medium),
+                hintStyle: _buildHintStyle(),
               ),
               const SizedBox(
                 height: 15,
@@ -180,5 +168,12 @@ class _AddNewTicketState extends State<AddNewTicket> {
         ),
       ),
     );
+  }
+
+  TextStyle _buildHintStyle() {
+    return const TextStyle(
+        color: AppColors.blueGrey,
+        fontWeight: FontWeight.w400,
+        fontSize: AppSize.medium);
   }
 }

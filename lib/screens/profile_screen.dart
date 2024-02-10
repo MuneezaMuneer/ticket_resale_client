@@ -14,6 +14,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.pastelBlue.withOpacity(0.3),
       appBar: const CustomAppBar(
         title: 'Profile',
       ),
@@ -66,7 +67,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       leadingIcon: Icons.person_2_outlined,
                       title: 'Profile Settings',
                       color: AppColors.jetBlack,
-                      trailingIcon: Icons.arrow_forward_ios,
                       iconColor: AppColors.lightGrey,
                     ),
                   ),
@@ -80,7 +80,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       isSvg: true,
                       title: 'Your Level',
                       color: AppColors.jetBlack,
-                      trailingIcon: Icons.arrow_forward_ios,
                       iconColor: AppColors.lightGrey,
                     ),
                   ),
@@ -88,7 +87,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     leadingIcon: Icons.notifications_none,
                     title: 'Notification',
                     color: AppColors.jetBlack,
-                    trailingIcon: Icons.arrow_forward_ios,
+                    arrowBack: false,
                     iconColor: AppColors.lightGrey,
                   ),
                   GestureDetector(
@@ -100,7 +99,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       leadingColor: AppColors.electricBlue,
                       title: 'Connect paypal',
                       color: AppColors.electricBlue,
-                      trailingIcon: Icons.arrow_forward_ios,
                       iconColor: AppColors.electricBlue,
                     ),
                   ),
@@ -108,7 +106,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     leadingIcon: Icons.privacy_tip_outlined,
                     title: 'Privacy Policy',
                     color: AppColors.jetBlack,
-                    trailingIcon: Icons.arrow_forward_ios,
                     iconColor: AppColors.lightGrey,
                   ),
                   const CustomProfileRow(
@@ -116,7 +113,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     isSvg: true,
                     title: 'Term of Use',
                     color: AppColors.jetBlack,
-                    trailingIcon: Icons.arrow_forward_ios,
                     iconColor: AppColors.lightGrey,
                   ),
                   const CustomProfileRow(
@@ -124,7 +120,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     leadingColor: AppColors.blueViolet,
                     title: 'Logout',
                     color: AppColors.blueViolet,
-                    trailingIcon: Icons.arrow_forward_ios,
                     iconColor: AppColors.blueViolet,
                   ),
                   GestureDetector(
@@ -133,10 +128,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     },
                     child: const CustomProfileRow(
                       leadingIcon: Icons.delete_outline,
+                      isLastRow: true,
                       leadingColor: AppColors.raddishPink,
                       title: 'Delete Account',
                       color: AppColors.raddishPink,
-                      trailingIcon: Icons.arrow_forward_ios,
                       iconColor: AppColors.raddishPink,
                     ),
                   ),

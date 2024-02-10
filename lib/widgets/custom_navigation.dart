@@ -1,9 +1,3 @@
-//   void _onItemTapped(int index) {
-//     if (index != 4) {
-//       navigationProvider.setSelectedIndex(index);
-//     }
-//   }
-// }
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:svg_flutter/svg_flutter.dart';
@@ -16,7 +10,6 @@ class CustomNavigation extends StatefulWidget {
   const CustomNavigation({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _CustomNavigationState createState() => _CustomNavigationState();
 }
 
@@ -127,36 +120,37 @@ class _CustomNavigationState extends State<CustomNavigation> {
                   ],
                 ),
                 IconButton(
-                    enableFeedback: false,
-                    onPressed: () {
-                      navigationProvider.setSelectedIndex(2);
-                    },
-                    icon: indexValue.selectedIndex == 2
-                        ? Column(
-                            children: [
-                              SvgPicture.asset(
-                                AppSvgs.level,
-                                colorFilter: const ColorFilter.mode(
-                                    AppColors.blueViolet, BlendMode.srcIn),
-                              ),
-                              const CustomText(
-                                title: 'Levels',
-                                color: AppColors.blueViolet,
-                              )
-                            ],
-                          )
-                        : Column(
-                            children: [
-                              SvgPicture.asset(AppSvgs.level,
-                                  colorFilter: ColorFilter.mode(
-                                      AppColors.blueViolet.withOpacity(0.6),
-                                      BlendMode.srcIn)),
-                              CustomText(
-                                title: 'Level',
-                                color: AppColors.blueViolet.withOpacity(0.6),
-                              )
-                            ],
-                          )),
+                  enableFeedback: false,
+                  onPressed: () {
+                    navigationProvider.setSelectedIndex(2);
+                  },
+                  icon: indexValue.selectedIndex == 2
+                      ? Column(
+                          children: [
+                            SvgPicture.asset(
+                              AppSvgs.level,
+                              colorFilter: const ColorFilter.mode(
+                                  AppColors.blueViolet, BlendMode.srcIn),
+                            ),
+                            const CustomText(
+                              title: 'Levels',
+                              color: AppColors.blueViolet,
+                            )
+                          ],
+                        )
+                      : Column(
+                          children: [
+                            SvgPicture.asset(AppSvgs.level,
+                                colorFilter: ColorFilter.mode(
+                                    AppColors.blueViolet.withOpacity(0.6),
+                                    BlendMode.srcIn)),
+                            CustomText(
+                              title: 'Level',
+                              color: AppColors.blueViolet.withOpacity(0.6),
+                            )
+                          ],
+                        ),
+                ),
                 IconButton(
                     enableFeedback: false,
                     onPressed: () {

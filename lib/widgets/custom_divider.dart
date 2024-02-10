@@ -9,7 +9,7 @@ class CustomDivider extends StatelessWidget {
     return const SizedBox(
       child: Divider(
         thickness: 1,
-        color: AppColors.silver,
+        color: AppColors.pastelBlue,
         endIndent: 15,
         indent: 15,
       ),

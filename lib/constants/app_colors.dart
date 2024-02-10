@@ -6,6 +6,8 @@ class AppColors {
   static const jetBlack = Color(0Xff000000);
   static const lightGrey = Color(0Xff6B779A);
   static const silver = Color(0XffB6BBCC);
+
+  /// #CDD9FF ...
   static const grey = Color(0Xff424242);
   static const white = Color(0XffFFFFFF);
   static const paleGrey = Color.fromARGB(255, 233, 236, 246);
@@ -22,4 +24,5 @@ class AppColors {
   static const skyBlue = Color(0Xffe4eafe);
   static const gryishBlue = Color(0Xff403B4E);
   static const tealBlue = Color(0Xff49C5B6);
+  static const pastelBlue = Color(0XffCDD9FF);
 }

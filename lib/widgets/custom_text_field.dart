@@ -84,22 +84,22 @@ class CustomTextField extends StatelessWidget {
             borderRadius: isCommentField
                 ? BorderRadius.circular(12)
                 : BorderRadius.circular(42),
-            borderSide: BorderSide(
-              color: borderColor,
+            borderSide: const BorderSide(
+              color: AppColors.pastelBlue,
             )),
         focusedBorder: OutlineInputBorder(
             borderRadius: isCommentField
                 ? BorderRadius.circular(12)
                 : BorderRadius.circular(42),
-            borderSide: BorderSide(
-              color: borderColor,
+            borderSide: const BorderSide(
+              color: AppColors.pastelBlue,
             )),
         border: OutlineInputBorder(
             borderRadius: isCommentField
                 ? BorderRadius.circular(12)
                 : BorderRadius.circular(42),
-            borderSide: BorderSide(
-              color: borderColor,
+            borderSide: const BorderSide(
+              color: AppColors.pastelBlue,
             )),
         hintStyle: const TextStyle(
           color: AppColors.silver,
