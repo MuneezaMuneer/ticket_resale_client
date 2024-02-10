@@ -4,7 +4,6 @@ import 'package:gap/gap.dart';
 import 'package:svg_flutter/svg.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
-import '../widgets/custom_tile_container.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -69,8 +68,8 @@ class HomeScreen extends StatelessWidget {
                           ],
                         ),
                         Container(
-                            height: 45,
-                            width: 45,
+                            height: 40,
+                            width: 40,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               color: AppColors.white.withOpacity(0.1),
@@ -81,7 +80,7 @@ class HomeScreen extends StatelessWidget {
                             ))
                       ],
                     ),
-                    SizedBox(height: height * 0.03),
+                    const Gap(10),
                     const CustomText(
                       title: 'Discover Amazing',
                       color: AppColors.white,
@@ -260,9 +259,10 @@ class HomeScreen extends StatelessWidget {
                   ),
                   const Gap(20),
                   SizedBox(
-                    height: height * 0.43,
+                    height: height * 0.4,
                     width: width,
                     child: ListView.builder(
+                      shrinkWrap: true,
                       scrollDirection: Axis.horizontal,
                       itemCount: 3,
                       itemBuilder: (context, index) {
@@ -274,6 +274,7 @@ class HomeScreen extends StatelessWidget {
                                   context, AppRoutes.detailScreen);
                             },
                             child: CustomTileContainer(
+                              height: height,
                               width: width * 0.65,
                               dateTime: '25th Janurary 8:00 AM - 12:00 AM',
                               posttitle:
@@ -312,7 +313,7 @@ Widget rowText(String title) {
     children: [
       SvgPicture.asset(AppSvgs.calender),
       Padding(
-        padding: const EdgeInsets.only(left: 7),
+        padding: const EdgeInsets.only(left: 4),
         child: CustomText(
           title: title,
           color: AppColors.lightGrey,

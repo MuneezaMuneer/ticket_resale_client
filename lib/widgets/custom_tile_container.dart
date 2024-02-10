@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:svg_flutter/svg_flutter.dart';
 import 'package:ticket_resale/constants/constants.dart';
-
 import 'package:ticket_resale/widgets/widgets.dart';
 
 class CustomTileContainer extends StatelessWidget {
@@ -14,22 +13,21 @@ class CustomTileContainer extends StatelessWidget {
   final String? imagePath;
 
   const CustomTileContainer({
-    super.key,
+    Key? key,
     this.width,
     this.dateTime,
     this.posttitle,
     this.postBy,
     this.imagePath,
     this.height,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Container(
           width: width,
-          height: height,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
@@ -45,9 +43,17 @@ class CustomTileContainer extends StatelessWidget {
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(10),
-                      child: Image.asset(AppImages.concert),
+                      child: SizedBox(
+                          height: constraints.maxHeight * 0.4,
+                          width: constraints.maxWidth,
+                          child: Image.asset(
+                            AppImages.concert,
+                            fit: BoxFit.cover,
+                          )),
                     ),
-                    const Gap(10),
+                    SizedBox(
+                      height: constraints.maxHeight * 0.02,
+                    ),
                     Container(
                       height: 25,
                       width: width,
@@ -73,7 +79,9 @@ class CustomTileContainer extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const Gap(5),
+                    SizedBox(
+                      height: constraints.maxHeight * 0.02,
+                    ),
                     CustomText(
                       title: '$posttitle',
                       softWrap: true,
@@ -81,7 +89,9 @@ class CustomTileContainer extends StatelessWidget {
                       size: AppSize.regular,
                       weight: FontWeight.w600,
                     ),
-                    const Gap(8),
+                    SizedBox(
+                      height: constraints.maxHeight * 0.02,
+                    ),
                     Row(
                       children: [
                         SizedBox(
@@ -119,31 +129,35 @@ class CustomTileContainer extends StatelessWidget {
                   ],
                 ),
               ),
+              SizedBox(
+                height: constraints.maxHeight * 0.01,
+              ),
+              Flexible(
+                flex: 3,
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: SizedBox(
+                    height: 40,
+                    child: CustomButton(
+                      onPressed: () {},
+                      textColor: AppColors.white,
+                      textSize: AppSize.medium,
+                      gradient: customGradient,
+                      isRounded: false,
+                      isSvgImage: true,
+                      btnText: 'Explore More',
+                      socialTextColor: AppColors.white,
+                      socialTextWeight: FontWeight.w700,
+                      socialTextSize: AppSize.verySmall,
+                      weight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
-        ),
-        Positioned(
-          bottom: 0,
-          left: 0,
-          right: 0,
-          child: SizedBox(
-            height: 40,
-            child: CustomButton(
-              onPressed: () {},
-              textColor: AppColors.white,
-              textSize: AppSize.regular,
-              gradient: customGradient,
-              isRounded: false,
-              isSvgImage: true,
-              btnText: 'Explore More',
-              socialTextColor: AppColors.white,
-              socialTextWeight: FontWeight.w700,
-              socialTextSize: AppSize.verySmall,
-              weight: FontWeight.w700,
-            ),
-          ),
-        )
-      ],
+        );
+      },
     );
   }
 }
