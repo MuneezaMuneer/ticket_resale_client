@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:svg_flutter/svg_flutter.dart';
-
 import '../constants/constants.dart';
-
 import '../widgets/widgets.dart';
 
 class ProfileSettings extends StatefulWidget {
@@ -17,12 +15,12 @@ class _ProfileSettingsState extends State<ProfileSettings> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const CustomAppBar(
+        title: 'Profile Settings',
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const CustomAppBar(
-              title: 'Profile',
-            ),
             const SizedBox(
               height: 15,
             ),
@@ -36,9 +34,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                   ),
                 ),
                 Positioned(
-                    left: 90,
-                    top: 70,
-                    child: SvgPicture.asset(AppSvgs.levelOne))
+                    left: 60, top: 55, child: SvgPicture.asset(AppSvgs.camera))
               ],
             ),
             const SizedBox(
@@ -52,10 +48,6 @@ class _ProfileSettingsState extends State<ProfileSettings> {
             ),
             const SizedBox(
               height: 5,
-            ),
-            const CustomRow(),
-            const SizedBox(
-              height: 3,
             ),
             const CustomRow(),
             Padding(

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/widgets/custom_text.dart';
 

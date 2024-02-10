@@ -9,5 +9,4 @@ class AppSize {
   static const double xsmall = 12;
   static const double xxlarge = 32;
   static const double intermediate = 13;
-
 }

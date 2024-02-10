@@ -11,12 +11,13 @@ class PaymentConnectScreen extends StatelessWidget {
     final double height = size.height;
     final double width = size.width;
     return Scaffold(
+      appBar: const CustomAppBar(
+        title: 'Payment Method',
+      ),
       body: Center(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const CustomAppBar(
-              title: 'Payment Method',
-            ),
             SizedBox(
               height: height * 0.1,
             ),
@@ -27,32 +28,34 @@ class PaymentConnectScreen extends StatelessWidget {
               height: height * 0.05,
             ),
             RichText(
-              text: const TextSpan(children: [
-                TextSpan(
-                    text: 'Connect Your',
-                    style: TextStyle(
-                        color: AppColors.jetBlack,
-                        fontWeight: FontWeight.w400,
-                        fontSize: AppSize.large)),
-                TextSpan(
-                    text: '\nPaypal Account',
-                    style: TextStyle(
-                        color: AppColors.jetBlack,
-                        fontWeight: FontWeight.w700,
-                        fontSize: AppSize.verylarge)),
-                TextSpan(
-                    text: '\nLorem ipsum dolor sit amet consectetur',
-                    style: TextStyle(
-                        color: AppColors.lightGrey,
-                        fontWeight: FontWeight.w400,
-                        fontSize: AppSize.regular)),
-                TextSpan(
-                    text: '\nadipiscing elit, sed do eiusmod.',
-                    style: TextStyle(
-                        color: AppColors.lightGrey,
-                        fontWeight: FontWeight.w400,
-                        fontSize: AppSize.regular)),
-              ]),
+              text: const TextSpan(
+                children: [
+                  TextSpan(
+                      text: 'Connect Your',
+                      style: TextStyle(
+                          color: AppColors.jetBlack,
+                          fontWeight: FontWeight.w400,
+                          fontSize: AppSize.large)),
+                  TextSpan(
+                      text: '\nPaypal Account',
+                      style: TextStyle(
+                          color: AppColors.jetBlack,
+                          fontWeight: FontWeight.w700,
+                          fontSize: AppSize.verylarge)),
+                  TextSpan(
+                      text: '\nLorem ipsum dolor sit amet consectetur',
+                      style: TextStyle(
+                          color: AppColors.lightGrey,
+                          fontWeight: FontWeight.w400,
+                          fontSize: AppSize.regular)),
+                  TextSpan(
+                      text: '\nadipiscing elit, sed do eiusmod.',
+                      style: TextStyle(
+                          color: AppColors.lightGrey,
+                          fontWeight: FontWeight.w400,
+                          fontSize: AppSize.regular)),
+                ],
+              ),
               textAlign: TextAlign.center,
               softWrap: true,
             ),
@@ -61,7 +64,9 @@ class PaymentConnectScreen extends StatelessWidget {
               height: height * 0.07,
               width: width * 0.8,
               child: CustomButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, AppRoutes.disconnectScreen);
+                },
                 textColor: AppColors.white,
                 textSize: AppSize.regular,
                 isSocial: true,

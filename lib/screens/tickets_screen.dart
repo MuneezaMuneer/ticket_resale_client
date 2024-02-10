@@ -4,23 +4,21 @@ import 'package:svg_flutter/svg.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
-import '../widgets/custom_text.dart';
-
 class TicketsScreen extends StatelessWidget {
   const TicketsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    final double height = size.height;
+
     final double width = size.width;
     return Scaffold(
+      appBar: const CustomAppBar(
+        title: 'Event Video Player',
+      ),
       backgroundColor: AppColors.paleGrey,
       body: Column(
         children: [
-          const CustomAppBar(
-            title: 'Event Video Player',
-          ),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(20.0),
@@ -194,7 +192,10 @@ class TicketsScreen extends StatelessWidget {
                                   height: 30,
                                   width: width,
                                   child: CustomButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Navigator.pushNamed(
+                                          context, AppRoutes.newTicketScreen);
+                                    },
                                     textColor: AppColors.white,
                                     textSize: AppSize.regular,
                                     isSocial: true,

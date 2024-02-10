@@ -99,7 +99,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 gradient: customGradient,
                 textSize: AppSize.medium,
                 onPressed: () {
-                
+                  Navigator.pushNamed(context, AppRoutes.signIn);
                 },
               ),
               SizedBox(

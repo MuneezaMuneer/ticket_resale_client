@@ -50,11 +50,11 @@ class ProfileLevelScreen extends StatelessWidget {
           const SizedBox(
             height: 3,
           ),
-          Gap(50),
+          const Gap(50),
           Expanded(
             child: Container(
               width: width,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   color: AppColors.paleGrey,
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(40),
@@ -65,7 +65,7 @@ class ProfileLevelScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CustomText(
+                      const CustomText(
                         title: 'Your Profile Level',
                         size: AppSize.large,
                         weight: FontWeight.w600,
@@ -79,14 +79,20 @@ class ProfileLevelScreen extends StatelessWidget {
                         softWrap: true,
                         color: AppColors.jetBlack.withOpacity(0.7),
                       ),
-                      Gap(20),
-                      _buildContainer(
-                          AppSvgs.levelOne,
-                          'Verify your email',
-                          'Level 1 verified',
-                          width,
-                          AppColors.yellow,
-                          AppColors.yellow),
+                      const Gap(20),
+                      InkWell(
+                        onTap: () {
+                          Navigator.pushNamed(
+                              context, AppRoutes.feedbackScreen);
+                        },
+                        child: _buildContainer(
+                            AppSvgs.levelOne,
+                            'Verify your email',
+                            'Level 1 verified',
+                            width,
+                            AppColors.yellow,
+                            AppColors.yellow),
+                      ),
                       _buildContainer(
                           AppSvgs.levelTwo,
                           'Verify your Phone No',
@@ -149,10 +155,10 @@ class ProfileLevelScreen extends StatelessWidget {
           children: [
             Row(
               children: [
-                Gap(8),
+                const Gap(8),
                 SizedBox(
                     height: 30, width: 30, child: SvgPicture.asset(svgPath)),
-                Gap(2),
+                const Gap(2),
                 CustomText(
                   title: title,
                   size: AppSize.intermediate,
@@ -168,7 +174,7 @@ class ProfileLevelScreen extends StatelessWidget {
                     AppSvgs.verified,
                     color: svgColor,
                   ),
-                  Gap(2),
+                  const Gap(2),
                   CustomText(
                     title: leveltext,
                     size: AppSize.verySmall,

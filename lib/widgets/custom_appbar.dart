@@ -5,9 +5,10 @@ import 'package:ticket_resale/widgets/custom_gradient.dart';
 import 'package:ticket_resale/widgets/custom_text.dart';
 import '../constants/constants.dart';
 
-class CustomAppBar extends StatelessWidget {
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
-  const CustomAppBar({super.key, this.title});
+  final Widget? child;
+  const CustomAppBar({super.key, this.title, this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -33,10 +34,15 @@ class CustomAppBar extends StatelessWidget {
               padding: const EdgeInsets.only(left: 25),
               child: Row(
                 children: [
-                  const Icon(
-                    Icons.arrow_back_ios,
-                    color: AppColors.white,
-                    size: 18,
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Icon(
+                      Icons.arrow_back_ios,
+                      color: AppColors.white,
+                      size: 18,
+                    ),
                   ),
                   const Gap(10),
                   CustomText(
@@ -50,11 +56,18 @@ class CustomAppBar extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.only(right: 25),
-              child: SvgPicture.asset(AppSvgs.sms),
+              child: GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, AppRoutes.notificationScreen);
+                  },
+                  child: SvgPicture.asset(AppSvgs.sms)),
             )
           ],
         ),
       ),
     );
   }
+
+  @override
+  Size get preferredSize => Size.fromHeight(kToolbarHeight);
 }

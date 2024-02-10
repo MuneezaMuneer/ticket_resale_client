@@ -102,7 +102,7 @@ class _CustomNavigationState extends State<CustomNavigation> {
                                       AppColors.blueViolet.withOpacity(0.6),
                                       BlendMode.srcIn)),
                               CustomText(
-                                title: 'Home',
+                                title: 'Tickets',
                                 color: AppColors.blueViolet.withOpacity(0.6),
                               )
                             ],

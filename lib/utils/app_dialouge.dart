@@ -5,8 +5,6 @@ import 'package:ticket_resale/constants/app_images.dart';
 import 'package:ticket_resale/constants/app_textsize.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
-
-
 deleteDialog({required BuildContext context}) {
   return showDialog(
     context: context,
@@ -55,7 +53,9 @@ deleteDialog({required BuildContext context}) {
                 height: 50,
                 width: 110,
                 child: CustomButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
                   btnText: 'Cancel',
                   backgroundColor: AppColors.white,
                   borderColor: AppColors.jetBlack,
@@ -68,7 +68,9 @@ deleteDialog({required BuildContext context}) {
                 height: 50,
                 width: 110,
                 child: CustomButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
                   btnText: 'Delete',
                   backgroundColor: AppColors.raddishPink,
                   borderColor: AppColors.raddishPink,
@@ -173,7 +175,9 @@ ticketSellDialog({required BuildContext context}) {
                 height: 50,
                 width: 120,
                 child: CustomButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
                   btnText: 'Cancel',
                   backgroundColor: AppColors.white,
                   borderColor: AppColors.jetBlack,
@@ -186,7 +190,9 @@ ticketSellDialog({required BuildContext context}) {
                 height: 50,
                 width: 120,
                 child: CustomButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
                   textColor: AppColors.white,
                   textSize: AppSize.medium,
                   btnText: 'Confirm',
