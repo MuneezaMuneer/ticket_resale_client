@@ -1,6 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
+import 'package:ticket_resale/db_services/auth_services.dart';
 import '../components/components.dart';
 import '../constants/constants.dart';
 import '../widgets/widgets.dart';
@@ -11,6 +11,9 @@ class LoginScreen extends StatefulWidget {
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
+
+late TextEditingController emailController;
+late TextEditingController passwordController;
 
 class _LoginScreenState extends State<LoginScreen> {
   @override
@@ -63,7 +66,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   socialTextWeight: FontWeight.w400,
                   imagePath: AppImages.google,
                   isSocial: true,
-                  onPressed: () {},
+                  onPressed: () {
+                    AuthServices.signInWithGoogle(context);
+                  },
                 ),
                 SizedBox(
                   height: height * 0.02,

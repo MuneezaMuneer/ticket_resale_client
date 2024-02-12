@@ -42,7 +42,12 @@ dependencies:
   device_preview: ^1.1.0
   intl_phone_field: ^3.2.0 
   provider:   
-
+  firebase_core: ^2.25.4
+  firebase_auth: ^4.17.4 
+  google_sign_in: ^6.2.1
+  fluttertoast: ^8.2.4
+  email_validator: ^2.1.17
+  shared_preferences: ^2.2.2
 dev_dependencies:
   flutter_test:
     sdk: flutter

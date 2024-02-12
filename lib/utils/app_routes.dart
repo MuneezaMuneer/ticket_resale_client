@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:ticket_resale/screens/profile_setting.dart';
 import 'package:ticket_resale/widgets/custom_navigation.dart';
+import '../constants/constants.dart';
 import '../screens/screens.dart';
+import '../screens/signin_screen.dart';
+import '../screens/signup_screen.dart';
 
 Route onGenerateRoute(RouteSettings settings) {
   if (settings.name == AppRoutes.logIn) {
-    return navigatePage(const LoginScreen());
+    return navigatePage(LoginScreen());
   } else if (settings.name == AppRoutes.signIn) {
-    return navigatePage(const SignInScreen());
+    return navigatePage(SignInScreen());
   } else if (settings.name == AppRoutes.signUp) {
-    return navigatePage(const SignUpScreen());
+    return navigatePage(SignUpScreen());
   } else if (settings.name == AppRoutes.navigationScreen) {
     return navigatePage(const CustomNavigation());
   } else if (settings.name == AppRoutes.homeScreen) {

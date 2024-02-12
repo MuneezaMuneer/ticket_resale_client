@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:svg_flutter/svg.dart';
+import 'package:ticket_resale/screens/home_screen.dart';
+import 'package:ticket_resale/screens/signin_screen.dart';
 import '../constants/constants.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -19,6 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // checkLoginState(context);
     return Scaffold(
       body: Container(
         height: double.infinity,
@@ -47,3 +51,21 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 }
+
+// //check if user is already login then navigate to home screen
+// Future<void> checkLoginState(BuildContext context) async {
+//   SharedPreferences prefs = await SharedPreferences.getInstance();
+//   bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+
+//   if (isLoggedIn) {
+//     // ignore: use_build_context_synchronously
+//     Navigator.of(context).pushReplacement(
+//       MaterialPageRoute(builder: (_) => const HomeScreen()),
+//     );
+//   } else {
+//     // ignore: use_build_context_synchronously
+//     Navigator.of(context).pushReplacement(
+//       MaterialPageRoute(builder: (_) => const SplashScreen()),
+//     );
+//   }
+// }

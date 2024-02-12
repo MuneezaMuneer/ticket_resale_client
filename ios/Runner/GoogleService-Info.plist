@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyCB8pwIjcM_BQEdaPMT_hQDZNtWeLgR2WI</string>
+	<key>GCM_SENDER_ID</key>
+	<string>831456807199</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.ticketResale</string>
+	<key>PROJECT_ID</key>
+	<string>rave-trade-ca544</string>
+	<key>STORAGE_BUCKET</key>
+	<string>rave-trade-ca544.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:831456807199:ios:dcb563f0c5dc975ccb882a</string>
+</dict>
+</plist>
