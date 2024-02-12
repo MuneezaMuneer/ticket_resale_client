@@ -1,6 +1,5 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import '../components/components.dart';
 import '../constants/constants.dart';
 import '../widgets/widgets.dart';
@@ -91,7 +90,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: height * 0.02,
                 ),
                 CustomButton(
-                  backgroundColor: AppColors.white,
                   btnText: 'Sign in with Email',
                   weight: FontWeight.w700,
                   textColor: AppColors.white,
@@ -108,7 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   text: TextSpan(
                     text: 'Not a member? ',
                     style: const TextStyle(
-                        color: AppColors.blueGrey,
+                        color: AppColors.lightBlack,
                         fontSize: AppSize.medium,
                         fontWeight: FontWeight.w400),
                     children: <TextSpan>[

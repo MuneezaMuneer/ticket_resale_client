@@ -11,39 +11,37 @@ deleteDialog({required BuildContext context}) {
     builder: (context) {
       return AlertDialog(
         backgroundColor: AppColors.white,
-        title: SizedBox(
-          height: 230,
-          child: Column(
-            children: [
-              SizedBox(
-                  height: 150,
-                  width: 150,
-                  child: Image.asset(
-                    AppImages.personBold,
-                    fit: BoxFit.cover,
-                  )),
-              const CustomText(
-                title: 'Delete Account',
-                color: AppColors.jetBlack,
-                size: AppSize.large,
-                weight: FontWeight.w700,
-              ),
-              CustomText(
-                title: 'Are you sure to delete your account.',
-                color: AppColors.jetBlack.withOpacity(0.8),
-                size: AppSize.medium,
-                weight: FontWeight.w400,
-                textAlign: TextAlign.center,
-              ),
-              CustomText(
-                title: 'Account will be permanently deleted.',
-                color: AppColors.jetBlack.withOpacity(0.8),
-                size: AppSize.medium,
-                weight: FontWeight.w400,
-                textAlign: TextAlign.center,
-              )
-            ],
-          ),
+        title: Column(
+          children: [
+            SizedBox(
+                height: 200,
+                width: 200,
+                child: Image.asset(
+                  AppImages.personBold,
+                  fit: BoxFit.cover,
+                )),
+            const CustomText(
+              title: 'Delete Account',
+              color: AppColors.jetBlack,
+              size: AppSize.large,
+              weight: FontWeight.w900,
+            ),
+            const Gap(20),
+            CustomText(
+              title: 'Are you sure to delete your account.',
+              color: AppColors.jetBlack.withOpacity(0.8),
+              size: AppSize.medium,
+              weight: FontWeight.w400,
+              textAlign: TextAlign.center,
+            ),
+            CustomText(
+              title: 'Account will be permanently deleted.',
+              color: AppColors.jetBlack.withOpacity(0.8),
+              size: AppSize.medium,
+              weight: FontWeight.w400,
+              textAlign: TextAlign.center,
+            )
+          ],
         ),
         actions: <Widget>[
           Row(
@@ -60,7 +58,7 @@ deleteDialog({required BuildContext context}) {
                   backgroundColor: AppColors.white,
                   borderColor: AppColors.jetBlack,
                   textColor: AppColors.jetBlack,
-                  weight: FontWeight.w500,
+                  weight: FontWeight.w700,
                   textSize: AppSize.regular,
                 ),
               ),
@@ -75,7 +73,7 @@ deleteDialog({required BuildContext context}) {
                   backgroundColor: AppColors.raddishPink,
                   borderColor: AppColors.raddishPink,
                   textColor: AppColors.white,
-                  weight: FontWeight.w700,
+                  weight: FontWeight.w900,
                   textSize: AppSize.regular,
                 ),
               ),
@@ -182,7 +180,7 @@ ticketSellDialog({required BuildContext context}) {
                   backgroundColor: AppColors.white,
                   borderColor: AppColors.jetBlack,
                   textColor: AppColors.jetBlack,
-                  weight: FontWeight.w500,
+                  weight: FontWeight.w700,
                   textSize: AppSize.regular,
                 ),
               ),
@@ -197,7 +195,7 @@ ticketSellDialog({required BuildContext context}) {
                   textSize: AppSize.medium,
                   btnText: 'Confirm',
                   gradient: customGradient,
-                  weight: FontWeight.w600,
+                  weight: FontWeight.w800,
                 ),
               )
             ],

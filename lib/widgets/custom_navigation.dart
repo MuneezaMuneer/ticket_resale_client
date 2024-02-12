@@ -79,24 +79,24 @@ class _CustomNavigationState extends State<CustomNavigation> {
                         ? Column(
                             children: [
                               SvgPicture.asset(
-                                AppSvgs.ticket,
+                                AppSvgs.event,
                                 colorFilter: const ColorFilter.mode(
                                     AppColors.blueViolet, BlendMode.srcIn),
                               ),
                               const CustomText(
-                                title: 'Tickets',
+                                title: 'Events',
                                 color: AppColors.blueViolet,
                               )
                             ],
                           )
                         : Column(
                             children: [
-                              SvgPicture.asset(AppSvgs.ticket,
+                              SvgPicture.asset(AppSvgs.event,
                                   colorFilter: ColorFilter.mode(
                                       AppColors.blueViolet.withOpacity(0.6),
                                       BlendMode.srcIn)),
                               CustomText(
-                                title: 'Tickets',
+                                title: 'Events',
                                 color: AppColors.blueViolet.withOpacity(0.6),
                               )
                             ],
@@ -146,7 +146,7 @@ class _CustomNavigationState extends State<CustomNavigation> {
                                     AppColors.blueViolet.withOpacity(0.6),
                                     BlendMode.srcIn)),
                             CustomText(
-                              title: 'Level',
+                              title: 'Levels',
                               color: AppColors.blueViolet.withOpacity(0.6),
                             )
                           ],
@@ -193,7 +193,7 @@ class _CustomNavigationState extends State<CustomNavigation> {
 
   static final List<Widget> _widgetOptions = <Widget>[
     const HomeScreen(),
-    const TicketsScreen(),
+    const EventScreen(),
     const ProfileLevelScreen(),
     const ProfileScreen(),
   ];

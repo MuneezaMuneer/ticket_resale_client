@@ -14,6 +14,9 @@ class ProfileSettings extends StatefulWidget {
 class _ProfileSettingsState extends State<ProfileSettings> {
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    final double height = size.height;
+    final double width = size.width;
     return Scaffold(
       backgroundColor: AppColors.pastelBlue.withOpacity(0.3),
       appBar: const CustomAppBar(
@@ -39,7 +42,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
               ],
             ),
             const SizedBox(
-              height: 5,
+              height: 13,
             ),
             const CustomText(
               title: 'Samantha Pate',
@@ -51,13 +54,14 @@ class _ProfileSettingsState extends State<ProfileSettings> {
               height: 5,
             ),
             const CustomRow(),
+            const SizedBox(height: 30),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'FullName',
+                    'Full Name',
                     style: _buildstyle(),
                   ),
                   const SizedBox(
@@ -68,7 +72,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                     hintStyle: _buildTextFieldstyle(),
                   ),
                   const SizedBox(
-                    height: 12,
+                    height: 15,
                   ),
                   Text(
                     'Instagram Username',
@@ -80,11 +84,11 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                   const CustomTextField(
                     hintText: '@SamanthaPate',
                     hintStyle: TextStyle(
-                        color: AppColors.blueGrey,
+                        color: AppColors.lightBlack,
                         fontWeight: FontWeight.w400,
                         fontSize: AppSize.small),
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 15),
                   Text(
                     'Email ID',
                     style: _buildstyle(),
@@ -99,10 +103,10 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                     hintStyle: _buildTextFieldstyle(),
                   ),
                   const SizedBox(
-                    height: 12,
+                    height: 15,
                   ),
                   Text(
-                    'Phone No',
+                    'Phone No.',
                     style: _buildstyle(),
                   ),
                   const SizedBox(
@@ -121,7 +125,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                           dropdownIconPosition: IconPosition.trailing,
                           cursorColor: AppColors.silver,
                           decoration: InputDecoration(
-                            hintText: 'eg. 2324 1231 4230',
+                            hintText: 'eg.3092829992',
                             hintStyle: const TextStyle(
                                 color: Color(0xFF9E9E9E),
                                 fontSize: 16,
@@ -171,7 +175,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                     ],
                   ),
                   const SizedBox(
-                    height: 12,
+                    height: 15,
                   ),
                   Text(
                     'DOB',
@@ -181,78 +185,21 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                     height: 5,
                   ),
                   CustomTextField(
-                    hintText: 'date of birth',
+                    hintText: 'Date of birth',
                     hintStyle: _buildTextFieldstyle(),
                   ),
-                  const SizedBox(
-                    height: 12,
+                  SizedBox(
+                    height: height * 0.07,
                   ),
-                  Text(
-                    'Country',
-                    style: _buildstyle(),
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  CustomTextField(
-                    hintText: 'country',
-                    suffixIcon: const Icon(Icons.keyboard_arrow_down_rounded),
-                    hintStyle: _buildTextFieldstyle(),
-                  ),
-                  const SizedBox(
-                    height: 12,
-                  ),
-                  Text(
-                    'State',
-                    style: _buildstyle(),
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  CustomTextField(
-                      hintText: 'state',
-                      suffixIcon: const Icon(Icons.keyboard_arrow_down_rounded),
-                      hintStyle: _buildTextFieldstyle()),
-                  const SizedBox(
-                    height: 12,
-                  ),
-                  Text(
-                    'City',
-                    style: _buildstyle(),
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  CustomTextField(
-                      hintText: 'city',
-                      suffixIcon: const Icon(Icons.keyboard_arrow_down_rounded),
-                      hintStyle: _buildTextFieldstyle()),
-                  const SizedBox(
-                    height: 12,
-                  ),
-                  Text(
-                    'Zip Code',
-                    style: _buildstyle(),
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  CustomTextField(
-                      hintText: 'code', hintStyle: _buildTextFieldstyle()),
-                  const SizedBox(
-                    height: 25,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 25, right: 25),
-                    child: CustomButton(
-                      backgroundColor: AppColors.white,
-                      btnText: 'Start with Conversation',
-                      weight: FontWeight.w700,
-                      textColor: AppColors.white,
-                      gradient: customGradient,
-                      textSize: AppSize.regular,
-                      onPressed: () {},
-                    ),
+                  CustomButton(
+                    fixedHeight: height * 0.07,
+                    fixedWidth: width,
+                    btnText: 'Save',
+                    weight: FontWeight.w700,
+                    textColor: AppColors.white,
+                    gradient: customGradient,
+                    textSize: AppSize.regular,
+                    onPressed: () {},
                   ),
                 ],
               ),
@@ -265,7 +212,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
 
   TextStyle _buildstyle() {
     return const TextStyle(
-      color: AppColors.blueGrey,
+      color: AppColors.lightBlack,
       fontWeight: FontWeight.w600,
       fontSize: AppSize.medium,
     );
@@ -273,7 +220,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
 
   TextStyle _buildTextFieldstyle() {
     return const TextStyle(
-        color: AppColors.blueGrey,
+        color: AppColors.lightBlack,
         fontWeight: FontWeight.w400,
         fontSize: AppSize.small);
   }

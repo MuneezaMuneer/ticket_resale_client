@@ -1,5 +1,4 @@
 import 'package:device_preview/device_preview.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -9,7 +8,7 @@ import 'package:ticket_resale/utils/app_routes.dart';
 
 void main() => runApp(
       DevicePreview(
-        enabled: !kReleaseMode,
+        enabled: true,
         builder: (context) => const TicketResale(),
       ),
     );

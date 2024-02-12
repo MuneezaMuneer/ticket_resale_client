@@ -7,7 +7,8 @@ class AppRoutes {
   static const homeScreen = '/homeScreen';
   static const commentScreen = '/commentScreen';
   static const feedbackScreen = '/feedbackScreen';
-  static const detailScreen = '/detailScreen';
+  static const detailFirstScreen = '/detailFirstScreen';
+  static const detailThirdScreen = '/detailThirdScreen';
   static const newTicketScreen = '/newTicketScreen';
   static const connectScreen = '/connectScreen';
   static const profileScreen = '/profileScreen';

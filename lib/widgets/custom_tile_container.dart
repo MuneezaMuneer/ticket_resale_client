@@ -24,6 +24,7 @@ class CustomTileContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('width is ...........................$width');
     return LayoutBuilder(
       builder: (context, constraints) {
         return Container(

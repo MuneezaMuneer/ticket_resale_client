@@ -56,16 +56,18 @@ class CustomTextField extends StatelessWidget {
       obscuringCharacter: obscuringCharacter,
       cursorColor: AppColors.jetBlack.withOpacity(0.3),
       obscureText: isVisibleText,
+      cursorHeight: 23,
       onChanged: onChanged,
       maxLines: maxLines,
       validator: validator,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       decoration: InputDecoration(
-        contentPadding: const EdgeInsets.only(top: 10, left: 10),
+        contentPadding: const EdgeInsets.only(top: 10, left: 17),
         hintText: hintText,
+        alignLabelWithHint: true,
         suffixIcon: isTrailingText
             ? Padding(
-                padding: const EdgeInsets.only(top: 10, right: 20),
+                padding: const EdgeInsets.only(top: 15, right: 20),
                 child: CustomText(
                   title: '$trailingText',
                   color: AppColors.springGreen,

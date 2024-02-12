@@ -13,6 +13,9 @@ class AddNewTicket extends StatefulWidget {
 class _AddNewTicketState extends State<AddNewTicket> {
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    final double height = size.height;
+    final double width = size.width;
     return Scaffold(
       appBar: const CustomAppBar(
         title: 'Add New Ticket',
@@ -54,7 +57,7 @@ class _AddNewTicketState extends State<AddNewTicket> {
                 ),
               ),
               const SizedBox(
-                height: 15,
+                height: 20,
               ),
               const CustomText(
                 title: 'Festival Name',
@@ -63,7 +66,7 @@ class _AddNewTicketState extends State<AddNewTicket> {
                 size: AppSize.medium,
               ),
               const SizedBox(
-                height: 15,
+                height: 5,
               ),
               CustomTextField(
                 hintText: 'Festival Name',
@@ -80,7 +83,7 @@ class _AddNewTicketState extends State<AddNewTicket> {
                 size: AppSize.medium,
               ),
               const SizedBox(
-                height: 15,
+                height: 5,
               ),
               CustomTextField(
                 hintText: 'Date',
@@ -102,7 +105,7 @@ class _AddNewTicketState extends State<AddNewTicket> {
                 size: AppSize.medium,
               ),
               const SizedBox(
-                height: 15,
+                height: 5,
               ),
               CustomTextField(
                 hintText: 'Select Type',
@@ -119,7 +122,7 @@ class _AddNewTicketState extends State<AddNewTicket> {
                 size: AppSize.medium,
               ),
               const SizedBox(
-                height: 15,
+                height: 5,
               ),
               CustomTextField(
                 hintText: 'Enter Ticket Price',
@@ -135,16 +138,16 @@ class _AddNewTicketState extends State<AddNewTicket> {
                 size: AppSize.medium,
               ),
               const SizedBox(
-                height: 15,
+                height: 5,
               ),
               CustomTextField(
                 maxLines: 5,
                 isCommentField: true,
-                hintText: 'Enter Your Description Here',
+                hintText: 'Enter your description here.',
                 hintStyle: _buildHintStyle(),
               ),
-              const SizedBox(
-                height: 15,
+              SizedBox(
+                height: height * 0.07,
               ),
               CustomButton(
                 backgroundColor: AppColors.white,
@@ -155,8 +158,8 @@ class _AddNewTicketState extends State<AddNewTicket> {
                 textSize: AppSize.regular,
                 onPressed: () {},
               ),
-              const SizedBox(
-                height: 15,
+              SizedBox(
+                height: height * 0.03,
               ),
             ],
           ),
@@ -167,7 +170,7 @@ class _AddNewTicketState extends State<AddNewTicket> {
 
   TextStyle _buildHintStyle() {
     return const TextStyle(
-        color: AppColors.blueGrey,
+        color: AppColors.lightBlack,
         fontWeight: FontWeight.w400,
         fontSize: AppSize.medium);
   }

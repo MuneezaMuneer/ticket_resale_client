@@ -143,28 +143,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 SizedBox(
                   height: height * 0.01,
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 25, right: 25),
-                  child: CustomButton(
-                    backgroundColor: AppColors.white,
-                    btnText: 'Sign up',
-                    weight: FontWeight.w700,
-                    textColor: AppColors.white,
-                    gradient: customGradient,
-                    textSize: AppSize.regular,
-                    onPressed: () {
-                      Navigator.pushNamed(context, AppRoutes.navigationScreen);
-                    },
-                  ),
+                CustomButton(
+                  btnText: 'Sign up',
+                  weight: FontWeight.w700,
+                  textColor: AppColors.white,
+                  gradient: customGradient,
+                  textSize: AppSize.regular,
+                  onPressed: () {
+                    Navigator.pushNamed(context, AppRoutes.navigationScreen);
+                  },
                 ),
                 SizedBox(
                   height: height * 0.04,
                 ),
                 RichText(
                   text: TextSpan(
-                    text: 'Don\'t have an account?  ',
+                    text: 'Don\'t have an account? ',
                     style: const TextStyle(
-                        color: AppColors.blueGrey,
+                        color: AppColors.lightBlack,
                         fontSize: AppSize.medium,
                         fontWeight: FontWeight.w400),
                     children: <TextSpan>[

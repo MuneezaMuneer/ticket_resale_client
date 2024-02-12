@@ -23,6 +23,7 @@ class CustomButton extends StatelessWidget {
   final LinearGradient? gradient;
   final Color? textColor;
   final double fixedHeight;
+  final double? fixedWidth;
   final FontWeight? weight;
   final bool isLoading;
   const CustomButton({
@@ -47,18 +48,18 @@ class CustomButton extends StatelessWidget {
     this.socialGradient,
     this.socialWhiteBg,
     this.isSocialWhiteBg = false,
-    this.isRounded = true,
+    this.isRounded = true, this.fixedWidth,
   });
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     double width = size.width;
-    //   double height = size.height;
     return GestureDetector(
       onTap: onPressed,
       child: Container(
         height: fixedHeight,
+        width: fixedWidth,
         decoration: ShapeDecoration(
           color:
               isSocialWhiteBg ? socialWhiteBg ?? Colors.white : backgroundColor,

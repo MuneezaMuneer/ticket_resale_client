@@ -75,7 +75,6 @@ class _SignInScreenState extends State<SignInScreen> {
                   height: height * 0.03,
                 ),
                 CustomButton(
-                  backgroundColor: AppColors.white,
                   btnText: 'Sign in',
                   weight: FontWeight.w700,
                   textColor: AppColors.white,
@@ -90,7 +89,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   text: TextSpan(
                     text: 'Not a member? ',
                     style: const TextStyle(
-                        color: AppColors.blueGrey,
+                        color: AppColors.lightBlack,
                         fontSize: AppSize.medium,
                         fontWeight: FontWeight.w400),
                     children: <TextSpan>[

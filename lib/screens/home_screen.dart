@@ -20,6 +20,8 @@ class HomeScreen extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     final double height = size.height;
     final double width = size.width;
+
+    print('width is .................$width');
     return Scaffold(
       backgroundColor: AppColors.pastelBlue.withOpacity(0.3),
       body: SingleChildScrollView(
@@ -259,7 +261,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                   const Gap(20),
                   SizedBox(
-                    height: height * 0.4,
+                    height: width < 370 ? height * 0.48 : height * 0.4,
                     width: width,
                     child: ListView.builder(
                       shrinkWrap: true,
@@ -271,7 +273,7 @@ class HomeScreen extends StatelessWidget {
                           child: GestureDetector(
                             onTap: () {
                               Navigator.pushNamed(
-                                  context, AppRoutes.detailScreen);
+                                  context, AppRoutes.detailFirstScreen);
                             },
                             child: CustomTileContainer(
                               height: height,

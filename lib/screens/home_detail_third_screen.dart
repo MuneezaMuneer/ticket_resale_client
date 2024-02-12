@@ -5,8 +5,8 @@ import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 import '../components/components.dart';
 
-class HomeDetailScreen extends StatelessWidget {
-  const HomeDetailScreen({super.key});
+class HomeDetailThirdScreen extends StatelessWidget {
+  const HomeDetailThirdScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,8 @@ class HomeDetailScreen extends StatelessWidget {
           padding: const EdgeInsets.only(top: 4),
           child: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.only(left: 28, top: 40, bottom: 20),
+              padding: const EdgeInsets.only(
+                  left: 23, top: 20, bottom: 20, right: 23),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -62,20 +63,7 @@ class HomeDetailScreen extends StatelessWidget {
                       subTitleColor: AppColors.jetBlack,
                       subTitleSize: AppSize.small,
                       subTitleWeight: FontWeight.w600,
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 12),
-                        child: Container(
-                          height: 40,
-                          width: 40,
-                          decoration: const BoxDecoration(
-                              color: AppColors.vibrantGreen,
-                              shape: BoxShape.circle),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: SvgPicture.asset(AppSvgs.man),
-                          ),
-                        ),
-                      )),
+                      child: const SizedBox.shrink()),
                   const Gap(10),
                   const CustomText(
                     title: 'About Event',
@@ -86,40 +74,42 @@ class HomeDetailScreen extends StatelessWidget {
                   const CustomText(
                     title:
                         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
-                    size: AppSize.small,
+                    size: AppSize.medium,
                     softWrap: true,
                     weight: FontWeight.w400,
                     color: AppColors.lightGrey,
                   ),
-                  const Gap(10),
+                  const Gap(20),
+                  const CustomText(
+                    title: 'Available Tickets',
+                    size: AppSize.regular,
+                    weight: FontWeight.w600,
+                    color: AppColors.jetBlack,
+                  ),
+                  const Gap(7),
                   _tileContainer(
                     height: height * 0.08,
                     width: width * 0.9,
-                    imagePath: AppImages.profile,
-                    backgroundColor: AppColors.white,
-                    containerBorderColor: AppColors.white,
-                    avatarBg: AppColors.paleGrey,
-                    title: 'Post by',
-                    titleColor: AppColors.lightGrey.withOpacity(0.6),
-                    titleSize: AppSize.xsmall,
-                    titleWeight: FontWeight.w400,
-                    subTitle: 'Cameron Walliamson',
-                    subTitleColor: AppColors.lightGrey.withOpacity(0.8),
-                    subTitleSize: 13,
-                    subTitleWeight: FontWeight.w600,
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 12),
-                      child: Row(
-                        children: [
-                          SvgPicture.asset(AppSvgs.verified),
-                          const Gap(3),
-                          const CustomText(
-                            title: 'Level 3 Varified',
-                            color: AppColors.yellow,
-                            size: AppSize.xxsmall,
-                            weight: FontWeight.w600,
-                          ),
-                        ],
+                    containerBorderColor: AppColors.blueViolet.withOpacity(0.8),
+                    isSvg: true,
+                    imagePath: AppSvgs.ticket,
+                    backgroundColor: const Color(0XffF7F5FF),
+                    avatarBg: AppColors.white,
+                    title: 'PREMIUM TICKET AVAILABLE',
+                    titleColor: AppColors.jetBlack,
+                    titleSize: AppSize.small,
+                    titleWeight: FontWeight.w600,
+                    subTitle: 'Premium Seats',
+                    subTitleColor: AppColors.lightGrey.withOpacity(0.6),
+                    subTitleSize: AppSize.xsmall,
+                    subTitleWeight: FontWeight.w400,
+                    child: const Padding(
+                      padding: EdgeInsets.only(right: 12),
+                      child: CustomText(
+                        title: '\$ 500',
+                        color: Color(0XffAC8AF7),
+                        size: 18,
+                        weight: FontWeight.w900,
                       ),
                     ),
                   ),
@@ -143,15 +133,107 @@ class HomeDetailScreen extends StatelessWidget {
                     child: const Padding(
                       padding: EdgeInsets.only(right: 12),
                       child: CustomText(
-                        title: '\$ 500',
+                        title: '\$ 400',
                         color: Color(0XffAC8AF7),
                         size: 18,
-                        weight: FontWeight.w600,
+                        weight: FontWeight.w900,
+                      ),
+                    ),
+                  ),
+                  const Gap(25),
+                  Container(
+                    height: height * 0.1,
+                    width: width,
+                    decoration: BoxDecoration(
+                      color: AppColors.white,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Row(
+                      children: [
+                        const Gap(7),
+                        const CircleAvatar(
+                            backgroundImage: AssetImage(AppImages.profile)),
+                        const Gap(9),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: width > 370 ? 14 : 5,
+                            ),
+                            CustomText(
+                              title: 'Sell by',
+                              size: AppSize.verySmall,
+                              weight: FontWeight.w300,
+                              color: AppColors.lightBlack.withOpacity(0.7),
+                            ),
+                            Row(
+                              children: [
+                                CustomText(
+                                  title: 'Cameron Williamson ',
+                                  size: AppSize.intermediate,
+                                  weight: FontWeight.w600,
+                                  color: AppColors.lightBlack.withOpacity(0.5),
+                                ),
+                                CustomText(
+                                  title: '(',
+                                  color: AppColors.lightBlack.withOpacity(0.7),
+                                ),
+                                SvgPicture.asset(
+                                  AppSvgs.fillStar,
+                                  height: 13,
+                                ),
+                                CustomText(
+                                  title: '4.7 )',
+                                  color: AppColors.lightBlack.withOpacity(0.7),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: width > 370 ? 4 : 0,
+                            ),
+                            const Row(
+                              children: [
+                                CustomText(
+                                    title: '23',
+                                    size: AppSize.intermediate,
+                                    weight: FontWeight.w500),
+                                Gap(2),
+                                CustomText(
+                                  title: 'Ticket Sold',
+                                  size: AppSize.xxsmall,
+                                  weight: FontWeight.w400,
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          width: width > 370 ? width * 0.15 : width * 0.11,
+                        ),
+                        Align(
+                            alignment: Alignment.topRight,
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 8),
+                              child: SvgPicture.asset(AppSvgs.levelThree),
+                            ))
+                      ],
+                    ),
+                  ),
+                  const Gap(25),
+                  CustomTextField(
+                    hintText: 'Offer you price',
+                    fillColor: AppColors.white,
+                    suffixIcon: InkWell(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: SvgPicture.asset(
+                          AppSvgs.dollarSign,
+                        ),
                       ),
                     ),
                   ),
                   SizedBox(
-                    height: height * 0.02,
+                    height: height * 0.04,
                   ),
                   SizedBox(
                     height: height * 0.07,

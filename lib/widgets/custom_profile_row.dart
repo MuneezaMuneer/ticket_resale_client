@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:svg_flutter/svg.dart';
 import 'package:ticket_resale/constants/app_colors.dart';
 import 'package:ticket_resale/constants/app_textsize.dart';
@@ -81,13 +82,14 @@ class CustomProfileRow extends StatelessWidget {
               ),
             ],
           ),
+          const Gap(5),
           if (!isLastRow!) const CustomDivider(),
           if (isLastRow!)
             const SizedBox(
               height: 20,
             ),
           const SizedBox(
-            height: 3,
+            height: 5,
           ),
         ],
       ),

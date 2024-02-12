@@ -98,7 +98,7 @@ class FeedBackScreen extends StatelessWidget {
                           title: 'Rate your overall experience',
                           size: AppSize.medium,
                           color: AppColors.jetBlack,
-                          weight: FontWeight.w600,
+                          weight: FontWeight.w900,
                         ),
                       ),
                       Center(
@@ -109,7 +109,7 @@ class FeedBackScreen extends StatelessWidget {
                           weight: FontWeight.w400,
                         ),
                       ),
-                      const Gap(5),
+                      const Gap(20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -139,7 +139,9 @@ class FeedBackScreen extends StatelessWidget {
                         hintText: 'Enter your comment here',
                         isCommentField: true,
                       ),
-                      const Gap(20),
+                      SizedBox(
+                        height: height * 0.07,
+                      ),
                       SizedBox(
                         height: height * 0.07,
                         width: width * 0.9,

@@ -47,4 +47,6 @@ class AppSvgs {
   static const image = 'assets/svgs/image.svg';
   static const date = 'assets/svgs/date.svg';
   static const plus = 'assets/svgs/plus.svg';
+  static const event = 'assets/svgs/event.svg';
+  static const dollarSign = 'assets/svgs/dollar_sign.svg';
 }
