@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:svg_flutter/svg_flutter.dart';
 import 'package:ticket_resale/constants/constants.dart';
+import 'package:ticket_resale/utils/app_utils.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
 class AddNewTicket extends StatefulWidget {
@@ -102,11 +103,18 @@ class _AddNewTicketState extends State<AddNewTicket> {
                     height: 5,
                   ),
                   CustomTextField(
+                    controller: dateController,
                     hintText: 'Date',
                     suffixIcon: Padding(
                       padding: const EdgeInsets.all(10),
-                      child: SvgPicture.asset(
-                        AppSvgs.date,
+                      child: GestureDetector(
+                        onTap: () {
+                          PickFile.openDatePicker(context,
+                              dateController: dateController);
+                        },
+                        child: SvgPicture.asset(
+                          AppSvgs.date,
+                        ),
                       ),
                     ),
                     hintStyle: _buildHintStyle(),

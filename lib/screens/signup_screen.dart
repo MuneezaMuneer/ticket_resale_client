@@ -17,8 +17,18 @@ class SignUpScreen extends StatefulWidget {
 TextEditingController emailController = TextEditingController();
 TextEditingController passwordController = TextEditingController();
 GlobalKey<FormState> formKey = GlobalKey<FormState>();
+ValueNotifier<bool> passwordVisibility = ValueNotifier<bool>(true);
+ValueNotifier<bool> confirmpasswordVisibility = ValueNotifier<bool>(true);
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  @override
+  void initState() {
+    emailController.clear();
+    passwordController.clear();
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -101,41 +111,65 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   const SizedBox(
                     height: 12,
                   ),
-                  CustomTextField(
-                    controller: passwordController,
-                    hintText: 'Password',
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please Enter your password';
-                      }
-                      if (value.length < 6) {
-                        return 'Password must be at least 6 characters long';
-                      }
-                      return null;
-                    },
-                    suffixIcon: const Icon(
-                      Icons.remove_red_eye_outlined,
-                      color: AppColors.silver,
+                  ValueListenableBuilder<bool>(
+                    builder: (context, isVisible, child) => CustomTextField(
+                      controller: passwordController,
+                      hintText: 'Password',
+                      maxLines: 1,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please Enter your password';
+                        }
+                        if (value.length < 6) {
+                          return 'Password must be at least 6 characters long';
+                        }
+                        return null;
+                      },
+                      isVisibleText: isVisible,
+                      suffixIcon: GestureDetector(
+                        onTap: () {
+                          passwordVisibility.value = !passwordVisibility.value;
+                        },
+                        child: Icon(
+                          isVisible ? Icons.visibility_off : Icons.visibility,
+                          color: AppColors.silver,
+                        ),
+                      ),
                     ),
+                    valueListenable: passwordVisibility,
                   ),
                   const SizedBox(
                     height: 12,
                   ),
-                  CustomTextField(
-                    hintText: 'Confirm Password',
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please Enter your password again';
-                      }
-                      if (value != passwordController.text) {
-                        return 'Passwords do not match';
-                      }
-                      return null;
-                    },
-                    suffixIcon: const Icon(
-                      Icons.remove_red_eye_outlined,
-                      color: AppColors.silver,
+                  ValueListenableBuilder<bool>(
+                    builder: (context, isVisiblePassword, child) =>
+                        CustomTextField(
+                      hintText: 'Confirm Password',
+                      isVisibleText: isVisiblePassword,
+                      maxLines: 1,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please Enter your password again';
+                        }
+                        if (value != passwordController.text) {
+                          return 'Passwords do not match';
+                        }
+                        return null;
+                      },
+                      suffixIcon: GestureDetector(
+                        onTap: () {
+                          confirmpasswordVisibility.value =
+                              !confirmpasswordVisibility.value;
+                        },
+                        child: Icon(
+                          isVisiblePassword
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                          color: AppColors.silver,
+                        ),
+                      ),
                     ),
+                    valueListenable: confirmpasswordVisibility,
                   ),
                   const SizedBox(
                     height: 12,

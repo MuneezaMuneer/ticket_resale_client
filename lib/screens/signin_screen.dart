@@ -18,8 +18,17 @@ class SignInScreen extends StatefulWidget {
 TextEditingController emailController = TextEditingController();
 TextEditingController passwordController = TextEditingController();
 GlobalKey<FormState> formKey = GlobalKey<FormState>();
+ValueNotifier<bool> passwordVisibility = ValueNotifier<bool>(true);
 
 class _SignInScreenState extends State<SignInScreen> {
+  @override
+  void initState() {
+    emailController.clear();
+    passwordController.clear();
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -74,22 +83,32 @@ class _SignInScreenState extends State<SignInScreen> {
                   SizedBox(
                     height: height * 0.02,
                   ),
-                  CustomTextField(
-                    controller: passwordController,
-                    hintText: 'Password',
-                    suffixIcon: const Icon(
-                      Icons.remove_red_eye_outlined,
-                      color: AppColors.silver,
+                  ValueListenableBuilder<bool>(
+                    builder: (context, isVisible, child) => CustomTextField(
+                      controller: passwordController,
+                      hintText: 'Password',
+                      maxLines: 1,
+                      isVisibleText: isVisible,
+                      suffixIcon: GestureDetector(
+                        onTap: () {
+                          passwordVisibility.value = !passwordVisibility.value;
+                        },
+                        child: Icon(
+                          isVisible ? Icons.visibility_off : Icons.visibility,
+                          color: AppColors.silver,
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please Enter your password';
+                        }
+                        if (value.length < 6) {
+                          return 'Password must be at least 6 characters long';
+                        }
+                        return null;
+                      },
                     ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please Enter your password';
-                      }
-                      if (value.length < 6) {
-                        return 'Password must be at least 6 characters long';
-                      }
-                      return null;
-                    },
+                    valueListenable: passwordVisibility,
                   ),
                   const Gap(10),
                   const Align(

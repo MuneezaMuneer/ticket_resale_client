@@ -1,8 +1,15 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+
 import 'package:flutter/material.dart';
+
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:provider/provider.dart';
 import 'package:svg_flutter/svg_flutter.dart';
+import 'package:ticket_resale/providers/image_picker_provider.dart';
+import 'package:ticket_resale/utils/app_utils.dart';
 import '../constants/constants.dart';
 import '../widgets/widgets.dart';
 
@@ -23,8 +30,16 @@ TextEditingController stateController = TextEditingController();
 TextEditingController cityController = TextEditingController();
 TextEditingController zipCodeController = TextEditingController();
 GlobalKey<FormState> formKey = GlobalKey<FormState>();
+late ImagePickerProvider imagePickerProvider;
 
 class _ProfileSettingsState extends State<ProfileSettings> {
+  @override
+  void initState() {
+    imagePickerProvider =
+        Provider.of<ImagePickerProvider>(context, listen: false);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -43,15 +58,33 @@ class _ProfileSettingsState extends State<ProfileSettings> {
             ),
             Stack(
               children: [
-                const SizedBox(
+                SizedBox(
                   height: 140,
                   width: 140,
-                  child: CircleAvatar(
-                    backgroundImage: AssetImage(AppImages.profileImage),
+                  child: Consumer<ImagePickerProvider>(
+                    builder: (BuildContext context, imageProvider, child) {
+                      return SizedBox(
+                          child: imageProvider.imagePath.isNotEmpty
+                              ? CircleAvatar(
+                                  backgroundImage:
+                                      FileImage(File(imageProvider.imagePath)),
+                                )
+                              : CircleAvatar(
+                                  backgroundImage: NetworkImage(
+                                      '${FirebaseAuth.instance.currentUser!.photoURL}'),
+                                ));
+                    },
                   ),
                 ),
                 Positioned(
-                    left: 60, top: 55, child: SvgPicture.asset(AppSvgs.camera))
+                    left: 60,
+                    top: 55,
+                    child: InkWell(
+                        onTap: () async {
+                          String image = await PickFile.getImageFromGallery();
+                          imagePickerProvider.setPath = image;
+                        },
+                        child: SvgPicture.asset(AppSvgs.camera)))
               ],
             ),
             const SizedBox(

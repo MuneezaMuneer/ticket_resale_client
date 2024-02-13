@@ -6,6 +6,8 @@ import 'package:ticket_resale/providers/navigation_provider.dart';
 import 'package:ticket_resale/screens/screens.dart';
 import 'package:ticket_resale/widgets/custom_text.dart';
 
+import '../screens/profile_screen.dart';
+
 class CustomNavigation extends StatefulWidget {
   const CustomNavigation({super.key});
 

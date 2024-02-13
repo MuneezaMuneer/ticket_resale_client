@@ -47,7 +47,10 @@ dependencies:
   google_sign_in: ^6.2.1
   fluttertoast: ^8.2.4
   email_validator: ^2.1.17
-  shared_preferences: ^2.2.2
+  image_picker: ^1.0.7
+  syncfusion_flutter_datepicker: ^24.2.5
+  bottom_picker: ^2.3.3
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

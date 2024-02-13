@@ -3,6 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:svg_flutter/svg.dart';
 import 'package:ticket_resale/constants/app_colors.dart';
 import 'package:ticket_resale/constants/app_textsize.dart';
+import '../screens/screens.dart';
 import 'widgets.dart';
 
 class CustomProfileRow extends StatelessWidget {
@@ -78,7 +79,7 @@ class CustomProfileRow extends StatelessWidget {
                         size: 15,
                         color: iconColor,
                       )
-                    : const CustomSwitch(),
+                    : CustomSwitch(),
               ),
             ],
           ),

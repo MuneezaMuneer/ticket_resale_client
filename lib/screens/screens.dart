@@ -7,7 +7,6 @@ export 'comment_screen.dart';
 export 'feed_back_screen.dart';
 export 'login_screen.dart';
 export 'splash_screen.dart';
-export 'profile_screen.dart';
 export 'new_ticket_screen.dart';
 export 'notification_screen.dart';
 export 'profile_level_screen.dart';

@@ -1,19 +1,29 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import '../constants/constants.dart';
 
 class CustomSwitch extends StatelessWidget {
-  const CustomSwitch({super.key});
+  CustomSwitch({
+    super.key,
+  });
+  ValueNotifier<bool> notificationVisibility = ValueNotifier<bool>(false);
+
   @override
   Widget build(BuildContext context) {
     return Transform.scale(
       scale: 0.8,
-      child: CupertinoSwitch(
-        activeColor: Colors.pink.shade200,
-        thumbColor: AppColors.white,
-        trackColor: AppColors.pastelBlue,
-        value: false,
-        onChanged: (bool value) {},
+      child: ValueListenableBuilder<bool>(
+        builder: (context, isVisible, child) => CupertinoSwitch(
+          activeColor: AppColors.blueViolet,
+          thumbColor: Colors.white,
+          trackColor: AppColors.pastelBlue,
+          value: isVisible,
+          onChanged: (bool value) {
+            notificationVisibility.value = !notificationVisibility.value;
+          },
+        ),
+        valueListenable: notificationVisibility,
       ),
     );
   }

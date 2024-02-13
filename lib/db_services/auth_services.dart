@@ -78,4 +78,8 @@ class AuthServices {
       print('Error: ${e.toString()}');
     }
   }
+
+  static Future<void> signOut() async {
+    await FirebaseAuth.instance.signOut();
+  }
 }

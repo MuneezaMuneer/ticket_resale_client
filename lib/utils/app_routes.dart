@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ticket_resale/screens/profile_setting.dart';
 import 'package:ticket_resale/widgets/custom_navigation.dart';
 import '../constants/constants.dart';
+import '../screens/profile_screen.dart';
 import '../screens/screens.dart';
 import '../screens/signin_screen.dart';
 import '../screens/signup_screen.dart';

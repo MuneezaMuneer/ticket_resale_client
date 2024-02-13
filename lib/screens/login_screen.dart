@@ -124,7 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             fontWeight: FontWeight.w400),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
-                            // navigate to desired screen
+                            Navigator.pushNamed(context, AppRoutes.signUp);
                           },
                       ),
                     ],

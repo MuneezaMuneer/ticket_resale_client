@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:ticket_resale/firebase_options.dart';
+import 'package:ticket_resale/providers/image_picker_provider.dart';
 import 'package:ticket_resale/providers/navigation_provider.dart';
 import 'package:ticket_resale/screens/screens.dart';
 import 'package:ticket_resale/utils/app_routes.dart';
@@ -28,7 +29,12 @@ class TicketResale extends StatelessWidget {
             create: (context) {
               return NavigationProvider();
             },
-          )
+          ),
+          ChangeNotifierProvider<ImagePickerProvider>(
+            create: (context) {
+              return ImagePickerProvider();
+            },
+          ),
         ],
         child: MaterialApp(
           onGenerateRoute: onGenerateRoute,

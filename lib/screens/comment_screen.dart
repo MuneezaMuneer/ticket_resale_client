@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:svg_flutter/svg_flutter.dart';
@@ -25,10 +26,10 @@ class CommentScreen extends StatelessWidget {
                 const EdgeInsets.only(left: 28, right: 28, top: 20, bottom: 20),
             child: Column(
               children: [
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    CustomText(
+                    const CustomText(
                       title: 'Comments',
                       size: AppSize.regular,
                       color: AppColors.jetBlack,
@@ -36,7 +37,7 @@ class CommentScreen extends StatelessWidget {
                     ),
                     Row(
                       children: [
-                        CustomText(
+                        const CustomText(
                           title: 'Subcribe to comments',
                           size: AppSize.medium,
                           weight: FontWeight.w400,
@@ -134,7 +135,6 @@ class CommentScreen extends StatelessWidget {
                   height: height * 0.07,
                   width: width * 0.9,
                   child: CustomTextField(
-                  
                     hintText: 'Enter your comment here',
                     fillColor: AppColors.white,
                     isFilled: true,
@@ -176,6 +176,32 @@ class CommentScreen extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class CustomSwitch extends StatelessWidget {
+  CustomSwitch({
+    super.key,
+  });
+  ValueNotifier<bool> notificationVisibility = ValueNotifier<bool>(false);
+
+  @override
+  Widget build(BuildContext context) {
+    return Transform.scale(
+      scale: 0.8,
+      child: ValueListenableBuilder<bool>(
+        builder: (context, isVisible, child) => CupertinoSwitch(
+          activeColor: AppColors.blueViolet,
+          thumbColor: Colors.white,
+          trackColor: AppColors.pastelBlue,
+          value: isVisible,
+          onChanged: (bool value) {
+            notificationVisibility.value = !notificationVisibility.value;
+          },
+        ),
+        valueListenable: notificationVisibility,
       ),
     );
   }
