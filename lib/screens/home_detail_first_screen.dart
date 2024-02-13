@@ -121,7 +121,8 @@ class HomeDetailFirstScreen extends StatelessWidget {
                   SizedBox(
                       height: height * 0.4,
                       child: ListView.builder(
-                        padding: const EdgeInsets.only(top: 12),
+                        padding: EdgeInsets.zero,
+                        //  physics: NeverScrollableScrollPhysics(),
                         itemCount: 4,
                         itemExtent: 140,
                         itemBuilder: (context, index) {

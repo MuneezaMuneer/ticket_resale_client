@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:svg_flutter/svg_flutter.dart';
@@ -13,7 +14,7 @@ class ProfileLevelScreen extends StatelessWidget {
     final double height = size.height;
     final double width = size.width;
     return Scaffold(
-      backgroundColor: AppColors.pastelBlue.withOpacity(0.3),
+      backgroundColor: AppColors.white.withOpacity(0.2),
       appBar: const CustomAppBar(
         title: 'Profile',
       ),
@@ -24,11 +25,12 @@ class ProfileLevelScreen extends StatelessWidget {
           ),
           Stack(
             children: [
-              const SizedBox(
+              SizedBox(
                 height: 140,
                 width: 140,
                 child: CircleAvatar(
-                  backgroundImage: AssetImage(AppImages.profileImage),
+                  backgroundImage: NetworkImage(
+                      "${FirebaseAuth.instance.currentUser!.photoURL}"),
                 ),
               ),
               Positioned(
@@ -38,8 +40,8 @@ class ProfileLevelScreen extends StatelessWidget {
           const SizedBox(
             height: 13,
           ),
-          const CustomText(
-            title: 'Samantha Pate',
+          CustomText(
+            title: '${FirebaseAuth.instance.currentUser!.displayName}',
             weight: FontWeight.w600,
             size: AppSize.large,
             color: AppColors.jetBlack,

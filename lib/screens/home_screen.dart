@@ -1,4 +1,6 @@
 import 'package:avatar_stack/avatar_stack.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:svg_flutter/svg.dart';
@@ -21,7 +23,6 @@ class HomeScreen extends StatelessWidget {
     final double height = size.height;
     final double width = size.width;
 
-    print('width is .................$width');
     return Scaffold(
       backgroundColor: AppColors.pastelBlue.withOpacity(0.3),
       body: SingleChildScrollView(
@@ -47,19 +48,20 @@ class HomeScreen extends StatelessWidget {
                         Row(
                           children: [
                             circleAvatar(48, 48, AppImages.profile),
-                            const Padding(
-                              padding: EdgeInsets.only(left: 18),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 18),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  CustomText(
+                                  const CustomText(
                                     title: 'Good Morning,',
                                     color: AppColors.white,
                                     weight: FontWeight.w400,
                                     size: AppSize.small,
                                   ),
                                   CustomText(
-                                    title: 'Kathrine Margot',
+                                    title:
+                                        '${FirebaseAuth.instance.currentUser!.displayName}',
                                     color: AppColors.white,
                                     weight: FontWeight.w700,
                                     size: AppSize.regular,
@@ -114,6 +116,7 @@ class HomeScreen extends StatelessWidget {
                       width: width * 0.85,
                       child: CustomTextField(
                         hintText: 'Search Event & Tickets',
+                        hintStyle: const TextStyle(color: AppColors.silver),
                         fillColor: AppColors.white,
                         isFilled: true,
                         suffixIcon: Padding(
@@ -261,7 +264,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                   const Gap(20),
                   SizedBox(
-                    height: width < 370 ? height * 0.48 : height * 0.4,
+                    height: width < 370 ? height * 0.4 : height * 0.32,
                     width: width,
                     child: ListView.builder(
                       shrinkWrap: true,
@@ -270,20 +273,14 @@ class HomeScreen extends StatelessWidget {
                       itemBuilder: (context, index) {
                         return Padding(
                           padding: const EdgeInsets.only(right: 10),
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.pushNamed(
-                                  context, AppRoutes.detailFirstScreen);
-                            },
-                            child: CustomTileContainer(
-                              height: height,
-                              width: width * 0.65,
-                              dateTime: '25th Janurary 8:00 AM - 12:00 AM',
-                              posttitle:
-                                  'Happy Holiday Music Concert Global Village',
-                              postBy: 'Jacob Jones',
-                              imagePath: AppImages.profile,
-                            ),
+                          child: CustomTileContainer(
+                            height: height,
+                            width: width * 0.65,
+                            dateTime: '25th Janurary 8:00 AM - 12:00 AM',
+                            posttitle:
+                                'Happy Holiday Music Concert Global Village',
+                            postBy: 'Jacob Jones',
+                            imagePath: AppImages.profile,
                           ),
                         );
                       },

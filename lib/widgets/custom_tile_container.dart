@@ -24,7 +24,6 @@ class CustomTileContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('width is ...........................$width');
     return LayoutBuilder(
       builder: (context, constraints) {
         return Container(
@@ -39,22 +38,20 @@ class CustomTileContainer extends StatelessWidget {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
+                padding: const EdgeInsets.only(left: 7, right: 7, top: 10),
                 child: Column(
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: SizedBox(
-                          height: constraints.maxHeight * 0.4,
+                          height: constraints.maxHeight * 0.44,
                           width: constraints.maxWidth,
                           child: Image.asset(
                             AppImages.concert,
                             fit: BoxFit.cover,
                           )),
                     ),
-                    SizedBox(
-                      height: constraints.maxHeight * 0.02,
-                    ),
+                    const Gap(10),
                     Container(
                       height: 25,
                       width: width,
@@ -90,43 +87,43 @@ class CustomTileContainer extends StatelessWidget {
                       size: AppSize.regular,
                       weight: FontWeight.w600,
                     ),
-                    SizedBox(
-                      height: constraints.maxHeight * 0.02,
-                    ),
-                    Row(
-                      children: [
-                        SizedBox(
-                          height: 30,
-                          width: 30,
-                          child: CircleAvatar(
-                            backgroundImage: AssetImage('$imagePath'),
-                          ),
-                        ),
-                        const Gap(10),
-                        RichText(
-                          text: TextSpan(
-                            children: [
-                              const TextSpan(
-                                text: 'Posted by ',
-                                style: TextStyle(
-                                  color: AppColors.lightGrey,
-                                  fontSize: AppSize.xxsmall,
-                                  fontWeight: FontWeight.w300,
-                                ),
-                              ),
-                              TextSpan(
-                                text: postBy,
-                                style: const TextStyle(
-                                  color: AppColors.lightGrey,
-                                  fontSize: AppSize.xxsmall,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                    // SizedBox(
+                    //   height: constraints.maxHeight * 0.02,
+                    // ),
+                    // Row(
+                    //   children: [
+                    //     SizedBox(
+                    //       height: 30,
+                    //       width: 30,
+                    //       child: CircleAvatar(
+                    //         backgroundImage: AssetImage('$imagePath'),
+                    //       ),
+                    //     ),
+                    //     const Gap(10),
+                    //     RichText(
+                    //       text: TextSpan(
+                    //         children: [
+                    //           const TextSpan(
+                    //             text: 'Posted by ',
+                    //             style: TextStyle(
+                    //               color: AppColors.lightGrey,
+                    //               fontSize: AppSize.xxsmall,
+                    //               fontWeight: FontWeight.w300,
+                    //             ),
+                    //           ),
+                    //           TextSpan(
+                    //             text: postBy,
+                    //             style: const TextStyle(
+                    //               color: AppColors.lightGrey,
+                    //               fontSize: AppSize.xxsmall,
+                    //               fontWeight: FontWeight.w600,
+                    //             ),
+                    //           ),
+                    //         ],
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
                   ],
                 ),
               ),
@@ -140,7 +137,10 @@ class CustomTileContainer extends StatelessWidget {
                   child: SizedBox(
                     height: 40,
                     child: CustomButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(
+                            context, AppRoutes.detailFirstScreen);
+                      },
                       textColor: AppColors.white,
                       textSize: AppSize.medium,
                       gradient: customGradient,

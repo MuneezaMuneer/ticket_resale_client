@@ -69,6 +69,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       Expanded(
                         child: CustomTextField(
                           hintText: 'First Name',
+                          hintStyle: const TextStyle(color: AppColors.silver),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return ' Enter your first name';
@@ -83,6 +84,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       Expanded(
                         child: CustomTextField(
                           hintText: 'Last Name',
+                          hintStyle: const TextStyle(color: AppColors.silver),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Enter your last name';
@@ -98,6 +100,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   CustomTextField(
                     controller: emailController,
+                    hintStyle: const TextStyle(color: AppColors.silver),
                     hintText: 'Email',
                     keyBoardType: TextInputType.emailAddress,
                     validator: (email) {

@@ -224,7 +224,7 @@ class _AddNewTicketState extends State<AddNewTicket> {
 
   TextStyle _buildHintStyle() {
     return const TextStyle(
-        color: AppColors.lightBlack,
+        color: AppColors.silver,
         fontWeight: FontWeight.w400,
         fontSize: AppSize.medium);
   }

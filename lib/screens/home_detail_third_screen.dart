@@ -234,6 +234,9 @@ class _HomeDetailThirdScreenState extends State<HomeDetailThirdScreen> {
                         child: value
                             ? CustomTextField(
                                 hintText: 'Offer you price',
+                                hintStyle: TextStyle(
+                                    color:
+                                        AppColors.lightBlack.withOpacity(0.5)),
                                 fillColor: AppColors.white,
                                 suffixIcon: InkWell(
                                   child: Padding(

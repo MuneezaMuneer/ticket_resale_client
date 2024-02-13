@@ -67,6 +67,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                   CustomTextField(
                     controller: emailController,
+                    hintStyle: const TextStyle(color: AppColors.silver),
                     hintText: 'Email ID',
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -132,37 +133,40 @@ class _SignInScreenState extends State<SignInScreen> {
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
                         AuthServices.login(
-                                email: emailController.text,
-                                password: passwordController.text,
-                                context: context)
-                            .then((value) => ToastMessage.toastMessage(
-                                'SignIn SuccessFully'));
+                            email: emailController.text,
+                            password: passwordController.text,
+                            context: context);
                       }
                     },
                   ),
                   SizedBox(
                     height: height * 0.2,
                   ),
-                  RichText(
-                    text: TextSpan(
-                      text: 'Not a member? ',
-                      style: const TextStyle(
-                          color: AppColors.lightBlack,
-                          fontSize: AppSize.medium,
-                          fontWeight: FontWeight.w400),
-                      children: <TextSpan>[
-                        TextSpan(
-                          text: 'Register Now ',
-                          style: const TextStyle(
-                              color: AppColors.electricBlue,
-                              fontSize: AppSize.medium,
-                              fontWeight: FontWeight.w400),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              Navigator.pushNamed(context, AppRoutes.signUp);
-                            },
-                        )
-                      ],
+                  InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(context, AppRoutes.signUp);
+                    },
+                    child: RichText(
+                      text: TextSpan(
+                        text: 'Not a member? ',
+                        style: const TextStyle(
+                            color: AppColors.lightBlack,
+                            fontSize: AppSize.medium,
+                            fontWeight: FontWeight.w400),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: 'Register Now ',
+                            style: const TextStyle(
+                                color: AppColors.electricBlue,
+                                fontSize: AppSize.medium,
+                                fontWeight: FontWeight.w400),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                Navigator.pushNamed(context, AppRoutes.signUp);
+                              },
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ],

@@ -32,7 +32,10 @@ class AppBackground extends StatelessWidget {
             top: 35,
             left: 20,
             child: isBackButton
-                ? SvgPicture.asset(AppSvgs.back)
+                ? GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    }, child: SvgPicture.asset(AppSvgs.back))
                 : const SizedBox.shrink()),
         Align(
           alignment: Alignment.bottomCenter,
