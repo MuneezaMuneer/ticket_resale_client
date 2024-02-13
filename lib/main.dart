@@ -7,6 +7,7 @@ import 'package:ticket_resale/firebase_options.dart';
 import 'package:ticket_resale/providers/navigation_provider.dart';
 import 'package:ticket_resale/screens/screens.dart';
 import 'package:ticket_resale/utils/app_routes.dart';
+import 'package:ticket_resale/widgets/custom_navigation.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,7 +38,7 @@ class TicketResale extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           home: FirebaseAuth.instance.currentUser == null
               ? const SplashScreen()
-              : const HomeScreen(),
+              : const CustomNavigation(),
         ));
   }
 }

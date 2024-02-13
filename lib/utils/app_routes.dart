@@ -8,44 +8,57 @@ import '../screens/signup_screen.dart';
 
 Route onGenerateRoute(RouteSettings settings) {
   if (settings.name == AppRoutes.logIn) {
-    return navigatePage(LoginScreen());
+    return animatePage(const LoginScreen());
   } else if (settings.name == AppRoutes.signIn) {
-    return navigatePage(SignInScreen());
+    return animatePage(const SignInScreen());
   } else if (settings.name == AppRoutes.signUp) {
-    return navigatePage(SignUpScreen());
+    return animatePage(const SignUpScreen());
   } else if (settings.name == AppRoutes.navigationScreen) {
-    return navigatePage(const CustomNavigation());
+    return animatePage(const CustomNavigation());
   } else if (settings.name == AppRoutes.homeScreen) {
-    return navigatePage(const HomeScreen());
+    return animatePage(const HomeScreen());
   } else if (settings.name == AppRoutes.commentScreen) {
-    return navigatePage(const CommentScreen());
+    return animatePage(const CommentScreen());
   } else if (settings.name == AppRoutes.feedbackScreen) {
-    return navigatePage(const FeedBackScreen());
-  } else if (settings.name == AppRoutes.detailScreen) {
-    return navigatePage(const HomeDetailScreen());
+    return animatePage(const FeedBackScreen());
+  } else if (settings.name == AppRoutes.detailFirstScreen) {
+    return animatePage(const HomeDetailFirstScreen());
+  } else if (settings.name == AppRoutes.detailThirdScreen) {
+    return animatePage(const HomeDetailThirdScreen());
   } else if (settings.name == AppRoutes.newTicketScreen) {
-    return navigatePage(const AddNewTicket());
+    return animatePage(const AddNewTicket());
   } else if (settings.name == AppRoutes.connectScreen) {
-    return navigatePage(const PaymentConnectScreen());
+    return animatePage(const PaymentConnectScreen());
   } else if (settings.name == AppRoutes.disconnectScreen) {
-    return navigatePage(const PaymentDisconnectScreen());
+    return animatePage(const PaymentDisconnectScreen());
   } else if (settings.name == AppRoutes.profileScreen) {
-    return navigatePage(const ProfileScreen());
+    return animatePage(const ProfileScreen());
   } else if (settings.name == AppRoutes.profileSettings) {
-    return navigatePage(const ProfileSettings());
+    return animatePage(const ProfileSettings());
   } else if (settings.name == AppRoutes.notificationScreen) {
-    return navigatePage(const NotificationScreen());
+    return animatePage(const NotificationScreen());
   } else if (settings.name == AppRoutes.profileLevelScreen) {
-    return navigatePage(const ProfileLevelScreen());
+    return animatePage(const ProfileLevelScreen());
   } else {
-    return navigatePage(const SplashScreen());
+    return animatePage(const SplashScreen());
   }
 }
 
-MaterialPageRoute navigatePage(Widget widget) {
-  return MaterialPageRoute(
-    builder: (context) {
-      return widget;
+PageRouteBuilder animatePage(Widget widget) {
+  return PageRouteBuilder(
+    transitionDuration: const Duration(milliseconds: 450),
+    pageBuilder: (_, __, ___) => widget,
+    transitionsBuilder: (_, Animation<double> animation, __, Widget child) {
+      return customLeftSlideTransition(animation, child);
     },
+  );
+}
+
+Widget customLeftSlideTransition(Animation<double> animation, Widget child) {
+  Tween<Offset> tween =
+      Tween<Offset>(begin: const Offset(1, 0), end: const Offset(0, 0));
+  return SlideTransition(
+    position: tween.animate(animation),
+    child: child,
   );
 }

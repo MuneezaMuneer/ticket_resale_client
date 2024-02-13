@@ -40,7 +40,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ],
             ),
             const SizedBox(
-              height: 5,
+              height: 13,
             ),
             const CustomText(
               title: 'Samantha Pate',

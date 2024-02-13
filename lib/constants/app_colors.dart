@@ -12,7 +12,7 @@ class AppColors {
   static const vibrantGreen = Color(0Xff19CC7F);
   static const yellow = Color(0XffF7DF8A);
   static const darkpurple = Color(0Xff6e4cee);
-  static const blueGrey = Color(0Xff6B779A);
+  static const lightBlack = Color(0Xff403B4E);
   static const electricBlue = Color(0Xff2294FD);
   static const amber = Color(0XffFAD03B);
   static const charcoal = Color(0Xff424242);

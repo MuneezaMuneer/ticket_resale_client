@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:svg_flutter/svg.dart';
-import 'package:ticket_resale/screens/home_screen.dart';
-import 'package:ticket_resale/screens/signin_screen.dart';
+
 import '../constants/constants.dart';
 
 class SplashScreen extends StatefulWidget {

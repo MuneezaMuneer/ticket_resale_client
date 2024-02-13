@@ -217,7 +217,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     text: TextSpan(
                       text: 'Don\'t have an account?  ',
                       style: const TextStyle(
-                          color: AppColors.blueGrey,
+                          color: AppColors.lightBlack,
                           fontSize: AppSize.medium,
                           fontWeight: FontWeight.w400),
                       children: <TextSpan>[

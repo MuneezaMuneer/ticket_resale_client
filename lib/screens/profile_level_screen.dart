@@ -36,7 +36,7 @@ class ProfileLevelScreen extends StatelessWidget {
             ],
           ),
           const SizedBox(
-            height: 5,
+            height: 13,
           ),
           const CustomText(
             title: 'Samantha Pate',
@@ -51,7 +51,7 @@ class ProfileLevelScreen extends StatelessWidget {
           const SizedBox(
             height: 3,
           ),
-          const Gap(50),
+          const Gap(40),
           Expanded(
             child: Container(
               width: width,
@@ -61,7 +61,7 @@ class ProfileLevelScreen extends StatelessWidget {
                       topLeft: Radius.circular(40),
                       topRight: Radius.circular(40))),
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(30, 30, 30, 0),
+                padding: const EdgeInsets.fromLTRB(30, 20, 30, 0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -165,34 +165,46 @@ class ProfileLevelScreen extends StatelessWidget {
           children: [
             Row(
               children: [
-                const Gap(2),
+                SizedBox(
+                  width: width < 370 ? 2 : 5,
+                ),
                 SizedBox(
                     height: 30, width: 30, child: SvgPicture.asset(svgPath)),
-                const Gap(2),
+                SizedBox(
+                  width: width < 370 ? 0 : 2,
+                ),
                 CustomText(
                   title: title,
                   size: AppSize.intermediate,
                   weight: FontWeight.w400,
                 ),
+                SizedBox(
+                  width: width < 370 ? 0 : 5,
+                ),
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.only(right: 2),
-              child: Row(
-                children: [
-                  SvgPicture.asset(
-                    AppSvgs.verified,
-                    colorFilter: ColorFilter.mode(svgColor, BlendMode.srcIn),
-                  ),
-                  const Gap(2),
-                  CustomText(
-                    title: leveltext,
-                    size: AppSize.verySmall,
-                    weight: FontWeight.w400,
-                    color: textColor,
-                  ),
-                ],
-              ),
+            Row(
+              children: [
+                SizedBox(
+                  width: width < 370 ? 0 : 5,
+                ),
+                SvgPicture.asset(
+                  AppSvgs.verified,
+                  colorFilter: ColorFilter.mode(svgColor, BlendMode.srcIn),
+                ),
+                SizedBox(
+                  width: width < 370 ? 0 : 5,
+                ),
+                CustomText(
+                  title: leveltext,
+                  size: AppSize.verySmall,
+                  weight: FontWeight.w400,
+                  color: textColor,
+                ),
+                SizedBox(
+                  width: width < 370 ? 5 : 9,
+                ),
+              ],
             )
           ],
         ),
