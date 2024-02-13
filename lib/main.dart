@@ -1,4 +1,3 @@
-import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -7,10 +6,7 @@ import 'package:ticket_resale/screens/screens.dart';
 import 'package:ticket_resale/utils/app_routes.dart';
 
 void main() => runApp(
-      DevicePreview(
-        enabled: true,
-        builder: (context) => const TicketResale(),
-      ),
+      const TicketResale(),
     );
 
 class TicketResale extends StatelessWidget {

@@ -80,7 +80,9 @@ class _SignInScreenState extends State<SignInScreen> {
                   textColor: AppColors.white,
                   gradient: customGradient,
                   textSize: AppSize.regular,
-                  onPressed: () {},
+                  onPressed: () {
+                    
+                  },
                 ),
                 SizedBox(
                   height: height * 0.2,
