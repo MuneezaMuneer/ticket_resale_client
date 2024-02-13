@@ -1,5 +1,3 @@
-
-
 class AppRoutes {
   static const logIn = '/loginScreen';
   static const signIn = '/signinScreen';

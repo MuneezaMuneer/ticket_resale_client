@@ -5,3 +5,7 @@ LinearGradient customGradient = const LinearGradient(
     colors: [AppColors.purple, AppColors.blueViolet],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight);
+LinearGradient whiteGradient = const LinearGradient(
+    colors: [AppColors.white, AppColors.white],
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight);

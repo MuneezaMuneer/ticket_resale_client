@@ -5,8 +5,15 @@ import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 import '../components/components.dart';
 
-class HomeDetailThirdScreen extends StatelessWidget {
+class HomeDetailThirdScreen extends StatefulWidget {
   const HomeDetailThirdScreen({super.key});
+
+  @override
+  State<HomeDetailThirdScreen> createState() => _HomeDetailThirdScreenState();
+}
+
+class _HomeDetailThirdScreenState extends State<HomeDetailThirdScreen> {
+  ValueNotifier<bool> isConversationStart = ValueNotifier<bool>(false);
 
   @override
   Widget build(BuildContext context) {
@@ -220,17 +227,29 @@ class HomeDetailThirdScreen extends StatelessWidget {
                     ),
                   ),
                   const Gap(25),
-                  CustomTextField(
-                    hintText: 'Offer you price',
-                    fillColor: AppColors.white,
-                    suffixIcon: InkWell(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: SvgPicture.asset(
-                          AppSvgs.dollarSign,
-                        ),
-                      ),
-                    ),
+                  ValueListenableBuilder(
+                    valueListenable: isConversationStart,
+                    builder: (context, value, child) {
+                      return SizedBox(
+                        child: value
+                            ? CustomTextField(
+                                hintText: 'Offer you price',
+                                hintStyle: TextStyle(
+                                    color:
+                                        AppColors.lightBlack.withOpacity(0.5)),
+                                fillColor: AppColors.white,
+                                suffixIcon: InkWell(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(16.0),
+                                    child: SvgPicture.asset(
+                                      AppSvgs.dollarSign,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : const SizedBox.shrink(),
+                      );
+                    },
                   ),
                   SizedBox(
                     height: height * 0.04,
@@ -240,7 +259,7 @@ class HomeDetailThirdScreen extends StatelessWidget {
                     width: width * 0.9,
                     child: CustomButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, AppRoutes.commentScreen);
+                        isConversationStart.value = true;
                       },
                       textColor: AppColors.white,
                       textSize: AppSize.regular,

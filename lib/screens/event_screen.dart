@@ -29,6 +29,7 @@ class EventScreen extends StatelessWidget {
                     child: SizedBox(
                       width: width * 0.9,
                       child: CustomTextField(
+                        hintStyle: const TextStyle(color: AppColors.silver),
                         hintText: 'Search Event & Tickets',
                         fillColor: AppColors.white,
                         isFilled: true,
@@ -68,7 +69,7 @@ class EventScreen extends StatelessWidget {
                               mainAxisSpacing: 10,
                               crossAxisSpacing: 10,
                               crossAxisCount: 2,
-                              mainAxisExtent: 250),
+                              mainAxisExtent: 230),
                       itemCount: 10,
                       itemBuilder: (context, index) {
                         return Container(
@@ -135,52 +136,52 @@ class EventScreen extends StatelessWidget {
                                         weight: FontWeight.w600,
                                       ),
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 3, top: 5),
-                                      child: Row(
-                                        children: [
-                                          const SizedBox(
-                                            height: 15,
-                                            width: 15,
-                                            child: CircleAvatar(
-                                              backgroundImage:
-                                                  AssetImage(AppImages.profile),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 3),
-                                            child: RichText(
-                                              text: const TextSpan(
-                                                children: [
-                                                  TextSpan(
-                                                    text: 'Posted by ',
-                                                    style: TextStyle(
-                                                      color:
-                                                          AppColors.lightGrey,
-                                                      fontSize: AppSize.xxsmall,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                    ),
-                                                  ),
-                                                  TextSpan(
-                                                    text: 'Jacob Jones',
-                                                    style: TextStyle(
-                                                      color:
-                                                          AppColors.lightGrey,
-                                                      fontSize: AppSize.xxsmall,
-                                                      fontWeight:
-                                                          FontWeight.w300,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
+                                    // Padding(
+                                    //   padding: const EdgeInsets.only(
+                                    //       left: 3, top: 5),
+                                    //   child: Row(
+                                    //     children: [
+                                    //       const SizedBox(
+                                    //         height: 15,
+                                    //         width: 15,
+                                    //         child: CircleAvatar(
+                                    //           backgroundImage:
+                                    //               AssetImage(AppImages.profile),
+                                    //         ),
+                                    //       ),
+                                    //       Padding(
+                                    //         padding:
+                                    //             const EdgeInsets.only(left: 3),
+                                    //         child: RichText(
+                                    //           text: const TextSpan(
+                                    //             children: [
+                                    //               TextSpan(
+                                    //                 text: 'Posted by ',
+                                    //                 style: TextStyle(
+                                    //                   color:
+                                    //                       AppColors.lightGrey,
+                                    //                   fontSize: AppSize.xxsmall,
+                                    //                   fontWeight:
+                                    //                       FontWeight.w600,
+                                    //                 ),
+                                    //               ),
+                                    //               TextSpan(
+                                    //                 text: 'Jacob Jones',
+                                    //                 style: TextStyle(
+                                    //                   color:
+                                    //                       AppColors.lightGrey,
+                                    //                   fontSize: AppSize.xxsmall,
+                                    //                   fontWeight:
+                                    //                       FontWeight.w300,
+                                    //                 ),
+                                    //               ),
+                                    //             ],
+                                    //           ),
+                                    //         ),
+                                    //       ),
+                                    //     ],
+                                    //   ),
+                                    // ),
                                   ],
                                 ),
                               ),

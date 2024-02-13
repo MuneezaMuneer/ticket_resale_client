@@ -13,7 +13,7 @@ class ProfileLevelScreen extends StatelessWidget {
     final double height = size.height;
     final double width = size.width;
     return Scaffold(
-      backgroundColor: AppColors.pastelBlue.withOpacity(0.3),
+      backgroundColor: AppColors.white.withOpacity(0.2),
       appBar: const CustomAppBar(
         title: 'Profile',
       ),

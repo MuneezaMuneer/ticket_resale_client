@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:ticket_resale/screens/profile_setting.dart';
 import 'package:ticket_resale/widgets/custom_navigation.dart';
+import '../constants/constants.dart';
 import '../screens/screens.dart';
+import '../screens/signin_screen.dart';
+import '../screens/signup_screen.dart';
 
 Route onGenerateRoute(RouteSettings settings) {
   if (settings.name == AppRoutes.logIn) {
@@ -19,11 +23,9 @@ Route onGenerateRoute(RouteSettings settings) {
     return animatePage(const FeedBackScreen());
   } else if (settings.name == AppRoutes.detailFirstScreen) {
     return animatePage(const HomeDetailFirstScreen());
-  } 
-   else if (settings.name == AppRoutes.detailThirdScreen) {
+  } else if (settings.name == AppRoutes.detailThirdScreen) {
     return animatePage(const HomeDetailThirdScreen());
-  } 
-  else if (settings.name == AppRoutes.newTicketScreen) {
+  } else if (settings.name == AppRoutes.newTicketScreen) {
     return animatePage(const AddNewTicket());
   } else if (settings.name == AppRoutes.connectScreen) {
     return animatePage(const PaymentConnectScreen());

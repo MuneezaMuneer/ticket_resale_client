@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:ticket_resale/db_services/auth_services.dart';
 import '../components/components.dart';
 import '../constants/constants.dart';
 import '../widgets/widgets.dart';
@@ -10,6 +11,9 @@ class LoginScreen extends StatefulWidget {
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
+
+late TextEditingController emailController;
+late TextEditingController passwordController;
 
 class _LoginScreenState extends State<LoginScreen> {
   @override
@@ -62,7 +66,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   socialTextWeight: FontWeight.w400,
                   imagePath: AppImages.google,
                   isSocial: true,
-                  onPressed: () {},
+                  onPressed: () {
+                    AuthServices.signInWithGoogle(context);
+                  },
                 ),
                 SizedBox(
                   height: height * 0.02,
@@ -102,26 +108,31 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(
                   height: height * 0.1,
                 ),
-                RichText(
-                  text: TextSpan(
-                    text: 'Not a member? ',
-                    style: const TextStyle(
-                        color: AppColors.lightBlack,
-                        fontSize: AppSize.medium,
-                        fontWeight: FontWeight.w400),
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: 'Register Now ',
-                        style: const TextStyle(
-                            color: AppColors.electricBlue,
-                            fontSize: AppSize.medium,
-                            fontWeight: FontWeight.w400),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            // navigate to desired screen
-                          },
-                      ),
-                    ],
+                InkWell(
+                  onTap: () {
+                    Navigator.pushNamed(context, AppRoutes.signUp);
+                  },
+                  child: RichText(
+                    text: TextSpan(
+                      text: 'Not a member? ',
+                      style: const TextStyle(
+                          color: AppColors.lightBlack,
+                          fontSize: AppSize.medium,
+                          fontWeight: FontWeight.w400),
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: 'Register Now ',
+                          style: const TextStyle(
+                              color: AppColors.electricBlue,
+                              fontSize: AppSize.medium,
+                              fontWeight: FontWeight.w400),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              // navigate to desired screen
+                            },
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],

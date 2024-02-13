@@ -16,6 +16,7 @@ class CustomTextField extends StatelessWidget {
   final bool isFilled;
   final FontWeight? weight;
   final TextStyle? hintStyle;
+
   final int? maxLines;
   final bool readOnly;
   final bool isCommentField;
@@ -100,11 +101,7 @@ class CustomTextField extends StatelessWidget {
             borderSide: const BorderSide(
               color: AppColors.pastelBlue,
             )),
-        hintStyle: const TextStyle(
-          color: AppColors.silver,
-          fontSize: AppSize.medium,
-          fontWeight: FontWeight.w400,
-        ),
+        hintStyle: hintStyle,
         suffixStyle: suffixStyle,
       ),
       keyboardType: keyBoardType,

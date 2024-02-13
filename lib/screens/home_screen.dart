@@ -21,7 +21,6 @@ class HomeScreen extends StatelessWidget {
     final double height = size.height;
     final double width = size.width;
 
-    print('width is .................$width');
     return Scaffold(
       backgroundColor: AppColors.pastelBlue.withOpacity(0.3),
       body: SingleChildScrollView(
@@ -114,6 +113,7 @@ class HomeScreen extends StatelessWidget {
                       width: width * 0.85,
                       child: CustomTextField(
                         hintText: 'Search Event & Tickets',
+                        hintStyle: const TextStyle(color: AppColors.silver),
                         fillColor: AppColors.white,
                         isFilled: true,
                         suffixIcon: Padding(
@@ -261,7 +261,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                   const Gap(20),
                   SizedBox(
-                    height: width < 370 ? height * 0.48 : height * 0.4,
+                    height: width < 370 ? height * 0.4 : height * 0.32,
                     width: width,
                     child: ListView.builder(
                       shrinkWrap: true,
@@ -270,20 +270,14 @@ class HomeScreen extends StatelessWidget {
                       itemBuilder: (context, index) {
                         return Padding(
                           padding: const EdgeInsets.only(right: 10),
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.pushNamed(
-                                  context, AppRoutes.detailFirstScreen);
-                            },
-                            child: CustomTileContainer(
-                              height: height,
-                              width: width * 0.65,
-                              dateTime: '25th Janurary 8:00 AM - 12:00 AM',
-                              posttitle:
-                                  'Happy Holiday Music Concert Global Village',
-                              postBy: 'Jacob Jones',
-                              imagePath: AppImages.profile,
-                            ),
+                          child: CustomTileContainer(
+                            height: height,
+                            width: width * 0.65,
+                            dateTime: '25th Janurary 8:00 AM - 12:00 AM',
+                            posttitle:
+                                'Happy Holiday Music Concert Global Village',
+                            postBy: 'Jacob Jones',
+                            imagePath: AppImages.profile,
                           ),
                         );
                       },

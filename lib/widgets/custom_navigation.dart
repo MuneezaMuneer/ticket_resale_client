@@ -19,10 +19,12 @@ class _CustomNavigationState extends State<CustomNavigation> {
 
   @override
   void initState() {
-    navigationProvider =
-        Provider.of<NavigationProvider>(context, listen: false);
-    navigationProvider.setSelectedIndex(0);
     super.initState();
+    Future.delayed(Duration.zero, () {
+      navigationProvider =
+          Provider.of<NavigationProvider>(context, listen: false);
+      navigationProvider.setSelectedIndex(0);
+    });
   }
 
   @override
