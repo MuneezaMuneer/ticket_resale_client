@@ -18,11 +18,11 @@ class AuthServices {
         return null;
       }
 
-      final GoogleSignInAuthentication? googleAuth =
-          await googleUser?.authentication;
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
 
       final credential = GoogleAuthProvider.credential(
-          idToken: googleAuth?.idToken, accessToken: googleAuth?.accessToken);
+          idToken: googleAuth.idToken, accessToken: googleAuth.accessToken);
 
       // ignore: use_build_context_synchronously
       Navigator.pushNamedAndRemoveUntil(
@@ -57,9 +57,6 @@ class AuthServices {
     }
   }
 
-  static Future<String> _generateReCAPTCHAToken() async {
-    return 'YourGeneratedToken';
-  }
 
   static Future<void> login({
     required String email,
