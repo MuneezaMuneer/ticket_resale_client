@@ -78,7 +78,7 @@ class CustomProfileRow extends StatelessWidget {
                         size: 15,
                         color: iconColor,
                       )
-                    : const CustomSwitch(),
+                    : CustomSwitch(),
               ),
             ],
           ),

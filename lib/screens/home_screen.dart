@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:svg_flutter/svg.dart';
 import 'package:ticket_resale/constants/constants.dart';
+import 'package:ticket_resale/db_services/db_services.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -46,19 +47,20 @@ class HomeScreen extends StatelessWidget {
                         Row(
                           children: [
                             circleAvatar(48, 48, AppImages.profile),
-                            const Padding(
-                              padding: EdgeInsets.only(left: 18),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 18),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  CustomText(
+                                  const CustomText(
                                     title: 'Good Morning,',
                                     color: AppColors.white,
                                     weight: FontWeight.w400,
                                     size: AppSize.small,
                                   ),
                                   CustomText(
-                                    title: 'Kathrine Margot',
+                                    title:
+                                        '${AuthServices.getCurrentUser.displayName}',
                                     color: AppColors.white,
                                     weight: FontWeight.w700,
                                     size: AppSize.regular,
@@ -260,6 +262,32 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                   const Gap(20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const CustomText(
+                        title: 'Events',
+                        color: AppColors.jetBlack,
+                        size: AppSize.regular,
+                        weight: FontWeight.w600,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, AppRoutes.eventScreen);
+                        },
+                        child: const Padding(
+                          padding: EdgeInsets.only(right: 4),
+                          child: CustomText(
+                            title: 'View All',
+                            color: AppColors.blueViolet,
+                            size: AppSize.small,
+                            weight: FontWeight.w400,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const Gap(8),
                   SizedBox(
                     height: width < 370 ? height * 0.4 : height * 0.32,
                     width: width,

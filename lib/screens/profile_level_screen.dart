@@ -1,11 +1,24 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:svg_flutter/svg_flutter.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
-class ProfileLevelScreen extends StatelessWidget {
+class ProfileLevelScreen extends StatefulWidget {
   const ProfileLevelScreen({super.key});
+
+  @override
+  State<ProfileLevelScreen> createState() => _ProfileLevelScreenState();
+}
+
+class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
+  String? photoUrl;
+  @override
+  void initState() {
+    photoUrl = FirebaseAuth.instance.currentUser!.photoURL;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,9 +26,9 @@ class ProfileLevelScreen extends StatelessWidget {
     final double height = size.height;
     final double width = size.width;
     return Scaffold(
-      backgroundColor: AppColors.white.withOpacity(0.2),
+      //  backgroundColor: AppColors.white.withOpacity(0.2),
       appBar: const CustomAppBar(
-        title: 'Profile',
+        title: 'Profile Level',
       ),
       body: Column(
         children: [
@@ -24,12 +37,14 @@ class ProfileLevelScreen extends StatelessWidget {
           ),
           Stack(
             children: [
-              const SizedBox(
+              SizedBox(
                 height: 140,
                 width: 140,
                 child: CircleAvatar(
-                  backgroundImage: AssetImage(AppImages.profileImage),
-                ),
+                    backgroundImage: photoUrl != null
+                        ? NetworkImage("$photoUrl")
+                        : const AssetImage(AppImages.profileImage)
+                            as ImageProvider),
               ),
               Positioned(
                   left: 90, top: 70, child: SvgPicture.asset(AppSvgs.levelOne))
@@ -38,8 +53,8 @@ class ProfileLevelScreen extends StatelessWidget {
           const SizedBox(
             height: 13,
           ),
-          const CustomText(
-            title: 'Samantha Pate',
+          CustomText(
+            title: '${FirebaseAuth.instance.currentUser!.displayName}',
             weight: FontWeight.w600,
             size: AppSize.large,
             color: AppColors.jetBlack,
@@ -87,19 +102,13 @@ class ProfileLevelScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Gap(20),
-                            InkWell(
-                              onTap: () {
-                                Navigator.pushNamed(
-                                    context, AppRoutes.feedbackScreen);
-                              },
-                              child: _buildContainer(
-                                  AppSvgs.levelOne,
-                                  'Verify your email',
-                                  'Level 1 verified',
-                                  width,
-                                  AppColors.yellow,
-                                  AppColors.yellow),
-                            ),
+                            _buildContainer(
+                                AppSvgs.levelOne,
+                                'Verify your email',
+                                'Level 1 verified',
+                                width,
+                                AppColors.yellow,
+                                AppColors.yellow),
                             _buildContainer(
                                 AppSvgs.levelTwo,
                                 'Verify your Phone No',

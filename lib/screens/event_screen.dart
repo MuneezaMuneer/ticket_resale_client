@@ -195,7 +195,7 @@ class EventScreen extends StatelessWidget {
                                   child: CustomButton(
                                     onPressed: () {
                                       Navigator.pushNamed(
-                                          context, AppRoutes.newTicketScreen);
+                                          context, AppRoutes.detailFirstScreen);
                                     },
                                     textColor: AppColors.white,
                                     textSize: AppSize.regular,

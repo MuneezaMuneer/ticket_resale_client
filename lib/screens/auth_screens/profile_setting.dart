@@ -1,9 +1,19 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
+
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:provider/provider.dart';
 import 'package:svg_flutter/svg_flutter.dart';
-import '../constants/constants.dart';
-import '../widgets/widgets.dart';
+import 'package:ticket_resale/db_services/auth_services.dart';
+import 'package:ticket_resale/models/models.dart';
+import 'package:ticket_resale/providers/image_picker_provider.dart';
+import 'package:ticket_resale/screens/auth_screens/signup_screen.dart';
+import 'package:ticket_resale/utils/app_utils.dart';
+import '../../constants/constants.dart';
+import '../../widgets/widgets.dart';
 
 class ProfileSettings extends StatefulWidget {
   const ProfileSettings({super.key});
@@ -12,23 +22,51 @@ class ProfileSettings extends StatefulWidget {
   State<ProfileSettings> createState() => _ProfileSettingsState();
 }
 
-TextEditingController fullNameController = TextEditingController();
-TextEditingController instagramUserNameController = TextEditingController();
+TextEditingController nameController = TextEditingController();
+TextEditingController instaController = TextEditingController();
 TextEditingController emailController = TextEditingController();
 TextEditingController phoneNoController = TextEditingController();
-TextEditingController dOBController = TextEditingController();
-TextEditingController countryController = TextEditingController();
-TextEditingController stateController = TextEditingController();
-TextEditingController cityController = TextEditingController();
-TextEditingController zipCodeController = TextEditingController();
+TextEditingController birthController = TextEditingController();
+ValueNotifier<bool> loading = ValueNotifier<bool>(false);
 GlobalKey<FormState> formKey = GlobalKey<FormState>();
+late ImagePickerProvider imagePickerProvider;
+String? photoUrl;
+bool validateImage() {
+  return imagePickerProvider.getImageBytes.isNotEmpty &&
+      File(imagePickerProvider.getImageBytes).existsSync();
+}
 
 class _ProfileSettingsState extends State<ProfileSettings> {
+  @override
+  void initState() {
+    imagePickerProvider =
+        Provider.of<ImagePickerProvider>(context, listen: false);
+    photoUrl = AuthServices.getCurrentUser.photoURL;
+    AuthServices.fetchUserDetails().then((userModel) {
+      if (userModel != null) {
+        instaController.text = userModel.instaUsername!;
+        phoneController.text = userModel.phoneNo!;
+        birthController.text = userModel.birthDate!;
+      } else {
+        instaController.text = '';
+        phoneController.text = '';
+        birthController.text = '';
+      }
+      return userModel;
+    });
+
+    nameController.text = '${AuthServices.getCurrentUser.displayName}';
+    emailController.text = '${AuthServices.getCurrentUser.email}';
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     final double height = size.height;
     final double width = size.width;
+
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 230, 234, 248),
       appBar: const CustomAppBar(
@@ -42,22 +80,45 @@ class _ProfileSettingsState extends State<ProfileSettings> {
             ),
             Stack(
               children: [
-                const SizedBox(
+                SizedBox(
                   height: 140,
                   width: 140,
-                  child: CircleAvatar(
-                    backgroundImage: AssetImage(AppImages.profileImage),
+                  child: Consumer<ImagePickerProvider>(
+                    builder: (BuildContext context, imageProvider, child) {
+                      return SizedBox(
+                        child: (imageProvider.getImageBytes.isNotEmpty)
+                            ? CircleAvatar(
+                                backgroundImage: FileImage(
+                                    File(imageProvider.getImageBytes)),
+                              )
+                            : (photoUrl != null && photoUrl != 'null')
+                                ? CircleAvatar(
+                                    backgroundImage: NetworkImage('$photoUrl'),
+                                  )
+                                : const CircleAvatar(
+                                    backgroundImage:
+                                        AssetImage(AppImages.profileImage),
+                                  ),
+                      );
+                    },
                   ),
                 ),
                 Positioned(
-                    left: 60, top: 55, child: SvgPicture.asset(AppSvgs.camera))
+                    left: 60,
+                    top: 55,
+                    child: InkWell(
+                        onTap: () async {
+                          String image = await AppUtils.getImageFromGallery();
+                          imagePickerProvider.setImageBytes = image;
+                        },
+                        child: SvgPicture.asset(AppSvgs.camera)))
               ],
             ),
             const SizedBox(
               height: 13,
             ),
             CustomText(
-              title: FirebaseAuth.instance.currentUser!.displayName,
+              title: '${FirebaseAuth.instance.currentUser!.displayName}',
               weight: FontWeight.w600,
               size: AppSize.large,
               color: AppColors.jetBlack,
@@ -83,8 +144,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                         height: 5,
                       ),
                       CustomTextField(
-                        hintText:
-                            FirebaseAuth.instance.currentUser!.displayName,
+                        controller: nameController,
                         hintStyle: _buildTextFieldstyle(),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -105,7 +165,8 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                         height: 5,
                       ),
                       CustomTextField(
-                        hintText: '@SamanthaPate',
+                        controller: instaController,
+                        //     hintText: '@SamanthaPate',
                         hintStyle: const TextStyle(
                             color: AppColors.lightBlack,
                             fontWeight: FontWeight.w400,
@@ -127,7 +188,8 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                         height: 5,
                       ),
                       CustomTextField(
-                        hintText: FirebaseAuth.instance.currentUser!.email,
+                        controller: emailController,
+                        readOnly: true,
                         trailingText: 'Verify',
                         isTrailingText: true,
                         hintStyle: _buildTextFieldstyle(),
@@ -154,6 +216,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                           SizedBox(
                             height: 70,
                             child: IntlPhoneField(
+                              controller: phoneController,
                               flagsButtonPadding: const EdgeInsets.all(8),
                               dropdownIcon: const Icon(
                                 Icons.keyboard_arrow_down_sharp,
@@ -222,6 +285,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                         height: 5,
                       ),
                       CustomTextField(
+                        controller: birthController,
                         hintText: 'Date of birth',
                         hintStyle: _buildTextFieldstyle(),
                         validator: (value) {
@@ -235,16 +299,41 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                       SizedBox(
                         height: height * 0.07,
                       ),
-                      CustomButton(
-                        fixedHeight: height * 0.07,
-                        fixedWidth: width,
-                        btnText: 'Save',
-                        weight: FontWeight.w700,
-                        textColor: AppColors.white,
-                        gradient: customGradient,
-                        textSize: AppSize.regular,
-                        onPressed: () {
-                          if (formKey.currentState!.validate()) {}
+                      ValueListenableBuilder(
+                        valueListenable: loading,
+                        builder: (context, value, child) {
+                          return CustomButton(
+                            fixedHeight: height * 0.07,
+                            fixedWidth: width,
+                            btnText: 'Save',
+                            loading: loading.value,
+                            weight: FontWeight.w700,
+                            textColor: AppColors.white,
+                            gradient: customGradient,
+                            textSize: AppSize.regular,
+                            onPressed: () async {
+                              if (formKey.currentState!.validate() &&
+                                  validateImage()) {
+                                loading.value = true;
+                                await AuthServices.uploadOrUpdateImage(
+                                        imagePath:
+                                            imagePickerProvider.getImageBytes)
+                                    .then((url) async {
+                                  UserModel userModel = UserModel(
+                                      displayName: nameController.text,
+                                      instaUsername: instaController.text,
+                                      phoneNo: phoneController.text,
+                                      birthDate: birthController.text,
+                                      photoUrl: url);
+                                  await AuthServices.storeUserImage(
+                                          userModel: userModel)
+                                      .then((value) {
+                                    loading.value = false;
+                                  });
+                                });
+                              }
+                            },
+                          );
                         },
                       ),
                     ],

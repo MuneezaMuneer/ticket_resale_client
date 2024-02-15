@@ -1,6 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:svg_flutter/svg_flutter.dart';
 import 'package:ticket_resale/constants/constants.dart';
+import 'package:ticket_resale/providers/image_picker_provider.dart';
+import 'package:ticket_resale/utils/app_utils.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
 class AddNewTicket extends StatefulWidget {
@@ -16,8 +21,16 @@ TextEditingController ticketTypeController = TextEditingController();
 TextEditingController priceController = TextEditingController();
 TextEditingController descriptionController = TextEditingController();
 GlobalKey<FormState> formKey = GlobalKey<FormState>();
+late ImagePickerProvider imagePickerProvider;
 
 class _AddNewTicketState extends State<AddNewTicket> {
+  @override
+  void initState() {
+    imagePickerProvider =
+        Provider.of<ImagePickerProvider>(context, listen: false);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -51,7 +64,14 @@ class _AddNewTicketState extends State<AddNewTicket> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          SvgPicture.asset(AppSvgs.image),
+                          GestureDetector(
+                              onTap: () async {
+                                String image =
+                                    await AppUtils.getImageFromGallery();
+                                imagePickerProvider.setImageUrl = image;
+                                log('The Url is : ${imagePickerProvider.getImageUrl}');
+                              },
+                              child: SvgPicture.asset(AppSvgs.image)),
                           const SizedBox(
                             height: 10,
                           ),
@@ -102,11 +122,18 @@ class _AddNewTicketState extends State<AddNewTicket> {
                     height: 5,
                   ),
                   CustomTextField(
+                    controller: dateController,
                     hintText: 'Date',
                     suffixIcon: Padding(
                       padding: const EdgeInsets.all(10),
-                      child: SvgPicture.asset(
-                        AppSvgs.date,
+                      child: GestureDetector(
+                        onTap: () {
+                          AppUtils.openDatePicker(context,
+                              dateController: dateController);
+                        },
+                        child: SvgPicture.asset(
+                          AppSvgs.date,
+                        ),
                       ),
                     ),
                     hintStyle: _buildHintStyle(),

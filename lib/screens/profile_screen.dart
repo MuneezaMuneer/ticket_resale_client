@@ -1,7 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:svg_flutter/svg.dart';
 import 'package:ticket_resale/constants/constants.dart';
+import 'package:ticket_resale/db_services/auth_services.dart';
+
 import 'package:ticket_resale/utils/app_dialouge.dart';
+
 import '../widgets/widgets.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -11,6 +16,13 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  String? photoUrl;
+  @override
+  void initState() {
+    photoUrl = FirebaseAuth.instance.currentUser!.photoURL;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,12 +38,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             Stack(
               children: [
-                const SizedBox(
+                SizedBox(
                   height: 140,
                   width: 140,
                   child: CircleAvatar(
-                    backgroundImage: AssetImage(AppImages.profileImage),
-                  ),
+                      backgroundImage: photoUrl != null
+                          ? NetworkImage("$photoUrl")
+                          : const AssetImage(AppImages.profileImage)
+                              as ImageProvider),
                 ),
                 Positioned(
                     left: 90,
@@ -42,8 +56,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             const SizedBox(
               height: 13,
             ),
-            const CustomText(
-              title: 'Samantha Pate',
+            CustomText(
+              title: '${FirebaseAuth.instance.currentUser!.displayName}',
               weight: FontWeight.w600,
               size: AppSize.large,
               color: AppColors.jetBlack,
@@ -102,11 +116,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       iconColor: AppColors.electricBlue,
                     ),
                   ),
-                  const CustomProfileRow(
-                    leadingIcon: Icons.privacy_tip_outlined,
-                    title: 'Privacy Policy',
-                    color: AppColors.jetBlack,
-                    iconColor: AppColors.lightGrey,
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, AppRoutes.commentScreen);
+                    },
+                    child: const CustomProfileRow(
+                      leadingIcon: Icons.privacy_tip_outlined,
+                      title: 'Privacy Policy',
+                      color: AppColors.jetBlack,
+                      iconColor: AppColors.lightGrey,
+                    ),
                   ),
                   const CustomProfileRow(
                     svgImage: AppSvgs.termOfUse,
@@ -115,12 +134,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     color: AppColors.jetBlack,
                     iconColor: AppColors.lightGrey,
                   ),
-                  const CustomProfileRow(
-                    leadingIcon: Icons.logout,
-                    leadingColor: AppColors.blueViolet,
-                    title: 'Logout',
-                    color: AppColors.blueViolet,
-                    iconColor: AppColors.blueViolet,
+                  InkWell(
+                    onTap: () {
+                      AuthServices.signOut();
+                      Navigator.pushNamed(context, AppRoutes.logIn);
+                    },
+                    child: const CustomProfileRow(
+                      leadingIcon: Icons.logout,
+                      leadingColor: AppColors.blueViolet,
+                      title: 'Logout',
+                      color: AppColors.blueViolet,
+                      iconColor: AppColors.blueViolet,
+                    ),
                   ),
                   GestureDetector(
                     onTap: () {

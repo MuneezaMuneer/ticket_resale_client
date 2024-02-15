@@ -3,9 +3,11 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:ticket_resale/db_services/auth_services.dart';
-import '../components/components.dart';
-import '../constants/constants.dart';
-import '../widgets/widgets.dart';
+import 'package:ticket_resale/models/user_model.dart';
+import 'package:ticket_resale/utils/app_utils.dart';
+import '../../components/components.dart';
+import '../../constants/constants.dart';
+import '../../widgets/widgets.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -14,15 +16,36 @@ class SignUpScreen extends StatefulWidget {
   State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
+TextEditingController firstNameController = TextEditingController();
+TextEditingController lastNameController = TextEditingController();
 TextEditingController emailController = TextEditingController();
 TextEditingController passwordController = TextEditingController();
+TextEditingController confirmPasswordController = TextEditingController();
+TextEditingController instaController = TextEditingController();
+TextEditingController phoneController = TextEditingController();
+ValueNotifier<bool> passwordVisibility = ValueNotifier<bool>(true);
+ValueNotifier<bool> confirmpasswordVisibility = ValueNotifier<bool>(true);
 GlobalKey<FormState> formKey = GlobalKey<FormState>();
+ValueNotifier<bool> loading = ValueNotifier<bool>(false);
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  @override
+  void initState() {
+    firstNameController.clear();
+    lastNameController.clear();
+    emailController.clear();
+    passwordController.clear();
+    confirmPasswordController.clear();
+    phoneController.clear();
+    instaController.clear();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     double height = size.height;
+    double width = size.width;
     return Scaffold(
       body: AppBackground(
         imagePath: AppImages.authImage,
@@ -59,6 +82,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       Expanded(
                         child: CustomTextField(
                           hintText: 'First Name',
+                          controller: firstNameController,
                           hintStyle: const TextStyle(color: AppColors.silver),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -73,6 +97,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                       Expanded(
                         child: CustomTextField(
+                          controller: lastNameController,
                           hintText: 'Last Name',
                           hintStyle: const TextStyle(color: AppColors.silver),
                           validator: (value) {
@@ -95,7 +120,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     keyBoardType: TextInputType.emailAddress,
                     validator: (email) {
                       if (email == null || !EmailValidator.validate(email)) {
-                        return 'Please Enter a valid email';
+                        return 'Please enter a valid email';
                       } else {
                         return null;
                       }
@@ -104,43 +129,80 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   const SizedBox(
                     height: 12,
                   ),
-                  CustomTextField(
-                    controller: passwordController,
-                    hintText: 'Password',
-                    hintStyle: const TextStyle(color: AppColors.silver),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please Enter your password';
-                      }
-                      if (value.length < 6) {
-                        return 'Password must be at least 6 characters long';
-                      }
-                      return null;
-                    },
-                    suffixIcon: const Icon(
-                      Icons.remove_red_eye_outlined,
-                      color: AppColors.silver,
+                  ValueListenableBuilder<bool>(
+                    builder: (context, isVisible, child) => CustomTextField(
+                      controller: passwordController,
+                      hintText: 'Password',
+                      hintStyle: const TextStyle(color: AppColors.silver),
+                      maxLines: 1,
+                      validator: (value) {
+                        if (value == null || value.length < 6) {
+                          return 'Please enter valid password';
+                        } else {
+                          return null;
+                        }
+                      },
+                      isVisibleText: isVisible,
+                      suffixIcon: GestureDetector(
+                        onTap: () {
+                          passwordVisibility.value = !passwordVisibility.value;
+                        },
+                        child: Icon(
+                          isVisible ? Icons.visibility_off : Icons.visibility,
+                          color: AppColors.silver,
+                        ),
+                      ),
                     ),
+                    valueListenable: passwordVisibility,
+                  ),
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  ValueListenableBuilder<bool>(
+                    builder: (context, isVisiblePassword, child) =>
+                        CustomTextField(
+                      hintText: 'Confirm Password',
+                      controller: confirmPasswordController,
+                      hintStyle: const TextStyle(color: AppColors.silver),
+                      isVisibleText: isVisiblePassword,
+                      maxLines: 1,
+                      validator: (value) {
+                        if (value == null || value.length < 6) {
+                          return 'Please enter your password again';
+                        } else {
+                          return null;
+                        }
+                      },
+                      suffixIcon: GestureDetector(
+                        onTap: () {
+                          confirmpasswordVisibility.value =
+                              !confirmpasswordVisibility.value;
+                        },
+                        child: Icon(
+                          isVisiblePassword
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                          color: AppColors.silver,
+                        ),
+                      ),
+                    ),
+                    valueListenable: confirmpasswordVisibility,
                   ),
                   const SizedBox(
                     height: 12,
                   ),
                   CustomTextField(
-                    hintText: 'Confirm Password',
+                    controller: instaController,
                     hintStyle: const TextStyle(color: AppColors.silver),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please Enter your password again';
+                    hintText: 'Instagram Profile Url',
+                    keyBoardType: TextInputType.emailAddress,
+                    validator: (url) {
+                      if (url!.isEmpty) {
+                        return 'Please enter instagram url';
+                      } else {
+                        return null;
                       }
-                      if (value != passwordController.text) {
-                        return 'Passwords do not match';
-                      }
-                      return null;
                     },
-                    suffixIcon: const Icon(
-                      Icons.remove_red_eye_outlined,
-                      color: AppColors.silver,
-                    ),
                   ),
                   const SizedBox(
                     height: 12,
@@ -148,6 +210,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   SizedBox(
                     height: 70,
                     child: IntlPhoneField(
+                      controller: phoneController,
                       flagsButtonPadding: const EdgeInsets.all(8),
                       dropdownIcon: const Icon(
                         Icons.keyboard_arrow_down_sharp,
@@ -198,20 +261,48 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 25, right: 25),
-                    child: CustomButton(
-                      backgroundColor: AppColors.white,
-                      btnText: 'Sign up',
-                      weight: FontWeight.w700,
-                      textColor: AppColors.white,
-                      gradient: customGradient,
-                      textSize: AppSize.regular,
-                      onPressed: () {
-                        if (formKey.currentState!.validate()) {
-                          AuthServices.signUp(
-                              email: emailController.text,
-                              password: passwordController.text,
-                              context: context);
-                        }
+                    child: ValueListenableBuilder(
+                      valueListenable: loading,
+                      builder: (context, value, child) {
+                        return CustomButton(
+                          backgroundColor: AppColors.white,
+                          btnText: 'Sign up',
+                          weight: FontWeight.w700,
+                          textColor: AppColors.white,
+                          gradient: customGradient,
+                          loading: loading.value,
+                          textSize: AppSize.regular,
+                          onPressed: () async {
+                            if (formKey.currentState!.validate()) {
+                              if (passwordController.text ==
+                                  confirmPasswordController.text) {
+                                loading.value = true;
+
+                                UserModel userModel = UserModel(
+                                  displayName:
+                                      '${firstNameController.text} ${lastNameController.text}',
+                                  email: emailController.text,
+                                  instaUsername: instaController.text,
+                                  phoneNo: phoneController.text,
+                                );
+
+                                await AuthServices.signUp(
+                                  email: emailController.text,
+                                  password: passwordController.text,
+                                  context: context,
+                                ).then((value) {
+                                  AuthServices.storeUserData(
+                                      userModel: userModel);
+
+                                  loading.value = false;
+                                });
+                              } else {
+                                AppUtils.toastMessage(
+                                    'Password does not match');
+                              }
+                            }
+                          },
+                        );
                       },
                     ),
                   ),

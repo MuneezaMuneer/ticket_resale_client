@@ -20,6 +20,7 @@ class NotificationScreen extends StatelessWidget {
         children: [
           const CustomAppBar(
             title: 'Notification',
+            isNotification: false,
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,

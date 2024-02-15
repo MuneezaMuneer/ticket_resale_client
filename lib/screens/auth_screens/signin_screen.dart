@@ -1,11 +1,12 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:gap/gap.dart';
 import 'package:ticket_resale/components/app_background.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/db_services/auth_services.dart';
-import '../widgets/widgets.dart';
+import '../../widgets/widgets.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -16,9 +17,19 @@ class SignInScreen extends StatefulWidget {
 
 TextEditingController emailController = TextEditingController();
 TextEditingController passwordController = TextEditingController();
-GlobalKey<FormState> formKey = GlobalKey<FormState>();
+GlobalKey<FormState> globalKey = GlobalKey<FormState>();
+ValueNotifier<bool> passwordVisibility = ValueNotifier<bool>(true);
+ValueNotifier<bool> loading = ValueNotifier<bool>(false);
 
 class _SignInScreenState extends State<SignInScreen> {
+  @override
+  void initState() {
+    emailController.clear();
+    passwordController.clear();
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -32,7 +43,7 @@ class _SignInScreenState extends State<SignInScreen> {
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
             child: Form(
-              key: formKey,
+              key: globalKey,
               child: Column(
                 children: [
                   RichText(
@@ -60,13 +71,10 @@ class _SignInScreenState extends State<SignInScreen> {
                     hintStyle: const TextStyle(color: AppColors.silver),
                     hintText: 'Email ID',
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please Enter your Email';
+                      if (value == null || !EmailValidator.validate(value)) {
+                        return 'Please enter a valid email';
                       }
 
-                      if (!EmailValidator.validate(value)) {
-                        return 'Please Enter a valid Email';
-                      }
                       return null;
                     },
                     keyBoardType: TextInputType.emailAddress,
@@ -74,23 +82,31 @@ class _SignInScreenState extends State<SignInScreen> {
                   SizedBox(
                     height: height * 0.02,
                   ),
-                  CustomTextField(
-                    controller: passwordController,
-                    hintStyle: const TextStyle(color: AppColors.silver),
-                    hintText: 'Password',
-                    suffixIcon: const Icon(
-                      Icons.remove_red_eye_outlined,
-                      color: AppColors.silver,
+                  ValueListenableBuilder<bool>(
+                    builder: (context, isVisible, child) => CustomTextField(
+                      controller: passwordController,
+                      hintStyle: const TextStyle(color: AppColors.silver),
+                      hintText: 'Password',
+                      maxLines: 1,
+                      isVisibleText: isVisible,
+                      suffixIcon: GestureDetector(
+                        onTap: () {
+                          passwordVisibility.value = !passwordVisibility.value;
+                        },
+                        child: Icon(
+                          isVisible ? Icons.visibility_off : Icons.visibility,
+                          color: AppColors.silver,
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.length < 6) {
+                          return 'Please enter your password';
+                        }
+
+                        return null;
+                      },
                     ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please Enter your password';
-                      }
-                      if (value.length < 6) {
-                        return 'Password must be at least 6 characters long';
-                      }
-                      return null;
-                    },
+                    valueListenable: passwordVisibility,
                   ),
                   const Gap(10),
                   const Align(
@@ -105,19 +121,34 @@ class _SignInScreenState extends State<SignInScreen> {
                   SizedBox(
                     height: height * 0.03,
                   ),
-                  CustomButton(
-                    btnText: 'Sign in',
-                    weight: FontWeight.w700,
-                    textColor: AppColors.white,
-                    gradient: customGradient,
-                    textSize: AppSize.regular,
-                    onPressed: () {
-                      if (formKey.currentState!.validate()) {
-                        AuthServices.login(
-                            email: emailController.text,
-                            password: passwordController.text,
-                            context: context);
-                      }
+                  ValueListenableBuilder(
+                    valueListenable: loading,
+                    builder: (context, value, child) {
+                      return CustomButton(
+                        loading: loading.value,
+                        btnText: 'Sign in',
+                        weight: FontWeight.w700,
+                        textColor: AppColors.white,
+                        gradient: customGradient,
+                        textSize: AppSize.regular,
+                        onPressed: () async {
+                          if (globalKey.currentState!.validate()) {
+                            loading.value = true;
+                            await Future.delayed(
+                                    const Duration(milliseconds: 500))
+                                .then((value) => AuthServices.login(
+                                    email: emailController.text,
+                                    password: passwordController.text,
+                                    context: context));
+                            SchedulerBinding.instance
+                                .addPostFrameCallback((timeStamp) {
+                              FocusScope.of(context).unfocus();
+                            });
+
+                            loading.value = false;
+                          }
+                        },
+                      );
                     },
                   ),
                   SizedBox(

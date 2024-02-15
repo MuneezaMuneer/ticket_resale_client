@@ -131,7 +131,7 @@ class HomeDetailFirstScreen extends StatelessWidget {
                             child: InkWell(
                               onTap: () {
                                 Navigator.pushNamed(
-                                    context, AppRoutes.detailThirdScreen);
+                                    context, AppRoutes.detailSecondScreen);
                               },
                               child: _tileContainer(
                                 title: 'VIP PLUS TICKET AVAILABLE',

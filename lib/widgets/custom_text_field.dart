@@ -25,6 +25,8 @@ class CustomTextField extends StatelessWidget {
   final String obscuringCharacter;
   final String? trailingText;
   final bool isTrailingText;
+  final String? initialValue;
+
   const CustomTextField({
     super.key,
     this.controller,
@@ -47,12 +49,14 @@ class CustomTextField extends StatelessWidget {
     this.isTrailingText = false,
     this.isCommentField = false,
     this.maxLines,
+    this.initialValue,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
+      initialValue: initialValue,
       readOnly: readOnly,
       obscuringCharacter: obscuringCharacter,
       cursorColor: AppColors.jetBlack.withOpacity(0.3),

@@ -5,14 +5,14 @@ import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 import '../components/components.dart';
 
-class HomeDetailThirdScreen extends StatefulWidget {
-  const HomeDetailThirdScreen({super.key});
+class HomeDetailSecondScreen extends StatefulWidget {
+  const HomeDetailSecondScreen({super.key});
 
   @override
-  State<HomeDetailThirdScreen> createState() => _HomeDetailThirdScreenState();
+  State<HomeDetailSecondScreen> createState() => _HomeDetailSecondScreenState();
 }
 
-class _HomeDetailThirdScreenState extends State<HomeDetailThirdScreen> {
+class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
   ValueNotifier<bool> isConversationStart = ValueNotifier<bool>(false);
 
   @override
@@ -227,29 +227,43 @@ class _HomeDetailThirdScreenState extends State<HomeDetailThirdScreen> {
                     ),
                   ),
                   const Gap(25),
-                  ValueListenableBuilder(
-                    valueListenable: isConversationStart,
-                    builder: (context, value, child) {
-                      return SizedBox(
-                        child: value
-                            ? CustomTextField(
-                                hintText: 'Offer you price',
-                                hintStyle: TextStyle(
-                                    color:
-                                        AppColors.lightBlack.withOpacity(0.5)),
-                                fillColor: AppColors.white,
-                                suffixIcon: InkWell(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(16.0),
-                                    child: SvgPicture.asset(
-                                      AppSvgs.dollarSign,
-                                    ),
-                                  ),
-                                ),
-                              )
-                            : const SizedBox.shrink(),
-                      );
-                    },
+                  // ValueListenableBuilder(
+                  //   valueListenable: isConversationStart,
+                  //   builder: (context, value, child) {
+                  //     return SizedBox(
+                  //       child: value
+                  //           ? CustomTextField(
+                  //               hintText: 'Offer you price',
+                  //               hintStyle: TextStyle(
+                  //                   color:
+                  //                       AppColors.lightBlack.withOpacity(0.5)),
+                  //               fillColor: AppColors.white,
+                  //               suffixIcon: InkWell(
+                  //                 child: Padding(
+                  //                   padding: const EdgeInsets.all(16.0),
+                  //                   child: SvgPicture.asset(
+                  //                     AppSvgs.dollarSign,
+                  //                   ),
+                  //                 ),
+                  //               ),
+                  //             )
+                  //           : const SizedBox.shrink(),
+                  //     );
+                  //   },
+                  // ),
+                  CustomTextField(
+                    hintText: 'Offer you price',
+                    hintStyle:
+                        TextStyle(color: AppColors.lightBlack.withOpacity(0.5)),
+                    fillColor: AppColors.white,
+                    suffixIcon: InkWell(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: SvgPicture.asset(
+                          AppSvgs.dollarSign,
+                        ),
+                      ),
+                    ),
                   ),
                   SizedBox(
                     height: height * 0.04,
@@ -260,6 +274,7 @@ class _HomeDetailThirdScreenState extends State<HomeDetailThirdScreen> {
                     child: CustomButton(
                       onPressed: () {
                         isConversationStart.value = true;
+                        Navigator.pushNamed(context, AppRoutes.commentScreen);
                       },
                       textColor: AppColors.white,
                       textSize: AppSize.regular,

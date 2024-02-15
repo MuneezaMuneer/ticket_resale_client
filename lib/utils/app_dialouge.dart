@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:ticket_resale/constants/aapp_routes.dart';
 import 'package:ticket_resale/constants/app_colors.dart';
 import 'package:ticket_resale/constants/app_images.dart';
 import 'package:ticket_resale/constants/app_textsize.dart';
@@ -189,7 +190,7 @@ ticketSellDialog({required BuildContext context}) {
                 width: 110,
                 child: CustomButton(
                   onPressed: () {
-                    Navigator.pop(context);
+                    Navigator.pushNamed(context, AppRoutes.feedbackScreen);
                   },
                   textColor: AppColors.white,
                   textSize: AppSize.medium,

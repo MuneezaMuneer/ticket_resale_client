@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:ticket_resale/firebase_options.dart';
 import 'package:ticket_resale/providers/feedbak_provider.dart';
+import 'package:ticket_resale/providers/image_picker_provider.dart';
 import 'package:ticket_resale/providers/navigation_provider.dart';
 import 'package:ticket_resale/screens/screens.dart';
 import 'package:ticket_resale/utils/app_routes.dart';
@@ -26,23 +27,23 @@ class TicketResale extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<NavigationProvider>(
-          create: (context) {
-            return NavigationProvider();
-          },
-        ),
+            create: (context) => NavigationProvider()),
         ChangeNotifierProvider<FeedbackProvider>(
-            create: (context) => FeedbackProvider())
+            create: (context) => FeedbackProvider()),
+        ChangeNotifierProvider<ImagePickerProvider>(
+            create: (context) => ImagePickerProvider()),
       ],
       child: MaterialApp(
-        onGenerateRoute: onGenerateRoute,
-        theme: ThemeData(
-          fontFamily: GoogleFonts.openSans().fontFamily,
-        ),
-        debugShowCheckedModeBanner: false,
-        home: FirebaseAuth.instance.currentUser == null
-            ? const SplashScreen()
-            : const CustomNavigation(),
-      ),
+          onGenerateRoute: onGenerateRoute,
+          theme: ThemeData(
+            fontFamily: GoogleFonts.openSans().fontFamily,
+          ),
+          debugShowCheckedModeBanner: false,
+          home: 
+          FirebaseAuth.instance.currentUser == null
+              ? const SplashScreen()
+              : const CustomNavigation(),
+          ),
     );
   }
 }
