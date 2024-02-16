@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:svg_flutter/svg_flutter.dart';
 import 'package:ticket_resale/constants/constants.dart';
+import 'package:ticket_resale/db_services/db_services.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
 class ProfileLevelScreen extends StatefulWidget {
@@ -16,7 +17,7 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
   String? photoUrl;
   @override
   void initState() {
-    photoUrl = FirebaseAuth.instance.currentUser!.photoURL;
+    photoUrl = AuthServices.getCurrentUser.photoURL;
     super.initState();
   }
 

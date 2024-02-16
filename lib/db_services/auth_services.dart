@@ -79,25 +79,7 @@ class AuthServices {
     }
     return null;
   }
-  // static Future<void> signUp({
-  //   required String email,
-  //   required String password,
-  //   required BuildContext context,
-  // }) async {
-  //   try {
-  //     final credentials =
-  //         await FirebaseAuth.instance.createUserWithEmailAndPassword(
-  //       email: email,
-  //       password: password,
-  //     );
-
-  //     if (credentials.user != null) {
-  //       log('Account created successfully');
-  //     }
-  //   } catch (e) {
-  //     log('Error: ${e.toString()}');
-  //   }
-  // }
+ 
 
   static Future<bool> login({
     required String email,
@@ -133,6 +115,17 @@ class AuthServices {
     }
   }
 
+  static Future<String> forgotPassword(
+      {required String email, required BuildContext context}) async {
+    FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+    try {
+      await firebaseAuth.sendPasswordResetEmail(email: email);
+      return 'success';
+    } on FirebaseAuthException catch (err) {
+      return "${err.message}";
+    }
+  }
+
   static Future<void> signOut() async {
     await FirebaseAuth.instance.signOut();
   }
@@ -162,9 +155,11 @@ class AuthServices {
 
       await getCurrentUser.updatePhotoURL(userModel.photoUrl);
       await getCurrentUser.updateDisplayName(userModel.displayName);
-      await user.update({'birth_date': userModel.birthDate});
-      await user.update({'phone_number': userModel.phoneNo});
-      await user.update({'instagram_username': userModel.instaUsername});
+      await user.set({
+        'birth_date': userModel.birthDate,
+        'phone_number': userModel.phoneNo,
+        'instagram_username': userModel.instaUsername,
+      }, SetOptions(merge: true));
     } catch (e) {
       log('Error storing photo url: ${e.toString()}');
     }

@@ -8,4 +8,3 @@ export 'custom_text_field.dart';
 export 'custom_text.dart';
 export 'custom_navigation.dart';
 export 'custom_tile_container.dart';
-export 'custom_switch.dart';

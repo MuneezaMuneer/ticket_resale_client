@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:svg_flutter/svg.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/db_services/auth_services.dart';
+import 'package:ticket_resale/providers/providers.dart';
 
 import 'package:ticket_resale/utils/app_dialouge.dart';
 
@@ -16,10 +18,12 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  late SwitchProvider switchProvider;
   String? photoUrl;
   @override
   void initState() {
-    photoUrl = FirebaseAuth.instance.currentUser!.photoURL;
+    photoUrl = AuthServices.getCurrentUser.photoURL;
+    switchProvider = Provider.of<SwitchProvider>(context, listen: false);
     super.initState();
   }
 
@@ -97,12 +101,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       iconColor: AppColors.lightGrey,
                     ),
                   ),
-                  const CustomProfileRow(
-                    leadingIcon: Icons.notifications_none,
-                    title: 'Notification',
-                    color: AppColors.jetBlack,
-                    arrowBack: false,
-                    iconColor: AppColors.lightGrey,
+                  GestureDetector(
+                    onTap: () {},
+                    child: const CustomProfileRow(
+                      leadingIcon: Icons.notifications_none,
+                      title: 'Notification',
+                      color: AppColors.jetBlack,
+                      arrowBack: false,
+                      iconColor: AppColors.lightGrey,
+                    ),
                   ),
                   GestureDetector(
                     onTap: () {

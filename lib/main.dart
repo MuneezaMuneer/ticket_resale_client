@@ -7,6 +7,7 @@ import 'package:ticket_resale/firebase_options.dart';
 import 'package:ticket_resale/providers/feedbak_provider.dart';
 import 'package:ticket_resale/providers/image_picker_provider.dart';
 import 'package:ticket_resale/providers/navigation_provider.dart';
+import 'package:ticket_resale/providers/providers.dart';
 import 'package:ticket_resale/screens/screens.dart';
 import 'package:ticket_resale/utils/app_routes.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
@@ -32,18 +33,19 @@ class TicketResale extends StatelessWidget {
             create: (context) => FeedbackProvider()),
         ChangeNotifierProvider<ImagePickerProvider>(
             create: (context) => ImagePickerProvider()),
+        ChangeNotifierProvider<SwitchProvider>(
+            create: (context) => SwitchProvider())
       ],
       child: MaterialApp(
-          onGenerateRoute: onGenerateRoute,
-          theme: ThemeData(
-            fontFamily: GoogleFonts.openSans().fontFamily,
-          ),
-          debugShowCheckedModeBanner: false,
-          home: 
-          FirebaseAuth.instance.currentUser == null
-              ? const SplashScreen()
-              : const CustomNavigation(),
-          ),
+        onGenerateRoute: onGenerateRoute,
+        theme: ThemeData(
+          fontFamily: GoogleFonts.openSans().fontFamily,
+        ),
+        debugShowCheckedModeBanner: false,
+        home: FirebaseAuth.instance.currentUser == null
+            ? const SplashScreen()
+            : const CustomNavigation(),
+      ),
     );
   }
 }

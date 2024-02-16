@@ -1,13 +1,25 @@
 import 'package:avatar_stack/avatar_stack.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:svg_flutter/svg.dart';
 import 'package:ticket_resale/constants/constants.dart';
-import 'package:ticket_resale/db_services/db_services.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  String? displayName;
+  @override
+  void initState() {
+    displayName = FirebaseAuth.instance.currentUser?.displayName ?? '';
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,8 +71,7 @@ class HomeScreen extends StatelessWidget {
                                     size: AppSize.small,
                                   ),
                                   CustomText(
-                                    title:
-                                        '${AuthServices.getCurrentUser.displayName}',
+                                    title: displayName,
                                     color: AppColors.white,
                                     weight: FontWeight.w700,
                                     size: AppSize.regular,

@@ -18,7 +18,7 @@ class SignUpScreen extends StatefulWidget {
 
 TextEditingController firstNameController = TextEditingController();
 TextEditingController lastNameController = TextEditingController();
-TextEditingController emailController = TextEditingController();
+TextEditingController gmailController = TextEditingController();
 TextEditingController passwordController = TextEditingController();
 TextEditingController confirmPasswordController = TextEditingController();
 TextEditingController instaController = TextEditingController();
@@ -33,7 +33,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   void initState() {
     firstNameController.clear();
     lastNameController.clear();
-    emailController.clear();
+    gmailController.clear();
     passwordController.clear();
     confirmPasswordController.clear();
     phoneController.clear();
@@ -114,7 +114,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     height: 12,
                   ),
                   CustomTextField(
-                    controller: emailController,
+                    controller: gmailController,
                     hintStyle: const TextStyle(color: AppColors.silver),
                     hintText: 'Email',
                     keyBoardType: TextInputType.emailAddress,
@@ -281,18 +281,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 UserModel userModel = UserModel(
                                   displayName:
                                       '${firstNameController.text} ${lastNameController.text}',
-                                  email: emailController.text,
+                                  email: gmailController.text,
                                   instaUsername: instaController.text,
                                   phoneNo: phoneController.text,
                                 );
 
                                 await AuthServices.signUp(
-                                  email: emailController.text,
+                                  email: gmailController.text,
                                   password: passwordController.text,
                                   context: context,
                                 ).then((value) {
                                   AuthServices.storeUserData(
-                                      userModel: userModel);
+                                          userModel: userModel)
+                                      .then((value) {
+                                    Navigator.pushNamed(
+                                        context, AppRoutes.signIn);
+                                  });
 
                                   loading.value = false;
                                 });

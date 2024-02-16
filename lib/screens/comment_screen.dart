@@ -1,8 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:provider/provider.dart';
 import 'package:svg_flutter/svg_flutter.dart';
 import 'package:ticket_resale/components/components.dart';
 import 'package:ticket_resale/constants/constants.dart';
+import 'package:ticket_resale/providers/providers.dart';
 import 'package:ticket_resale/utils/utils.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
@@ -42,7 +45,19 @@ class CommentScreen extends StatelessWidget {
                           weight: FontWeight.w400,
                           color: AppColors.lightGrey,
                         ),
-                        CustomSwitch()
+                        Consumer<SwitchProvider>(
+                          builder: (context, provider, child) {
+                            return CupertinoSwitch(
+                              activeColor: AppColors.blueViolet,
+                              thumbColor: Colors.white,
+                              trackColor: AppColors.pastelBlue,
+                              value: provider.getComment,
+                              onChanged: (bool value) {
+                                provider.setComment(true);
+                              },
+                            );
+                          },
+                        ),
                       ],
                     )
                   ],
@@ -179,5 +194,3 @@ class CommentScreen extends StatelessWidget {
     );
   }
 }
-
-

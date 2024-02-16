@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ticket_resale/screens/auth_screens/profile_setting.dart';
+import 'package:ticket_resale/screens/ticket_screen.dart';
 import 'package:ticket_resale/widgets/custom_navigation.dart';
 import '../constants/constants.dart';
 import '../screens/profile_screen.dart';
@@ -16,6 +17,8 @@ Route onGenerateRoute(RouteSettings settings) {
     return animatePage(const SignUpScreen());
   } else if (settings.name == AppRoutes.navigationScreen) {
     return animatePage(const CustomNavigation());
+  } else if (settings.name == AppRoutes.passwordScreen) {
+    return animatePage(const PasswordScreen());
   } else if (settings.name == AppRoutes.homeScreen) {
     return animatePage(const HomeScreen());
   } else if (settings.name == AppRoutes.commentScreen) {
@@ -26,8 +29,8 @@ Route onGenerateRoute(RouteSettings settings) {
     return animatePage(const HomeDetailFirstScreen());
   } else if (settings.name == AppRoutes.detailSecondScreen) {
     return animatePage(const HomeDetailSecondScreen());
-  } else if (settings.name == AppRoutes.newTicketScreen) {
-    return animatePage(const AddNewTicket());
+  } else if (settings.name == AppRoutes.ticketScreen) {
+    return animatePage(const TicketScreen());
   } else if (settings.name == AppRoutes.eventScreen) {
     return animatePage(const EventScreen());
   } else if (settings.name == AppRoutes.connectScreen) {

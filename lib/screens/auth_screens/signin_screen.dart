@@ -109,13 +109,18 @@ class _SignInScreenState extends State<SignInScreen> {
                     valueListenable: passwordVisibility,
                   ),
                   const Gap(10),
-                  const Align(
+                  Align(
                     alignment: Alignment.centerRight,
-                    child: CustomText(
-                      title: 'Forgot Password?',
-                      color: AppColors.electricBlue,
-                      weight: FontWeight.w400,
-                      size: AppSize.medium,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context, AppRoutes.passwordScreen);
+                      },
+                      child: const CustomText(
+                        title: 'Forgot Password?',
+                        color: AppColors.electricBlue,
+                        weight: FontWeight.w400,
+                        size: AppSize.medium,
+                      ),
                     ),
                   ),
                   SizedBox(

@@ -7,7 +7,7 @@ class AppRoutes {
   static const feedbackScreen = '/feedbackScreen';
   static const detailFirstScreen = '/detailFirstScreen';
   static const detailSecondScreen = '/detailThirdScreen';
-  static const newTicketScreen = '/newTicketScreen';
+  static const ticketScreen = '/ticketScreen';
   static const connectScreen = '/connectScreen';
   static const profileScreen = '/profileScreen';
   static const disconnectScreen = '/disconnectScreen';
@@ -16,4 +16,5 @@ class AppRoutes {
   static const eventScreen = '/eventScreen';
   static const profileLevelScreen = '/profileLevelScreen';
   static const navigationScreen = '/navigationScreen';
+  static const passwordScreen = 'passwordScreen';
 }

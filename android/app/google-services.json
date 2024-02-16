@@ -7,12 +7,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:831456807199:android:3396f8cd2f532f41cb882a",
+        "mobilesdk_app_id": "1:831456807199:android:4f5ff927e55adb29cb882a",
         "android_client_info": {
-          "package_name": "com.example.ticket_resale"
+          "package_name": "ravetrade.com.ticketresale"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "831456807199-2kbnkfs8gnicjhfugqmvqqfu493bfcer.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyABWdHcAzfetx405yG6TvZp4MJ6DrVbS_Y"
@@ -20,7 +25,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "831456807199-2kbnkfs8gnicjhfugqmvqqfu493bfcer.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "831456807199-56rfb40d8h4tvk9lj2ammhk7bc8hqjv7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "ravetrade.com.ticketresale"
+              }
+            }
+          ]
         }
       }
     }

@@ -8,11 +8,11 @@ import 'package:ticket_resale/providers/image_picker_provider.dart';
 import 'package:ticket_resale/utils/app_utils.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
-class AddNewTicket extends StatefulWidget {
-  const AddNewTicket({super.key});
+class TicketScreen extends StatefulWidget {
+  const TicketScreen({super.key});
 
   @override
-  State<AddNewTicket> createState() => _AddNewTicketState();
+  State<TicketScreen> createState() => _TicketScreenState();
 }
 
 TextEditingController festivalNameController = TextEditingController();
@@ -23,7 +23,7 @@ TextEditingController descriptionController = TextEditingController();
 GlobalKey<FormState> formKey = GlobalKey<FormState>();
 late ImagePickerProvider imagePickerProvider;
 
-class _AddNewTicketState extends State<AddNewTicket> {
+class _TicketScreenState extends State<TicketScreen> {
   @override
   void initState() {
     imagePickerProvider =

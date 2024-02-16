@@ -31,10 +31,10 @@ ValueNotifier<bool> loading = ValueNotifier<bool>(false);
 GlobalKey<FormState> formKey = GlobalKey<FormState>();
 late ImagePickerProvider imagePickerProvider;
 String? photoUrl;
-bool validateImage() {
-  return imagePickerProvider.getImageBytes.isNotEmpty &&
-      File(imagePickerProvider.getImageBytes).existsSync();
-}
+// bool validateImage() {
+//   return imagePickerProvider.getImageBytes.isNotEmpty &&
+//       File(imagePickerProvider.getImageBytes).existsSync();
+// }
 
 class _ProfileSettingsState extends State<ProfileSettings> {
   @override
@@ -312,25 +312,36 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                             gradient: customGradient,
                             textSize: AppSize.regular,
                             onPressed: () async {
-                              if (formKey.currentState!.validate() &&
-                                  validateImage()) {
+                              if (formKey.currentState!.validate()) {
                                 loading.value = true;
-                                await AuthServices.uploadOrUpdateImage(
-                                        imagePath:
-                                            imagePickerProvider.getImageBytes)
-                                    .then((url) async {
+
+                                try {
+                                  String? imageUrl;
+                                  if (imagePickerProvider
+                                      .getImageBytes.isNotEmpty) {
+                                    imageUrl =
+                                        await AuthServices.uploadOrUpdateImage(
+                                      imagePath:
+                                          imagePickerProvider.getImageBytes,
+                                    );
+                                  }
+
                                   UserModel userModel = UserModel(
-                                      displayName: nameController.text,
-                                      instaUsername: instaController.text,
-                                      phoneNo: phoneController.text,
-                                      birthDate: birthController.text,
-                                      photoUrl: url);
+                                    displayName: nameController.text,
+                                    instaUsername: instaController.text,
+                                    phoneNo: phoneController.text,
+                                    birthDate: birthController.text,
+                                    photoUrl: imageUrl,
+                                  );
+
                                   await AuthServices.storeUserImage(
-                                          userModel: userModel)
-                                      .then((value) {
-                                    loading.value = false;
-                                  });
-                                });
+                                      userModel: userModel);
+                                } catch (e) {
+                                  print(
+                                      'Error storing user data: ${e.toString()}');
+                                } finally {
+                                  loading.value = false;
+                                }
                               }
                             },
                           );
