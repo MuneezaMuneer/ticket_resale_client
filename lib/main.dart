@@ -1,12 +1,10 @@
+import 'package:device_preview/device_preview.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:ticket_resale/firebase_options.dart';
-import 'package:ticket_resale/providers/feedbak_provider.dart';
-import 'package:ticket_resale/providers/image_picker_provider.dart';
-import 'package:ticket_resale/providers/navigation_provider.dart';
 import 'package:ticket_resale/providers/providers.dart';
 import 'package:ticket_resale/screens/screens.dart';
 import 'package:ticket_resale/utils/app_routes.dart';
@@ -17,7 +15,14 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const TicketResale());
+  SwitchProvider provider = SwitchProvider();
+  await provider.loadPreferences();
+
+  // runApp(const TicketResale());
+  DevicePreview(
+    enabled: true,
+    builder: (context) => const TicketResale(), 
+  );
 }
 
 class TicketResale extends StatelessWidget {
@@ -42,6 +47,7 @@ class TicketResale extends StatelessWidget {
           fontFamily: GoogleFonts.openSans().fontFamily,
         ),
         debugShowCheckedModeBanner: false,
+        // home: const SplashScreen(),
         home: FirebaseAuth.instance.currentUser == null
             ? const SplashScreen()
             : const CustomNavigation(),

@@ -9,8 +9,19 @@ import 'package:ticket_resale/providers/providers.dart';
 import 'package:ticket_resale/utils/utils.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
-class CommentScreen extends StatelessWidget {
+class CommentScreen extends StatefulWidget {
   const CommentScreen({super.key});
+
+  @override
+  State<CommentScreen> createState() => _CommentScreenState();
+}
+
+class _CommentScreenState extends State<CommentScreen> {
+  @override
+  void initState() {
+    Provider.of<SwitchProvider>(context, listen: false).loadPreferences();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +64,7 @@ class CommentScreen extends StatelessWidget {
                               trackColor: AppColors.pastelBlue,
                               value: provider.getComment,
                               onChanged: (bool value) {
-                                provider.setComment(true);
+                                provider.setComment(value);
                               },
                             );
                           },

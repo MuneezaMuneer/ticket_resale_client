@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:svg_flutter/svg.dart';
 import 'package:ticket_resale/constants/constants.dart';
+import 'package:ticket_resale/db_services/auth_services.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -15,9 +16,18 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String? displayName;
+  String? photoUrl;
   @override
   void initState() {
-    displayName = FirebaseAuth.instance.currentUser?.displayName ?? '';
+    try {
+      if (FirebaseAuth.instance.currentUser != null) {
+        displayName = AuthServices.getCurrentUser.displayName ?? '';
+        photoUrl = FirebaseAuth.instance.currentUser!.photoURL ?? '';
+      }
+    } catch (e) {
+      print('Error in initState: $e');
+    }
+
     super.initState();
   }
 
@@ -58,9 +68,16 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         Row(
                           children: [
-                            circleAvatar(48, 48, AppImages.profile),
+                            CircleAvatar(
+                              backgroundImage:
+                                  photoUrl != null && photoUrl!.isNotEmpty
+                                      ? NetworkImage(photoUrl!)
+                                      : const AssetImage(AppImages.profileImage)
+                                          as ImageProvider,
+                              radius: 25,
+                            ),
                             Padding(
-                              padding: const EdgeInsets.only(left: 18),
+                              padding: const EdgeInsets.only(left: 10),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -71,7 +88,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                     size: AppSize.small,
                                   ),
                                   CustomText(
-                                    title: displayName,
+                                    title: displayName != null
+                                        ? displayName ?? ''
+                                        : '',
                                     color: AppColors.white,
                                     weight: FontWeight.w700,
                                     size: AppSize.regular,

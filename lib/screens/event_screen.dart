@@ -55,7 +55,7 @@ class EventScreen extends StatelessWidget {
                   ),
                   const Gap(10),
                   const CustomText(
-                    title: 'All Tickets',
+                    title: 'All Events',
                     color: AppColors.jetBlack,
                     size: AppSize.regular,
                     weight: FontWeight.w600,
@@ -91,7 +91,7 @@ class EventScreen extends StatelessWidget {
                                       borderRadius: BorderRadius.circular(10),
                                       child: SizedBox(
                                           height: width < 370
-                                              ? height * 0.17
+                                              ? height * 0.19
                                               : height * 0.13,
                                           width: width,
                                           child: Image.asset(

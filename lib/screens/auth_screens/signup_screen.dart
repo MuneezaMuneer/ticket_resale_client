@@ -295,7 +295,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                           userModel: userModel)
                                       .then((value) {
                                     Navigator.pushNamed(
-                                        context, AppRoutes.signIn);
+                                        context, AppRoutes.navigationScreen);
                                   });
 
                                   loading.value = false;

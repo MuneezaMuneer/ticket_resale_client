@@ -39,7 +39,6 @@ dependencies:
   gap: ^3.0.1
   avatar_stack: ^1.2.0
   google_fonts: ^6.1.0
-  device_preview: ^1.1.0
   intl_phone_field: ^3.2.0 
   provider:   
   firebase_core: ^2.25.4
@@ -53,8 +52,8 @@ dependencies:
   cloud_firestore: ^4.15.4
   firebase_storage: ^11.6.5
   cached_network_image: ^3.3.1
-
-
+  shared_preferences: ^2.2.2
+  device_preview: ^1.1.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

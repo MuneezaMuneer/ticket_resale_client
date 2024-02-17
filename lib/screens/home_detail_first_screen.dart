@@ -118,29 +118,28 @@ class HomeDetailFirstScreen extends StatelessWidget {
                     color: AppColors.jetBlack,
                   ),
                   const Gap(15),
-                  SizedBox(
-                      height: height * 0.4,
-                      child: ListView.builder(
-                        padding: EdgeInsets.zero,
-                        //  physics: NeverScrollableScrollPhysics(),
-                        itemCount: 4,
-                        itemExtent: 140,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.only(top: 15),
-                            child: InkWell(
-                              onTap: () {
-                                Navigator.pushNamed(
-                                    context, AppRoutes.detailSecondScreen);
-                              },
-                              child: _tileContainer(
-                                title: 'VIP PLUS TICKET AVAILABLE',
-                                subTitle: 'VIP Seats + Exclusive braclets',
-                              ),
-                            ),
-                          );
-                        },
-                      )),
+                  ListView.builder(
+                    padding: EdgeInsets.zero,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: 4,
+                    itemExtent: 140,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 15),
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.pushNamed(
+                                context, AppRoutes.detailSecondScreen);
+                          },
+                          child: _tileContainer(
+                            title: 'VIP PLUS TICKET AVAILABLE',
+                            subTitle: 'VIP Seats + Exclusive braclets',
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                   const Gap(10)
                 ],
               ),

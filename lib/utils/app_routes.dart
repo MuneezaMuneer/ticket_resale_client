@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ticket_resale/screens/auth_screens/profile_setting.dart';
 import 'package:ticket_resale/screens/ticket_screen.dart';
 import 'package:ticket_resale/widgets/custom_navigation.dart';
 import '../constants/constants.dart';

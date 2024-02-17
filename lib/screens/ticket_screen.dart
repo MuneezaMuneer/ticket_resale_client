@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -53,37 +54,69 @@ class _TicketScreenState extends State<TicketScreen> {
                   const SizedBox(
                     height: 35,
                   ),
-                  Container(
-                    height: 150,
-                    decoration: BoxDecoration(
-                      color: AppColors.white,
-                      borderRadius: BorderRadius.circular(15),
-                      border: Border.all(color: AppColors.skyBlue, width: 1),
-                    ),
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          GestureDetector(
-                              onTap: () async {
-                                String image =
-                                    await AppUtils.getImageFromGallery();
-                                imagePickerProvider.setImageUrl = image;
-                                log('The Url is : ${imagePickerProvider.getImageUrl}');
-                              },
-                              child: SvgPicture.asset(AppSvgs.image)),
-                          const SizedBox(
-                            height: 10,
+                  Consumer<ImagePickerProvider>(
+                    builder: (context, value, child) {
+                      return Container(
+                          height: 150,
+                          decoration: BoxDecoration(
+                            color: AppColors.white,
+                            borderRadius: BorderRadius.circular(15),
+                            border:
+                                Border.all(color: AppColors.skyBlue, width: 1),
                           ),
-                          const CustomText(
-                            title: 'Add Ticket Image Thumbnail',
-                            color: AppColors.silver,
-                            size: AppSize.medium,
-                            weight: FontWeight.w500,
-                          )
-                        ],
-                      ),
-                    ),
+                          child: imagePickerProvider.getImageUrl.isNotEmpty
+                              ? ClipRRect(
+                                  borderRadius: BorderRadius.circular(15),
+                                  child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      SizedBox(
+                                        width: width,
+                                        child: Image.file(
+                                          File(value.getImageUrl),
+                                          fit: BoxFit.fitWidth,
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                          onTap: () async {
+                                            String image = await AppUtils
+                                                .getImageFromGallery();
+                                            imagePickerProvider.setImageUrl =
+                                                image;
+                                            log('The Url is : ${imagePickerProvider.getImageUrl}');
+                                          },
+                                          child:
+                                              SvgPicture.asset(AppSvgs.image)),
+                                    ],
+                                  ),
+                                )
+                              : Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      GestureDetector(
+                                          onTap: () async {
+                                            String image = await AppUtils
+                                                .getImageFromGallery();
+                                            imagePickerProvider.setImageUrl =
+                                                image;
+                                            log('The Url is : ${imagePickerProvider.getImageUrl}');
+                                          },
+                                          child:
+                                              SvgPicture.asset(AppSvgs.image)),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      const CustomText(
+                                        title: 'Add Ticket Image Thumbnail',
+                                        color: AppColors.silver,
+                                        size: AppSize.medium,
+                                        weight: FontWeight.w500,
+                                      )
+                                    ],
+                                  ),
+                                ));
+                    },
                   ),
                   const SizedBox(
                     height: 20,

@@ -106,30 +106,54 @@ class _CustomNavigationState extends State<CustomNavigation> {
                               )
                             ],
                           )),
-                Stack(
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        navigationProvider.setSelectedIndex(2);
-                      },
-                      child: SvgPicture.asset(
-                        AppSvgs.plus,
-                        colorFilter: const ColorFilter.mode(
-                            AppColors.blueViolet, BlendMode.srcIn),
-                      ),
-                    ),
-                    const Positioned(
-                      left: 0,
-                      top: 0,
-                      right: 0,
-                      bottom: 0,
-                      child: Icon(
-                        Icons.add,
-                        color: AppColors.white,
-                      ),
-                    ),
-                  ],
-                ),
+                // Stack(
+                //   children: [
+                //     GestureDetector(
+                //       onTap: () {
+                //         navigationProvider.setSelectedIndex(2);
+                //       },
+                //       child: SvgPicture.asset(
+                //         AppSvgs.plus,
+                //         colorFilter: const ColorFilter.mode(
+                //             AppColors.blueViolet, BlendMode.srcIn),
+                //       ),
+                //     ),
+                //     const Positioned(
+                //       left: 0,
+                //       top: 0,
+                //       right: 0,
+                //       bottom: 0,
+                //       child: Icon(
+                //         Icons.add,
+                //         color: AppColors.white,
+                //       ),
+                //     ),
+                //   ],
+                // ),
+                IconButton(
+                    enableFeedback: false,
+                    onPressed: () {
+                      navigationProvider.setSelectedIndex(2);
+                    },
+                    icon: Stack(
+                      children: [
+                        SvgPicture.asset(
+                          AppSvgs.plus,
+                          colorFilter: const ColorFilter.mode(
+                              AppColors.blueViolet, BlendMode.srcIn),
+                        ),
+                        const Positioned(
+                          left: 0,
+                          top: 0,
+                          right: 0,
+                          bottom: 0,
+                          child: Icon(
+                            Icons.add,
+                            color: AppColors.white,
+                          ),
+                        ),
+                      ],
+                    )),
                 IconButton(
                   enableFeedback: false,
                   onPressed: () {

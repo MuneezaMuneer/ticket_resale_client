@@ -20,10 +20,13 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   late SwitchProvider switchProvider;
   String? photoUrl;
+
   @override
   void initState() {
     photoUrl = AuthServices.getCurrentUser.photoURL;
+    Provider.of<SwitchProvider>(context, listen: false).loadPreferences();
     switchProvider = Provider.of<SwitchProvider>(context, listen: false);
+
     super.initState();
   }
 

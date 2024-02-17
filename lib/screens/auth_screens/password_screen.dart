@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:ticket_resale/components/components.dart';
@@ -14,11 +16,12 @@ class PasswordScreen extends StatefulWidget {
 }
 
 class _PasswordScreenState extends State<PasswordScreen> {
-  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  GlobalKey<FormState> key = GlobalKey<FormState>();
   final ValueNotifier<bool> loadingNotifier = ValueNotifier(false);
   TextEditingController emailController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    log('$key');
     Size size = MediaQuery.of(context).size;
 
     double height = size.height;
@@ -31,22 +34,24 @@ class _PasswordScreenState extends State<PasswordScreen> {
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
             child: Form(
-                key: formKey,
+                key: key,
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'Forgot Password',
-                      style: TextStyle(
-                          color: AppColors.jetBlack,
-                          fontSize: AppSize.verylarge,
-                          fontWeight: FontWeight.w700),
+                    const Center(
+                      child: Text(
+                        'Forgot Password?',
+                        style: TextStyle(
+                            color: AppColors.jetBlack,
+                            fontSize: AppSize.verylarge,
+                            fontWeight: FontWeight.w700),
+                      ),
                     ),
                     const SizedBox(
                       height: 30,
                     ),
                     const CustomText(
-                      title:
-                          'Select the contact details we should use to reset your password.',
+                      title: 'Please add your registered email.',
                       color: AppColors.jetBlack,
                       textAlign: TextAlign.start,
                       softWrap: true,
@@ -87,7 +92,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
                                   color: AppColors.lightBlack.withOpacity(0.4),
                                 ),
                                 const CustomText(
-                                  title: 'an_anishly@gmail.com',
+                                  title: 'xyz@gmail.com',
                                   size: AppSize.xsmall,
                                   weight: FontWeight.w600,
                                 )
@@ -103,6 +108,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your email';
                         }
+                        return null;
                       },
                       controller: emailController,
                       hintText: 'Enter Email',
@@ -124,7 +130,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
                         gradient: customGradient,
                         textSize: AppSize.regular,
                         onPressed: () async {
-                          if (formKey.currentState!.validate()) {
+                          if (key.currentState!.validate()) {
                             loadingNotifier.value = true;
                             String result = await AuthServices.forgotPassword(
                                 email: emailController.text, context: context);

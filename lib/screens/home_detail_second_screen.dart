@@ -13,7 +13,7 @@ class HomeDetailSecondScreen extends StatefulWidget {
 }
 
 class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
-  ValueNotifier<bool> isConversationStart = ValueNotifier<bool>(false);
+  ValueNotifier<bool> isSelected = ValueNotifier<bool>(false);
 
   @override
   Widget build(BuildContext context) {
@@ -94,58 +94,82 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                     color: AppColors.jetBlack,
                   ),
                   const Gap(7),
-                  _tileContainer(
-                    height: height * 0.08,
-                    width: width * 0.9,
-                    containerBorderColor: AppColors.blueViolet.withOpacity(0.8),
-                    isSvg: true,
-                    imagePath: AppSvgs.ticket,
-                    backgroundColor: const Color(0XffF7F5FF),
-                    avatarBg: AppColors.white,
-                    title: 'PREMIUM TICKET AVAILABLE',
-                    titleColor: AppColors.jetBlack,
-                    titleSize: AppSize.small,
-                    titleWeight: FontWeight.w600,
-                    subTitle: 'Premium Seats',
-                    subTitleColor: AppColors.lightGrey.withOpacity(0.6),
-                    subTitleSize: AppSize.xsmall,
-                    subTitleWeight: FontWeight.w400,
-                    child: const Padding(
-                      padding: EdgeInsets.only(right: 12),
-                      child: CustomText(
-                        title: '\$ 500',
-                        color: Color(0XffAC8AF7),
-                        size: 18,
-                        weight: FontWeight.w900,
-                      ),
-                    ),
+                  ValueListenableBuilder(
+                    valueListenable: isSelected,
+                    builder: (context, value, child) {
+                      return GestureDetector(
+                        onTap: () {
+                          isSelected.value = !isSelected.value;
+                        },
+                        child: _tileContainer(
+                          height: height * 0.08,
+                          width: width * 0.9,
+                          containerBorderColor: isSelected.value
+                              ? AppColors.blueViolet.withOpacity(0.8)
+                              : const Color(0XffF7F5FF),
+                          isSvg: true,
+                          imagePath: AppSvgs.ticket,
+                          backgroundColor: const Color(0XffF7F5FF),
+                          avatarBg: AppColors.white,
+                          title: 'PREMIUM TICKET AVAILABLE',
+                          titleColor: AppColors.jetBlack,
+                          titleSize: AppSize.small,
+                          titleWeight: FontWeight.w600,
+                          subTitle: 'Premium Seats',
+                          subTitleColor: AppColors.lightGrey.withOpacity(0.6),
+                          subTitleSize: AppSize.xsmall,
+                          subTitleWeight: FontWeight.w400,
+                          child: const Padding(
+                            padding: EdgeInsets.only(right: 12),
+                            child: CustomText(
+                              title: '\$ 500',
+                              color: Color(0XffAC8AF7),
+                              size: 18,
+                              weight: FontWeight.w900,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
                   ),
                   const Gap(25),
-                  _tileContainer(
-                    height: height * 0.08,
-                    width: width * 0.9,
-                    containerBorderColor: AppColors.blueViolet.withOpacity(0.8),
-                    isSvg: true,
-                    imagePath: AppSvgs.ticket,
-                    backgroundColor: const Color(0XffF7F5FF),
-                    avatarBg: AppColors.white,
-                    title: 'VIP PLUS TICKET AVAILABLE',
-                    titleColor: AppColors.jetBlack,
-                    titleSize: AppSize.small,
-                    titleWeight: FontWeight.w600,
-                    subTitle: 'VIP Seats + Exclusive braclets',
-                    subTitleColor: AppColors.lightGrey.withOpacity(0.6),
-                    subTitleSize: AppSize.xsmall,
-                    subTitleWeight: FontWeight.w400,
-                    child: const Padding(
-                      padding: EdgeInsets.only(right: 12),
-                      child: CustomText(
-                        title: '\$ 400',
-                        color: Color(0XffAC8AF7),
-                        size: 18,
-                        weight: FontWeight.w900,
-                      ),
-                    ),
+                  ValueListenableBuilder(
+                    valueListenable: isSelected,
+                    builder: (context, value, child) {
+                      return GestureDetector(
+                        onTap: () {
+                          isSelected.value = !isSelected.value;
+                        },
+                        child: _tileContainer(
+                          height: height * 0.08,
+                          width: width * 0.9,
+                          containerBorderColor: isSelected.value
+                              ? AppColors.blueViolet.withOpacity(0.8)
+                              : const Color(0XffF7F5FF),
+                          isSvg: true,
+                          imagePath: AppSvgs.ticket,
+                          backgroundColor: const Color(0XffF7F5FF),
+                          avatarBg: AppColors.white,
+                          title: 'VIP PLUS TICKET AVAILABLE',
+                          titleColor: AppColors.jetBlack,
+                          titleSize: AppSize.small,
+                          titleWeight: FontWeight.w600,
+                          subTitle: 'VIP Seats + Exclusive braclets',
+                          subTitleColor: AppColors.lightGrey.withOpacity(0.6),
+                          subTitleSize: AppSize.xsmall,
+                          subTitleWeight: FontWeight.w400,
+                          child: const Padding(
+                            padding: EdgeInsets.only(right: 12),
+                            child: CustomText(
+                              title: '\$ 400',
+                              color: Color(0XffAC8AF7),
+                              size: 18,
+                              weight: FontWeight.w900,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
                   ),
                   const Gap(25),
                   Container(
@@ -227,61 +251,53 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                     ),
                   ),
                   const Gap(25),
-                  // ValueListenableBuilder(
-                  //   valueListenable: isConversationStart,
-                  //   builder: (context, value, child) {
-                  //     return SizedBox(
-                  //       child: value
-                  //           ? CustomTextField(
-                  //               hintText: 'Offer you price',
-                  //               hintStyle: TextStyle(
-                  //                   color:
-                  //                       AppColors.lightBlack.withOpacity(0.5)),
-                  //               fillColor: AppColors.white,
-                  //               suffixIcon: InkWell(
-                  //                 child: Padding(
-                  //                   padding: const EdgeInsets.all(16.0),
-                  //                   child: SvgPicture.asset(
-                  //                     AppSvgs.dollarSign,
-                  //                   ),
-                  //                 ),
-                  //               ),
-                  //             )
-                  //           : const SizedBox.shrink(),
-                  //     );
-                  //   },
-                  // ),
-                  CustomTextField(
-                    hintText: 'Offer you price',
-                    hintStyle:
-                        TextStyle(color: AppColors.lightBlack.withOpacity(0.5)),
-                    fillColor: AppColors.white,
-                    suffixIcon: InkWell(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: SvgPicture.asset(
-                          AppSvgs.dollarSign,
-                        ),
-                      ),
-                    ),
+                  ValueListenableBuilder(
+                    valueListenable: isSelected,
+                    builder: (context, value, child) {
+                      return SizedBox(
+                        child: value
+                            ? CustomTextField(
+                                hintText: 'Offer you price',
+                                hintStyle: TextStyle(
+                                    color:
+                                        AppColors.lightBlack.withOpacity(0.5)),
+                                fillColor: AppColors.white,
+                                suffixIcon: InkWell(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(16.0),
+                                    child: SvgPicture.asset(
+                                      AppSvgs.dollarSign,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : const SizedBox.shrink(),
+                      );
+                    },
                   ),
                   SizedBox(
                     height: height * 0.04,
                   ),
-                  SizedBox(
-                    height: height * 0.07,
-                    width: width * 0.9,
-                    child: CustomButton(
-                      onPressed: () {
-                        isConversationStart.value = true;
-                        Navigator.pushNamed(context, AppRoutes.commentScreen);
-                      },
-                      textColor: AppColors.white,
-                      textSize: AppSize.regular,
-                      btnText: 'Start Conversation',
-                      gradient: customGradient,
-                      weight: FontWeight.w700,
-                    ),
+                  ValueListenableBuilder(
+                    valueListenable: isSelected,
+                    builder: (context, value, child) {
+                      return SizedBox(
+                          height: height * 0.07,
+                          width: width * 0.9,
+                          child: value
+                              ? CustomButton(
+                                  onPressed: () {
+                                    Navigator.pushNamed(
+                                        context, AppRoutes.commentScreen);
+                                  },
+                                  textColor: AppColors.white,
+                                  textSize: AppSize.regular,
+                                  btnText: 'Start Conversation',
+                                  gradient: customGradient,
+                                  weight: FontWeight.w700,
+                                )
+                              : const SizedBox.shrink());
+                    },
                   )
                 ],
               ),

@@ -287,10 +287,22 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                       CustomTextField(
                         controller: birthController,
                         hintText: 'Date of birth',
+                        suffixIcon: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: GestureDetector(
+                            onTap: () {
+                              AppUtils.openDatePicker(context,
+                                  dateController: birthController);
+                            },
+                            child: SvgPicture.asset(
+                              AppSvgs.date,
+                            ),
+                          ),
+                        ),
                         hintStyle: _buildTextFieldstyle(),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Enter date';
+                            return 'Please enter date of birth';
                           }
 
                           return null;
