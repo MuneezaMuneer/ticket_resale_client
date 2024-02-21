@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:svg_flutter/svg_flutter.dart';
 import 'package:ticket_resale/constants/constants.dart';
+import 'package:ticket_resale/utils/app_dialouge.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 import '../components/components.dart';
 
@@ -14,7 +15,7 @@ class HomeDetailSecondScreen extends StatefulWidget {
 
 class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
   ValueNotifier<bool> isSelected = ValueNotifier<bool>(false);
-
+  ValueNotifier<bool> isSecondSelected = ValueNotifier<bool>(false);
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -52,6 +53,54 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                         fit: BoxFit.cover,
                       )
                     ],
+                  ),
+                  const Gap(10),
+                  Container(
+                    height: height * 0.06,
+                    width: width * 0.9,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(56),
+                        border: Border.all(color: AppColors.white),
+                        color: AppColors.white),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Row(
+                            children: [
+                              const CircleAvatar(
+                                backgroundColor: AppColors.paleGrey,
+                                radius: 17,
+                                backgroundImage:
+                                    AssetImage(AppImages.profileImage),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 12,
+                                ),
+                                child: RichText(
+                                    text: TextSpan(children: [
+                                  TextSpan(
+                                      text: 'Featured DJ : ',
+                                      style: TextStyle(
+                                          color: AppColors.lightGrey
+                                              .withOpacity(0.6),
+                                          fontSize: AppSize.xsmall,
+                                          fontWeight: FontWeight.w400)),
+                                  const TextSpan(
+                                      text: 'Martin Garrix',
+                                      style: TextStyle(
+                                          color: AppColors.blueViolet,
+                                          fontSize: AppSize.medium,
+                                          fontWeight: FontWeight.w600)),
+                                ])),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   const Gap(10),
                   _tileContainer(
@@ -95,16 +144,16 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                   ),
                   const Gap(7),
                   ValueListenableBuilder(
-                    valueListenable: isSelected,
+                    valueListenable: isSecondSelected,
                     builder: (context, value, child) {
                       return GestureDetector(
                         onTap: () {
-                          isSelected.value = !isSelected.value;
+                          isSecondSelected.value = !isSecondSelected.value;
                         },
                         child: _tileContainer(
                           height: height * 0.08,
                           width: width * 0.9,
-                          containerBorderColor: isSelected.value
+                          containerBorderColor: isSecondSelected.value
                               ? AppColors.blueViolet.withOpacity(0.8)
                               : const Color(0XffF7F5FF),
                           isSvg: true,
@@ -287,8 +336,9 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                           child: value
                               ? CustomButton(
                                   onPressed: () {
-                                    Navigator.pushNamed(
-                                        context, AppRoutes.commentScreen);
+                                    // Navigator.pushNamed(
+                                    //     context, AppRoutes.commentScreen);
+                                    ticketSellDialog(context: context);
                                   },
                                   textColor: AppColors.white,
                                   textSize: AppSize.regular,
@@ -298,7 +348,7 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                                 )
                               : const SizedBox.shrink());
                     },
-                  )
+                  ),
                 ],
               ),
             ),

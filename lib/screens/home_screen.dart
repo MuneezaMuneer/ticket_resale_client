@@ -2,9 +2,13 @@ import 'package:avatar_stack/avatar_stack.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+
 import 'package:svg_flutter/svg.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/db_services/auth_services.dart';
+import 'package:ticket_resale/db_services/firestore_services.dart';
+import 'package:ticket_resale/models/models.dart';
+
 import 'package:ticket_resale/widgets/widgets.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -17,6 +21,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String? displayName;
   String? photoUrl;
+  late Stream<List<EventModal>> displayEventData;
   @override
   void initState() {
     try {
@@ -27,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
     } catch (e) {
       print('Error in initState: $e');
     }
-
+    displayEventData = FireStoreServices.fetchEventData();
     super.initState();
   }
 
@@ -318,28 +323,39 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                   const Gap(8),
-                  SizedBox(
-                    height: width < 370 ? height * 0.4 : height * 0.32,
-                    width: width,
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 3,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.only(right: 10),
-                          child: CustomTileContainer(
-                            height: height,
-                            width: width * 0.65,
-                            dateTime: '25th Janurary 8:00 AM - 12:00 AM',
-                            posttitle:
-                                'Happy Holiday Music Concert Global Village',
-                            postBy: 'Jacob Jones',
-                            imagePath: AppImages.profile,
+                  StreamBuilder<List<EventModal>>(
+                    stream: displayEventData,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        final data = snapshot.data;
+
+                        return SizedBox(
+                          height: width < 370 ? height * 0.4 : height * 0.32,
+                          width: width,
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount: data!.length,
+                            itemBuilder: (context, index) {
+                              print(data[index].date!);
+                              return Padding(
+                                padding: const EdgeInsets.only(right: 10),
+                                child: CustomTileContainer(
+                                  height: height,
+                                  width: width * 0.65,
+                                  dateTime: data[index].date!,
+                                  posttitle: data[index].festivalName,
+                                  postBy: 'Jacob Jones',
+                                  imagePath: data[index].imageUrl,
+                                ),
+                              );
+                            },
                           ),
                         );
-                      },
-                    ),
+                      } else {
+                        return const Text('No Event Yet');
+                      }
+                    },
                   ),
                   const Gap(10),
                 ],

@@ -2,9 +2,13 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 import 'package:svg_flutter/svg_flutter.dart';
 import 'package:ticket_resale/constants/constants.dart';
+import 'package:ticket_resale/db_services/auth_services.dart';
+import 'package:ticket_resale/db_services/firestore_services.dart';
+import 'package:ticket_resale/models/event_modal.dart';
 import 'package:ticket_resale/providers/image_picker_provider.dart';
 import 'package:ticket_resale/utils/app_utils.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
@@ -22,6 +26,7 @@ TextEditingController ticketTypeController = TextEditingController();
 TextEditingController priceController = TextEditingController();
 TextEditingController descriptionController = TextEditingController();
 GlobalKey<FormState> formKey = GlobalKey<FormState>();
+ValueNotifier<bool> notifier = ValueNotifier<bool>(false);
 late ImagePickerProvider imagePickerProvider;
 
 class _TicketScreenState extends State<TicketScreen> {
@@ -30,6 +35,11 @@ class _TicketScreenState extends State<TicketScreen> {
     imagePickerProvider =
         Provider.of<ImagePickerProvider>(context, listen: false);
     super.initState();
+  }
+
+  bool validateImage() {
+    return imagePickerProvider.getImageUrl.isNotEmpty &&
+        File(imagePickerProvider.getImageUrl).existsSync();
   }
 
   @override
@@ -118,6 +128,15 @@ class _TicketScreenState extends State<TicketScreen> {
                                 ));
                     },
                   ),
+                  const Gap(10),
+                  const CustomText(
+                    title:
+                        '* Proof of ticket ownership, can be screenshot or email.',
+                    size: AppSize.small,
+                    weight: FontWeight.w500,
+                    softWrap: true,
+                    color: AppColors.lightGrey,
+                  ),
                   const SizedBox(
                     height: 20,
                   ),
@@ -133,6 +152,7 @@ class _TicketScreenState extends State<TicketScreen> {
                   CustomTextField(
                     hintText: 'Festival Name',
                     weight: FontWeight.w400,
+                    controller: festivalNameController,
                     hintStyle: _buildHintStyle(),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -192,7 +212,16 @@ class _TicketScreenState extends State<TicketScreen> {
                   ),
                   CustomTextField(
                     hintText: 'Select Type',
-                    suffixIcon: const Icon(Icons.keyboard_arrow_down_rounded),
+                    controller: ticketTypeController,
+                    isSuffixIcon: true,
+                    suffixIcon: DropDownWidget(
+                      itemList: const ['VIP', 'Basic', 'Professional'],
+                      icon: Icons.keyboard_arrow_down_rounded,
+                      controller: ticketTypeController,
+                      onChanged: (String? selectOption) {
+                        ticketTypeController.text = '$selectOption';
+                      },
+                    ),
                     hintStyle: _buildHintStyle(),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -216,6 +245,7 @@ class _TicketScreenState extends State<TicketScreen> {
                   ),
                   CustomTextField(
                     hintText: 'Enter Ticket Price',
+                    controller: priceController,
                     hintStyle: _buildHintStyle(),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -238,6 +268,7 @@ class _TicketScreenState extends State<TicketScreen> {
                     height: 5,
                   ),
                   CustomTextField(
+                    controller: descriptionController,
                     maxLines: 5,
                     isCommentField: true,
                     hintText: 'Enter your description here.',
@@ -253,15 +284,41 @@ class _TicketScreenState extends State<TicketScreen> {
                   SizedBox(
                     height: height * 0.07,
                   ),
-                  CustomButton(
-                    backgroundColor: AppColors.white,
-                    btnText: 'Submit',
-                    weight: FontWeight.w700,
-                    textColor: AppColors.white,
-                    gradient: customGradient,
-                    textSize: AppSize.regular,
-                    onPressed: () {
-                      if (formKey.currentState!.validate()) {}
+                  ValueListenableBuilder(
+                    valueListenable: notifier,
+                    builder: (context, value, child) {
+                      return CustomButton(
+                        backgroundColor: AppColors.white,
+                        btnText: 'Submit',
+                        weight: FontWeight.w700,
+                        loading: notifier.value,
+                        textColor: AppColors.white,
+                        gradient: customGradient,
+                        textSize: AppSize.regular,
+                        onPressed: () async {
+                          if (formKey.currentState!.validate() &&
+                              validateImage()) {
+                            notifier.value = true;
+                            String? imageUrl =
+                                await AuthServices.uploadEventImage(
+                                    imagePath: imagePickerProvider.getImageUrl);
+                            EventModal eventModal = EventModal(
+                                imageUrl: imageUrl,
+                                festivalName: festivalNameController.text,
+                                ticketType: ticketTypeController.text,
+                                date: dateController.text,
+                                price: priceController.text,
+                                description: descriptionController.text,
+                                userId: AuthServices.getCurrentUser.uid);
+
+                            if (imageUrl != null && imageUrl != '') {
+                              await FireStoreServices.uploadEventData(
+                                  eventModal: eventModal);
+                              notifier.value = false;
+                            }
+                          }
+                        },
+                      );
                     },
                   ),
                   SizedBox(

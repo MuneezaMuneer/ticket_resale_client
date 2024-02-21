@@ -54,14 +54,20 @@ class _ProfileSettingsState extends State<ProfileSettings> {
       }
       return userModel;
     });
-
     nameController.text = '${AuthServices.getCurrentUser.displayName}';
     emailController.text = '${AuthServices.getCurrentUser.email}';
-
+   
     super.initState();
   }
-
   @override
+  void dispose() {
+    emailController.dispose();
+    birthController.dispose();
+    nameController.dispose();
+    instaController.dispose();
+    phoneController.dispose();
+    super.dispose();
+  }  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     final double height = size.height;

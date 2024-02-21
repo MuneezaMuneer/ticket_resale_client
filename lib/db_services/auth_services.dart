@@ -79,7 +79,6 @@ class AuthServices {
     }
     return null;
   }
- 
 
   static Future<bool> login({
     required String email,
@@ -139,6 +138,8 @@ class AuthServices {
       await user.set({
         "phone_number": userModel.phoneNo,
         "instagram_username": userModel.instaUsername,
+        "email": userModel.email,
+        "user_name": userModel.displayName
       });
 
       await getCurrentUser.updateDisplayName(userModel.displayName);
@@ -173,6 +174,26 @@ class AuthServices {
           .ref('profile_image')
           .child(AuthServices.getCurrentUser.uid)
           .child("image");
+      await ref.putFile(
+          File(imagePath), SettableMetadata(contentType: 'image/png'));
+      return await ref.getDownloadURL();
+    } on FirebaseException catch (error) {
+      SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+        log('Error: ${error.toString()}');
+      });
+    }
+    return null;
+  }
+
+  static Future<String?> uploadEventImage({
+    required String imagePath,
+  }) async {
+    try {
+      Reference ref = FirebaseStorage.instance
+          .ref('event_image')
+          .child(AuthServices.getCurrentUser.uid)
+          .child(
+              '${AuthServices.getCurrentUser.uid}${DateTime.timestamp().millisecond}');
       await ref.putFile(
           File(imagePath), SettableMetadata(contentType: 'image/png'));
       return await ref.getDownloadURL();

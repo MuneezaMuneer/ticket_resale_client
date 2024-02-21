@@ -16,7 +16,8 @@ class CustomTextField extends StatelessWidget {
   final bool isFilled;
   final FontWeight? weight;
   final TextStyle? hintStyle;
-
+  final bool isSuffixIcon;
+  final Widget? iconWidget;
   final int? maxLines;
   final bool readOnly;
   final bool isCommentField;
@@ -50,6 +51,8 @@ class CustomTextField extends StatelessWidget {
     this.isCommentField = false,
     this.maxLines,
     this.initialValue,
+    this.isSuffixIcon = true,
+    this.iconWidget,
   });
 
   @override
@@ -80,7 +83,9 @@ class CustomTextField extends StatelessWidget {
                   size: AppSize.medium,
                 ),
               )
-            : suffixIcon,
+            : isSuffixIcon
+                ? suffixIcon
+                : iconWidget,
         prefixIcon: prefixIcon,
         fillColor: fillColor,
         filled: isFilled,

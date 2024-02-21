@@ -40,14 +40,15 @@ class CustomTileContainer extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(left: 7, right: 7, top: 10),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: SizedBox(
                           height: constraints.maxHeight * 0.44,
                           width: constraints.maxWidth,
-                          child: Image.asset(
-                            AppImages.concert,
+                          child: Image.network(
+                            imagePath!,
                             fit: BoxFit.cover,
                           )),
                     ),
@@ -83,6 +84,7 @@ class CustomTileContainer extends StatelessWidget {
                     CustomText(
                       title: '$posttitle',
                       softWrap: true,
+                      textAlign: TextAlign.start,
                       color: AppColors.jetBlack,
                       size: AppSize.regular,
                       weight: FontWeight.w600,

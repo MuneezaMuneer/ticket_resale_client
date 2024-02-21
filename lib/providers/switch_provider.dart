@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SwitchProvider extends ChangeNotifier {
-  bool _notification = false;
+  bool _notification = true;
   bool get getNotification => _notification;
 
   bool _comment = false;

@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:ticket_resale/constants/app_colors.dart';
 import 'package:ticket_resale/constants/app_textsize.dart';
 
@@ -29,6 +30,12 @@ class AppUtils {
         backgroundColor: AppColors.blueViolet,
         textColor: AppColors.white,
         fontSize: 16.0);
+  }
+
+  static dateFormat(String date) {
+    DateTime dateFormat = DateTime.parse(date);
+    String formattedDate = DateFormat('d MMM').format(dateFormat);
+    return formattedDate;
   }
 
   static void openDatePicker(
