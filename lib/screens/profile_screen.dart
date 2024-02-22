@@ -105,7 +105,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.pushNamed(
+                          context, AppRoutes.notificationScreen);
+                    },
                     child: const CustomProfileRow(
                       leadingIcon: Icons.notifications_none,
                       title: 'Notification',
@@ -128,7 +131,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, AppRoutes.commentScreen);
+                      Navigator.pushNamed(context, AppRoutes.privacyScreen);
                     },
                     child: const CustomProfileRow(
                       leadingIcon: Icons.privacy_tip_outlined,
@@ -137,12 +140,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       iconColor: AppColors.lightGrey,
                     ),
                   ),
-                  const CustomProfileRow(
-                    svgImage: AppSvgs.termOfUse,
-                    isSvg: true,
-                    title: 'Term of Use',
-                    color: AppColors.jetBlack,
-                    iconColor: AppColors.lightGrey,
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, AppRoutes.termOfUseScreen);
+                    },
+                    child: const CustomProfileRow(
+                      svgImage: AppSvgs.termOfUse,
+                      isSvg: true,
+                      title: 'Term of Use',
+                      color: AppColors.jetBlack,
+                      iconColor: AppColors.lightGrey,
+                    ),
                   ),
                   InkWell(
                     onTap: () {

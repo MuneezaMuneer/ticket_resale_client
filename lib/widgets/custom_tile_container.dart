@@ -6,7 +6,8 @@ import 'package:ticket_resale/widgets/widgets.dart';
 
 class CustomTileContainer extends StatelessWidget {
   final double? width;
-  final String? dateTime;
+  final String? date;
+  final String? time;
   final String? posttitle;
   final String? postBy;
   final double? height;
@@ -15,8 +16,9 @@ class CustomTileContainer extends StatelessWidget {
   const CustomTileContainer({
     Key? key,
     this.width,
-    this.dateTime,
+    this.date,
     this.posttitle,
+    this.time,
     this.postBy,
     this.imagePath,
     this.height,
@@ -67,11 +69,22 @@ class CustomTileContainer extends StatelessWidget {
                             SvgPicture.asset(AppSvgs.clock),
                             Padding(
                               padding: const EdgeInsets.only(left: 10),
-                              child: CustomText(
-                                title: '$dateTime',
-                                color: const Color(0Xff6E4CEE),
-                                size: AppSize.xxsmall,
-                                weight: FontWeight.w600,
+                              child: Row(
+                                children: [
+                                  CustomText(
+                                    title: '$date,',
+                                    color: const Color(0Xff6E4CEE),
+                                    size: AppSize.xxsmall,
+                                    weight: FontWeight.w600,
+                                  ),
+                                  const Gap(6),
+                                  CustomText(
+                                    title: '$time',
+                                    color: const Color(0Xff6E4CEE),
+                                    size: AppSize.xxsmall,
+                                    weight: FontWeight.w600,
+                                  ),
+                                ],
                               ),
                             ),
                           ],

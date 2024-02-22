@@ -38,6 +38,14 @@ class AppUtils {
     return formattedDate;
   }
 
+  static String limitTextTo32Characters(String inputText) {
+    if (inputText.length > 43) {
+      return '${inputText.substring(0, 43)}...';
+    } else {
+      return inputText;
+    }
+  }
+
   static void openDatePicker(
     BuildContext context, {
     TextEditingController? dateController,

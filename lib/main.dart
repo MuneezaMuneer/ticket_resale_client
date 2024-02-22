@@ -12,6 +12,7 @@ import 'package:ticket_resale/utils/app_routes.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
 void main() async {
+ 
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -19,11 +20,11 @@ void main() async {
   SwitchProvider provider = SwitchProvider();
   await provider.loadPreferences();
 
-  runApp(const TicketResale());
-  DevicePreview(
+   runApp( DevicePreview(
     enabled: !kReleaseMode,
     builder: (context) => const TicketResale(), 
-  );
+  ));
+ 
 }
 
 class TicketResale extends StatelessWidget {

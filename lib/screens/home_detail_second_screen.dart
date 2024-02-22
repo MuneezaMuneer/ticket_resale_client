@@ -14,8 +14,7 @@ class HomeDetailSecondScreen extends StatefulWidget {
 }
 
 class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
-  ValueNotifier<bool> isSelected = ValueNotifier<bool>(false);
-  ValueNotifier<bool> isSecondSelected = ValueNotifier<bool>(false);
+  ValueNotifier<bool> isTileSelected = ValueNotifier<bool>(false);
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -144,16 +143,19 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                   ),
                   const Gap(7),
                   ValueListenableBuilder(
-                    valueListenable: isSecondSelected,
+                    valueListenable: isTileSelected,
                     builder: (context, value, child) {
                       return GestureDetector(
                         onTap: () {
-                          isSecondSelected.value = !isSecondSelected.value;
+                          isTileSelected.value = true;
+                          // isFirstTileSelected.value =
+                          //     !isFirstTileSelected.value;
+                          // isSecondTileSelected.value = false;
                         },
                         child: _tileContainer(
                           height: height * 0.08,
                           width: width * 0.9,
-                          containerBorderColor: isSecondSelected.value
+                          containerBorderColor: isTileSelected.value
                               ? AppColors.blueViolet.withOpacity(0.8)
                               : const Color(0XffF7F5FF),
                           isSvg: true,
@@ -183,16 +185,19 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                   ),
                   const Gap(25),
                   ValueListenableBuilder(
-                    valueListenable: isSelected,
+                    valueListenable: isTileSelected,
                     builder: (context, value, child) {
                       return GestureDetector(
                         onTap: () {
-                          isSelected.value = !isSelected.value;
+                          isTileSelected.value = true;
+                          // isSecondTileSelected.value =
+                          //     !isSecondTileSelected.value;
+                          // isFirstTileSelected.value = false;
                         },
                         child: _tileContainer(
                           height: height * 0.08,
                           width: width * 0.9,
-                          containerBorderColor: isSelected.value
+                          containerBorderColor: isTileSelected.value
                               ? AppColors.blueViolet.withOpacity(0.8)
                               : const Color(0XffF7F5FF),
                           isSvg: true,
@@ -301,7 +306,7 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                   ),
                   const Gap(25),
                   ValueListenableBuilder(
-                    valueListenable: isSelected,
+                    valueListenable: isTileSelected,
                     builder: (context, value, child) {
                       return SizedBox(
                         child: value
@@ -328,25 +333,25 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                     height: height * 0.04,
                   ),
                   ValueListenableBuilder(
-                    valueListenable: isSelected,
+                    valueListenable: isTileSelected,
                     builder: (context, value, child) {
                       return SizedBox(
                           height: height * 0.07,
                           width: width * 0.9,
-                          child: value
-                              ? CustomButton(
-                                  onPressed: () {
-                                    // Navigator.pushNamed(
-                                    //     context, AppRoutes.commentScreen);
-                                    ticketSellDialog(context: context);
-                                  },
-                                  textColor: AppColors.white,
-                                  textSize: AppSize.regular,
-                                  btnText: 'Start Conversation',
-                                  gradient: customGradient,
-                                  weight: FontWeight.w700,
-                                )
-                              : const SizedBox.shrink());
+                          child: CustomButton(
+                            onPressed: () {
+                              // Navigator.pushNamed(
+                              //     context, AppRoutes.commentScreen);
+                              ticketSellDialog(context: context);
+                            },
+                            textColor: AppColors.white,
+                            textSize: AppSize.regular,
+                            btnText: 'Start Conversation',
+                            gradient: isTileSelected.value
+                                ? customGradient
+                                : lightGradient,
+                            weight: FontWeight.w700,
+                          ));
                     },
                   ),
                 ],

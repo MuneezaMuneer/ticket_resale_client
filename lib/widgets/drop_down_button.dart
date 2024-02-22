@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ticket_resale/constants/constants.dart';
 
 class DropDownWidget extends StatelessWidget {
   final List<String> itemList;
@@ -21,7 +22,10 @@ class DropDownWidget extends StatelessWidget {
     return DropdownButton(
       icon: Padding(
         padding: const EdgeInsets.only(right: 15),
-        child: Icon(icon),
+        child: Icon(
+          icon,
+          color: AppColors.lightGrey,
+        ),
       ),
       underline: const SizedBox(),
       alignment: Alignment.center,

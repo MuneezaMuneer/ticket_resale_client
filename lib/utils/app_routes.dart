@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:ticket_resale/screens/ticket_screen.dart';
-import 'package:ticket_resale/widgets/custom_navigation.dart';
+import 'package:ticket_resale/widgets/widgets.dart';
 import '../constants/constants.dart';
-import '../screens/profile_screen.dart';
-import '../screens/screens.dart';
 import '../screens/auth_screens/signin_screen.dart';
 import '../screens/auth_screens/signup_screen.dart';
+import '../screens/screens.dart';
+
 
 Route onGenerateRoute(RouteSettings settings) {
   if (settings.name == AppRoutes.logIn) {
@@ -24,9 +23,13 @@ Route onGenerateRoute(RouteSettings settings) {
     return animatePage(const CommentScreen());
   } else if (settings.name == AppRoutes.feedbackScreen) {
     return animatePage(const FeedBackScreen());
-  } else if (settings.name == AppRoutes.detailFirstScreen) {
-    return animatePage(const HomeDetailFirstScreen());
-  } else if (settings.name == AppRoutes.detailSecondScreen) {
+  } else if (settings.name == AppRoutes.privacyScreen) {
+    return animatePage(const PrivacyPolicy());
+  }
+  // else if (settings.name == AppRoutes.detailFirstScreen) {
+  //   return animatePage(HomeDetailFirstScreen());
+  // }
+  else if (settings.name == AppRoutes.detailSecondScreen) {
     return animatePage(const HomeDetailSecondScreen());
   } else if (settings.name == AppRoutes.ticketScreen) {
     return animatePage(const TicketScreen());
@@ -38,7 +41,11 @@ Route onGenerateRoute(RouteSettings settings) {
     return animatePage(const PaymentDisconnectScreen());
   } else if (settings.name == AppRoutes.profileScreen) {
     return animatePage(const ProfileScreen());
-  } else if (settings.name == AppRoutes.profileSettings) {
+  } 
+  else if (settings.name == AppRoutes.termOfUseScreen) {
+    return animatePage(const TermsOfUseScreen());
+  } 
+  else if (settings.name == AppRoutes.profileSettings) {
     return animatePage(const ProfileSettings());
   } else if (settings.name == AppRoutes.notificationScreen) {
     return animatePage(const NotificationScreen());

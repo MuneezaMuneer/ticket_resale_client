@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:developer';
 import 'dart:io';
 
@@ -20,21 +22,38 @@ class TicketScreen extends StatefulWidget {
   State<TicketScreen> createState() => _TicketScreenState();
 }
 
-TextEditingController festivalNameController = TextEditingController();
-TextEditingController dateController = TextEditingController();
-TextEditingController ticketTypeController = TextEditingController();
-TextEditingController priceController = TextEditingController();
-TextEditingController descriptionController = TextEditingController();
-GlobalKey<FormState> formKey = GlobalKey<FormState>();
-ValueNotifier<bool> notifier = ValueNotifier<bool>(false);
-late ImagePickerProvider imagePickerProvider;
-
 class _TicketScreenState extends State<TicketScreen> {
+  TextEditingController festivalNameController = TextEditingController();
+  TextEditingController dateController = TextEditingController();
+  TextEditingController startTimeController = TextEditingController();
+  TextEditingController endTimeController = TextEditingController();
+  TextEditingController ticketTypeController = TextEditingController();
+  TextEditingController priceController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  ValueNotifier<bool> notifier = ValueNotifier<bool>(false);
+  late ImagePickerProvider imagePickerProvider;
+  late String startTime;
+  late String endTime;
   @override
   void initState() {
     imagePickerProvider =
         Provider.of<ImagePickerProvider>(context, listen: false);
+    startTime = '';
+    endTime = '';
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    festivalNameController.dispose();
+    dateController.dispose();
+    startTimeController.dispose();
+    endTimeController.dispose();
+    ticketTypeController.dispose();
+    priceController.dispose();
+    descriptionController.dispose();
   }
 
   bool validateImage() {
@@ -201,6 +220,106 @@ class _TicketScreenState extends State<TicketScreen> {
                   const SizedBox(
                     height: 15,
                   ),
+                  const Row(
+                    children: [
+                      Expanded(
+                        child: CustomText(
+                          title: 'Start Time',
+                          color: AppColors.gryishBlue,
+                          weight: FontWeight.w600,
+                          size: AppSize.medium,
+                        ),
+                      ),
+                      Gap(35),
+                      Expanded(
+                        child: CustomText(
+                          title: 'End Time',
+                          color: AppColors.gryishBlue,
+                          weight: FontWeight.w600,
+                          size: AppSize.medium,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: CustomTextField(
+                          controller: startTimeController,
+                          hintText: 'Start Time',
+                          suffixIcon: Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: GestureDetector(
+                                onTap: () async {
+                                  TimeOfDay? time = await showTimePicker(
+                                      context: context,
+                                      initialTime: TimeOfDay.now());
+                                  if (time != null) {
+                                    startTimeController.text =
+                                        time.format(context);
+                                    startTime = startTimeController.text;
+                                  }
+                                },
+                                child: const Icon(
+                                  Icons.alarm,
+                                  color: AppColors.lightGrey,
+                                )),
+                          ),
+                          hintStyle: _buildHintStyle(),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Enter valid time';
+                            }
+
+                            return null;
+                          },
+                        ),
+                      ),
+                      const Gap(20),
+                      Expanded(
+                        child: CustomTextField(
+                          controller: endTimeController,
+                          hintText: 'End Time',
+                          suffixIcon: Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: GestureDetector(
+                              onTap: () async {
+                                TimeOfDay? pickedTime = await showTimePicker(
+                                  context: context,
+                                  initialTime: TimeOfDay.now(),
+                                );
+
+                                if (pickedTime != null) {
+                                  endTimeController.text =
+                                      pickedTime.format(context);
+
+                                  endTime = endTimeController.text;
+                                }
+                              },
+                              child: const Icon(
+                                Icons.alarm,
+                                color: AppColors.lightGrey,
+                              ),
+                            ),
+                          ),
+                          hintStyle: _buildHintStyle(),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Enter valid time';
+                            }
+
+                            return null;
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
                   const CustomText(
                     title: 'Ticket Type',
                     color: AppColors.gryishBlue,
@@ -309,11 +428,15 @@ class _TicketScreenState extends State<TicketScreen> {
                                 date: dateController.text,
                                 price: priceController.text,
                                 description: descriptionController.text,
-                                userId: AuthServices.getCurrentUser.uid);
+                                userId: AuthServices.getCurrentUser.uid,
+                                time: '$startTime - $endTime',
+                                status: 'Active');
 
                             if (imageUrl != null && imageUrl != '') {
                               await FireStoreServices.uploadEventData(
-                                  eventModal: eventModal);
+                                  eventModal: eventModal).then((value) {
+                                    imagePickerProvider.setImageBytes = '';
+                                  });
                               notifier.value = false;
                             }
                           }

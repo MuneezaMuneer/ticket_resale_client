@@ -39,7 +39,11 @@ class NotificationScreen extends StatelessWidget {
               Container(
                   height: height * 0.32,
                   width: width,
-                  color: AppColors.white.withOpacity(0.2),
+                  decoration: BoxDecoration(color: AppColors.white, boxShadow: [
+                    BoxShadow(
+                        color: AppColors.blueViolet.withOpacity(0.4),
+                        blurRadius: 10)
+                  ]),
                   child: _builderWidget(FontWeight.w600, AppColors.yellow)),
               Padding(
                 padding: const EdgeInsets.fromLTRB(30, 20, 30, 0),

@@ -2,12 +2,11 @@ import 'package:avatar_stack/avatar_stack.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-
 import 'package:svg_flutter/svg.dart';
 import 'package:ticket_resale/constants/constants.dart';
-import 'package:ticket_resale/db_services/auth_services.dart';
-import 'package:ticket_resale/db_services/firestore_services.dart';
+import 'package:ticket_resale/db_services/db_services.dart';
 import 'package:ticket_resale/models/models.dart';
+import 'package:ticket_resale/utils/app_utils.dart';
 
 import 'package:ticket_resale/widgets/widgets.dart';
 
@@ -21,6 +20,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String? displayName;
   String? photoUrl;
+  TextEditingController searchController = TextEditingController();
+  ValueNotifier<String> searchNotifier = ValueNotifier<String>('');
   late Stream<List<EventModal>> displayEventData;
   @override
   void initState() {
@@ -105,17 +106,23 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ],
                         ),
-                        Container(
-                            height: 40,
-                            width: 40,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: AppColors.white.withOpacity(0.1),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: SvgPicture.asset(AppSvgs.sms),
-                            ))
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(
+                                context, AppRoutes.notificationScreen);
+                          },
+                          child: Container(
+                              height: 40,
+                              width: 40,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: AppColors.white.withOpacity(0.1),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: SvgPicture.asset(AppSvgs.sms),
+                              )),
+                        )
                       ],
                     ),
                     const Gap(10),
@@ -148,28 +155,48 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: SizedBox(
                       height: height * 0.08,
                       width: width * 0.85,
-                      child: CustomTextField(
-                        hintText: 'Search Event & Tickets',
-                        hintStyle: const TextStyle(color: AppColors.silver),
-                        fillColor: AppColors.white,
-                        isFilled: true,
-                        suffixIcon: Padding(
-                          padding: const EdgeInsets.only(right: 8),
-                          child: Container(
-                            height: 35,
-                            width: 35,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              gradient: customGradient,
-                            ),
-                            child: const Center(
-                              child: Icon(
-                                Icons.search,
-                                color: AppColors.white,
+                      child: ValueListenableBuilder(
+                        valueListenable: searchNotifier,
+                        builder: (context, value, child) {
+                          return CustomTextField(
+                            hintText: 'Search Event & Tickets',
+                            hintStyle: const TextStyle(color: AppColors.silver),
+                            fillColor: AppColors.white,
+                            controller: searchController,
+                            isFilled: true,
+                            onChanged: (query) {
+                              searchNotifier.value = query;
+                            },
+                            suffixIcon: Padding(
+                              padding: const EdgeInsets.only(right: 8),
+                              child: Container(
+                                height: 35,
+                                width: 35,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  gradient: customGradient,
+                                ),
+                                child: Center(
+                                  child: searchController.text.isEmpty
+                                      ? const Icon(
+                                          Icons.search,
+                                          color: AppColors.white,
+                                        )
+                                      : GestureDetector(
+                                          onTap: () {
+                                            searchController.clear();
+                                            searchNotifier.value = '';
+                                          },
+                                          child: const Icon(
+                                            Icons.close,
+                                            color: AppColors.white,
+                                          ),
+                                        ),
+                                ),
                               ),
                             ),
-                          ),
-                        ),
+                          );
+                        },
                       ),
                     ),
                   ),
@@ -323,38 +350,61 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                   const Gap(8),
-                  StreamBuilder<List<EventModal>>(
-                    stream: displayEventData,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        final data = snapshot.data;
+                  ValueListenableBuilder(
+                    valueListenable: searchNotifier,
+                    builder: (context, query, child) {
+                      return StreamBuilder(
+                        stream: displayEventData,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            final data = query.isEmpty
+                                ? snapshot.data
+                                : snapshot.data!
+                                    .where((element) => element.festivalName!
+                                        .toLowerCase()
+                                        .contains(query.toLowerCase()))
+                                    .toList();
 
-                        return SizedBox(
-                          height: width < 370 ? height * 0.4 : height * 0.32,
-                          width: width,
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            scrollDirection: Axis.horizontal,
-                            itemCount: data!.length,
-                            itemBuilder: (context, index) {
-                              print(data[index].date!);
-                              return Padding(
-                                padding: const EdgeInsets.only(right: 10),
-                                child: CustomTileContainer(
-                                  height: height,
-                                  width: width * 0.65,
-                                  dateTime: data[index].date!,
-                                  posttitle: data[index].festivalName,
-                                  postBy: 'Jacob Jones',
-                                  imagePath: data[index].imageUrl,
+                            if (data!.isNotEmpty) {
+                              return SizedBox(
+                                height:
+                                    width < 370 ? height * 0.4 : height * 0.32,
+                                width: width,
+                                child: ListView.builder(
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: data.length,
+                                  itemBuilder: (context, index) {
+                                    return Padding(
+                                      padding: const EdgeInsets.only(right: 10),
+                                      child: CustomTileContainer(
+                                        height: height,
+                                        width: width * 0.65,
+                                        date: AppUtils.dateFormat(
+                                            data[index].date!),
+                                        time: data[index].time,
+                                        posttitle:
+                                            AppUtils.limitTextTo32Characters(
+                                                '${data[index].festivalName}'),
+                                        postBy: 'Jacob Jones',
+                                        imagePath: data[index].imageUrl,
+                                      ),
+                                    );
+                                  },
                                 ),
                               );
-                            },
-                          ),
-                        );
-                      } else {
-                        return const Text('No Event Yet');
-                      }
+                            } else {
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 40),
+                                child: _buildText(),
+                              );
+                            }
+                          } else {
+                            return _buildText();
+                          }
+                        },
+                      );
                     },
                   ),
                   const Gap(10),
@@ -365,6 +415,17 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  Widget _buildText() {
+    return const Center(
+        child: Text(
+      'No Record Found',
+      style: TextStyle(
+          color: AppColors.jetBlack,
+          fontSize: AppSize.medium,
+          fontWeight: FontWeight.w400),
+    ));
   }
 }
 

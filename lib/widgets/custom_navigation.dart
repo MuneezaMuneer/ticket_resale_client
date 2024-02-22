@@ -4,10 +4,7 @@ import 'package:svg_flutter/svg_flutter.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/providers/navigation_provider.dart';
 import 'package:ticket_resale/screens/screens.dart';
-import 'package:ticket_resale/screens/ticket_screen.dart';
 import 'package:ticket_resale/widgets/custom_text.dart';
-
-import '../screens/profile_screen.dart';
 
 class CustomNavigation extends StatefulWidget {
   const CustomNavigation({super.key});

@@ -41,12 +41,12 @@ class _ProfileSettingsState extends State<ProfileSettings> {
   void initState() {
     imagePickerProvider =
         Provider.of<ImagePickerProvider>(context, listen: false);
-    photoUrl = AuthServices.getCurrentUser.photoURL;
+    photoUrl = '${AuthServices.getCurrentUser.photoURL}';
     AuthServices.fetchUserDetails().then((userModel) {
       if (userModel != null) {
-        instaController.text = userModel.instaUsername!;
-        phoneController.text = userModel.phoneNo!;
-        birthController.text = userModel.birthDate!;
+        instaController.text = '${userModel.instaUsername}';
+        phoneController.text = '${userModel.phoneNo}';
+        birthController.text = userModel.birthDate ?? '';
       } else {
         instaController.text = '';
         phoneController.text = '';
@@ -56,9 +56,10 @@ class _ProfileSettingsState extends State<ProfileSettings> {
     });
     nameController.text = '${AuthServices.getCurrentUser.displayName}';
     emailController.text = '${AuthServices.getCurrentUser.email}';
-   
+
     super.initState();
   }
+
   @override
   void dispose() {
     emailController.dispose();
@@ -67,7 +68,9 @@ class _ProfileSettingsState extends State<ProfileSettings> {
     instaController.dispose();
     phoneController.dispose();
     super.dispose();
-  }  @override
+  }
+
+  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     final double height = size.height;

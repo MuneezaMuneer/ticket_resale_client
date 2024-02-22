@@ -12,3 +12,8 @@ export 'payment_connect_screen.dart';
 export 'payment_disconnect_screen.dart';
 export 'profile_level_screen.dart';
 export 'splash_screen.dart';
+export 'privacy_policy_screen.dart';
+export 'ticket_screen.dart';
+export 'term_of_use_screen.dart';
+export 'profile_screen.dart';
+

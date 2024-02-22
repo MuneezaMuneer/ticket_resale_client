@@ -13,8 +13,10 @@ class AppRoutes {
   static const disconnectScreen = '/disconnectScreen';
   static const notificationScreen = '/notificationScreen';
   static const profileSettings = '/profileSettingsScreen';
+  static const privacyScreen = '/privacyScreen';
   static const eventScreen = '/eventScreen';
   static const profileLevelScreen = '/profileLevelScreen';
   static const navigationScreen = '/navigationScreen';
-  static const passwordScreen = 'passwordScreen';
+  static const passwordScreen = '/passwordScreen';
+  static const termOfUseScreen = '/termUseScreen';
 }

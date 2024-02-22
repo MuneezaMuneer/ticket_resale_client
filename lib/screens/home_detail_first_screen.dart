@@ -1,12 +1,21 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:svg_flutter/svg_flutter.dart';
+
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
+
 import '../components/components.dart';
 
 class HomeDetailFirstScreen extends StatelessWidget {
-  const HomeDetailFirstScreen({super.key});
+  String id;
+  String festivalName;
+  HomeDetailFirstScreen({
+    Key? key,
+    required this.id,
+    required this.festivalName,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +37,9 @@ class HomeDetailFirstScreen extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      const Expanded(
+                      Expanded(
                         child: CustomText(
-                          title: ' Holiday Music Concert Golbal Village',
+                          title: festivalName,
                           size: AppSize.large,
                           weight: FontWeight.w600,
                           softWrap: true,
@@ -161,9 +170,8 @@ class HomeDetailFirstScreen extends StatelessWidget {
                     weight: FontWeight.w600,
                     color: AppColors.jetBlack,
                   ),
-                  const CustomText(
-                    title:
-                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
+                  CustomText(
+                    title: id,
                     size: AppSize.medium,
                     softWrap: true,
                     weight: FontWeight.w400,
