@@ -24,4 +24,12 @@ class AppColors {
   static const gryishBlue = Color(0Xff403B4E);
   static const tealBlue = Color(0Xff49C5B6);
   static const pastelBlue = Color(0XffCDD9FF);
+  static const black = Color(0Xff010A1B);
+  static const electricGrey = Color(0XffA9A5B5);
+  static const lightPurple = Color(0XffF1EDFC);
+  static const green = Color(0Xff2FDB88);
+  static const blue = Color(0Xff869FF9);
+  static const midNight = Color(0XffE5EBFF);
+  static const darkGrey = Color(0Xff6B779A);
+  static const backgroundColor = Color(0Xfff7f5fc);
 }

@@ -13,3 +13,7 @@ LinearGradient whiteGradient = const LinearGradient(
     colors: [AppColors.white, AppColors.white],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight);
+LinearGradient customGradientAdmin = const LinearGradient(
+    colors: [AppColors.purple, AppColors.blueViolet],
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter);
