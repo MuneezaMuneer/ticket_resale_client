@@ -6,8 +6,6 @@ import 'package:ticket_resale/providers/navigation_provider.dart';
 import 'package:ticket_resale/screens/screens.dart';
 import 'package:ticket_resale/widgets/custom_text.dart';
 
-import '../screens/profile_screen.dart';
-
 class CustomNavigation extends StatefulWidget {
   const CustomNavigation({super.key});
 
@@ -105,31 +103,60 @@ class _CustomNavigationState extends State<CustomNavigation> {
                               )
                             ],
                           )),
-                Stack(
-                  children: [
-                    SvgPicture.asset(
-                      AppSvgs.plus,
-                      colorFilter: const ColorFilter.mode(
-                          AppColors.blueViolet, BlendMode.srcIn),
-                    ),
-                    const Positioned(
-                      left: 0,
-                      top: 0,
-                      right: 0,
-                      bottom: 0,
-                      child: Icon(
-                        Icons.add,
-                        color: AppColors.white,
-                      ),
-                    ),
-                  ],
-                ),
+                // Stack(
+                //   children: [
+                //     GestureDetector(
+                //       onTap: () {
+                //         navigationProvider.setSelectedIndex(2);
+                //       },
+                //       child: SvgPicture.asset(
+                //         AppSvgs.plus,
+                //         colorFilter: const ColorFilter.mode(
+                //             AppColors.blueViolet, BlendMode.srcIn),
+                //       ),
+                //     ),
+                //     const Positioned(
+                //       left: 0,
+                //       top: 0,
+                //       right: 0,
+                //       bottom: 0,
+                //       child: Icon(
+                //         Icons.add,
+                //         color: AppColors.white,
+                //       ),
+                //     ),
+                //   ],
+                // ),
+                IconButton(
+                    enableFeedback: false,
+                    onPressed: () {
+                      navigationProvider.setSelectedIndex(2);
+                    },
+                    icon: Stack(
+                      children: [
+                        SvgPicture.asset(
+                          AppSvgs.plus,
+                          colorFilter: const ColorFilter.mode(
+                              AppColors.blueViolet, BlendMode.srcIn),
+                        ),
+                        const Positioned(
+                          left: 0,
+                          top: 0,
+                          right: 0,
+                          bottom: 0,
+                          child: Icon(
+                            Icons.add,
+                            color: AppColors.white,
+                          ),
+                        ),
+                      ],
+                    )),
                 IconButton(
                   enableFeedback: false,
                   onPressed: () {
-                    navigationProvider.setSelectedIndex(2);
+                    navigationProvider.setSelectedIndex(3);
                   },
-                  icon: indexValue.selectedIndex == 2
+                  icon: indexValue.selectedIndex == 3
                       ? Column(
                           children: [
                             SvgPicture.asset(
@@ -159,9 +186,9 @@ class _CustomNavigationState extends State<CustomNavigation> {
                 IconButton(
                     enableFeedback: false,
                     onPressed: () {
-                      navigationProvider.setSelectedIndex(3);
+                      navigationProvider.setSelectedIndex(4);
                     },
-                    icon: indexValue.selectedIndex == 3
+                    icon: indexValue.selectedIndex == 4
                         ? Column(
                             children: [
                               SvgPicture.asset(
@@ -198,6 +225,7 @@ class _CustomNavigationState extends State<CustomNavigation> {
   static final List<Widget> _widgetOptions = <Widget>[
     const HomeScreen(),
     const EventScreen(),
+    const TicketScreen(),
     const ProfileLevelScreen(),
     const ProfileScreen(),
   ];

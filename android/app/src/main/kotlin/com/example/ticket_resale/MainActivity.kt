@@ -1,4 +1,4 @@
-package com.example.ticket_resale
+package ravetrade.com.ticketresale
 
 import io.flutter.embedding.android.FlutterActivity
 

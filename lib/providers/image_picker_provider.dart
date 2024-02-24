@@ -1,10 +1,23 @@
 import 'package:flutter/widgets.dart';
 
 class ImagePickerProvider extends ChangeNotifier {
-  String imagePath = '';
-  String get getPath => imagePath;
-  set setPath(String path) {
-    imagePath = path;
+  String _imageBytes = '';
+  String _imageUrl = '';
+  String get getImageBytes {
+    return _imageBytes;
+  }
+
+  set setImageBytes(String bytes) {
+    _imageBytes = bytes;
+    notifyListeners();
+  }
+
+  String get getImageUrl {
+    return _imageUrl;
+  }
+
+  set setImageUrl(String url) {
+    _imageUrl = url;
     notifyListeners();
   }
 }

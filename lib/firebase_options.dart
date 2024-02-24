@@ -17,7 +17,10 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -25,10 +28,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -46,18 +46,9 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyA2ZUDHmSKBSkcZOhGHkgqIC4Y0bOw5oeQ',
-    appId: '1:831456807199:web:1474431de585705bcb882a',
-    messagingSenderId: '831456807199',
-    projectId: 'rave-trade-ca544',
-    authDomain: 'rave-trade-ca544.firebaseapp.com',
-    storageBucket: 'rave-trade-ca544.appspot.com',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyABWdHcAzfetx405yG6TvZp4MJ6DrVbS_Y',
-    appId: '1:831456807199:android:3396f8cd2f532f41cb882a',
+    appId: '1:831456807199:android:4f5ff927e55adb29cb882a',
     messagingSenderId: '831456807199',
     projectId: 'rave-trade-ca544',
     storageBucket: 'rave-trade-ca544.appspot.com',
@@ -65,10 +56,23 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyCB8pwIjcM_BQEdaPMT_hQDZNtWeLgR2WI',
-    appId: '1:831456807199:ios:dcb563f0c5dc975ccb882a',
+    appId: '1:831456807199:ios:fdaa6845bbedeb81cb882a',
     messagingSenderId: '831456807199',
     projectId: 'rave-trade-ca544',
     storageBucket: 'rave-trade-ca544.appspot.com',
-    iosBundleId: 'com.example.ticketResale',
+    androidClientId: '831456807199-1otc8peen525k4ihn80rf081s6igd8sb.apps.googleusercontent.com',
+    iosClientId: '831456807199-56rfb40d8h4tvk9lj2ammhk7bc8hqjv7.apps.googleusercontent.com',
+    iosBundleId: 'ravetrade.com.ticketresale',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyCB8pwIjcM_BQEdaPMT_hQDZNtWeLgR2WI',
+    appId: '1:831456807199:ios:fdaa6845bbedeb81cb882a',
+    messagingSenderId: '831456807199',
+    projectId: 'rave-trade-ca544',
+    storageBucket: 'rave-trade-ca544.appspot.com',
+    androidClientId: '831456807199-1otc8peen525k4ihn80rf081s6igd8sb.apps.googleusercontent.com',
+    iosClientId: '831456807199-56rfb40d8h4tvk9lj2ammhk7bc8hqjv7.apps.googleusercontent.com',
+    iosBundleId: 'ravetrade.com.ticketresale',
   );
 }

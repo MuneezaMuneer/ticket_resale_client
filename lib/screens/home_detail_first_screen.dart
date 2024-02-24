@@ -1,12 +1,21 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:svg_flutter/svg_flutter.dart';
+
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
+
 import '../components/components.dart';
 
 class HomeDetailFirstScreen extends StatelessWidget {
-  const HomeDetailFirstScreen({super.key});
+  String id;
+  String festivalName;
+  HomeDetailFirstScreen({
+    Key? key,
+    required this.id,
+    required this.festivalName,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +37,9 @@ class HomeDetailFirstScreen extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      const Expanded(
+                      Expanded(
                         child: CustomText(
-                          title: ' Holiday Music Concert Golbal Village',
+                          title: festivalName,
                           size: AppSize.large,
                           weight: FontWeight.w600,
                           softWrap: true,
@@ -47,6 +56,54 @@ class HomeDetailFirstScreen extends StatelessWidget {
                   ),
                   const Gap(10),
                   Container(
+                    height: height * 0.06,
+                    width: width * 0.9,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(56),
+                        border: Border.all(color: AppColors.white),
+                        color: AppColors.white),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Row(
+                            children: [
+                              const CircleAvatar(
+                                backgroundColor: AppColors.paleGrey,
+                                radius: 17,
+                                backgroundImage:
+                                    AssetImage(AppImages.profileImage),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 12,
+                                ),
+                                child: RichText(
+                                    text: TextSpan(children: [
+                                  TextSpan(
+                                      text: 'Featured DJ : ',
+                                      style: TextStyle(
+                                          color: AppColors.lightGrey
+                                              .withOpacity(0.6),
+                                          fontSize: AppSize.xsmall,
+                                          fontWeight: FontWeight.w400)),
+                                  const TextSpan(
+                                      text: 'Martin Garrix',
+                                      style: TextStyle(
+                                          color: AppColors.blueViolet,
+                                          fontSize: AppSize.medium,
+                                          fontWeight: FontWeight.w600)),
+                                ])),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Gap(15),
+                  Container(
                     height: height * 0.08,
                     width: width * 0.9,
                     decoration: BoxDecoration(
@@ -62,10 +119,10 @@ class HomeDetailFirstScreen extends StatelessWidget {
                             children: [
                               CircleAvatar(
                                   backgroundColor: AppColors.paleGrey,
-                                  radius: 15,
+                                  radius: 20,
                                   child: SvgPicture.asset(
                                     AppSvgs.clock,
-                                    height: 25,
+                                    height: 30,
                                   )),
                               Padding(
                                 padding:
@@ -74,18 +131,29 @@ class HomeDetailFirstScreen extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     CustomText(
-                                      title: '25th Janurary 2024',
+                                      title: '25th Jan 2024, 08:00pm -11:00pm',
                                       color:
                                           AppColors.lightGrey.withOpacity(0.6),
                                       size: AppSize.xsmall,
                                       weight: FontWeight.w400,
                                     ),
-                                    const CustomText(
-                                      title: '8:00 AM - 12:00 AM',
-                                      color: AppColors.jetBlack,
-                                      size: AppSize.small,
-                                      weight: FontWeight.w600,
-                                    ),
+                                    const Gap(5),
+                                    RichText(
+                                        text: TextSpan(children: [
+                                      TextSpan(
+                                          text: 'at ',
+                                          style: TextStyle(
+                                              color: AppColors.lightGrey
+                                                  .withOpacity(0.6),
+                                              fontSize: AppSize.xsmall,
+                                              fontWeight: FontWeight.w400)),
+                                      const TextSpan(
+                                          text: 'at Global Village Dubai, UAE',
+                                          style: TextStyle(
+                                              color: AppColors.jetBlack,
+                                              fontSize: AppSize.small,
+                                              fontWeight: FontWeight.w600)),
+                                    ])),
                                   ],
                                 ),
                               ),
@@ -102,9 +170,8 @@ class HomeDetailFirstScreen extends StatelessWidget {
                     weight: FontWeight.w600,
                     color: AppColors.jetBlack,
                   ),
-                  const CustomText(
-                    title:
-                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
+                  CustomText(
+                    title: id,
                     size: AppSize.medium,
                     softWrap: true,
                     weight: FontWeight.w400,
@@ -118,29 +185,28 @@ class HomeDetailFirstScreen extends StatelessWidget {
                     color: AppColors.jetBlack,
                   ),
                   const Gap(15),
-                  SizedBox(
-                      height: height * 0.4,
-                      child: ListView.builder(
-                        padding: EdgeInsets.zero,
-                        //  physics: NeverScrollableScrollPhysics(),
-                        itemCount: 4,
-                        itemExtent: 140,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.only(top: 15),
-                            child: InkWell(
-                              onTap: () {
-                                Navigator.pushNamed(
-                                    context, AppRoutes.detailThirdScreen);
-                              },
-                              child: _tileContainer(
-                                title: 'VIP PLUS TICKET AVAILABLE',
-                                subTitle: 'VIP Seats + Exclusive braclets',
-                              ),
-                            ),
-                          );
-                        },
-                      )),
+                  ListView.builder(
+                    padding: EdgeInsets.zero,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: 4,
+                    itemExtent: 140,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 15),
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.pushNamed(
+                                context, AppRoutes.detailSecondScreen);
+                          },
+                          child: _tileContainer(
+                            title: 'VIP PLUS TICKET AVAILABLE',
+                            subTitle: 'VIP Seats + Exclusive braclets',
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                   const Gap(10)
                 ],
               ),

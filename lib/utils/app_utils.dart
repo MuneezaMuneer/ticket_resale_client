@@ -3,14 +3,14 @@ import 'dart:io';
 import 'package:bottom_picker/bottom_picker.dart';
 import 'package:bottom_picker/resources/arrays.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:ticket_resale/constants/app_colors.dart';
 import 'package:ticket_resale/constants/app_textsize.dart';
-import 'package:ticket_resale/widgets/custom_button.dart';
-import 'package:ticket_resale/widgets/custom_gradient.dart';
 
-class PickFile {
+class AppUtils {
   static Future<String> getImageFromGallery() async {
     final pickedFile = await ImagePicker()
         .pickImage(source: ImageSource.gallery, imageQuality: 100);
@@ -19,6 +19,30 @@ class PickFile {
       return image.path;
     } else {
       return '';
+    }
+  }
+
+  static void toastMessage(String message) {
+    Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM_RIGHT,
+        backgroundColor: AppColors.blueViolet,
+        textColor: AppColors.white,
+        fontSize: 16.0);
+  }
+
+  static dateFormat(String date) {
+    DateTime dateFormat = DateTime.parse(date);
+    String formattedDate = DateFormat('d MMM').format(dateFormat);
+    return formattedDate;
+  }
+
+  static String limitTextTo32Characters(String inputText) {
+    if (inputText.length > 43) {
+      return '${inputText.substring(0, 43)}...';
+    } else {
+      return inputText;
     }
   }
 
@@ -53,5 +77,13 @@ class PickFile {
       },
       bottomPickerTheme: BottomPickerTheme.plumPlate,
     ).show(context);
+  }
+
+  static String textTo32Characters(String inputText) {
+    if (inputText.length > 15) {
+      return '${inputText.substring(0, 15)}...';
+    } else {
+      return inputText;
+    }
   }
 }

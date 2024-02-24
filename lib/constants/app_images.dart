@@ -10,6 +10,7 @@ class AppImages {
 
   static const google = 'assets/images/google_icon.png';
   static const profileImage = 'assets/images/profileImage.png';
+  static const admin = 'assets/images/adminSignin.png';
 }
 
 class AppSvgs {
@@ -25,9 +26,9 @@ class AppSvgs {
   static const fillStar = 'assets/svgs/star_fill.svg';
   static const star = 'assets/svgs/star.svg';
   static const share = 'assets/svgs/share.svg';
-
+  static const logout = 'assets/svgs/logout.svg';
   static const profile = 'assets/svgs/profile.svg';
-
+  static const notification = 'assets/svgs/notification.svg';
   static const home = 'assets/svgs/home.svg';
   static const apple = 'assets/svgs/apple.svg';
   static const facebook = 'assets/svgs/facebook.svg';
@@ -49,4 +50,5 @@ class AppSvgs {
   static const plus = 'assets/svgs/plus.svg';
   static const event = 'assets/svgs/event.svg';
   static const dollarSign = 'assets/svgs/dollar_sign.svg';
+  static const ticketListing = 'assets/svgs/ticket_listing.svg';
 }

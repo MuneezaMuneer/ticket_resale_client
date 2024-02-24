@@ -1,12 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:svg_flutter/svg.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/db_services/auth_services.dart';
-import 'package:ticket_resale/screens/login_screen.dart';
+import 'package:ticket_resale/providers/providers.dart';
+
 import 'package:ticket_resale/utils/app_dialouge.dart';
-import 'package:ticket_resale/utils/toastmessage.dart';
+
 import '../widgets/widgets.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -16,6 +18,18 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  late SwitchProvider switchProvider;
+  String? photoUrl;
+
+  @override
+  void initState() {
+    photoUrl = AuthServices.getCurrentUser.photoURL;
+    Provider.of<SwitchProvider>(context, listen: false).loadPreferences();
+    switchProvider = Provider.of<SwitchProvider>(context, listen: false);
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,9 +49,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   height: 140,
                   width: 140,
                   child: CircleAvatar(
-                    backgroundImage: NetworkImage(
-                        '${FirebaseAuth.instance.currentUser!.photoURL}'),
-                  ),
+                      backgroundImage: photoUrl != null
+                          ? NetworkImage("$photoUrl")
+                          : const AssetImage(AppImages.profileImage)
+                              as ImageProvider),
                 ),
                 Positioned(
                     left: 90,
@@ -49,7 +64,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               height: 13,
             ),
             CustomText(
-              title: FirebaseAuth.instance.currentUser!.displayName,
+              title: '${FirebaseAuth.instance.currentUser!.displayName}',
               weight: FontWeight.w600,
               size: AppSize.large,
               color: AppColors.jetBlack,
@@ -89,12 +104,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       iconColor: AppColors.lightGrey,
                     ),
                   ),
-                  const CustomProfileRow(
-                    leadingIcon: Icons.notifications_none,
-                    title: 'Notification',
-                    color: AppColors.jetBlack,
-                    arrowBack: false,
-                    iconColor: AppColors.lightGrey,
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(
+                          context, AppRoutes.notificationScreen);
+                    },
+                    child: const CustomProfileRow(
+                      leadingIcon: Icons.notifications_none,
+                      title: 'Notification',
+                      color: AppColors.jetBlack,
+                      arrowBack: false,
+                      iconColor: AppColors.lightGrey,
+                    ),
                   ),
                   GestureDetector(
                     onTap: () {
@@ -110,7 +131,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, AppRoutes.commentScreen);
+                      Navigator.pushNamed(context, AppRoutes.privacyScreen);
                     },
                     child: const CustomProfileRow(
                       leadingIcon: Icons.privacy_tip_outlined,
@@ -119,12 +140,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       iconColor: AppColors.lightGrey,
                     ),
                   ),
-                  const CustomProfileRow(
-                    svgImage: AppSvgs.termOfUse,
-                    isSvg: true,
-                    title: 'Term of Use',
-                    color: AppColors.jetBlack,
-                    iconColor: AppColors.lightGrey,
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, AppRoutes.termOfUseScreen);
+                    },
+                    child: const CustomProfileRow(
+                      svgImage: AppSvgs.termOfUse,
+                      isSvg: true,
+                      title: 'Term of Use',
+                      color: AppColors.jetBlack,
+                      iconColor: AppColors.lightGrey,
+                    ),
                   ),
                   InkWell(
                     onTap: () {

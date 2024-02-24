@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:ticket_resale/screens/profile_setting.dart';
-import 'package:ticket_resale/widgets/custom_navigation.dart';
+import 'package:ticket_resale/widgets/widgets.dart';
 import '../constants/constants.dart';
-import '../screens/profile_screen.dart';
+import '../screens/auth_screens/signin_screen.dart';
+import '../screens/auth_screens/signup_screen.dart';
 import '../screens/screens.dart';
-import '../screens/signin_screen.dart';
-import '../screens/signup_screen.dart';
+
 
 Route onGenerateRoute(RouteSettings settings) {
   if (settings.name == AppRoutes.logIn) {
@@ -16,25 +15,37 @@ Route onGenerateRoute(RouteSettings settings) {
     return animatePage(const SignUpScreen());
   } else if (settings.name == AppRoutes.navigationScreen) {
     return animatePage(const CustomNavigation());
+  } else if (settings.name == AppRoutes.passwordScreen) {
+    return animatePage(const PasswordScreen());
   } else if (settings.name == AppRoutes.homeScreen) {
     return animatePage(const HomeScreen());
   } else if (settings.name == AppRoutes.commentScreen) {
     return animatePage(const CommentScreen());
   } else if (settings.name == AppRoutes.feedbackScreen) {
     return animatePage(const FeedBackScreen());
-  } else if (settings.name == AppRoutes.detailFirstScreen) {
-    return animatePage(const HomeDetailFirstScreen());
-  } else if (settings.name == AppRoutes.detailThirdScreen) {
-    return animatePage(const HomeDetailThirdScreen());
-  } else if (settings.name == AppRoutes.newTicketScreen) {
-    return animatePage(const AddNewTicket());
+  } else if (settings.name == AppRoutes.privacyScreen) {
+    return animatePage(const PrivacyPolicy());
+  }
+  // else if (settings.name == AppRoutes.detailFirstScreen) {
+  //   return animatePage(HomeDetailFirstScreen());
+  // }
+  else if (settings.name == AppRoutes.detailSecondScreen) {
+    return animatePage(const HomeDetailSecondScreen());
+  } else if (settings.name == AppRoutes.ticketScreen) {
+    return animatePage(const TicketScreen());
+  } else if (settings.name == AppRoutes.eventScreen) {
+    return animatePage(const EventScreen());
   } else if (settings.name == AppRoutes.connectScreen) {
     return animatePage(const PaymentConnectScreen());
   } else if (settings.name == AppRoutes.disconnectScreen) {
     return animatePage(const PaymentDisconnectScreen());
   } else if (settings.name == AppRoutes.profileScreen) {
     return animatePage(const ProfileScreen());
-  } else if (settings.name == AppRoutes.profileSettings) {
+  } 
+  else if (settings.name == AppRoutes.termOfUseScreen) {
+    return animatePage(const TermsOfUseScreen());
+  } 
+  else if (settings.name == AppRoutes.profileSettings) {
     return animatePage(const ProfileSettings());
   } else if (settings.name == AppRoutes.notificationScreen) {
     return animatePage(const NotificationScreen());

@@ -19,8 +19,8 @@ class _FeedBackScreenState extends State<FeedBackScreen> {
   ValueNotifier<int> selectedStarsNotifier = ValueNotifier<int>(0);
   @override
   void initState() {
-    super.initState();
     feedbackProvider = Provider.of<FeedbackProvider>(context, listen: false);
+    super.initState();
   }
 
   @override
@@ -66,258 +66,8 @@ class _FeedBackScreenState extends State<FeedBackScreen> {
                 ),
                 const Gap(30),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25),
-                  child: Consumer<FeedbackProvider>(
-                    builder: (context, feedbackProvider, child) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'How was you experience?',
-                            style: _buildStyle(),
-                          ),
-                          const Gap(10),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              SizedBox(
-                                height: 40,
-                                width: width * 0.24,
-                                child: CustomButton(
-                                  onPressed: () {
-                                    feedbackProvider.setExperience(0);
-                                  },
-                                  btnText: 'Negative',
-                                  borderColor:
-                                      AppColors.lightGrey.withOpacity(0.7),
-                                  textColor: feedbackProvider.getExperience == 0
-                                      ? AppColors.white
-                                      : AppColors.lightGrey,
-                                  gradient: feedbackProvider.getExperience == 0
-                                      ? customGradient
-                                      : whiteGradient,
-                                  weight: FontWeight.w500,
-                                  textSize: AppSize.regular,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 40,
-                                width: width * 0.24,
-                                child: CustomButton(
-                                  onPressed: () {
-                                    feedbackProvider.setExperience(1);
-                                  },
-                                  btnText: 'Neutral',
-                                  borderColor:
-                                      AppColors.lightGrey.withOpacity(0.7),
-                                  textColor: feedbackProvider.getExperience == 1
-                                      ? AppColors.white
-                                      : AppColors.lightGrey,
-                                  gradient: feedbackProvider.getExperience == 1
-                                      ? customGradient
-                                      : whiteGradient,
-                                  weight: FontWeight.w500,
-                                  textSize: AppSize.regular,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 40,
-                                width: width * 0.24,
-                                child: CustomButton(
-                                  onPressed: () {
-                                    feedbackProvider.setExperience(2);
-                                  },
-                                  btnText: 'Positive',
-                                  borderColor:
-                                      AppColors.lightGrey.withOpacity(0.7),
-                                  textColor: feedbackProvider.getExperience == 2
-                                      ? AppColors.white
-                                      : AppColors.lightGrey,
-                                  gradient: feedbackProvider.getExperience == 2
-                                      ? customGradient
-                                      : whiteGradient,
-                                  weight: FontWeight.w500,
-                                  textSize: AppSize.regular,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const Gap(20),
-                          Text(
-                            'Did your ticket arrive (or was it available digitally) in a timely manner?',
-                            style: _buildStyle(),
-                          ),
-                          const Gap(10),
-                          Row(
-                            children: [
-                              SizedBox(
-                                height: 40,
-                                width: width * 0.24,
-                                child: CustomButton(
-                                  onPressed: () {
-                                    feedbackProvider.setTime(3);
-                                  },
-                                  btnText: 'Yes',
-                                  borderColor:
-                                      AppColors.lightGrey.withOpacity(0.7),
-                                  textColor: feedbackProvider.getTime == 3
-                                      ? AppColors.white
-                                      : AppColors.lightGrey,
-                                  gradient: feedbackProvider.getTime == 3
-                                      ? customGradient
-                                      : whiteGradient,
-                                  weight: FontWeight.w500,
-                                  textSize: AppSize.regular,
-                                ),
-                              ),
-                              const Gap(27),
-                              SizedBox(
-                                height: 40,
-                                width: width * 0.24,
-                                child: CustomButton(
-                                  onPressed: () {
-                                    feedbackProvider.setTime(4);
-                                  },
-                                  btnText: 'No',
-                                  borderColor:
-                                      AppColors.lightGrey.withOpacity(0.7),
-                                  textColor: feedbackProvider.getTime == 4
-                                      ? AppColors.white
-                                      : AppColors.lightGrey,
-                                  gradient: feedbackProvider.getTime == 4
-                                      ? customGradient
-                                      : whiteGradient,
-                                  textSize: AppSize.regular,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const Gap(20),
-                          Text(
-                            'Was the information about the festival (line-up, dates, venue, etc.) accurate and helpful?',
-                            style: _buildStyle(),
-                          ),
-                          const Gap(10),
-                          Row(
-                            children: [
-                              SizedBox(
-                                height: 40,
-                                width: width * 0.24,
-                                child: CustomButton(
-                                  onPressed: () {
-                                    feedbackProvider.setAccuracy(5);
-                                  },
-                                  btnText: 'Yes',
-                                  textColor: feedbackProvider.getAccuracy == 5
-                                      ? AppColors.white
-                                      : AppColors.lightGrey,
-                                  gradient: feedbackProvider.getAccuracy == 5
-                                      ? customGradient
-                                      : whiteGradient,
-                                  borderColor:
-                                      AppColors.lightGrey.withOpacity(0.7),
-                                  weight: FontWeight.w500,
-                                  textSize: AppSize.regular,
-                                ),
-                              ),
-                              const Gap(27),
-                              SizedBox(
-                                height: 40,
-                                width: width * 0.24,
-                                child: CustomButton(
-                                  onPressed: () {
-                                    feedbackProvider.setAccuracy(6);
-                                  },
-                                  btnText: 'No',
-                                  textColor: feedbackProvider.getAccuracy == 6
-                                      ? AppColors.white
-                                      : AppColors.lightGrey,
-                                  gradient: feedbackProvider.getAccuracy == 6
-                                      ? customGradient
-                                      : whiteGradient,
-                                  borderColor:
-                                      AppColors.lightGrey.withOpacity(0.7),
-                                  weight: FontWeight.w500,
-                                  textSize: AppSize.regular,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const Gap(20),
-                          Text(
-                            'How well did the seller communicate? Consider response time and clarity of information',
-                            style: _buildStyle(),
-                          ),
-                          const Gap(10),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              SizedBox(
-                                height: 40,
-                                width: width * 0.24,
-                                child: CustomButton(
-                                  onPressed: () {
-                                    feedbackProvider.setBehave(7);
-                                  },
-                                  btnText: 'Negative',
-                                  borderColor:
-                                      AppColors.lightGrey.withOpacity(0.7),
-                                  textColor: feedbackProvider.getBehave == 7
-                                      ? AppColors.white
-                                      : AppColors.lightGrey,
-                                  gradient: feedbackProvider.getBehave == 7
-                                      ? customGradient
-                                      : whiteGradient,
-                                  weight: FontWeight.w500,
-                                  textSize: AppSize.regular,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 40,
-                                width: width * 0.24,
-                                child: CustomButton(
-                                  onPressed: () {
-                                    feedbackProvider.setBehave(8);
-                                  },
-                                  btnText: 'Neutral',
-                                  borderColor:
-                                      AppColors.lightGrey.withOpacity(0.7),
-                                  textColor: feedbackProvider.getBehave == 8
-                                      ? AppColors.white
-                                      : AppColors.lightGrey,
-                                  gradient: feedbackProvider.getBehave == 8
-                                      ? customGradient
-                                      : whiteGradient,
-                                  weight: FontWeight.w500,
-                                  textSize: AppSize.regular,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 40,
-                                width: width * 0.24,
-                                child: CustomButton(
-                                  onPressed: () {
-                                    feedbackProvider.setBehave(9);
-                                  },
-                                  btnText: 'Positive',
-                                  borderColor:
-                                      AppColors.lightGrey.withOpacity(0.7),
-                                  textColor: feedbackProvider.getBehave == 9
-                                      ? AppColors.white
-                                      : AppColors.lightGrey,
-                                  gradient: feedbackProvider.getBehave == 9
-                                      ? customGradient
-                                      : whiteGradient,
-                                  weight: FontWeight.w500,
-                                  textSize: AppSize.regular,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      );
-                    },
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: _buildForm(width),
                 ),
                 SizedBox(
                   height: height * 0.4,
@@ -415,13 +165,6 @@ class _FeedBackScreenState extends State<FeedBackScreen> {
     );
   }
 
-  TextStyle _buildStyle() {
-    return TextStyle(
-        fontSize: AppSize.medium,
-        fontWeight: FontWeight.w600,
-        color: AppColors.jetBlack.withOpacity(0.7));
-  }
-
   Widget buildStar(int starNumber) {
     return GestureDetector(
       onTap: () {
@@ -437,4 +180,114 @@ class _FeedBackScreenState extends State<FeedBackScreen> {
       ),
     );
   }
+}
+
+Widget _buildForm(double width) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 10),
+    child: Consumer<FeedbackProvider>(
+      builder: (context, feedbackProvider, child) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            buildHeaderText('How was your experience?'),
+            const Gap(10),
+            buildButtonRow(
+              width: width,
+              values: [0, 1, 2],
+              buttonTexts: ['Negative', 'Neutral', 'Positive'],
+              onPressed: feedbackProvider.setExperience,
+              selectedValue: feedbackProvider.getExperience,
+            ),
+            const Gap(20),
+            buildHeaderText(
+                'Did your ticket arrive (or was it available digitally) in a timely manner?'),
+            const Gap(10),
+            buildButtonRow(
+              width: width,
+              values: [
+                3,
+                4,
+              ],
+              buttonTexts: [
+                'Yes',
+                'No',
+              ],
+              onPressed: feedbackProvider.setTime,
+              selectedValue: feedbackProvider.getTime,
+            ),
+            const Gap(20),
+            buildHeaderText(
+                'Was the information about the festival accurate and helpful?'),
+            const Gap(10),
+            buildButtonRow(
+              width: width,
+              values: [
+                5,
+                6,
+              ],
+              buttonTexts: [
+                'Yes',
+                'No',
+              ],
+              onPressed: feedbackProvider.setAccuracy,
+              selectedValue: feedbackProvider.getAccuracy,
+            ),
+            const Gap(20),
+            buildHeaderText(
+                'How well did the seller communicate? Consider response time and clarity of information'),
+            const Gap(10),
+            buildButtonRow(
+              width: width,
+              values: [7, 8, 9],
+              buttonTexts: ['Negative', 'Neutral', 'Positive'],
+              onPressed: feedbackProvider.setBehave,
+              selectedValue: feedbackProvider.getBehave,
+            ),
+          ],
+        );
+      },
+    ),
+  );
+}
+
+Text buildHeaderText(String text) {
+  return Text(
+    text,
+    style: TextStyle(
+        fontSize: AppSize.medium,
+        fontWeight: FontWeight.w600,
+        color: AppColors.jetBlack.withOpacity(0.7)),
+  );
+}
+
+Row buildButtonRow({
+  required double width,
+  required List<int> values,
+  required List<String> buttonTexts,
+  required void Function(int) onPressed,
+  required int selectedValue,
+}) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: List.generate(
+      values.length,
+      (index) => SizedBox(
+        height: 40,
+        width: width * 0.24,
+        child: CustomButton(
+          onPressed: () => onPressed(values[index]),
+          btnText: buttonTexts[index],
+          borderColor: AppColors.lightGrey.withOpacity(0.7),
+          textColor: selectedValue == values[index]
+              ? AppColors.white
+              : AppColors.lightGrey,
+          gradient:
+              selectedValue == values[index] ? customGradient : whiteGradient,
+          weight: FontWeight.w500,
+          textSize: AppSize.regular,
+        ),
+      ),
+    ),
+  );
 }

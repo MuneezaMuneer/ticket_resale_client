@@ -1,9 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:ticket_resale/db_services/auth_services.dart';
-import '../components/components.dart';
-import '../constants/constants.dart';
-import '../widgets/widgets.dart';
+import '../../components/components.dart';
+import '../../constants/constants.dart';
+import '../../widgets/widgets.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -12,8 +12,10 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-late TextEditingController emailController;
-late TextEditingController passwordController;
+
+ValueNotifier<bool> googleNotifier = ValueNotifier<bool>(false);
+ValueNotifier<bool> fbNotifier = ValueNotifier<bool>(false);
+ValueNotifier<bool> appleNotifier = ValueNotifier<bool>(false);
 
 class _LoginScreenState extends State<LoginScreen> {
   @override
@@ -33,7 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 RichText(
                   text: TextSpan(
-                    text: 'Login to ',
+                    text: 'Sign in to ',
                     style: const TextStyle(
                         color: Colors.black,
                         fontSize: AppSize.xxlarge,
@@ -59,38 +61,64 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(
                   height: height * 0.02,
                 ),
-                CustomButton(
-                  isSvgImage: false,
-                  backgroundColor: AppColors.white,
-                  socialText: 'Sign in with Gmail',
-                  socialTextWeight: FontWeight.w400,
-                  imagePath: AppImages.google,
-                  isSocial: true,
-                  onPressed: () {
-                    AuthServices.signInWithGoogle(context);
+                ValueListenableBuilder(
+                  valueListenable: googleNotifier,
+                  builder: (context, value, child) {
+                    return CustomButton(
+                      loading: googleNotifier.value,
+                      isSvgImage: false,
+                      backgroundColor: AppColors.white,
+                      socialText: 'Sign in with Gmail',
+                      socialTextWeight: FontWeight.w400,
+                      imagePath: AppImages.google,
+                      isSocial: true,
+                      onPressed: () async {
+                        googleNotifier.value = true;
+                        await AuthServices.signInWithGoogle(context)
+                            .then((value) {
+                          googleNotifier.value = false;
+                        });
+                      },
+                    );
                   },
                 ),
                 SizedBox(
                   height: height * 0.02,
                 ),
-                CustomButton(
-                  backgroundColor: AppColors.white,
-                  socialText: 'Sign in with Facebook',
-                  imagePath: AppSvgs.facebook,
-                  socialTextWeight: FontWeight.w400,
-                  isSocial: true,
-                  onPressed: () {},
+                ValueListenableBuilder(
+                  valueListenable: fbNotifier,
+                  builder: (context, value, child) {
+                    return CustomButton(
+                      loading: fbNotifier.value,
+                      backgroundColor: AppColors.white,
+                      socialText: 'Sign in with Facebook',
+                      imagePath: AppSvgs.facebook,
+                      socialTextWeight: FontWeight.w400,
+                      isSocial: true,
+                      onPressed: () async {
+                        fbNotifier.value = true;
+                      },
+                    );
+                  },
                 ),
                 SizedBox(
                   height: height * 0.02,
                 ),
-                CustomButton(
-                  backgroundColor: AppColors.white,
-                  socialText: 'Sign in with Apple ID',
-                  imagePath: AppSvgs.apple,
-                  socialTextWeight: FontWeight.w400,
-                  isSocial: true,
-                  onPressed: () {},
+                ValueListenableBuilder(
+                  valueListenable: appleNotifier,
+                  builder: (context, value, child) {
+                    return CustomButton(
+                      loading: appleNotifier.value,
+                      backgroundColor: AppColors.white,
+                      socialText: 'Sign in with Apple ID',
+                      imagePath: AppSvgs.apple,
+                      socialTextWeight: FontWeight.w400,
+                      isSocial: true,
+                      onPressed: () async {
+                        appleNotifier.value = true;
+                      },
+                    );
+                  },
                 ),
                 SizedBox(
                   height: height * 0.02,

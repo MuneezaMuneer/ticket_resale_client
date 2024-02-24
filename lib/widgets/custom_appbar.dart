@@ -8,7 +8,9 @@ import '../constants/constants.dart';
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
   final Widget? child;
-  const CustomAppBar({super.key, this.title, this.child});
+  final bool isNotification;
+  const CustomAppBar(
+      {super.key, this.title, this.child, this.isNotification = true});
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +38,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      Navigator.pop(context);
+//                      Navigator.pop(context);
                     },
                     child: const Icon(
                       Icons.arrow_back_ios,
@@ -56,21 +58,25 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
             Padding(
               padding: const EdgeInsets.only(right: 25, top: 10),
-              child: GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamed(context, AppRoutes.notificationScreen);
-                  },
-                  child: Container(
-                      height: 40,
-                      width: 40,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: AppColors.white.withOpacity(0.1),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: SvgPicture.asset(AppSvgs.sms),
-                      ))),
+              child: SizedBox(
+                  child: isNotification
+                      ? GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(
+                                context, AppRoutes.notificationScreen);
+                          },
+                          child: Container(
+                              height: 40,
+                              width: 40,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: AppColors.white.withOpacity(0.1),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: SvgPicture.asset(AppSvgs.sms),
+                              )))
+                      : const SizedBox.shrink()),
             )
           ],
         ),

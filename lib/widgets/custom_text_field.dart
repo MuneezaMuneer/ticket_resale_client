@@ -16,7 +16,8 @@ class CustomTextField extends StatelessWidget {
   final bool isFilled;
   final FontWeight? weight;
   final TextStyle? hintStyle;
-
+  final bool isSuffixIcon;
+  final Widget? iconWidget;
   final int? maxLines;
   final bool readOnly;
   final bool isCommentField;
@@ -25,6 +26,8 @@ class CustomTextField extends StatelessWidget {
   final String obscuringCharacter;
   final String? trailingText;
   final bool isTrailingText;
+  final String? initialValue;
+
   const CustomTextField({
     super.key,
     this.controller,
@@ -47,12 +50,16 @@ class CustomTextField extends StatelessWidget {
     this.isTrailingText = false,
     this.isCommentField = false,
     this.maxLines,
+    this.initialValue,
+    this.isSuffixIcon = true,
+    this.iconWidget,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
+      initialValue: initialValue,
       readOnly: readOnly,
       obscuringCharacter: obscuringCharacter,
       cursorColor: AppColors.jetBlack.withOpacity(0.3),
@@ -76,7 +83,9 @@ class CustomTextField extends StatelessWidget {
                   size: AppSize.medium,
                 ),
               )
-            : suffixIcon,
+            : isSuffixIcon
+                ? suffixIcon
+                : iconWidget,
         prefixIcon: prefixIcon,
         fillColor: fillColor,
         filled: isFilled,

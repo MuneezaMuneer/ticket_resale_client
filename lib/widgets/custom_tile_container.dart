@@ -6,7 +6,8 @@ import 'package:ticket_resale/widgets/widgets.dart';
 
 class CustomTileContainer extends StatelessWidget {
   final double? width;
-  final String? dateTime;
+  final String? date;
+  final String? time;
   final String? posttitle;
   final String? postBy;
   final double? height;
@@ -15,8 +16,9 @@ class CustomTileContainer extends StatelessWidget {
   const CustomTileContainer({
     Key? key,
     this.width,
-    this.dateTime,
+    this.date,
     this.posttitle,
+    this.time,
     this.postBy,
     this.imagePath,
     this.height,
@@ -40,14 +42,15 @@ class CustomTileContainer extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(left: 7, right: 7, top: 10),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: SizedBox(
                           height: constraints.maxHeight * 0.44,
                           width: constraints.maxWidth,
-                          child: Image.asset(
-                            AppImages.concert,
+                          child: Image.network(
+                            imagePath!,
                             fit: BoxFit.cover,
                           )),
                     ),
@@ -66,11 +69,22 @@ class CustomTileContainer extends StatelessWidget {
                             SvgPicture.asset(AppSvgs.clock),
                             Padding(
                               padding: const EdgeInsets.only(left: 10),
-                              child: CustomText(
-                                title: '$dateTime',
-                                color: const Color(0Xff6E4CEE),
-                                size: AppSize.xxsmall,
-                                weight: FontWeight.w600,
+                              child: Row(
+                                children: [
+                                  CustomText(
+                                    title: '$date,',
+                                    color: const Color(0Xff6E4CEE),
+                                    size: AppSize.xxsmall,
+                                    weight: FontWeight.w600,
+                                  ),
+                                  const Gap(6),
+                                  CustomText(
+                                    title: '$time',
+                                    color: const Color(0Xff6E4CEE),
+                                    size: AppSize.xxsmall,
+                                    weight: FontWeight.w600,
+                                  ),
+                                ],
                               ),
                             ),
                           ],
@@ -83,6 +97,7 @@ class CustomTileContainer extends StatelessWidget {
                     CustomText(
                       title: '$posttitle',
                       softWrap: true,
+                      textAlign: TextAlign.start,
                       color: AppColors.jetBlack,
                       size: AppSize.regular,
                       weight: FontWeight.w600,
@@ -138,8 +153,7 @@ class CustomTileContainer extends StatelessWidget {
                     height: 40,
                     child: CustomButton(
                       onPressed: () {
-                        Navigator.pushNamed(
-                            context, AppRoutes.detailFirstScreen);
+                        Navigator.pushNamed(context, AppRoutes.eventScreen);
                       },
                       textColor: AppColors.white,
                       textSize: AppSize.medium,

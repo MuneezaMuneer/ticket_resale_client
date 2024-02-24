@@ -1,14 +1,27 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:provider/provider.dart';
 import 'package:svg_flutter/svg_flutter.dart';
 import 'package:ticket_resale/components/components.dart';
 import 'package:ticket_resale/constants/constants.dart';
+import 'package:ticket_resale/providers/providers.dart';
 import 'package:ticket_resale/utils/utils.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
-class CommentScreen extends StatelessWidget {
+class CommentScreen extends StatefulWidget {
   const CommentScreen({super.key});
+
+  @override
+  State<CommentScreen> createState() => _CommentScreenState();
+}
+
+class _CommentScreenState extends State<CommentScreen> {
+  @override
+  void initState() {
+    Provider.of<SwitchProvider>(context, listen: false).loadPreferences();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +56,19 @@ class CommentScreen extends StatelessWidget {
                           weight: FontWeight.w400,
                           color: AppColors.lightGrey,
                         ),
-                        CustomSwitch()
+                        Consumer<SwitchProvider>(
+                          builder: (context, provider, child) {
+                            return CupertinoSwitch(
+                              activeColor: AppColors.blueViolet,
+                              thumbColor: Colors.white,
+                              trackColor: AppColors.pastelBlue,
+                              value: provider.getComment,
+                              onChanged: (bool value) {
+                                provider.setComment(value);
+                              },
+                            );
+                          },
+                        ),
                       ],
                     )
                   ],
@@ -176,32 +201,6 @@ class CommentScreen extends StatelessWidget {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class CustomSwitch extends StatelessWidget {
-  CustomSwitch({
-    super.key,
-  });
-  ValueNotifier<bool> notificationVisibility = ValueNotifier<bool>(false);
-
-  @override
-  Widget build(BuildContext context) {
-    return Transform.scale(
-      scale: 0.8,
-      child: ValueListenableBuilder<bool>(
-        builder: (context, isVisible, child) => CupertinoSwitch(
-          activeColor: AppColors.blueViolet,
-          thumbColor: Colors.white,
-          trackColor: AppColors.pastelBlue,
-          value: isVisible,
-          onChanged: (bool value) {
-            notificationVisibility.value = !notificationVisibility.value;
-          },
-        ),
-        valueListenable: notificationVisibility,
       ),
     );
   }
