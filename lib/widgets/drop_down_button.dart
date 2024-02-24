@@ -19,24 +19,27 @@ class DropDownWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButton(
-      icon: Padding(
-        padding: const EdgeInsets.only(right: 15),
-        child: Icon(
-          icon,
-          color: AppColors.lightGrey,
+    return SizedBox(
+      width: 90,
+      child: DropdownButton(
+        isExpanded: true,
+        icon: Padding(
+          padding: const EdgeInsets.only(right: 15),
+          child: Icon(
+            icon,
+            color: AppColors.lightGrey,
+          ),
         ),
+        underline: const SizedBox(),
+        alignment: Alignment.topRight,
+        items: itemList.map<DropdownMenuItem<String>>((String item) {
+          return DropdownMenuItem(
+            value: item,
+            child: Text(item),
+          );
+        }).toList(),
+        onChanged: onChanged,
       ),
-      underline: const SizedBox(),
-      alignment: Alignment.center,
-      items: itemList.map<DropdownMenuItem<String>>((String item) {
-        return DropdownMenuItem(
-          alignment: Alignment.center,
-          value: item,
-          child: Center(child: Text(item)),
-        );
-      }).toList(),
-      onChanged: onChanged,
     );
   }
 }

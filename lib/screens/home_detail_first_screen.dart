@@ -2,19 +2,16 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:svg_flutter/svg_flutter.dart';
-
 import 'package:ticket_resale/constants/constants.dart';
+import 'package:ticket_resale/models/event_modal.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
-
 import '../components/components.dart';
 
 class HomeDetailFirstScreen extends StatelessWidget {
-  String id;
-  String festivalName;
+  EventModal eventModal;
   HomeDetailFirstScreen({
     Key? key,
-    required this.id,
-    required this.festivalName,
+    required this.eventModal,
   }) : super(key: key);
 
   @override
@@ -25,7 +22,8 @@ class HomeDetailFirstScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.pastelBlue.withOpacity(0.3),
       body: AppBackground(
-        imagePath: AppImages.concert,
+        networkImage: eventModal.imageUrl,
+        isAssetImage: false,
         isBackButton: true,
         child: Padding(
           padding: const EdgeInsets.only(top: 4),
@@ -39,7 +37,7 @@ class HomeDetailFirstScreen extends StatelessWidget {
                     children: [
                       Expanded(
                         child: CustomText(
-                          title: festivalName,
+                          title: eventModal.festivalName,
                           size: AppSize.large,
                           weight: FontWeight.w600,
                           softWrap: true,
@@ -131,7 +129,8 @@ class HomeDetailFirstScreen extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     CustomText(
-                                      title: '25th Jan 2024, 08:00pm -11:00pm',
+                                      title:
+                                          '${eventModal.date} ${eventModal.time}',
                                       color:
                                           AppColors.lightGrey.withOpacity(0.6),
                                       size: AppSize.xsmall,
@@ -171,7 +170,7 @@ class HomeDetailFirstScreen extends StatelessWidget {
                     color: AppColors.jetBlack,
                   ),
                   CustomText(
-                    title: id,
+                    title: '${eventModal.description}',
                     size: AppSize.medium,
                     softWrap: true,
                     weight: FontWeight.w400,
@@ -197,7 +196,8 @@ class HomeDetailFirstScreen extends StatelessWidget {
                         child: InkWell(
                           onTap: () {
                             Navigator.pushNamed(
-                                context, AppRoutes.detailSecondScreen);
+                                context, AppRoutes.detailSecondScreen,
+                                arguments: eventModal);
                           },
                           child: _tileContainer(
                             title: 'VIP PLUS TICKET AVAILABLE',

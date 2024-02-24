@@ -1,13 +1,21 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:svg_flutter/svg_flutter.dart';
+
 import 'package:ticket_resale/constants/constants.dart';
+import 'package:ticket_resale/models/event_modal.dart';
 import 'package:ticket_resale/utils/app_dialouge.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
+
 import '../components/components.dart';
 
 class HomeDetailSecondScreen extends StatefulWidget {
-  const HomeDetailSecondScreen({super.key});
+  EventModal eventModal;
+  HomeDetailSecondScreen({
+    Key? key,
+    required this.eventModal,
+  }) : super(key: key);
 
   @override
   State<HomeDetailSecondScreen> createState() => _HomeDetailSecondScreenState();
@@ -23,7 +31,8 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
     return Scaffold(
       backgroundColor: AppColors.pastelBlue.withOpacity(0.3),
       body: AppBackground(
-        imagePath: AppImages.concert,
+        networkImage: widget.eventModal.imageUrl,
+        isAssetImage: false,
         isBackButton: true,
         child: Padding(
           padding: const EdgeInsets.only(top: 4),
@@ -36,9 +45,9 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                 children: [
                   Row(
                     children: [
-                      const Expanded(
+                      Expanded(
                         child: CustomText(
-                          title: ' Holiday Music Concert Golbal Village',
+                          title: widget.eventModal.festivalName,
                           size: AppSize.large,
                           weight: FontWeight.w600,
                           softWrap: true,
@@ -110,11 +119,11 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                       backgroundColor: AppColors.white,
                       avatarBg: AppColors.paleGrey,
                       containerBorderColor: AppColors.white,
-                      title: '25th Janurary 2024',
+                      title: widget.eventModal.date,
                       titleColor: AppColors.lightGrey.withOpacity(0.6),
                       titleSize: AppSize.xsmall,
                       titleWeight: FontWeight.w400,
-                      subTitle: '8:00 AM - 12:00 AM',
+                      subTitle: widget.eventModal.time,
                       subTitleColor: AppColors.jetBlack,
                       subTitleSize: AppSize.small,
                       subTitleWeight: FontWeight.w600,
@@ -126,9 +135,8 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                     weight: FontWeight.w600,
                     color: AppColors.jetBlack,
                   ),
-                  const CustomText(
-                    title:
-                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ',
+                  CustomText(
+                    title: widget.eventModal.description,
                     size: AppSize.medium,
                     softWrap: true,
                     weight: FontWeight.w400,
@@ -408,7 +416,7 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                             fit: BoxFit.cover,
                           )),
                 Padding(
-                  padding: const EdgeInsets.only(left: 8, top: 13),
+                  padding: const EdgeInsets.only(left: 8, top: 10),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

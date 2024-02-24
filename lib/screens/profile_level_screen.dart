@@ -1,13 +1,21 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:svg_flutter/svg_flutter.dart';
+
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/db_services/db_services.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
 class ProfileLevelScreen extends StatefulWidget {
-  const ProfileLevelScreen({super.key});
+  bool isBackButton;
+  ProfileLevelScreen({
+    Key? key,
+    required this.isBackButton,
+  }) : super(key: key);
 
   @override
   State<ProfileLevelScreen> createState() => _ProfileLevelScreenState();
@@ -24,12 +32,13 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    final double height = size.height;
+   // final double height = size.height;
     final double width = size.width;
     return Scaffold(
       //  backgroundColor: AppColors.white.withOpacity(0.2),
-      appBar: const CustomAppBar(
+      appBar: CustomAppBar(
         title: 'Profile Level',
+        isBackButton: widget.isBackButton,
       ),
       body: Column(
         children: [
@@ -39,14 +48,22 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
           Stack(
             children: [
               SizedBox(
-                height: 140,
-                width: 140,
-                child: CircleAvatar(
-                    backgroundImage: photoUrl != null
-                        ? NetworkImage("$photoUrl")
-                        : const AssetImage(AppImages.profileImage)
-                            as ImageProvider),
-              ),
+                  height: 140,
+                  width: 140,
+                  child: photoUrl != null
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.circular(100),
+                          child: CachedNetworkImage(
+                            imageUrl: "$photoUrl",
+                            placeholder: (context, url) =>
+                                const CupertinoActivityIndicator(
+                              color: AppColors.blueViolet,
+                            ),
+                            fit: BoxFit.cover,
+                          ),
+                        )
+                      : const CircleAvatar(
+                          backgroundImage: AssetImage(AppImages.profileImage))),
               Positioned(
                   left: 90, top: 70, child: SvgPicture.asset(AppSvgs.levelOne))
             ],

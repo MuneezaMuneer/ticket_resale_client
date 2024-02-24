@@ -5,12 +5,12 @@ import 'package:svg_flutter/svg.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/db_services/firestore_services.dart';
 import 'package:ticket_resale/models/models.dart';
-import 'package:ticket_resale/screens/home_detail_first_screen.dart';
 import 'package:ticket_resale/utils/app_utils.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
 class EventScreen extends StatefulWidget {
-  const EventScreen({super.key});
+  final bool isBackButton;
+  const EventScreen({super.key, required this.isBackButton});
 
   @override
   State<EventScreen> createState() => _EventScreenState();
@@ -31,10 +31,11 @@ class _EventScreenState extends State<EventScreen> {
     Size size = MediaQuery.of(context).size;
     final double height = size.height;
     final double width = size.width;
-    print('The Width IS : $width');
+
     return Scaffold(
-      appBar: const CustomAppBar(
+      appBar: CustomAppBar(
         title: 'Event Video Player',
+        isBackButton: widget.isBackButton,
       ),
       backgroundColor: AppColors.paleGrey,
       body: Column(
@@ -53,7 +54,7 @@ class _EventScreenState extends State<EventScreen> {
                         builder: (context, value, child) {
                           return CustomTextField(
                             hintStyle: const TextStyle(color: AppColors.silver),
-                            hintText: 'Search Event & Tickets',
+                            hintText: 'Search Events, Tickets, or City',
                             controller: searchController,
                             fillColor: AppColors.white,
                             isFilled: true,
@@ -129,7 +130,7 @@ class _EventScreenState extends State<EventScreen> {
                                         mainAxisSpacing: 10,
                                         crossAxisSpacing: 10,
                                         crossAxisCount: 2,
-                                        mainAxisExtent: 230),
+                                        mainAxisExtent: 240),
                                 itemCount: data.length,
                                 itemBuilder: (context, index) {
                                   return Container(
@@ -218,9 +219,8 @@ class _EventScreenState extends State<EventScreen> {
                                                     left: 3),
                                                 child: CustomText(
                                                   softWrap: true,
-                                                  title: AppUtils
-                                                      .limitTextTo32Characters(
-                                                          '${data[index].festivalName}'),
+                                                  title: AppUtils.limitTo42Char(
+                                                      '${data[index].festivalName}'),
                                                   color: AppColors.jetBlack,
                                                   size: AppSize.xsmall,
                                                   weight: FontWeight.w600,
@@ -284,19 +284,20 @@ class _EventScreenState extends State<EventScreen> {
                                             width: width,
                                             child: CustomButton(
                                               onPressed: () {
-                                                // Navigator.pushNamed(context,
-                                                //     AppRoutes.detailFirstScreen);
-                                                Navigator.push(context,
-                                                    MaterialPageRoute(
-                                                  builder: (context) {
-                                                    return HomeDetailFirstScreen(
-                                                      id: data[index]
-                                                          .description!,
-                                                      festivalName: data[index]
-                                                          .festivalName!,
-                                                    );
-                                                  },
-                                                ));
+                                                EventModal eventModal =
+                                                    EventModal(
+                                                  description:
+                                                      data[index].description!,
+                                                  festivalName:
+                                                      data[index].festivalName!,
+                                                  imageUrl:
+                                                      data[index].imageUrl!,
+                                                  date: data[index].date!,
+                                                  time: data[index].time!,
+                                                );
+                                                Navigator.pushNamed(context,
+                                                    AppRoutes.detailFirstScreen,
+                                                    arguments: eventModal);
                                               },
                                               textColor: AppColors.white,
                                               textSize: AppSize.regular,

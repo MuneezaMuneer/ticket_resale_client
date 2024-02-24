@@ -9,8 +9,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
   final Widget? child;
   final bool isNotification;
+  final bool isBackButton;
   const CustomAppBar(
-      {super.key, this.title, this.child, this.isNotification = true});
+      {super.key,
+      this.title,
+      this.child,
+      this.isNotification = true,
+      this.isBackButton = true});
 
   @override
   Widget build(BuildContext context) {
@@ -37,15 +42,16 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               child: Row(
                 children: [
                   GestureDetector(
-                    onTap: () {
-//                      Navigator.pop(context);
-                    },
-                    child: const Icon(
-                      Icons.arrow_back_ios,
-                      color: AppColors.white,
-                      size: 18,
-                    ),
-                  ),
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: isBackButton
+                          ? const Icon(
+                              Icons.arrow_back_ios,
+                              color: AppColors.white,
+                              size: 18,
+                            )
+                          : const SizedBox.shrink()),
                   const Gap(10),
                   CustomText(
                     title: '$title',

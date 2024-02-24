@@ -365,6 +365,7 @@ class _TicketScreenState extends State<TicketScreen> {
                   CustomTextField(
                     hintText: 'Enter Ticket Price',
                     controller: priceController,
+                    keyBoardType: TextInputType.number,
                     hintStyle: _buildHintStyle(),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -434,9 +435,13 @@ class _TicketScreenState extends State<TicketScreen> {
 
                             if (imageUrl != null && imageUrl != '') {
                               await FireStoreServices.uploadEventData(
-                                  eventModal: eventModal).then((value) {
-                                    imagePickerProvider.setImageBytes = '';
-                                  });
+                                      eventModal: eventModal)
+                                  .then((value) {
+                                imagePickerProvider.setImageUrl = '';
+                              }).then((value) {
+                                AppUtils.toastMessage(
+                                    'Event Created Successfully');
+                              });
                               notifier.value = false;
                             }
                           }

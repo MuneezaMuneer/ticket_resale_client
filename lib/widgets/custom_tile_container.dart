@@ -153,7 +153,11 @@ class CustomTileContainer extends StatelessWidget {
                     height: 40,
                     child: CustomButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, AppRoutes.eventScreen);
+                        Navigator.pushNamed(
+                          context,
+                          AppRoutes.eventScreen,
+                          arguments: true,
+                        );
                       },
                       textColor: AppColors.white,
                       textSize: AppSize.medium,

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:ticket_resale/models/event_modal.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 import '../constants/constants.dart';
 import '../screens/auth_screens/signin_screen.dart';
 import '../screens/auth_screens/signup_screen.dart';
 import '../screens/screens.dart';
-
 
 Route onGenerateRoute(RouteSettings settings) {
   if (settings.name == AppRoutes.logIn) {
@@ -26,31 +26,34 @@ Route onGenerateRoute(RouteSettings settings) {
   } else if (settings.name == AppRoutes.privacyScreen) {
     return animatePage(const PrivacyPolicy());
   }
-  // else if (settings.name == AppRoutes.detailFirstScreen) {
-  //   return animatePage(HomeDetailFirstScreen());
-  // }
+  else if (settings.name == AppRoutes.detailFirstScreen) {
+    final eventModal = settings.arguments as EventModal;
+    return animatePage(HomeDetailFirstScreen(eventModal: eventModal));
+  }
   else if (settings.name == AppRoutes.detailSecondScreen) {
-    return animatePage(const HomeDetailSecondScreen());
-  } else if (settings.name == AppRoutes.ticketScreen) {
+    final eventModal = settings.arguments as EventModal;
+    return animatePage( HomeDetailSecondScreen(eventModal: eventModal,));
+  }
+  else if (settings.name == AppRoutes.ticketScreen) {
     return animatePage(const TicketScreen());
   } else if (settings.name == AppRoutes.eventScreen) {
-    return animatePage(const EventScreen());
+    final isBackButton = settings.arguments as bool;
+    return animatePage(EventScreen(isBackButton: isBackButton));
   } else if (settings.name == AppRoutes.connectScreen) {
     return animatePage(const PaymentConnectScreen());
   } else if (settings.name == AppRoutes.disconnectScreen) {
     return animatePage(const PaymentDisconnectScreen());
   } else if (settings.name == AppRoutes.profileScreen) {
     return animatePage(const ProfileScreen());
-  } 
-  else if (settings.name == AppRoutes.termOfUseScreen) {
+  } else if (settings.name == AppRoutes.termOfUseScreen) {
     return animatePage(const TermsOfUseScreen());
-  } 
-  else if (settings.name == AppRoutes.profileSettings) {
+  } else if (settings.name == AppRoutes.profileSettings) {
     return animatePage(const ProfileSettings());
   } else if (settings.name == AppRoutes.notificationScreen) {
-    return animatePage(const NotificationScreen());
+    return animatePage(NotificationScreen());
   } else if (settings.name == AppRoutes.profileLevelScreen) {
-    return animatePage(const ProfileLevelScreen());
+    final isBackButton = settings.arguments as bool;
+    return animatePage(ProfileLevelScreen(isBackButton: isBackButton));
   } else {
     return animatePage(const SplashScreen());
   }

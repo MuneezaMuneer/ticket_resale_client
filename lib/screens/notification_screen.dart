@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:ticket_resale/constants/constants.dart';
@@ -5,58 +7,53 @@ import 'package:ticket_resale/widgets/custom_appbar.dart';
 import 'package:ticket_resale/widgets/custom_text.dart';
 
 class NotificationScreen extends StatelessWidget {
-  const NotificationScreen({super.key});
-
+  NotificationScreen({super.key});
+  bool isRead = false;
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    final double height = size.height;
-    final double width = size.width;
+   // Size size = MediaQuery.of(context).size;
+    // final double height = size.height;
+    // final double width = size.width;
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 230, 234, 248),
+      appBar: const CustomAppBar(
+        title: 'Notification',
+        isNotification: false,
+      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const CustomAppBar(
-            title: 'Notification',
-            isNotification: false,
+          const Gap(20),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 30,
+            ),
+            child: Text(
+              'Unread',
+              style: _textStyle(),
+            ),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Gap(20),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 30,
-                ),
-                child: Text(
-                  'Unread',
-                  style: _textStyle(),
-                ),
-              ),
-              const Gap(20),
-              Container(
-                  height: height * 0.32,
-                  width: width,
-                  decoration: BoxDecoration(color: AppColors.white, boxShadow: [
-                    BoxShadow(
-                        color: AppColors.blueViolet.withOpacity(0.4),
-                        blurRadius: 10)
-                  ]),
-                  child: _builderWidget(FontWeight.w600, AppColors.yellow)),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(30, 20, 30, 0),
-                child: Text(
-                  'Read',
-                  style: _textStyle(),
-                ),
-              ),
-              SizedBox(
-                  height: height * 0.36,
-                  child:
-                      _builderWidget(FontWeight.w300, AppColors.vibrantGreen))
-            ],
+          const Gap(20),
+          Expanded(
+            child: Container(
+                decoration: BoxDecoration(color: AppColors.white, boxShadow: [
+                  BoxShadow(
+                      color: AppColors.blueViolet.withOpacity(0.4),
+                      blurRadius: 10)
+                ]),
+                child: _builderWidget(FontWeight.w600, AppColors.yellow)),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(30, 20, 30, 0),
+            child: Text(
+              'Read',
+              style: _textStyle(),
+            ),
+          ),
+          const Gap(20),
+          Expanded(
+            child: _builderWidget(FontWeight.w300, AppColors.vibrantGreen),
           )
         ],
       ),
@@ -65,51 +62,43 @@ class NotificationScreen extends StatelessWidget {
 
   Widget _builderWidget(final FontWeight weight, final Color containerColor) {
     return ListView.builder(
-      padding: const EdgeInsets.only(top: 10),
       itemCount: 5,
+      shrinkWrap: true,
       itemBuilder: (context, index) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-          child: Row(
-            children: [
-              Container(
-                height: 10,
-                width: 10,
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle, color: containerColor),
+        return ListTile(
+            leading: Container(
+              height: 10,
+              width: 10,
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: index.isEven ? Colors.red : Colors.blue),
+            ),
+            title: Row(children: [
+              Expanded(
+                flex: 2,
+                child: CustomText(
+                  title: 'Posted! ',
+                  size: AppSize.medium,
+                  weight: weight,
+                  color: AppColors.jetBlack,
+                ),
               ),
-              const Gap(20),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      CustomText(
-                        title: 'Posted! ',
-                        size: AppSize.medium,
-                        weight: weight,
-                        color: AppColors.jetBlack,
-                      ),
-                      CustomText(
-                        title: 'your post successfully uploaded',
-                        size: AppSize.medium,
-                        weight: FontWeight.w300,
-                        color: AppColors.jetBlack.withOpacity(0.7),
-                      )
-                    ],
-                  ),
-                  const Gap(3),
-                  CustomText(
-                    title: 'Today at 9:34 PM',
-                    size: AppSize.small,
-                    weight: FontWeight.w400,
-                    color: AppColors.jetBlack.withOpacity(0.4),
-                  )
-                ],
+              Expanded(
+                flex: 8,
+                child: CustomText(
+                  title: 'your post successfully uploaded',
+                  size: AppSize.medium,
+                  weight: FontWeight.w300,
+                  color: AppColors.jetBlack.withOpacity(0.7),
+                ),
               )
-            ],
-          ),
-        );
+            ]),
+            subtitle: CustomText(
+              title: 'Today at 9:34 PM',
+              size: AppSize.small,
+              weight: FontWeight.w400,
+              color: AppColors.jetBlack.withOpacity(0.4),
+            ));
       },
     );
   }

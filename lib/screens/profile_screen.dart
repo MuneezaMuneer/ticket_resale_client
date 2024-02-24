@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -36,6 +38,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       backgroundColor: AppColors.pastelBlue.withOpacity(0.3),
       appBar: const CustomAppBar(
         title: 'Profile',
+        isBackButton: false,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -46,14 +49,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Stack(
               children: [
                 SizedBox(
-                  height: 140,
-                  width: 140,
-                  child: CircleAvatar(
-                      backgroundImage: photoUrl != null
-                          ? NetworkImage("$photoUrl")
-                          : const AssetImage(AppImages.profileImage)
-                              as ImageProvider),
-                ),
+                    height: 140,
+                    width: 140,
+                    child: photoUrl != null
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(100),
+                            child: CachedNetworkImage(
+                              imageUrl: "$photoUrl",
+                              placeholder: (context, url) =>
+                                  const CupertinoActivityIndicator(
+                                color: AppColors.blueViolet,
+                              ),
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                        : const CircleAvatar(
+                            backgroundImage:
+                                AssetImage(AppImages.profileImage))),
                 Positioned(
                     left: 90,
                     top: 70,
@@ -94,7 +106,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   GestureDetector(
                     onTap: () {
                       Navigator.pushNamed(
-                          context, AppRoutes.profileLevelScreen);
+                        context,
+                        AppRoutes.profileLevelScreen,
+                        arguments: true,
+                      );
                     },
                     child: const CustomProfileRow(
                       svgImage: AppSvgs.level,

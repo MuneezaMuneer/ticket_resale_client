@@ -22,6 +22,23 @@ class AppUtils {
     }
   }
 
+  static String getGreeting() {
+    DateTime now = DateTime.now();
+    int hour = now.hour;
+
+    if (hour >= 6 && hour < 12) {
+      return 'Good Morning,';
+    } else if (hour >= 12 && hour < 14) {
+      return 'Good Noon,';
+    } else if (hour >= 14 && hour < 16) {
+      return 'Good Afternoon,';
+    } else if (hour >= 16 && hour < 21) {
+      return 'Good Evening,';
+    } else {
+      return 'Good Night,';
+    }
+  }
+
   static void toastMessage(String message) {
     Fluttertoast.showToast(
         msg: message,
@@ -38,9 +55,17 @@ class AppUtils {
     return formattedDate;
   }
 
-  static String limitTextTo32Characters(String inputText) {
+  static String limitTo42Char(String inputText) {
     if (inputText.length > 43) {
       return '${inputText.substring(0, 43)}...';
+    } else {
+      return inputText;
+    }
+  }
+
+  static String limitTo33Char(String inputText) {
+    if (inputText.length > 33) {
+      return '${inputText.substring(0, 33)}...';
     } else {
       return inputText;
     }

@@ -45,7 +45,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     double height = size.height;
-    double width = size.width;
+   // double width = size.width;
     return Scaffold(
       body: AppBackground(
         imagePath: AppImages.authImage,
@@ -194,11 +194,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   CustomTextField(
                     controller: instaController,
                     hintStyle: const TextStyle(color: AppColors.silver),
-                    hintText: 'Instagram Profile Url',
+                    hintText: 'Instagram @',
                     keyBoardType: TextInputType.emailAddress,
                     validator: (url) {
                       if (url!.isEmpty) {
-                        return 'Please enter instagram url';
+                        return 'Please enter valid instagram';
                       } else {
                         return null;
                       }
@@ -290,13 +290,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   email: gmailController.text,
                                   password: passwordController.text,
                                   context: context,
-                                ).then((value) {
-                                  AuthServices.storeUserData(
-                                          userModel: userModel)
-                                      .then((value) {
-                                    Navigator.pushNamed(
-                                        context, AppRoutes.navigationScreen);
-                                  });
+                                ).then((userCredentials) {
+                                  if (userCredentials != null) {
+                                    AuthServices.storeUserData(
+                                            userModel: userModel)
+                                        .then((value) {
+                                      Navigator.pushNamed(
+                                          context, AppRoutes.navigationScreen);
+                                    });
+                                  }
 
                                   loading.value = false;
                                 });

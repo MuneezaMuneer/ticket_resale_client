@@ -10,7 +10,7 @@ class SwitchProvider extends ChangeNotifier {
 
   Future<void> loadPreferences() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    _notification = prefs.getBool('notification') ?? false;
+    _notification = prefs.getBool('notification') ?? true;
     _comment = prefs.getBool('comment') ?? false;
     notifyListeners();
   }

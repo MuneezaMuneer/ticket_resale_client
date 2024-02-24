@@ -1,5 +1,7 @@
 import 'package:avatar_stack/avatar_stack.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:svg_flutter/svg.dart';
@@ -23,16 +25,11 @@ class _HomeScreenState extends State<HomeScreen> {
   TextEditingController searchController = TextEditingController();
   ValueNotifier<String> searchNotifier = ValueNotifier<String>('');
   late Stream<List<EventModal>> displayEventData;
+
   @override
   void initState() {
-    try {
-      if (FirebaseAuth.instance.currentUser != null) {
-        displayName = AuthServices.getCurrentUser.displayName ?? '';
-        photoUrl = FirebaseAuth.instance.currentUser!.photoURL ?? '';
-      }
-    } catch (e) {
-      print('Error in initState: $e');
-    }
+    displayName = AuthServices.getCurrentUser.displayName ?? '';
+    photoUrl = FirebaseAuth.instance.currentUser!.photoURL ?? '';
     displayEventData = FireStoreServices.fetchEventData();
     super.initState();
   }
@@ -74,21 +71,32 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         Row(
                           children: [
-                            CircleAvatar(
-                              backgroundImage:
-                                  photoUrl != null && photoUrl!.isNotEmpty
-                                      ? NetworkImage(photoUrl!)
-                                      : const AssetImage(AppImages.profileImage)
-                                          as ImageProvider,
-                              radius: 25,
-                            ),
+                            SizedBox(
+                                height: 50,
+                                width: 50,
+                                child: photoUrl != null && photoUrl!.isNotEmpty
+                                    ? ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                        child: CachedNetworkImage(
+                                          imageUrl: "$photoUrl",
+                                          placeholder: (context, url) =>
+                                              const CupertinoActivityIndicator(
+                                            color: AppColors.blueViolet,
+                                          ),
+                                          fit: BoxFit.cover,
+                                        ),
+                                      )
+                                    : const CircleAvatar(
+                                        backgroundImage: AssetImage(
+                                            AppImages.profileImage))),
                             Padding(
                               padding: const EdgeInsets.only(left: 10),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const CustomText(
-                                    title: 'Good Morning,',
+                                  CustomText(
+                                    title: AppUtils.getGreeting(),
                                     color: AppColors.white,
                                     weight: FontWeight.w400,
                                     size: AppSize.small,
@@ -159,7 +167,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         valueListenable: searchNotifier,
                         builder: (context, value, child) {
                           return CustomTextField(
-                            hintText: 'Search Event & Tickets',
+                            hintText: 'Search Events, Tickets, or City',
                             hintStyle: const TextStyle(color: AppColors.silver),
                             fillColor: AppColors.white,
                             controller: searchController,
@@ -208,68 +216,96 @@ class _HomeScreenState extends State<HomeScreen> {
                     weight: FontWeight.w600,
                   ),
                   const Gap(15),
-                  Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Image.asset(AppImages.homeConcert)),
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: SizedBox(
-                            width: 150,
-                            child: AvatarStack(
-                              height: 50,
-                              avatars: [
-                                for (var n = 0; n < 17; n++)
-                                  const AssetImage(AppImages.profile),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        left: 18,
-                        bottom: -35,
-                        child: Container(
-                          height: height * 0.1,
-                          width: width * 0.8,
-                          decoration: BoxDecoration(
-                              border: Border.all(color: AppColors.pastelBlue),
-                              color: AppColors.white,
-                              borderRadius: BorderRadius.circular(10)),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Padding(
-                                padding: EdgeInsets.only(top: 10, left: 15),
-                                child: CustomText(
-                                  title: 'Event Name Here',
-                                  color: AppColors.jetBlack,
-                                  size: 15,
-                                  weight: FontWeight.w700,
+                  StreamBuilder(
+                    stream: displayEventData,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        final data = snapshot.data;
+                        data!.sort((a, b) => a.date!.compareTo(b.date!));
+
+                        final nearestEvent = data.first;
+                        return Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            ClipRRect(
+                                borderRadius: BorderRadius.circular(20),
+                                child: SizedBox(
+                                    height: 200,
+                                    width: width,
+                                    child: Image.network(
+                                      '${nearestEvent.imageUrl}',
+                                      fit: BoxFit.cover,
+                                    ))),
+                            Align(
+                              alignment: Alignment.topLeft,
+                              child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: SizedBox(
+                                  width: 150,
+                                  child: AvatarStack(
+                                    height: 50,
+                                    avatars: [
+                                      for (var n = 1; n < data.length; n++)
+                                        NetworkImage('${data[n].imageUrl}')
+                                    ],
+                                  ),
                                 ),
                               ),
-                              const Gap(5),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 10),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                            ),
+                            Positioned(
+                              left: 18,
+                              bottom: -35,
+                              child: Container(
+                                height: height * 0.1,
+                                width: width * 0.8,
+                                decoration: BoxDecoration(
+                                    border:
+                                        Border.all(color: AppColors.pastelBlue),
+                                    color: AppColors.white,
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    rowText('25th jan - 31st jan'),
-                                    rowText('8:00 PM - 11:00 PM')
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 10, left: 15),
+                                      child: CustomText(
+                                        title: AppUtils.limitTo33Char(
+                                            '${nearestEvent.festivalName}'),
+                                        color: AppColors.jetBlack,
+                                        size: 15,
+                                        weight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    const Gap(5),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          rowText('${nearestEvent.date}'),
+                                          rowText('${nearestEvent.time}')
+                                        ],
+                                      ),
+                                    )
                                   ],
                                 ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
+                              ),
+                            ),
+                          ],
+                        );
+                      } else {
+                        return const Center(
+                            child: Column(
+                          children: [
+                            Gap(40),
+                            CupertinoActivityIndicator(),
+                          ],
+                        ));
+                      }
+                    },
                   ),
                   SizedBox(
                     height: height * 0.065,
@@ -335,7 +371,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          Navigator.pushNamed(context, AppRoutes.eventScreen);
+                          Navigator.pushNamed(
+                            context,
+                            AppRoutes.eventScreen,
+                            arguments: true,
+                          );
                         },
                         child: const Padding(
                           padding: EdgeInsets.only(right: 4),
@@ -383,9 +423,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                         date: AppUtils.dateFormat(
                                             data[index].date!),
                                         time: data[index].time,
-                                        posttitle:
-                                            AppUtils.limitTextTo32Characters(
-                                                '${data[index].festivalName}'),
+                                        posttitle: AppUtils.limitTo42Char(
+                                            '${data[index].festivalName}'),
                                         postBy: 'Jacob Jones',
                                         imagePath: data[index].imageUrl,
                                       ),

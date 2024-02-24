@@ -157,7 +157,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     },
                   ),
                   SizedBox(
-                    height: height * 0.2,
+                    height: height * 0.15,
                   ),
                   InkWell(
                     onTap: () {
