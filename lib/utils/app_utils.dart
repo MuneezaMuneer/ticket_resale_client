@@ -103,4 +103,12 @@ class AppUtils {
       bottomPickerTheme: BottomPickerTheme.plumPlate,
     ).show(context);
   }
+
+  static String textTo32Characters(String inputText) {
+    if (inputText.length > 15) {
+      return '${inputText.substring(0, 15)}...';
+    } else {
+      return inputText;
+    }
+  }
 }
