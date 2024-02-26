@@ -6,6 +6,8 @@ import 'package:provider/provider.dart';
 import 'package:ticket_resale/admin_panel/splash_screen_admin.dart';
 
 import 'package:ticket_resale/firebase_options.dart';
+import 'package:ticket_resale/providers/drop_down_provider.dart';
+
 import 'package:ticket_resale/providers/providers.dart';
 
 import 'package:ticket_resale/utils/app_routes.dart';
@@ -30,6 +32,9 @@ class TicketResale extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider<DropDownProvider>(
+          create: (context) => DropDownProvider(),
+        ),
         ChangeNotifierProvider<NavigationProvider>(
             create: (context) => NavigationProvider()),
         ChangeNotifierProvider<FeedbackProvider>(

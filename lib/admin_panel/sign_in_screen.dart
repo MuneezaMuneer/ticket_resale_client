@@ -19,6 +19,12 @@ class _SignInAdminState extends State<SignInAdmin> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   ValueNotifier<bool> passwordVisibility = ValueNotifier<bool>(true);
   ValueNotifier<bool> indicator = ValueNotifier<bool>(false);
+  @override
+  void initState() {
+    emailController.text = 'test@gmail.com';
+    passwordController.text = '123456';
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

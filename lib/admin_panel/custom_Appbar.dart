@@ -1,11 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 import 'package:svg_flutter/svg_flutter.dart';
 import 'package:ticket_resale/admin_panel/sign_in_screen.dart';
-
 import '../components/components.dart';
 import '../constants/constants.dart';
 import '../providers/search_provider.dart';

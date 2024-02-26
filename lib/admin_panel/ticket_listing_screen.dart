@@ -1,11 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 import 'package:ticket_resale/admin_panel/custom_appbar.dart';
-
+import 'package:ticket_resale/admin_panel/drop_down_menu.dart';
 import 'package:ticket_resale/admin_panel/firestore_services.dart';
 import 'package:ticket_resale/constants/constants.dart';
+import '../providers/drop_down_provider.dart';
 import '../providers/search_provider.dart';
 import '../utils/utils.dart';
 import '../widgets/widgets.dart';
@@ -19,12 +21,12 @@ class TicketListing extends StatefulWidget {
 }
 
 late Stream<List<EventModelAdmin?>> fetchEvents;
+ValueNotifier<String> searchNotifier = ValueNotifier('');
+TextEditingController searchcontroller = TextEditingController();
+late List<EventModelAdmin> userData = [];
+late SearchProvider searchProvider;
 
 class _TicketListingState extends State<TicketListing> {
-  ValueNotifier<String> searchNotifier = ValueNotifier('');
-  TextEditingController searchcontroller = TextEditingController();
-  late List<EventModelAdmin> userData = [];
-  late SearchProvider searchProvider;
   @override
   void initState() {
     fetchEvents = FirestoreServices.fetchEvents();
@@ -52,13 +54,17 @@ class _TicketListingState extends State<TicketListing> {
                   child: CustomAppBarAdmin()),
           body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             const Gap(30),
-            const Padding(
-              padding: EdgeInsets.only(left: 20),
-              child: CustomText(
-                title: 'Ticket listing',
-                weight: FontWeight.w600,
-                size: AppSize.regular,
-              ),
+            const Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                CustomText(
+                  title: 'Ticket listing',
+                  weight: FontWeight.w600,
+                  size: AppSize.regular,
+                ),
+                Gap(50),
+                CustomDropDown()
+              ],
             ),
             const Gap(25),
             Expanded(
@@ -100,9 +106,15 @@ class _TicketListingState extends State<TicketListing> {
                                 List<EventModelAdmin?> eventData = query.isEmpty
                                     ? snapshot.data!
                                     : snapshot.data!
-                                        .where((data) => data!.festivalName!
-                                            .toLowerCase()
-                                            .contains(query.toLowerCase()))
+                                        .where((data) =>
+                                            data!.festivalName!
+                                                .toLowerCase()
+                                                .contains(
+                                                    query.toLowerCase()) ||
+                                            // data.sellerName!.toLowerCase().contains(query.toLowerCase()) ||
+                                            data.ticketType!
+                                                .toLowerCase()
+                                                .contains(query.toLowerCase()))
                                         .toList();
                                 if (eventData.isNotEmpty) {
                                   return DataTable(
@@ -131,11 +143,13 @@ class _TicketListingState extends State<TicketListing> {
                                               entry) {
                                         EventModelAdmin? eventData =
                                             entry.value;
+                                        int id = entry.key;
                                         final bool isOdd = entry.key.isOdd;
                                         final Color rowColor = isOdd
                                             ? AppColors.lightPurple
                                             : AppColors.white;
-
+                                        print(
+                                            'User id is:       ${eventData!.userID}');
                                         return DataRow(
                                           color: MaterialStateProperty
                                               .resolveWith<Color?>(
@@ -151,8 +165,10 @@ class _TicketListingState extends State<TicketListing> {
                                                 eventData.ticketType!),
                                             _createDataCell(eventData.date!),
                                             _createDataCell(eventData.price!),
-                                            DataCell(
-                                                createTableCell('Pending')),
+                                            DataCell(createTableCell(
+                                                eventData.status!,
+                                                eventData.id!,
+                                                eventData.status!)),
                                           ],
                                         );
                                       }).toList());
@@ -208,33 +224,39 @@ DataColumn _buildTableCell(String text) {
   );
 }
 
-Widget createTableCell(String cellText) {
+Widget createTableCell(
+    String cellText, String documentId, String currentStatus) {
   Color backgroundColor;
   Color textColor = Colors.white;
 
   if (cellText == 'Active') {
     backgroundColor = AppColors.green;
-  } else if (cellText == 'Disabled') {
+  } else if (cellText == 'Disable') {
     backgroundColor = AppColors.red;
   } else {
     backgroundColor = AppColors.blue;
   }
 
   return TableCell(
-    child: Container(
-      height: 30,
-      width: 100,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(38),
-        color: backgroundColor,
-      ),
-      child: Center(
-        child: Text(
-          cellText,
-          style: TextStyle(
-            color: textColor,
-            fontSize: AppSize.small,
-            fontWeight: FontWeight.w600,
+    child: GestureDetector(
+      onTap: () {
+        FirestoreServices.updateStatus(documentId, currentStatus);
+      },
+      child: Container(
+        height: 30,
+        width: 100,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(38),
+          color: backgroundColor,
+        ),
+        child: Center(
+          child: Text(
+            cellText,
+            style: TextStyle(
+              color: textColor,
+              fontSize: AppSize.small,
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ),
       ),

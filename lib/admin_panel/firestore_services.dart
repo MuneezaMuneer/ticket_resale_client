@@ -21,8 +21,20 @@ class FirestoreServices {
         .snapshots()
         .map((query) {
       return query.docs
-          .map((doc) => EventModelAdmin.fromMap(doc.data()))
+          .map((doc) => EventModelAdmin.fromMap(doc.data(), doc.id))
           .toList();
     });
+  }
+
+  static Future<void> updateStatus(
+      String documentId, String currentStatus) async {
+    String newValue = (currentStatus == 'Active') ? 'Disable' : 'Active';
+    try {
+      final docRef =
+          FirebaseFirestore.instance.collection('event_ticket').doc(documentId);
+      await docRef.update({'status': newValue});
+    } catch (e) {
+      print('Error updating status: $e');
+    }
   }
 }
