@@ -1,15 +1,13 @@
 import 'package:avatar_stack/avatar_stack.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:svg_flutter/svg.dart';
+import 'package:ticket_resale/components/home_app_bar.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/db_services/db_services.dart';
 import 'package:ticket_resale/models/models.dart';
 import 'package:ticket_resale/utils/app_utils.dart';
-
 import 'package:ticket_resale/widgets/widgets.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -20,16 +18,16 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String? displayName;
-  String? photoUrl;
+  // String? displayName;
+  // String? photoUrl;
   TextEditingController searchController = TextEditingController();
   ValueNotifier<String> searchNotifier = ValueNotifier<String>('');
   late Stream<List<EventModal>> displayEventData;
 
   @override
   void initState() {
-    displayName = AuthServices.getCurrentUser.displayName ?? '';
-    photoUrl = FirebaseAuth.instance.currentUser!.photoURL ?? '';
+    // displayName = AuthServices.getCurrentUser.displayName ?? '';
+    // photoUrl = FirebaseAuth.instance.currentUser!.photoURL ?? '';
     displayEventData = FireStoreServices.fetchEventData();
     super.initState();
   }
@@ -49,166 +47,21 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.pastelBlue.withOpacity(0.3),
+      appBar: HomeAppBar(
+        controller: searchController,
+        setSearchQuery: (String searchQuery) {
+          searchNotifier.value = searchQuery;
+        },
+      ),
       body: SingleChildScrollView(
         child: Stack(
           children: [
-            Container(
-              height: height * 0.27,
-              width: width,
-              decoration: BoxDecoration(
-                  gradient: customGradient,
-                  borderRadius: const BorderRadius.only(
-                      bottomLeft: Radius.circular(40),
-                      bottomRight: Radius.circular(40))),
-              child: Padding(
-                padding: const EdgeInsets.only(
-                    left: 20, right: 20, top: 40, bottom: 0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            SizedBox(
-                                height: 50,
-                                width: 50,
-                                child: photoUrl != null && photoUrl!.isNotEmpty
-                                    ? ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                        child: CachedNetworkImage(
-                                          imageUrl: "$photoUrl",
-                                          placeholder: (context, url) =>
-                                              const CupertinoActivityIndicator(
-                                            color: AppColors.blueViolet,
-                                          ),
-                                          fit: BoxFit.cover,
-                                        ),
-                                      )
-                                    : const CircleAvatar(
-                                        backgroundImage: AssetImage(
-                                            AppImages.profileImage))),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 10),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  CustomText(
-                                    title: AppUtils.getGreeting(),
-                                    color: AppColors.white,
-                                    weight: FontWeight.w400,
-                                    size: AppSize.small,
-                                  ),
-                                  CustomText(
-                                    title: displayName != null
-                                        ? displayName ?? ''
-                                        : '',
-                                    color: AppColors.white,
-                                    weight: FontWeight.w700,
-                                    size: AppSize.regular,
-                                  )
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.pushNamed(
-                                context, AppRoutes.notificationScreen);
-                          },
-                          child: Container(
-                              height: 40,
-                              width: 40,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: AppColors.white.withOpacity(0.1),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: SvgPicture.asset(AppSvgs.sms),
-                              )),
-                        )
-                      ],
-                    ),
-                    const Gap(10),
-                    const CustomText(
-                      title: 'Discover Amazing',
-                      color: AppColors.white,
-                      size: AppSize.regular,
-                      weight: FontWeight.w400,
-                    ),
-                    const CustomText(
-                      title: 'Events Ticket Now',
-                      color: AppColors.white,
-                      size: AppSize.verylarge,
-                      weight: FontWeight.w700,
-                    ),
-                  ],
-                ),
-              ),
-            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    height: height * 0.24,
-                  ),
-                  Align(
-                    alignment: Alignment.center,
-                    child: SizedBox(
-                      height: height * 0.08,
-                      width: width * 0.85,
-                      child: ValueListenableBuilder(
-                        valueListenable: searchNotifier,
-                        builder: (context, value, child) {
-                          return CustomTextField(
-                            hintText: 'Search Events, Tickets, or City',
-                            hintStyle: const TextStyle(color: AppColors.silver),
-                            fillColor: AppColors.white,
-                            controller: searchController,
-                            isFilled: true,
-                            onChanged: (query) {
-                              searchNotifier.value = query;
-                            },
-                            suffixIcon: Padding(
-                              padding: const EdgeInsets.only(right: 8),
-                              child: Container(
-                                height: 35,
-                                width: 35,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  gradient: customGradient,
-                                ),
-                                child: Center(
-                                  child: searchController.text.isEmpty
-                                      ? const Icon(
-                                          Icons.search,
-                                          color: AppColors.white,
-                                        )
-                                      : GestureDetector(
-                                          onTap: () {
-                                            searchController.clear();
-                                            searchNotifier.value = '';
-                                          },
-                                          child: const Icon(
-                                            Icons.close,
-                                            color: AppColors.white,
-                                          ),
-                                        ),
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                  const Gap(15),
+                  const Gap(40),
                   const CustomText(
                     title: 'Upcoming Event Tickets',
                     color: AppColors.jetBlack,

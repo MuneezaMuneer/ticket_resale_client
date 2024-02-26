@@ -431,7 +431,7 @@ class _TicketScreenState extends State<TicketScreen> {
                                 description: descriptionController.text,
                                 userId: AuthServices.getCurrentUser.uid,
                                 time: '$startTime - $endTime',
-                                status: 'Active');
+                                status: 'Pending');
 
                             if (imageUrl != null && imageUrl != '') {
                               await FireStoreServices.uploadEventData(

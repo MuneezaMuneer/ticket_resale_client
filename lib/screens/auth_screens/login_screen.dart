@@ -74,7 +74,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       isSocial: true,
                       onPressed: () async {
                         googleNotifier.value = true;
-                        await AuthServices.signInWithGoogle(context)
+                        await AuthServices.signInWithGoogle(
+                                context, googleNotifier)
                             .then((credential) {
                           if (credential != null) {
                             googleNotifier.value = false;

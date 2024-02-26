@@ -5,6 +5,7 @@ class UserModel {
   final String? phoneNo;
   final String? birthDate;
   final String? photoUrl;
+  Map<String, dynamic>? profileLevels = {};
 
   UserModel(
       {this.displayName,
@@ -12,13 +13,15 @@ class UserModel {
       this.instaUsername,
       this.phoneNo,
       this.birthDate,
-      this.photoUrl});
+      this.photoUrl,
+      this.profileLevels,});
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'instagram_username': instaUsername,
       'phone_number': phoneNo,
       'birth_date': birthDate,
+      'profile_levels':profileLevels
     };
   }
 
@@ -28,6 +31,7 @@ class UserModel {
       phoneNo:
           map['phone_number'] != null ? map['phone_number'] as String : null,
       birthDate: map['birth_date'] != null ? map['birth_date'] as String : null,
+        profileLevels: map['profile_levels'] as Map<String, dynamic>,
     );
   }
 }

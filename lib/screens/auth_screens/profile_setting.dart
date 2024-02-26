@@ -14,7 +14,6 @@ import 'package:ticket_resale/models/models.dart';
 import 'package:ticket_resale/providers/image_picker_provider.dart';
 import 'package:ticket_resale/screens/auth_screens/signup_screen.dart';
 import 'package:ticket_resale/utils/app_utils.dart';
-import 'package:ticket_resale/utils/bottom_sheet.dart';
 import '../../constants/constants.dart';
 import '../../widgets/widgets.dart';
 
@@ -48,7 +47,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
     photoUrl = '${AuthServices.getCurrentUser.photoURL}';
     AuthServices.fetchUserDetails().then((userModel) {
       if (userModel != null) {
-        instaController.text = '${userModel.instaUsername}';
+        instaController.text = '${userModel.profileLevels}';
         phoneNoController.text = '${userModel.phoneNo}';
         birthController.text = userModel.birthDate ?? '';
       } else {
@@ -271,7 +270,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                                 }
                               },
                               onChanged: (phone) {
-                                countryCode = phone.countryCode;
+                                // countryCode = phone.countryCode;
                               },
                             ),
                           ),
@@ -280,11 +279,10 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                             top: 15,
                             child: GestureDetector(
                               onTap: () async {
-                                await AuthServices.phoneNoVerification(
-                                  context: context,
-                                        phoneNumber:
-                                            '$countryCode${phoneNoController.text}');
-                                 
+                                // await AuthServices.phoneNoVerification(
+                                //     context: context,
+                                //     phoneNumber:
+                                //         '$countryCode${phoneNoController.text}');
                               },
                               child: const CustomText(
                                 title: 'Verify',

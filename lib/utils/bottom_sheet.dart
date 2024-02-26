@@ -11,7 +11,7 @@ class CustomBottomSheet {
   static void showOTPBottomSheet(
       {required BuildContext context,
       required OnChanged onChanged,
-      required String number,
+      required String email,
       bool isLoading = false,
       required OnTape onTape}) {
     showModalBottomSheet(
@@ -39,7 +39,7 @@ class CustomBottomSheet {
                 ),
                 const Gap(10),
                 Text(
-                  "Verification code has been sent on\n $number. ",
+                  "Verification code has been sent on\n $email. ",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       color: Colors.black.withOpacity(0.5), fontSize: 15),
@@ -48,10 +48,10 @@ class CustomBottomSheet {
                   height: 20,
                 ),
                 OtpTextField(
-                  numberOfFields: 6,
+                  numberOfFields: 4,
                   borderColor: AppColors.jetBlack,
                   focusedBorderColor: AppColors.jetBlack,
-                  showFieldAsBox: false,
+                  showFieldAsBox: true,
                   borderWidth: 4.0,
                   onSubmit: onChanged,
                 ),
@@ -64,7 +64,7 @@ class CustomBottomSheet {
                       child: CustomButton(
                         loading: loadingProvider.getLoadingProgress,
                         gradient: customGradient,
-                        btnText: 'Verify Phone Number',
+                        btnText: 'Verify Email',
                         onPressed: onTape,
                       ),
                     ),

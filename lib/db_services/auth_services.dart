@@ -11,7 +11,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:ticket_resale/constants/aapp_routes.dart';
 import 'package:ticket_resale/constants/app_colors.dart';
 import 'package:ticket_resale/models/models.dart';
-import 'package:ticket_resale/screens/auth_screens/signup_screen.dart';
 import 'package:ticket_resale/utils/app_utils.dart';
 import 'package:ticket_resale/utils/bottom_sheet.dart';
 
@@ -22,8 +21,10 @@ class AuthServices {
 
   //Google Authentication
 
-  static Future<UserCredential?> signInWithGoogle(BuildContext context) async {
+  static Future<UserCredential?> signInWithGoogle(
+      BuildContext context, ValueNotifier<bool> googleNotifier) async {
     try {
+      googleNotifier.value = true;
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
       if (googleUser == null) {
@@ -36,6 +37,7 @@ class AuthServices {
             ),
           ),
         );
+        googleNotifier.value = false;
         return null;
       }
 
@@ -55,6 +57,7 @@ class AuthServices {
       return userCredential;
     } catch (e) {
       log("Error signing in with Google: $e");
+      googleNotifier.value = false;
     }
     return null;
   }
@@ -65,6 +68,13 @@ class AuthServices {
       'user_name': user!.displayName,
       'email': user.email,
       // 'photoURL': user.photoURL,
+      'profile_levels': {
+        'isEmailVerified': true,
+        'isPaypalVerified': false,
+        'isInstaVerified': false,
+        'isTransactionVerified': false,
+        'isSuperVerified': false
+      }
     };
 
     final userDocumentReference =
@@ -136,46 +146,46 @@ class AuthServices {
     }
   }
 
-  static Future<bool> phoneNoVerification(
-      {required String phoneNumber, required BuildContext context}) async {
-    FirebaseAuth auth = FirebaseAuth.instance;
+  // static Future<bool> phoneNoVerification(
+  //     {required String phoneNumber, required BuildContext context}) async {
+  //   FirebaseAuth auth = FirebaseAuth.instance;
 
-    try {
-      await auth.verifyPhoneNumber(
-        phoneNumber: phoneNumber,
-        timeout: const Duration(seconds: 60),
-        verificationCompleted: (PhoneAuthCredential credential) async {
-          await auth.signInWithCredential(credential);
-        },
-        verificationFailed: (FirebaseAuthException e) {
-          log('Phone number verification failed: ${e.message}');
-        },
-        codeSent: (String verificationId, int? resendToken) async {
-          String smsCode = '';
+  //   try {
+  //     await auth.verifyPhoneNumber(
+  //       phoneNumber: phoneNumber,
+  //       timeout: const Duration(seconds: 60),
+  //       verificationCompleted: (PhoneAuthCredential credential) async {
+  //         await auth.signInWithCredential(credential);
+  //       },
+  //       verificationFailed: (FirebaseAuthException e) {
+  //         log('Phone number verification failed: ${e.message}');
+  //       },
+  //       codeSent: (String verificationId, int? resendToken) async {
+  //         String smsCode = '';
 
-          CustomBottomSheet.showOTPBottomSheet(
-              number: phoneNumber,
-              onTape: () async {
-                PhoneAuthCredential credential = PhoneAuthProvider.credential(
-                    verificationId: verificationId, smsCode: smsCode);
-              },
-              onChanged: (code) {
-                smsCode = code;
-              },
-              context: context);
-          // await auth.signInWithCredential(credential);
-        },
-        codeAutoRetrievalTimeout: (String verificationId) {
-          log('Auto-retrieval timeout. Please enter the code manually.');
-        },
-      );
-      return true;
-    } catch (e) {
-      log('Error during phone number verification: $e');
+  //         CustomBottomSheet.showOTPBottomSheet(
+  //             email: phoneNumber,
+  //             onTape: () async {
+  //               PhoneAuthCredential credential = PhoneAuthProvider.credential(
+  //                   verificationId: verificationId, smsCode: smsCode);
+  //             },
+  //             onChanged: (code) {
+  //               smsCode = code;
+  //             },
+  //             context: context);
+  //         // await auth.signInWithCredential(credential);
+  //       },
+  //       codeAutoRetrievalTimeout: (String verificationId) {
+  //         log('Auto-retrieval timeout. Please enter the code manually.');
+  //       },
+  //     );
+  //     return true;
+  //   } catch (e) {
+  //     log('Error during phone number verification: $e');
 
-      return false;
-    }
-  }
+  //     return false;
+  //   }
+  // }
 
   static Future<void> deleteUserAccount() async {
     try {
@@ -247,12 +257,16 @@ class AuthServices {
 
       await getCurrentUser.updatePhotoURL(userModel.photoUrl);
       await getCurrentUser.updateDisplayName(userModel.displayName);
-      await user.set({
-        'birth_date': userModel.birthDate,
-        'phone_number': userModel.phoneNo,
-        'instagram_username': userModel.instaUsername,
-        'user_name': userModel.displayName
-      }, SetOptions(merge: true));
+      await user.set(
+          {
+            'birth_date': userModel.birthDate,
+            'phone_number': userModel.phoneNo,
+            'instagram_username': userModel.instaUsername,
+            'user_name': userModel.displayName,
+          },
+          SetOptions(
+            merge: true,
+          ));
     } catch (e) {
       log('Error storing photo url: ${e.toString()}');
     }
@@ -284,7 +298,14 @@ class AuthServices {
         "phone_number": userModel.phoneNo,
         "instagram_username": userModel.instaUsername,
         "email": userModel.email,
-        "user_name": userModel.displayName
+        "user_name": userModel.displayName,
+        'profile_levels': {
+          'isEmailVerified': true,
+          'isPaypalVerified': false,
+          'isInstaVerified': true,
+          'isTransactionVerified': false,
+          'isSuperVerified': false
+        }
       });
 
       await getCurrentUser.updateDisplayName(userModel.displayName);

@@ -9,7 +9,6 @@ class BottomSheetProvider extends ChangeNotifier {
 
   set setLoadingProgress(bool value) {
     _isLoadingProgress = value;
-
     notifyListeners();
   }
 

@@ -8,6 +8,7 @@ import 'package:svg_flutter/svg_flutter.dart';
 
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/db_services/db_services.dart';
+import 'package:ticket_resale/models/models.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
 class ProfileLevelScreen extends StatefulWidget {
@@ -23,16 +24,18 @@ class ProfileLevelScreen extends StatefulWidget {
 
 class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
   String? photoUrl;
+  late Stream<List<UserModel>> fetchUserLevel;
   @override
   void initState() {
     photoUrl = AuthServices.getCurrentUser.photoURL;
+    fetchUserLevel = FireStoreServices.fetchUserLevels();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-   // final double height = size.height;
+    // final double height = size.height;
     final double width = size.width;
     return Scaffold(
       //  backgroundColor: AppColors.white.withOpacity(0.2),
@@ -116,53 +119,64 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
                     Expanded(
                       child: SingleChildScrollView(
                         scrollDirection: Axis.vertical,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Gap(20),
-                            _buildContainer(
-                                AppSvgs.levelOne,
-                                'Verify your email',
-                                'Level 1 verified',
-                                width,
-                                AppColors.yellow,
-                                AppColors.yellow),
-                            _buildContainer(
-                                AppSvgs.levelTwo,
-                                'Verify your Phone No',
-                                'Level 2 verified',
-                                width,
-                                AppColors.yellow,
-                                AppColors.yellow),
-                            _buildContainer(
-                                AppSvgs.levelThree,
-                                'Connect you PayPal',
-                                'Verify for Level 3',
-                                width,
-                                AppColors.blueViolet,
-                                AppColors.blueViolet),
-                            _buildContainer(
-                                AppSvgs.levelFour,
-                                'Add Instagram profile',
-                                'Verify for Level 4',
-                                width,
-                                AppColors.blueViolet,
-                                AppColors.blueViolet),
-                            _buildContainer(
-                                AppSvgs.levelFive,
-                                'Post your 1st Ticket',
-                                'Verify for Level 5',
-                                width,
-                                AppColors.blueViolet,
-                                AppColors.blueViolet),
-                            _buildContainer(
-                                AppSvgs.levelSix,
-                                'Make your 1st transaction',
-                                'Verify for Level 6',
-                                width,
-                                AppColors.blueViolet,
-                                AppColors.blueViolet),
-                          ],
+                        child: StreamBuilder(
+                          stream: fetchUserLevel,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              final data = snapshot.data!;
+                              print('The Data is : $data');
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Gap(20),
+                                  _buildContainer(
+                                      AppSvgs.levelOne,
+                                      'Verify Your Email & Number',
+                                      data[0].profileLevels!['isEmailVerified'],
+                                      width,
+                                      AppColors.yellow,
+                                      AppColors.yellow),
+                                  // _buildContainer(
+                                  //     AppSvgs.levelTwo,
+                                  //     'Verify your Phone No',
+                                  //     'Verify for Level 2',
+                                  //     width,
+                                  //     AppColors.yellow,
+                                  //     AppColors.yellow),
+                                  _buildContainer(
+                                      AppSvgs.levelThree,
+                                      'Connect Your PayPal',
+                                      'Verify for Level 2',
+                                      width,
+                                      AppColors.blueViolet,
+                                      AppColors.blueViolet),
+                                  _buildContainer(
+                                      AppSvgs.levelFour,
+                                      'Add Instagram Profile',
+                                      'Verify for Level 3',
+                                      width,
+                                      AppColors.blueViolet,
+                                      AppColors.blueViolet),
+                                  _buildContainer(
+                                      AppSvgs.levelFive,
+                                      'Make 5 Buy/Sell Transaction',
+                                      'Verify for Level 4',
+                                      width,
+                                      AppColors.blueViolet,
+                                      AppColors.blueViolet),
+                                  _buildContainer(
+                                      AppSvgs.levelSix,
+                                      'Tier 5 Super Verified',
+                                      'Verify for Level 5',
+                                      width,
+                                      AppColors.blueViolet,
+                                      AppColors.blueViolet),
+                                ],
+                              );
+                            } else {
+                              return const SizedBox();
+                            }
+                          },
                         ),
                       ),
                     ),
@@ -190,48 +204,53 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              children: [
-                SizedBox(
-                  width: width < 370 ? 2 : 5,
-                ),
-                SizedBox(
-                    height: 30, width: 30, child: SvgPicture.asset(svgPath)),
-                SizedBox(
-                  width: width < 370 ? 0 : 2,
-                ),
-                CustomText(
-                  title: title,
-                  size: AppSize.intermediate,
-                  weight: FontWeight.w400,
-                ),
-                SizedBox(
-                  width: width < 370 ? 0 : 5,
-                ),
-              ],
+            Expanded(
+              flex: 7,
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: width < 370 ? 2 : 5,
+                  ),
+                  SizedBox(
+                      height: 25, width: 25, child: SvgPicture.asset(svgPath)),
+                  SizedBox(
+                    width: width < 370 ? 0 : 2,
+                  ),
+                  Expanded(
+                    child: CustomText(
+                      title: title,
+                      size: AppSize.intermediate,
+                      weight: FontWeight.w400,
+                    ),
+                  ),
+                ],
+              ),
             ),
-            Row(
-              children: [
-                SizedBox(
-                  width: width < 370 ? 0 : 5,
-                ),
-                SvgPicture.asset(
-                  AppSvgs.verified,
-                  colorFilter: ColorFilter.mode(svgColor, BlendMode.srcIn),
-                ),
-                SizedBox(
-                  width: width < 370 ? 0 : 5,
-                ),
-                CustomText(
-                  title: leveltext,
-                  size: AppSize.verySmall,
-                  weight: FontWeight.w400,
-                  color: textColor,
-                ),
-                SizedBox(
-                  width: width < 370 ? 5 : 9,
-                ),
-              ],
+            Expanded(
+              flex: 4,
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: width < 370 ? 0 : 7,
+                  ),
+                  SvgPicture.asset(
+                    AppSvgs.verified,
+                    colorFilter: ColorFilter.mode(svgColor, BlendMode.srcIn),
+                  ),
+                  SizedBox(
+                    width: width < 370 ? 0 : 5,
+                  ),
+                  CustomText(
+                    title: leveltext,
+                    size: AppSize.verySmall,
+                    weight: FontWeight.w400,
+                    color: textColor,
+                  ),
+                  SizedBox(
+                    width: width < 370 ? 5 : 9,
+                  ),
+                ],
+              ),
             )
           ],
         ),
