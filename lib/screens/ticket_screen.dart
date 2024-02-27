@@ -4,15 +4,16 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 import 'package:svg_flutter/svg_flutter.dart';
 import 'package:ticket_resale/constants/constants.dart';
-import 'package:ticket_resale/db_services/auth_services.dart';
-import 'package:ticket_resale/db_services/firestore_services.dart';
-import 'package:ticket_resale/models/event_modal.dart';
-import 'package:ticket_resale/providers/image_picker_provider.dart';
-import 'package:ticket_resale/utils/app_utils.dart';
+import 'package:ticket_resale/db_services/db_services.dart';
+import 'package:ticket_resale/models/models.dart';
+import 'package:ticket_resale/providers/providers.dart';
+import 'package:ticket_resale/utils/utils.dart';
+
 import 'package:ticket_resale/widgets/widgets.dart';
 
 class TicketScreen extends StatefulWidget {
@@ -29,6 +30,7 @@ class _TicketScreenState extends State<TicketScreen> {
   TextEditingController endTimeController = TextEditingController();
   TextEditingController ticketTypeController = TextEditingController();
   TextEditingController priceController = TextEditingController();
+  TextEditingController cityController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   ValueNotifier<bool> notifier = ValueNotifier<bool>(false);
@@ -69,6 +71,7 @@ class _TicketScreenState extends State<TicketScreen> {
     return Scaffold(
         appBar: const CustomAppBar(
           title: 'Add New Ticket',
+          isBackButton: false,
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(
@@ -212,6 +215,30 @@ class _TicketScreenState extends State<TicketScreen> {
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return ' Enter Date';
+                      }
+
+                      return null;
+                    },
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  const CustomText(
+                    title: 'City',
+                    color: AppColors.gryishBlue,
+                    weight: FontWeight.w600,
+                    size: AppSize.medium,
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  CustomTextField(
+                    controller: cityController,
+                    hintText: 'Enter City',
+                    hintStyle: _buildHintStyle(),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter city';
                       }
 
                       return null;
@@ -366,6 +393,9 @@ class _TicketScreenState extends State<TicketScreen> {
                     hintText: 'Enter Ticket Price',
                     controller: priceController,
                     keyBoardType: TextInputType.number,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                    ],
                     hintStyle: _buildHintStyle(),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -431,6 +461,7 @@ class _TicketScreenState extends State<TicketScreen> {
                                 description: descriptionController.text,
                                 userId: AuthServices.getCurrentUser.uid,
                                 time: '$startTime - $endTime',
+                                city: cityController.text,
                                 status: 'Pending');
 
                             if (imageUrl != null && imageUrl != '') {
@@ -438,11 +469,16 @@ class _TicketScreenState extends State<TicketScreen> {
                                       eventModal: eventModal)
                                   .then((value) {
                                 imagePickerProvider.setImageUrl = '';
-                              }).then((value) {
                                 AppUtils.toastMessage(
                                     'Event Created Successfully');
+                                FocusScope.of(context).unfocus();
+                                notifier.value = false;
+
+                                Navigator.pushNamed(
+                                  context,
+                                  AppRoutes.navigationScreen,
+                                );
                               });
-                              notifier.value = false;
                             }
                           }
                         },

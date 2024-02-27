@@ -2,12 +2,10 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:svg_flutter/svg_flutter.dart';
-
 import 'package:ticket_resale/constants/constants.dart';
-import 'package:ticket_resale/models/event_modal.dart';
-import 'package:ticket_resale/utils/app_dialouge.dart';
+import 'package:ticket_resale/models/models.dart';
+import 'package:ticket_resale/utils/utils.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
-
 import '../components/components.dart';
 
 class HomeDetailSecondScreen extends StatefulWidget {
@@ -111,23 +109,67 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                     ),
                   ),
                   const Gap(10),
-                  _tileContainer(
-                      height: height * 0.08,
-                      width: width * 0.9,
-                      isSvg: true,
-                      imagePath: AppSvgs.clock,
-                      backgroundColor: AppColors.white,
-                      avatarBg: AppColors.paleGrey,
-                      containerBorderColor: AppColors.white,
-                      title: widget.eventModal.date,
-                      titleColor: AppColors.lightGrey.withOpacity(0.6),
-                      titleSize: AppSize.xsmall,
-                      titleWeight: FontWeight.w400,
-                      subTitle: widget.eventModal.time,
-                      subTitleColor: AppColors.jetBlack,
-                      subTitleSize: AppSize.small,
-                      subTitleWeight: FontWeight.w600,
-                      child: const SizedBox.shrink()),
+                  Container(
+                    height: height * 0.08,
+                    width: width * 0.9,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(56),
+                        border: Border.all(color: AppColors.white),
+                        color: AppColors.white),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Row(
+                            children: [
+                              CircleAvatar(
+                                  backgroundColor: AppColors.paleGrey,
+                                  radius: 20,
+                                  child: SvgPicture.asset(
+                                    AppSvgs.clock,
+                                    height: 30,
+                                  )),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 12, top: 13),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    CustomText(
+                                      title: '${AppUtils.formatDate(
+                                        widget.eventModal.date!,
+                                      )}, ${widget.eventModal.time}',
+                                      color:
+                                          AppColors.lightGrey.withOpacity(0.6),
+                                      size: AppSize.xsmall,
+                                      weight: FontWeight.w400,
+                                    ),
+                                    RichText(
+                                        text: TextSpan(children: [
+                                      TextSpan(
+                                          text: 'at ',
+                                          style: TextStyle(
+                                              color: AppColors.lightGrey
+                                                  .withOpacity(0.6),
+                                              fontSize: AppSize.xsmall,
+                                              fontWeight: FontWeight.w400)),
+                                      TextSpan(
+                                          text: '${widget.eventModal.city}',
+                                          style: const TextStyle(
+                                              color: AppColors.jetBlack,
+                                              fontSize: AppSize.small,
+                                              fontWeight: FontWeight.w600)),
+                                    ])),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                   const Gap(10),
                   const CustomText(
                     title: 'About Event',
@@ -416,7 +458,7 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                             fit: BoxFit.cover,
                           )),
                 Padding(
-                  padding: const EdgeInsets.only(left: 8, top: 10),
+                  padding: const EdgeInsets.only(left: 13, top: 13),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

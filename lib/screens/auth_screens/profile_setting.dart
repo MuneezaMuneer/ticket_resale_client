@@ -9,11 +9,11 @@ import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:provider/provider.dart';
 import 'package:svg_flutter/svg_flutter.dart';
-import 'package:ticket_resale/db_services/auth_services.dart';
+import 'package:ticket_resale/db_services/db_services.dart';
 import 'package:ticket_resale/models/models.dart';
-import 'package:ticket_resale/providers/image_picker_provider.dart';
-import 'package:ticket_resale/screens/auth_screens/signup_screen.dart';
-import 'package:ticket_resale/utils/app_utils.dart';
+import 'package:ticket_resale/providers/providers.dart';
+import 'package:ticket_resale/utils/utils.dart';
+
 import '../../constants/constants.dart';
 import '../../widgets/widgets.dart';
 
@@ -24,13 +24,6 @@ class ProfileSettings extends StatefulWidget {
   State<ProfileSettings> createState() => _ProfileSettingsState();
 }
 
-TextEditingController nameController = TextEditingController();
-TextEditingController instaController = TextEditingController();
-TextEditingController emailController = TextEditingController();
-TextEditingController phoneNoController = TextEditingController();
-TextEditingController birthController = TextEditingController();
-ValueNotifier<bool> loading = ValueNotifier<bool>(false);
-GlobalKey<FormState> formKey = GlobalKey<FormState>();
 late ImagePickerProvider imagePickerProvider;
 String? photoUrl;
 String countryCode = '';
@@ -40,6 +33,13 @@ String countryCode = '';
 // }
 
 class _ProfileSettingsState extends State<ProfileSettings> {
+  TextEditingController nameController = TextEditingController();
+  TextEditingController instaController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController phoneNoController = TextEditingController();
+  TextEditingController birthController = TextEditingController();
+  ValueNotifier<bool> loading = ValueNotifier<bool>(false);
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
   @override
   void initState() {
     imagePickerProvider =
@@ -47,8 +47,8 @@ class _ProfileSettingsState extends State<ProfileSettings> {
     photoUrl = '${AuthServices.getCurrentUser.photoURL}';
     AuthServices.fetchUserDetails().then((userModel) {
       if (userModel != null) {
-        instaController.text = '${userModel.profileLevels}';
-        phoneNoController.text = '${userModel.phoneNo}';
+        instaController.text = '${userModel.instaUsername}';
+        phoneNoController.text = userModel.phoneNo ?? '';
         birthController.text = userModel.birthDate ?? '';
       } else {
         instaController.text = '';
@@ -62,7 +62,6 @@ class _ProfileSettingsState extends State<ProfileSettings> {
     super.initState();
   }
 
-  @override
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -200,7 +199,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                       CustomTextField(
                         controller: emailController,
                         readOnly: true,
-                        trailingText: 'Verify',
+                        trailingText: 'Verified',
                         isTrailingText: true,
                         hintStyle: _buildTextFieldstyle(),
                         validator: (value) {
@@ -361,13 +360,14 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                                   UserModel userModel = UserModel(
                                     displayName: nameController.text,
                                     instaUsername: instaController.text,
-                                    phoneNo: phoneController.text,
+                                    phoneNo: phoneNoController.text,
                                     birthDate: birthController.text,
                                     photoUrl: imageUrl,
                                   );
 
                                   await AuthServices.storeUserImage(
                                       userModel: userModel);
+                                  FocusScope.of(context).unfocus();
                                 } catch (e) {
                                   log('Error storing user data: ${e.toString()}');
                                 } finally {

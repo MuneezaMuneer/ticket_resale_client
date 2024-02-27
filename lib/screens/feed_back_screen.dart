@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:svg_flutter/svg_flutter.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/providers/providers.dart';
-
 import 'package:ticket_resale/widgets/widgets.dart';
 
 class FeedBackScreen extends StatefulWidget {

@@ -8,11 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:provider/provider.dart';
 import 'package:ticket_resale/db_services/db_services.dart';
-import 'package:ticket_resale/models/user_model.dart';
-import 'package:ticket_resale/providers/bottom_sheet_provider.dart';
-import 'package:ticket_resale/utils/app_utils.dart';
-import 'package:ticket_resale/utils/bottom_sheet.dart';
-import 'package:ticket_resale/utils/verify_email.dart';
+import 'package:ticket_resale/models/models.dart';
+import 'package:ticket_resale/providers/providers.dart';
+import 'package:ticket_resale/utils/utils.dart';
 import '../../components/components.dart';
 import '../../constants/constants.dart';
 import '../../widgets/widgets.dart';
@@ -24,33 +22,40 @@ class SignUpScreen extends StatefulWidget {
   State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-TextEditingController firstNameController = TextEditingController();
-TextEditingController lastNameController = TextEditingController();
-TextEditingController gmailController = TextEditingController();
-TextEditingController passwordController = TextEditingController();
-TextEditingController confirmPasswordController = TextEditingController();
-TextEditingController instaController = TextEditingController();
-TextEditingController phoneController = TextEditingController();
-ValueNotifier<bool> passwordVisibility = ValueNotifier<bool>(true);
-ValueNotifier<bool> confirmpasswordVisibility = ValueNotifier<bool>(true);
 GlobalKey<FormState> formKey = GlobalKey<FormState>();
-ValueNotifier<bool> loading = ValueNotifier<bool>(false);
 String emailVerificationCode = '';
 late BottomSheetProvider bottomSheetProvider;
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  TextEditingController firstNameController = TextEditingController();
+  ValueNotifier<bool> loading = ValueNotifier<bool>(false);
+  TextEditingController lastNameController = TextEditingController();
+  TextEditingController gmailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
+  TextEditingController instaController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  ValueNotifier<bool> passwordVisibility = ValueNotifier<bool>(true);
+  ValueNotifier<bool> confirmpasswordVisibility = ValueNotifier<bool>(true);
   @override
   void initState() {
     bottomSheetProvider =
         Provider.of<BottomSheetProvider>(context, listen: false);
-    firstNameController.clear();
-    lastNameController.clear();
-    gmailController.clear();
-    passwordController.clear();
-    confirmPasswordController.clear();
-    phoneController.clear();
-    instaController.clear();
+
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    firstNameController.dispose();
+    lastNameController.dispose();
+    gmailController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    phoneController.dispose();
+    instaController.dispose();
+
+    super.dispose();
   }
 
   @override
@@ -293,7 +298,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                               if (isEmailExist) {
                                 AppUtils.toastMessage('Email already exists');
+                                loading.value = false;
                               } else {
+                                loading.value = true;
                                 UserModel userModel = UserModel(
                                   displayName:
                                       '${firstNameController.text} ${lastNameController.text}',

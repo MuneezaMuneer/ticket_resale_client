@@ -3,8 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:ticket_resale/constants/constants.dart';
-import 'package:ticket_resale/widgets/custom_appbar.dart';
-import 'package:ticket_resale/widgets/custom_text.dart';
+import 'package:ticket_resale/widgets/widgets.dart';
+
 
 class NotificationScreen extends StatelessWidget {
   NotificationScreen({super.key});

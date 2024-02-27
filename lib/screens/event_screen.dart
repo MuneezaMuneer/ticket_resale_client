@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:svg_flutter/svg.dart';
 import 'package:ticket_resale/constants/constants.dart';
-import 'package:ticket_resale/db_services/firestore_services.dart';
+import 'package:ticket_resale/db_services/db_services.dart';
+
 import 'package:ticket_resale/models/models.dart';
-import 'package:ticket_resale/utils/app_utils.dart';
+import 'package:ticket_resale/utils/utils.dart';
+
 import 'package:ticket_resale/widgets/widgets.dart';
 
 class EventScreen extends StatefulWidget {
@@ -24,6 +26,13 @@ class _EventScreenState extends State<EventScreen> {
   void initState() {
     displayEventData = FireStoreServices.fetchEventData();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+
+    super.dispose();
   }
 
   @override
@@ -116,11 +125,16 @@ class _EventScreenState extends State<EventScreen> {
                             final data = query.isEmpty
                                 ? snapshot.data!
                                 : snapshot.data!
-                                    .where(
-                                      (data) => data.festivalName!
-                                          .toLowerCase()
-                                          .contains(query.toLowerCase()),
-                                    )
+                                    .where((data) =>
+                                        data.festivalName!
+                                            .toLowerCase()
+                                            .contains(query.toLowerCase()) ||
+                                        data.city!
+                                            .toLowerCase()
+                                            .contains(query.toLowerCase()) ||
+                                        data.ticketType!
+                                            .toLowerCase()
+                                            .contains(query.toLowerCase()))
                                     .toList();
                             if (data.isNotEmpty) {
                               return GridView.builder(
@@ -147,8 +161,8 @@ class _EventScreenState extends State<EventScreen> {
                                           padding: const EdgeInsets.only(
                                               left: 5, right: 5, top: 5),
                                           child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
                                               ClipRRect(
                                                 borderRadius:
@@ -286,15 +300,17 @@ class _EventScreenState extends State<EventScreen> {
                                               onPressed: () {
                                                 EventModal eventModal =
                                                     EventModal(
-                                                  description:
-                                                      data[index].description!,
-                                                  festivalName:
-                                                      data[index].festivalName!,
-                                                  imageUrl:
-                                                      data[index].imageUrl!,
-                                                  date: data[index].date!,
-                                                  time: data[index].time!,
-                                                );
+                                                        description: data[index]
+                                                            .description!,
+                                                        festivalName:
+                                                            data[index]
+                                                                .festivalName!,
+                                                        imageUrl: data[index]
+                                                            .imageUrl!,
+                                                        date: data[index].date!,
+                                                        time: data[index].time!,
+                                                        city:
+                                                            data[index].city!);
                                                 Navigator.pushNamed(context,
                                                     AppRoutes.detailFirstScreen,
                                                     arguments: eventModal);

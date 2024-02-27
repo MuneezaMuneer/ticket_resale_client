@@ -1,16 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:svg_flutter/svg.dart';
 import 'package:ticket_resale/constants/constants.dart';
-import 'package:ticket_resale/db_services/auth_services.dart';
+import 'package:ticket_resale/db_services/db_services.dart';
 import 'package:ticket_resale/providers/providers.dart';
-
-import 'package:ticket_resale/utils/app_dialouge.dart';
-
+import 'package:ticket_resale/utils/utils.dart';
 import '../widgets/widgets.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -92,7 +89,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Column(
                 children: [
-                  GestureDetector(
+                  InkWell(
                     onTap: () {
                       Navigator.pushNamed(context, AppRoutes.profileSettings);
                     },
@@ -103,7 +100,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       iconColor: AppColors.lightGrey,
                     ),
                   ),
-                  GestureDetector(
+                  InkWell(
                     onTap: () {
                       Navigator.pushNamed(
                         context,
@@ -119,7 +116,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       iconColor: AppColors.lightGrey,
                     ),
                   ),
-                  GestureDetector(
+                  InkWell(
                     onTap: () {
                       Navigator.pushNamed(
                           context, AppRoutes.notificationScreen);
@@ -132,7 +129,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       iconColor: AppColors.lightGrey,
                     ),
                   ),
-                  GestureDetector(
+                  InkWell(
                     onTap: () {
                       Navigator.pushNamed(context, AppRoutes.connectScreen);
                     },
@@ -144,7 +141,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       iconColor: AppColors.electricBlue,
                     ),
                   ),
-                  GestureDetector(
+                  InkWell(
                     onTap: () {
                       Navigator.pushNamed(context, AppRoutes.privacyScreen);
                     },
@@ -155,7 +152,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       iconColor: AppColors.lightGrey,
                     ),
                   ),
-                  GestureDetector(
+                  InkWell(
                     onTap: () {
                       Navigator.pushNamed(context, AppRoutes.termOfUseScreen);
                     },
@@ -180,7 +177,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       iconColor: AppColors.blueViolet,
                     ),
                   ),
-                  GestureDetector(
+                  InkWell(
                     onTap: () {
                       deleteDialog(context: context);
                     },

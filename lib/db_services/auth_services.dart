@@ -8,11 +8,9 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:ticket_resale/constants/aapp_routes.dart';
-import 'package:ticket_resale/constants/app_colors.dart';
+import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/models/models.dart';
-import 'package:ticket_resale/utils/app_utils.dart';
-import 'package:ticket_resale/utils/bottom_sheet.dart';
+import 'package:ticket_resale/utils/utils.dart';
 
 class AuthServices {
   static User get getCurrentUser {
@@ -70,17 +68,18 @@ class AuthServices {
       // 'photoURL': user.photoURL,
       'profile_levels': {
         'isEmailVerified': true,
-        'isPaypalVerified': false,
-        'isInstaVerified': false,
-        'isTransactionVerified': false,
-        'isSuperVerified': false
+        // 'isPhoneNoVerified': false,
+        // 'isPaypalVerified': false,
+        // 'isInstaVerified': false,
+        // 'isTransactionVerified': false,
+        // 'isSuperVerified': false
       }
     };
 
     final userDocumentReference =
         FirebaseFirestore.instance.collection('user_data').doc(user.uid);
 
-    await userDocumentReference.set(userData);
+    await userDocumentReference.set(userData, SetOptions(merge: true));
   }
 
   static Future<UserCredential?> signUp({
@@ -263,6 +262,9 @@ class AuthServices {
             'phone_number': userModel.phoneNo,
             'instagram_username': userModel.instaUsername,
             'user_name': userModel.displayName,
+            'profile_levels': {
+              'isInstaVerified': true,
+            },
           },
           SetOptions(
             merge: true,
@@ -301,10 +303,11 @@ class AuthServices {
         "user_name": userModel.displayName,
         'profile_levels': {
           'isEmailVerified': true,
-          'isPaypalVerified': false,
+          // 'isPhoneNoVerified': false,
+          // 'isPaypalVerified': false,
           'isInstaVerified': true,
-          'isTransactionVerified': false,
-          'isSuperVerified': false
+          // 'isTransactionVerified': false,
+          // 'isSuperVerified': false
         }
       });
 

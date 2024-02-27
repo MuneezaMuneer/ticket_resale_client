@@ -41,7 +41,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               padding: const EdgeInsets.only(left: 25),
               child: Row(
                 children: [
-                  GestureDetector(
+                  InkWell(
                       onTap: () {
                         Navigator.pop(context);
                       },
@@ -66,7 +66,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               padding: const EdgeInsets.only(right: 25, top: 10),
               child: SizedBox(
                   child: isNotification
-                      ? GestureDetector(
+                      ? InkWell(
                           onTap: () {
                             Navigator.pushNamed(
                                 context, AppRoutes.notificationScreen);

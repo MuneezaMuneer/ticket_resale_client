@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ticket_resale/db_services/db_services.dart';
+
 import 'package:ticket_resale/models/models.dart';
 import 'package:uuid/uuid.dart';
 
@@ -13,6 +15,27 @@ class FireStoreServices {
         .set(eventModal.toMap());
   }
 
+  static Future<void> verifyInstagram({required String instagram}) async {
+    try {
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
+      DocumentReference user = firestore
+          .collection('user_data')
+          .doc(AuthServices.getCurrentUser.uid);
+
+      await user.set(
+        {
+          'instagram_username': instagram,
+          'profile_levels': {
+            'isInstaVerified': true,
+          },
+        },
+        SetOptions(merge: true),
+      );
+    } catch (e) {
+      log('Error storing user instagram: ${e.toString()}');
+    }
+  }
+
   static Stream<List<EventModal>> fetchEventData() {
     return FirebaseFirestore.instance
         .collection('event_ticket')
@@ -23,7 +46,8 @@ class FireStoreServices {
       }).toList();
     });
   }
- static Stream<List<UserModel>> fetchUserLevels() {
+
+  static Stream<List<UserModel>> fetchUserLevels() {
     return FirebaseFirestore.instance
         .collection('user_data')
         .snapshots()
@@ -34,7 +58,7 @@ class FireStoreServices {
     });
   }
 
- static Future<bool> checkUserEmail({required String email}) async {
+  static Future<bool> checkUserEmail({required String email}) async {
     log("....................Email.............$email");
     var user = await FirebaseFirestore.instance
         .collection('user_data')
@@ -46,6 +70,4 @@ class FireStoreServices {
       return true;
     }
   }
-
-
 }

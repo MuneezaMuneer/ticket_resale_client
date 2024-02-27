@@ -12,7 +12,6 @@ class CustomBottomSheet {
       {required BuildContext context,
       required OnChanged onChanged,
       required String email,
-      bool isLoading = false,
       required OnTape onTape}) {
     showModalBottomSheet(
       isScrollControlled: true,
@@ -77,6 +76,68 @@ class CustomBottomSheet {
       },
       backgroundColor: Colors.transparent,
       context: context,
+    );
+  }
+
+  static showInstaBottomSheet({
+    required BuildContext context,
+    required TextEditingController controller,
+    required OnTape onTape,
+    required GlobalKey<FormState> defaultFormKey,
+  }) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      isDismissible: false,
+      context: context,
+      builder: (context) {
+        return Padding(
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.3,
+              decoration: const BoxDecoration(
+                  color: AppColors.paleGrey,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(30),
+                    topRight: Radius.circular(30),
+                  )),
+              child: Form(
+                key: defaultFormKey,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30),
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 60),
+                      CustomTextField(
+                        controller: controller,
+                        hintStyle: const TextStyle(color: AppColors.silver),
+                        hintText: 'Instagram @',
+                        keyBoardType: TextInputType.emailAddress,
+                        validator: (url) {
+                          if (url!.isEmpty) {
+                            return 'Please enter valid instagram';
+                          } else {
+                            return null;
+                          }
+                        },
+                      ),
+                      const Gap(50),
+                      Consumer<BottomSheetProvider>(
+                        builder: (context, instaProgress, child) =>
+                            CustomButton(
+                          loading: instaProgress.getInstaProgress,
+                          fixedWidth: 200,
+                          gradient: customGradient,
+                          btnText: 'Save',
+                          onPressed: onTape,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ));
+      },
     );
   }
 }

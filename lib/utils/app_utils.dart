@@ -1,10 +1,8 @@
 import 'dart:io';
-
 import 'package:bottom_picker/bottom_picker.dart';
 import 'package:bottom_picker/resources/arrays.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:ticket_resale/constants/app_colors.dart';
@@ -54,6 +52,11 @@ class AppUtils {
     String formattedDate = DateFormat('d MMM').format(dateFormat);
     return formattedDate;
   }
+static String formatDate(String inputDate) {
+  DateTime dateTime = DateTime.parse(inputDate);
+  String formattedDate = DateFormat('dd MMM yyyy').format(dateTime);
+  return formattedDate;
+}
 
   static String limitTo42Char(String inputText) {
     if (inputText.length > 43) {

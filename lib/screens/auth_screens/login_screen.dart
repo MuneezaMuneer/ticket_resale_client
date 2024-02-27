@@ -1,7 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:ticket_resale/db_services/auth_services.dart';
+import 'package:ticket_resale/db_services/db_services.dart';
+
 import '../../components/components.dart';
 import '../../constants/constants.dart';
 import '../../widgets/widgets.dart';
@@ -13,11 +14,12 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-ValueNotifier<bool> googleNotifier = ValueNotifier<bool>(false);
-ValueNotifier<bool> fbNotifier = ValueNotifier<bool>(false);
-ValueNotifier<bool> appleNotifier = ValueNotifier<bool>(false);
+
 
 class _LoginScreenState extends State<LoginScreen> {
+  ValueNotifier<bool> googleNotifier = ValueNotifier<bool>(false);
+ValueNotifier<bool> fbNotifier = ValueNotifier<bool>(false);
+ValueNotifier<bool> appleNotifier = ValueNotifier<bool>(false);
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;

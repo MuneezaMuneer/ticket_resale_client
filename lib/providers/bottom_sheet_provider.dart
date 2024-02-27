@@ -11,5 +11,13 @@ class BottomSheetProvider extends ChangeNotifier {
     _isLoadingProgress = value;
     notifyListeners();
   }
+  
+   bool _isinstaProgress = false;
+   bool get getInstaProgress => _isinstaProgress;
+   set setInstaProgress(bool value){
+       _isinstaProgress = value;
+       notifyListeners();
+   }
+
 
 }

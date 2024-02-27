@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:svg_flutter/svg_flutter.dart';
 import 'package:ticket_resale/constants/constants.dart';
-import 'package:ticket_resale/models/event_modal.dart';
+import 'package:ticket_resale/models/models.dart';
+import 'package:ticket_resale/utils/app_utils.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 import '../components/components.dart';
 
@@ -130,13 +131,13 @@ class HomeDetailFirstScreen extends StatelessWidget {
                                   children: [
                                     CustomText(
                                       title:
-                                          '${eventModal.date} ${eventModal.time}',
+                                          '${AppUtils.formatDate(eventModal.date!)}, ${eventModal.time}',
                                       color:
                                           AppColors.lightGrey.withOpacity(0.6),
                                       size: AppSize.xsmall,
                                       weight: FontWeight.w400,
                                     ),
-                                    const Gap(5),
+                                  
                                     RichText(
                                         text: TextSpan(children: [
                                       TextSpan(
@@ -146,9 +147,9 @@ class HomeDetailFirstScreen extends StatelessWidget {
                                                   .withOpacity(0.6),
                                               fontSize: AppSize.xsmall,
                                               fontWeight: FontWeight.w400)),
-                                      const TextSpan(
-                                          text: 'at Global Village Dubai, UAE',
-                                          style: TextStyle(
+                                      TextSpan(
+                                          text: '${eventModal.city}',
+                                          style: const TextStyle(
                                               color: AppColors.jetBlack,
                                               fontSize: AppSize.small,
                                               fontWeight: FontWeight.w600)),

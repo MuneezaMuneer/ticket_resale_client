@@ -1,13 +1,12 @@
 import 'package:avatar_stack/avatar_stack.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:svg_flutter/svg.dart';
-import 'package:ticket_resale/components/home_app_bar.dart';
+import 'package:ticket_resale/components/components.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/db_services/db_services.dart';
 import 'package:ticket_resale/models/models.dart';
-import 'package:ticket_resale/utils/app_utils.dart';
+import 'package:ticket_resale/utils/utils.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -18,16 +17,18 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // String? displayName;
-  // String? photoUrl;
   TextEditingController searchController = TextEditingController();
   ValueNotifier<String> searchNotifier = ValueNotifier<String>('');
   late Stream<List<EventModal>> displayEventData;
+  @override
+  void dispose() {
+    searchController.dispose();
+
+    super.dispose();
+  }
 
   @override
   void initState() {
-    // displayName = AuthServices.getCurrentUser.displayName ?? '';
-    // photoUrl = FirebaseAuth.instance.currentUser!.photoURL ?? '';
     displayEventData = FireStoreServices.fetchEventData();
     super.initState();
   }
@@ -72,7 +73,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   StreamBuilder(
                     stream: displayEventData,
                     builder: (context, snapshot) {
-                      if (snapshot.hasData) {
+                      if (snapshot.hasData &&
+                          snapshot.data != null &&
+                          snapshot.data!.isNotEmpty) {
                         final data = snapshot.data;
                         data!.sort((a, b) => a.date!.compareTo(b.date!));
 
@@ -138,8 +141,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          rowText('${nearestEvent.date}'),
-                                          rowText('${nearestEvent.time}')
+                                          rowText(
+                                              AppUtils.formatDate(
+                                                nearestEvent.date!,
+                                              ),
+                                              AppSvgs.calender),
+                                          rowText('${nearestEvent.time}',
+                                              AppSvgs.clock)
                                         ],
                                       ),
                                     )
@@ -150,13 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         );
                       } else {
-                        return const Center(
-                            child: Column(
-                          children: [
-                            Gap(40),
-                            CupertinoActivityIndicator(),
-                          ],
-                        ));
+                        return const Text('No Event Yet');
                       }
                     },
                   ),
@@ -253,9 +255,16 @@ class _HomeScreenState extends State<HomeScreen> {
                             final data = query.isEmpty
                                 ? snapshot.data
                                 : snapshot.data!
-                                    .where((element) => element.festivalName!
-                                        .toLowerCase()
-                                        .contains(query.toLowerCase()))
+                                    .where((element) =>
+                                        element.festivalName!
+                                            .toLowerCase()
+                                            .contains(query.toLowerCase()) ||
+                                        element.city!
+                                            .toLowerCase()
+                                            .contains(query.toLowerCase()) ||
+                                        element.ticketType!
+                                            .toLowerCase()
+                                            .contains(query.toLowerCase()))
                                     .toList();
 
                             if (data!.isNotEmpty) {
@@ -331,10 +340,14 @@ Widget circleAvatar(double height, double width, String imagePath) {
   );
 }
 
-Widget rowText(String title) {
+Widget rowText(String title, String svgIcon) {
   return Row(
     children: [
-      SvgPicture.asset(AppSvgs.calender),
+      SvgPicture.asset(
+        svgIcon,
+        colorFilter:
+            const ColorFilter.mode(AppColors.lightGrey, BlendMode.srcIn),
+      ),
       Padding(
         padding: const EdgeInsets.only(left: 4),
         child: CustomText(
