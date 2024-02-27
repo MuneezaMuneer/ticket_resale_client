@@ -216,22 +216,20 @@ Widget createTableCell(String cellText) {
     backgroundColor = AppColors.blue;
   }
 
-  return TableCell(
-    child: Container(
-      height: 30,
-      width: 100,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(38),
-        color: backgroundColor,
-      ),
-      child: Center(
-        child: Text(
-          cellText,
-          style: TextStyle(
-            color: textColor,
-            fontSize: AppSize.small,
-            fontWeight: FontWeight.w600,
-          ),
+  return Container(
+    height: 30,
+    width: 100,
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(38),
+      color: backgroundColor,
+    ),
+    child: Center(
+      child: Text(
+        cellText,
+        style: TextStyle(
+          color: textColor,
+          fontSize: AppSize.small,
+          fontWeight: FontWeight.w600,
         ),
       ),
     ),

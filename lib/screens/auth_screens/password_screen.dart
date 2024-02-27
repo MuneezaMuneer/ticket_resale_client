@@ -8,6 +8,8 @@ import 'package:ticket_resale/db_services/db_services.dart';
 import 'package:ticket_resale/utils/app_utils.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
+import '../../admin_panel/snackBar.dart';
+
 class PasswordScreen extends StatefulWidget {
   const PasswordScreen({super.key});
 
@@ -136,9 +138,8 @@ class _PasswordScreenState extends State<PasswordScreen> {
                                 email: emailController.text, context: context);
 
                             if (result == 'success') {
-                              AppUtils.toastMessage(
-                                'Password reset email sent successfully!',
-                              );
+                              SnackBarHelper.showSnackBar(context,
+                                  'Password reset email sent successfully!');
                             } else {
                               AppUtils.toastMessage(
                                 result,

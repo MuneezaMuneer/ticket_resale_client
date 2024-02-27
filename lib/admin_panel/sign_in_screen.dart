@@ -3,6 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:ticket_resale/admin_panel/auth_services_admin.dart';
+import 'package:ticket_resale/screens/auth_screens/password_screen.dart';
 import '../constants/constants.dart';
 
 import '../widgets/widgets.dart';
@@ -131,7 +132,13 @@ class _SignInAdminState extends State<SignInAdmin> {
                       Align(
                         alignment: Alignment.centerRight,
                         child: GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const PasswordScreen(),
+                                ));
+                          },
                           child: const CustomText(
                             title: 'Forgot Password?',
                             color: AppColors.electricBlue,

@@ -1,4 +1,6 @@
+import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -22,7 +24,9 @@ void main() async {
   SwitchProvider provider = SwitchProvider();
   await provider.loadPreferences();
 
-  runApp(const TicketResale());
+  runApp(
+    const TicketResale(),
+  );
 }
 
 class TicketResale extends StatelessWidget {

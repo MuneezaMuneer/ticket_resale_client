@@ -58,31 +58,28 @@ class CustomAppBarAdmin extends StatelessWidget implements PreferredSizeWidget {
             SizedBox(
               width: width * 0.2,
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 10),
-              child: GestureDetector(
-                onTap: () {
-                  searchProvider.toggleSearch();
-                },
-                child: Container(
-                  height: 40,
-                  width: 40,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColors.white.withOpacity(0.1),
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: Icon(
-                      Icons.search,
-                      color: AppColors.white,
-                    ),
+            GestureDetector(
+              onTap: () {
+                searchProvider.toggleSearch();
+              },
+              child: Container(
+                height: 40,
+                width: 40,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.white.withOpacity(0.1),
+                ),
+                child: const Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: Icon(
+                    Icons.search,
+                    color: AppColors.white,
                   ),
                 ),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(right: 25, top: 10),
+              padding: const EdgeInsets.only(right: 20),
               child: GestureDetector(
                 onTap: () async {
                   await FirebaseAuth.instance

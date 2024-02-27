@@ -26,9 +26,7 @@ class FirestoreServices {
     });
   }
 
-  static Future<void> updateStatus(
-      String documentId, String currentStatus) async {
-    String newValue = (currentStatus == 'Active') ? 'Disable' : 'Active';
+  static Future<void> updateStatus(String documentId, String newValue) async {
     try {
       final docRef =
           FirebaseFirestore.instance.collection('event_ticket').doc(documentId);

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:ticket_resale/components/call_back_funs.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/widgets/custom_text.dart';
@@ -27,6 +28,7 @@ class CustomTextField extends StatelessWidget {
   final String? trailingText;
   final bool isTrailingText;
   final String? initialValue;
+  final List<TextInputFormatter>? inputFormatters;
 
   const CustomTextField({
     super.key,
@@ -53,6 +55,7 @@ class CustomTextField extends StatelessWidget {
     this.initialValue,
     this.isSuffixIcon = true,
     this.iconWidget,
+    this.inputFormatters,
   });
 
   @override
@@ -61,6 +64,7 @@ class CustomTextField extends StatelessWidget {
       controller: controller,
       initialValue: initialValue,
       readOnly: readOnly,
+      inputFormatters: inputFormatters,
       obscuringCharacter: obscuringCharacter,
       cursorColor: AppColors.jetBlack.withOpacity(0.3),
       obscureText: isVisibleText,
