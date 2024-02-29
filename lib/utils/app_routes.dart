@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ticket_resale/models/event_modal.dart';
+import 'package:ticket_resale/models/models.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 import '../constants/constants.dart';
 import '../screens/auth_screens/signin_screen.dart';
@@ -20,21 +21,24 @@ Route onGenerateRoute(RouteSettings settings) {
   } else if (settings.name == AppRoutes.homeScreen) {
     return animatePage(const HomeScreen());
   } else if (settings.name == AppRoutes.commentScreen) {
-    return animatePage(const CommentScreen());
+    final id = settings.arguments as String;
+    return animatePage(CommentScreen(id: id));
   } else if (settings.name == AppRoutes.feedbackScreen) {
     return animatePage(const FeedBackScreen());
   } else if (settings.name == AppRoutes.privacyScreen) {
     return animatePage(const PrivacyPolicy());
-  }
-  else if (settings.name == AppRoutes.detailFirstScreen) {
+  } else if (settings.name == AppRoutes.detailFirstScreen) {
     final eventModal = settings.arguments as EventModal;
     return animatePage(HomeDetailFirstScreen(eventModal: eventModal));
-  }
-  else if (settings.name == AppRoutes.detailSecondScreen) {
-    final eventModal = settings.arguments as EventModal;
-    return animatePage( HomeDetailSecondScreen(eventModal: eventModal,));
-  }
-  else if (settings.name == AppRoutes.ticketScreen) {
+  } else if (settings.name == AppRoutes.detailSecondScreen) {
+     final Map<String, dynamic> arguments = settings.arguments as Map<String, dynamic>;
+  final EventModal eventModal = arguments['eventModal'] as EventModal;
+  final TicketModel ticketModal = arguments['ticketModel'] as TicketModel;
+  return animatePage(HomeDetailSecondScreen(
+    eventModal: eventModal,
+    ticketModel: ticketModal,
+  ));
+  } else if (settings.name == AppRoutes.ticketScreen) {
     return animatePage(const TicketScreen());
   } else if (settings.name == AppRoutes.eventScreen) {
     final isBackButton = settings.arguments as bool;

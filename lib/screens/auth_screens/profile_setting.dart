@@ -269,7 +269,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                                 }
                               },
                               onChanged: (phone) {
-                                // countryCode = phone.countryCode;
+                                countryCode = phone.countryCode;
                               },
                             ),
                           ),
@@ -278,10 +278,17 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                             top: 15,
                             child: GestureDetector(
                               onTap: () async {
-                                // await AuthServices.phoneNoVerification(
-                                //     context: context,
-                                //     phoneNumber:
-                                //         '$countryCode${phoneNoController.text}');
+                                AuthServices.sendVerificationCode(
+                                    '$countryCode${phoneNoController.text}',
+                                    '67687');
+                                CustomBottomSheet.showOTPBottomSheet(
+                                  context: context,
+                                  btnText: 'Verify Number',
+                                  onChanged: (p0) {},
+                                  email:
+                                      '$countryCode${phoneNoController.text}',
+                                  onTape: () {},
+                                );
                               },
                               child: const CustomText(
                                 title: 'Verify',

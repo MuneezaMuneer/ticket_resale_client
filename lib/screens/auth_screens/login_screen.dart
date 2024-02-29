@@ -14,12 +14,10 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-
-
 class _LoginScreenState extends State<LoginScreen> {
   ValueNotifier<bool> googleNotifier = ValueNotifier<bool>(false);
-ValueNotifier<bool> fbNotifier = ValueNotifier<bool>(false);
-ValueNotifier<bool> appleNotifier = ValueNotifier<bool>(false);
+  ValueNotifier<bool> fbNotifier = ValueNotifier<bool>(false);
+  ValueNotifier<bool> appleNotifier = ValueNotifier<bool>(false);
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;

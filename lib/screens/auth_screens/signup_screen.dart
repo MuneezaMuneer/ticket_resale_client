@@ -302,12 +302,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               } else {
                                 loading.value = true;
                                 UserModel userModel = UserModel(
-                                  displayName:
-                                      '${firstNameController.text} ${lastNameController.text}',
-                                  email: gmailController.text,
-                                  instaUsername: instaController.text,
-                                  phoneNo: phoneController.text,
-                                );
+                                    displayName:
+                                        '${firstNameController.text} ${lastNameController.text}',
+                                    email: gmailController.text,
+                                    instaUsername: instaController.text,
+                                    phoneNo: phoneController.text,
+                                    status: 'Active');
 
                                 int otp =
                                     VerifyUserEmail.generateRandomNumber();
@@ -329,6 +329,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     bool isValidEmail = false;
 
                                     CustomBottomSheet.showOTPBottomSheet(
+                                      btnText: 'Verify Email',
                                       context: context,
                                       onChanged: (code) {
                                         emailVerificationCode = code;

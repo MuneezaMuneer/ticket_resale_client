@@ -1,18 +1,19 @@
 import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ticket_resale/db_services/db_services.dart';
-
 import 'package:ticket_resale/models/models.dart';
 import 'package:uuid/uuid.dart';
 
 class FireStoreServices {
   static Uuid uid = const Uuid();
-  static Future<void> uploadEventData({required EventModal eventModal}) async {
+  static Future<void> createTickets(
+      {required TicketModel ticketModel, required String id}) async {
     FirebaseFirestore.instance
-        .collection('event_ticket')
+        .collection('tickets')
+        .doc('tickets')
+        .collection(id)
         .doc(uid.v4())
-        .set(eventModal.toMap());
+        .set(ticketModel.toMap());
   }
 
   static Future<void> verifyInstagram({required String instagram}) async {
@@ -47,13 +48,26 @@ class FireStoreServices {
     });
   }
 
+  static Stream<List<TicketModel>> fetchTicketsData({required String docID}) {
+    return FirebaseFirestore.instance
+        .collection('tickets')
+        .doc('tickets')
+        .collection(docID)
+        .snapshots()
+        .map((event) {
+      return event.docs.map((doc) {
+        return TicketModel.fromMap(doc.data());
+      }).toList();
+    });
+  }
+
   static Stream<List<UserModel>> fetchUserLevels() {
     return FirebaseFirestore.instance
         .collection('user_data')
         .snapshots()
         .map((event) {
       return event.docs.map((doc) {
-        return UserModel.fromMap(doc.data());
+        return UserModel.fromMap(doc.data(), doc.id);
       }).toList();
     });
   }

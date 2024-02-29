@@ -1,10 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:ticket_resale/constants/constants.dart';
+import 'package:ticket_resale/utils/paypal_services.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
-class PaymentConnectScreen extends StatelessWidget {
+class PaymentConnectScreen extends StatefulWidget {
   const PaymentConnectScreen({super.key});
 
+  @override
+  State<PaymentConnectScreen> createState() => _PaymentConnectScreenState();
+}
+
+class _PaymentConnectScreenState extends State<PaymentConnectScreen> {
+  PayPalService payPalService = PayPalService();
+  @override
+  void initState() {
+   payPalService.initPayPal();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -65,8 +77,9 @@ class PaymentConnectScreen extends StatelessWidget {
               height: height * 0.07,
               width: width * 0.8,
               child: CustomButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, AppRoutes.disconnectScreen);
+                onPressed: () async {
+                  PayPalService.makePayPalPayment();
+                  //  Navigator.pushNamed(context, AppRoutes.disconnectScreen);
                 },
                 textColor: AppColors.white,
                 textSize: AppSize.regular,

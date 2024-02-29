@@ -11,6 +11,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/models/models.dart';
 import 'package:ticket_resale/utils/utils.dart';
+import 'package:twilio_flutter/twilio_flutter.dart';
 
 class AuthServices {
   static User get getCurrentUser {
@@ -65,6 +66,7 @@ class AuthServices {
     final userData = {
       'user_name': user!.displayName,
       'email': user.email,
+      'status': 'Active',
       // 'photoURL': user.photoURL,
       'profile_levels': {
         'isEmailVerified': true,
@@ -145,46 +147,28 @@ class AuthServices {
     }
   }
 
-  // static Future<bool> phoneNoVerification(
-  //     {required String phoneNumber, required BuildContext context}) async {
-  //   FirebaseAuth auth = FirebaseAuth.instance;
+ static Future<void> sendVerificationCode(
+      String toPhoneNumber, String verificationCode) async {
+    // Initialize Twilio
+    TwilioFlutter twilioFlutter = TwilioFlutter(
+      accountSid: 'AC4a81b930d51a35fab421fa39ab8bbaf0',
+      authToken: '2cc0b71ea0aab26f0f00d26ae4e03849',
+      twilioNumber: '',
+    );
 
-  //   try {
-  //     await auth.verifyPhoneNumber(
-  //       phoneNumber: phoneNumber,
-  //       timeout: const Duration(seconds: 60),
-  //       verificationCompleted: (PhoneAuthCredential credential) async {
-  //         await auth.signInWithCredential(credential);
-  //       },
-  //       verificationFailed: (FirebaseAuthException e) {
-  //         log('Phone number verification failed: ${e.message}');
-  //       },
-  //       codeSent: (String verificationId, int? resendToken) async {
-  //         String smsCode = '';
+    try {
+      String messageBody = 'Your verification code is: $verificationCode';
+      
+      await twilioFlutter.sendSMS(
+        toNumber: toPhoneNumber,
+        messageBody: messageBody,
+      );
 
-  //         CustomBottomSheet.showOTPBottomSheet(
-  //             email: phoneNumber,
-  //             onTape: () async {
-  //               PhoneAuthCredential credential = PhoneAuthProvider.credential(
-  //                   verificationId: verificationId, smsCode: smsCode);
-  //             },
-  //             onChanged: (code) {
-  //               smsCode = code;
-  //             },
-  //             context: context);
-  //         // await auth.signInWithCredential(credential);
-  //       },
-  //       codeAutoRetrievalTimeout: (String verificationId) {
-  //         log('Auto-retrieval timeout. Please enter the code manually.');
-  //       },
-  //     );
-  //     return true;
-  //   } catch (e) {
-  //     log('Error during phone number verification: $e');
-
-  //     return false;
-  //   }
-  // }
+      print('Verification code sent successfully.');
+    } catch (e) {
+      print('Error sending verification code: $e');
+    }
+  }
 
   static Future<void> deleteUserAccount() async {
     try {
@@ -301,6 +285,7 @@ class AuthServices {
         "instagram_username": userModel.instaUsername,
         "email": userModel.email,
         "user_name": userModel.displayName,
+        "status": userModel.status,
         'profile_levels': {
           'isEmailVerified': true,
           // 'isPhoneNoVerified': false,
@@ -366,7 +351,7 @@ class AuthServices {
 
       if (documentSnapshot.exists) {
         Map<String, dynamic> mapData = documentSnapshot.data()!;
-        return UserModel.fromMap(mapData);
+        return UserModel.fromMap(mapData, documentSnapshot.id);
       } else {
         return null;
       }

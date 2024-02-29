@@ -1,39 +1,30 @@
 class EventModal {
   String? imageUrl;
   String? festivalName;
-  String? ticketType;
   String? date;
-  String? price;
   String? description;
-  String? userId;
+  String? docId;
   String? time;
-  String? status;
   String? city;
 
   EventModal(
       {this.imageUrl,
       this.festivalName,
-      this.ticketType,
       this.date,
-      this.price,
       this.description,
-      this.userId,
+      this.docId,
       this.time,
-      this.status,
       this.city});
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'image_url': imageUrl,
       'festival_name': festivalName,
-      'ticket_type': ticketType,
       'date': date,
-      'price': price,
       'description': description,
-      'user_id': userId,
+      'doc_id': docId,
       'time': time,
-      'status': status,
-      'city': city
+      'city': city,
     };
   }
 
@@ -41,13 +32,10 @@ class EventModal {
     return EventModal(
       imageUrl: map['image_url'] ?? '',
       festivalName: map['festival_name'] ?? '',
-      ticketType: map['ticket_type'] ?? '',
       date: map['date'] ?? '',
-      price: map['price'] ?? '',
       description: map['description'] ?? '',
-      userId: map['user_id'] ?? '',
+      docId: map['doc_id'] ?? '',
       time: map['time'] ?? '',
-      status: map['status'] ?? '',
       city: map['city'] ?? '',
     );
   }

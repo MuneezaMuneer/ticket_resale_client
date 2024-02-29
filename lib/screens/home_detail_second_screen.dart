@@ -1,18 +1,24 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:svg_flutter/svg_flutter.dart';
+
 import 'package:ticket_resale/constants/constants.dart';
+import 'package:ticket_resale/db_services/auth_services.dart';
 import 'package:ticket_resale/models/models.dart';
 import 'package:ticket_resale/utils/utils.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
+
 import '../components/components.dart';
 
 class HomeDetailSecondScreen extends StatefulWidget {
   EventModal eventModal;
+  TicketModel ticketModel;
   HomeDetailSecondScreen({
     Key? key,
     required this.eventModal,
+    required this.ticketModel,
   }) : super(key: key);
 
   @override
@@ -20,7 +26,6 @@ class HomeDetailSecondScreen extends StatefulWidget {
 }
 
 class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
-  ValueNotifier<bool> isTileSelected = ValueNotifier<bool>(false);
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -191,219 +196,166 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                     weight: FontWeight.w600,
                     color: AppColors.jetBlack,
                   ),
-                  const Gap(7),
-                  ValueListenableBuilder(
-                    valueListenable: isTileSelected,
-                    builder: (context, value, child) {
-                      return GestureDetector(
-                        onTap: () {
-                          isTileSelected.value = true;
-                          // isFirstTileSelected.value =
-                          //     !isFirstTileSelected.value;
-                          // isSecondTileSelected.value = false;
-                        },
-                        child: _tileContainer(
-                          height: height * 0.08,
-                          width: width * 0.9,
-                          containerBorderColor: isTileSelected.value
-                              ? AppColors.blueViolet.withOpacity(0.8)
-                              : const Color(0XffF7F5FF),
-                          isSvg: true,
-                          imagePath: AppSvgs.ticket,
-                          backgroundColor: const Color(0XffF7F5FF),
-                          avatarBg: AppColors.white,
-                          title: 'PREMIUM TICKET AVAILABLE',
-                          titleColor: AppColors.jetBlack,
-                          titleSize: AppSize.small,
-                          titleWeight: FontWeight.w600,
-                          subTitle: 'Premium Seats',
-                          subTitleColor: AppColors.lightGrey.withOpacity(0.6),
-                          subTitleSize: AppSize.xsmall,
-                          subTitleWeight: FontWeight.w400,
-                          child: const Padding(
-                            padding: EdgeInsets.only(right: 12),
-                            child: CustomText(
-                              title: '\$ 500',
-                              color: Color(0XffAC8AF7),
-                              size: 18,
-                              weight: FontWeight.w900,
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
                   const Gap(25),
-                  ValueListenableBuilder(
-                    valueListenable: isTileSelected,
-                    builder: (context, value, child) {
-                      return GestureDetector(
-                        onTap: () {
-                          isTileSelected.value = true;
-                          // isSecondTileSelected.value =
-                          //     !isSecondTileSelected.value;
-                          // isFirstTileSelected.value = false;
-                        },
-                        child: _tileContainer(
-                          height: height * 0.08,
-                          width: width * 0.9,
-                          containerBorderColor: isTileSelected.value
-                              ? AppColors.blueViolet.withOpacity(0.8)
-                              : const Color(0XffF7F5FF),
-                          isSvg: true,
-                          imagePath: AppSvgs.ticket,
-                          backgroundColor: const Color(0XffF7F5FF),
-                          avatarBg: AppColors.white,
-                          title: 'VIP PLUS TICKET AVAILABLE',
-                          titleColor: AppColors.jetBlack,
-                          titleSize: AppSize.small,
-                          titleWeight: FontWeight.w600,
-                          subTitle: 'VIP Seats + Exclusive braclets',
-                          subTitleColor: AppColors.lightGrey.withOpacity(0.6),
-                          subTitleSize: AppSize.xsmall,
-                          subTitleWeight: FontWeight.w400,
-                          child: const Padding(
-                            padding: EdgeInsets.only(right: 12),
-                            child: CustomText(
-                              title: '\$ 400',
-                              color: Color(0XffAC8AF7),
-                              size: 18,
-                              weight: FontWeight.w900,
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                  const Gap(25),
-                  Container(
-                    height: height * 0.1,
-                    width: width,
-                    decoration: BoxDecoration(
-                      color: AppColors.white,
-                      borderRadius: BorderRadius.circular(20),
+                  _tileContainer(
+                    height: height * 0.08,
+                    width: width * 0.9,
+                    containerBorderColor: AppColors.blueViolet.withOpacity(0.8),
+                    isSvg: true,
+                    imagePath: AppSvgs.ticket,
+                    backgroundColor: const Color(0XffF7F5FF),
+                    avatarBg: AppColors.white,
+                    title: '${widget.ticketModel.ticketType} TICKET AVAILABLE',
+                    titleColor: AppColors.jetBlack,
+                    titleSize: AppSize.small,
+                    titleWeight: FontWeight.w600,
+                    subTitle: 'VIP Seats + Exclusive braclets',
+                    subTitleColor: AppColors.lightGrey.withOpacity(0.6),
+                    subTitleSize: AppSize.xsmall,
+                    subTitleWeight: FontWeight.w400,
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 12),
+                      child: CustomText(
+                        title: '\$ ${widget.ticketModel.price}',
+                        color: const Color(0XffAC8AF7),
+                        size: 18,
+                        weight: FontWeight.w900,
+                      ),
                     ),
-                    child: Row(
-                      children: [
-                        const Gap(7),
-                        const CircleAvatar(
-                            backgroundImage: AssetImage(AppImages.profile)),
-                        const Gap(9),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              height: width > 370 ? 14 : 5,
-                            ),
-                            CustomText(
-                              title: 'Sell by',
-                              size: AppSize.verySmall,
-                              weight: FontWeight.w300,
-                              color: AppColors.lightBlack.withOpacity(0.7),
-                            ),
-                            Row(
-                              children: [
-                                CustomText(
-                                  title: 'Cameron Williamson ',
-                                  size: AppSize.intermediate,
-                                  weight: FontWeight.w600,
-                                  color: AppColors.lightBlack.withOpacity(0.5),
-                                ),
-                                CustomText(
-                                  title: '(',
-                                  color: AppColors.lightBlack.withOpacity(0.7),
-                                ),
-                                SvgPicture.asset(
-                                  AppSvgs.fillStar,
-                                  height: 13,
-                                ),
-                                CustomText(
-                                  title: '4.7 )',
-                                  color: AppColors.lightBlack.withOpacity(0.7),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: width > 370 ? 4 : 0,
-                            ),
-                            const Row(
-                              children: [
-                                CustomText(
-                                    title: '23',
+                  ),
+                  const Gap(25),
+                  GestureDetector(
+                    onTap: () {
+                      sellerRatingDialog(context: context);
+                    },
+                    child: Container(
+                      height: height * 0.1,
+                      width: width,
+                      decoration: BoxDecoration(
+                        color: AppColors.white,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Row(
+                        children: [
+                          const Gap(7),
+                          CircleAvatar(
+                              backgroundImage:
+                                  widget.ticketModel.imageUrl != null &&
+                                          widget.ticketModel.imageUrl != 'null'
+                                      ? NetworkImage(
+                                          '${widget.ticketModel.imageUrl}')
+                                      : const AssetImage(AppImages.profileImage)
+                                          as ImageProvider),
+                          const Gap(9),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                height: width > 370 ? 14 : 5,
+                              ),
+                              CustomText(
+                                title: 'Sell by',
+                                size: AppSize.verySmall,
+                                weight: FontWeight.w300,
+                                color: AppColors.lightBlack.withOpacity(0.7),
+                              ),
+                              Row(
+                                children: [
+                                  CustomText(
+                                    title:
+                                        AuthServices.getCurrentUser.displayName,
                                     size: AppSize.intermediate,
-                                    weight: FontWeight.w500),
-                                Gap(2),
-                                CustomText(
-                                  title: 'Ticket Sold',
-                                  size: AppSize.xxsmall,
-                                  weight: FontWeight.w400,
-                                )
-                              ],
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          width: width > 370 ? width * 0.15 : width * 0.11,
-                        ),
-                        Align(
-                            alignment: Alignment.topRight,
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 8),
-                              child: SvgPicture.asset(AppSvgs.levelThree),
-                            ))
-                      ],
+                                    weight: FontWeight.w600,
+                                    color:
+                                        AppColors.lightBlack.withOpacity(0.5),
+                                  ),
+                                  CustomText(
+                                    title: '(',
+                                    color:
+                                        AppColors.lightBlack.withOpacity(0.7),
+                                  ),
+                                  SvgPicture.asset(
+                                    AppSvgs.fillStar,
+                                    height: 13,
+                                  ),
+                                  CustomText(
+                                    title: '4.7 )',
+                                    color:
+                                        AppColors.lightBlack.withOpacity(0.7),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: width > 370 ? 4 : 0,
+                              ),
+                              const Row(
+                                children: [
+                                  CustomText(
+                                      title: '23',
+                                      size: AppSize.intermediate,
+                                      weight: FontWeight.w500),
+                                  Gap(2),
+                                  CustomText(
+                                    title: 'Ticket Sold',
+                                    size: AppSize.xxsmall,
+                                    weight: FontWeight.w400,
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            width: width > 370 ? width * 0.15 : width * 0.11,
+                          ),
+                          Align(
+                              alignment: Alignment.topRight,
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 8),
+                                child: SvgPicture.asset(AppSvgs.levelThree),
+                              ))
+                        ],
+                      ),
                     ),
                   ),
                   const Gap(25),
-                  ValueListenableBuilder(
-                    valueListenable: isTileSelected,
-                    builder: (context, value, child) {
-                      return SizedBox(
-                        child: value
-                            ? CustomTextField(
-                                hintText: 'Offer you price',
-                                hintStyle: TextStyle(
-                                    color:
-                                        AppColors.lightBlack.withOpacity(0.5)),
-                                fillColor: AppColors.white,
-                                suffixIcon: InkWell(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(16.0),
-                                    child: SvgPicture.asset(
-                                      AppSvgs.dollarSign,
-                                    ),
-                                  ),
-                                ),
-                              )
-                            : const SizedBox.shrink(),
-                      );
-                    },
+                  CustomTextField(
+                    hintText: 'Offer you price',
+                    hintStyle:
+                        TextStyle(color: AppColors.lightBlack.withOpacity(0.5)),
+                    fillColor: AppColors.white,
+                    keyBoardType: TextInputType.number,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                    ],
+                    suffixIcon: InkWell(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: SvgPicture.asset(
+                          AppSvgs.dollarSign,
+                        ),
+                      ),
+                    ),
                   ),
                   SizedBox(
                     height: height * 0.04,
                   ),
-                  ValueListenableBuilder(
-                    valueListenable: isTileSelected,
-                    builder: (context, value, child) {
-                      return SizedBox(
-                          height: height * 0.07,
-                          width: width * 0.9,
-                          child: CustomButton(
-                            onPressed: () {
-                              // Navigator.pushNamed(
-                              //     context, AppRoutes.commentScreen);
-                              ticketSellDialog(context: context);
-                            },
-                            textColor: AppColors.white,
-                            textSize: AppSize.regular,
-                            btnText: 'Start Conversation',
-                            gradient: isTileSelected.value
-                                ? customGradient
-                                : lightGradient,
-                            weight: FontWeight.w700,
-                          ));
-                    },
-                  ),
+                  SizedBox(
+                      height: height * 0.07,
+                      width: width * 0.9,
+                      child: CustomButton(
+                        onPressed: () {
+                          Navigator.pushNamed(
+                            context,
+                            AppRoutes.commentScreen,
+                            arguments: widget.eventModal.docId,
+                          );
+                        },
+                        textColor: AppColors.white,
+                        textSize: AppSize.regular,
+                        btnText: 'Start Conversation',
+                        gradient: customGradient,
+                        weight: FontWeight.w700,
+                      ))
                 ],
               ),
             ),

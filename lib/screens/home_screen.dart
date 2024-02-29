@@ -1,4 +1,5 @@
 import 'package:avatar_stack/avatar_stack.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:svg_flutter/svg.dart';
@@ -73,7 +74,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   StreamBuilder(
                     stream: displayEventData,
                     builder: (context, snapshot) {
-                      if (snapshot.hasData &&
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                            child: CupertinoActivityIndicator());
+                      } else if (snapshot.hasData &&
                           snapshot.data != null &&
                           snapshot.data!.isNotEmpty) {
                         final data = snapshot.data;
@@ -158,7 +162,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         );
                       } else {
-                        return const Text('No Event Yet');
+                        return const Center(
+                            child: Column(
+                          children: [
+                            Gap(30),
+                            Text('No Event Yet'),
+                          ],
+                        ));
                       }
                     },
                   ),
@@ -261,10 +271,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                             .contains(query.toLowerCase()) ||
                                         element.city!
                                             .toLowerCase()
-                                            .contains(query.toLowerCase()) ||
-                                        element.ticketType!
-                                            .toLowerCase()
-                                            .contains(query.toLowerCase()))
+                                            .contains(query.toLowerCase())
+                                        
+                                            
+                                            )
                                     .toList();
 
                             if (data!.isNotEmpty) {

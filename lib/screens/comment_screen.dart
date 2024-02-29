@@ -1,16 +1,23 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 import 'package:svg_flutter/svg_flutter.dart';
+
 import 'package:ticket_resale/components/components.dart';
 import 'package:ticket_resale/constants/constants.dart';
+import 'package:ticket_resale/db_services/auth_services.dart';
 import 'package:ticket_resale/providers/providers.dart';
 import 'package:ticket_resale/utils/utils.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
 class CommentScreen extends StatefulWidget {
-  const CommentScreen({super.key});
+  String id;
+  CommentScreen({
+    Key? key,
+    required this.id,
+  }) : super(key: key);
 
   @override
   State<CommentScreen> createState() => _CommentScreenState();
@@ -58,14 +65,17 @@ class _CommentScreenState extends State<CommentScreen> {
                         ),
                         Consumer<SwitchProvider>(
                           builder: (context, provider, child) {
-                            return CupertinoSwitch(
-                              activeColor: AppColors.blueViolet,
-                              thumbColor: Colors.white,
-                              trackColor: AppColors.pastelBlue,
-                              value: provider.getComment,
-                              onChanged: (bool value) {
-                                provider.setComment(value);
-                              },
+                            return Transform.scale(
+                              scale: 0.8,
+                              child: CupertinoSwitch(
+                                activeColor: AppColors.blueViolet,
+                                thumbColor: Colors.white,
+                                trackColor: AppColors.pastelBlue,
+                                value: provider.getComment,
+                                onChanged: (bool value) {
+                                  provider.setComment(value);
+                                },
+                              ),
                             );
                           },
                         ),
@@ -81,6 +91,9 @@ class _CommentScreenState extends State<CommentScreen> {
                       padding: const EdgeInsets.only(top: 6),
                       itemCount: 5,
                       itemBuilder: (context, index) {
+                        bool isCurrentUserTicket =
+                            AuthServices.getCurrentUser.uid == widget.id;
+
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 7),
                           child: Row(
@@ -89,8 +102,8 @@ class _CommentScreenState extends State<CommentScreen> {
                                 backgroundImage: AssetImage(AppImages.profile),
                               ),
                               const Gap(20),
-                              SizedBox(
-                                width: width * 0.53,
+                              Expanded(
+                                flex: 8,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -123,32 +136,55 @@ class _CommentScreenState extends State<CommentScreen> {
                                     ),
                                     const CustomText(
                                       title:
-                                          'Sed ut est eget dolor finibus mattis maximus hendrerit ex.',
+                                          'Sed ut est eget dolor finibus the way is',
                                       size: AppSize.intermediate,
                                       weight: FontWeight.w400,
                                       color: AppColors.lightGrey,
                                       maxLines: 2,
                                       softWrap: true,
                                     ),
+                                    const Gap(5),
+                                    RichText(
+                                        text: const TextSpan(children: [
+                                      TextSpan(
+                                          text: 'Offered Price is',
+                                          style: TextStyle(
+                                              letterSpacing: 0.5,
+                                              color: AppColors.lightGrey,
+                                              fontSize: AppSize.small,
+                                              fontWeight: FontWeight.w400)),
+                                      WidgetSpan(
+                                        child: SizedBox(width: 5.0),
+                                      ),
+                                      TextSpan(
+                                          text: '\$420',
+                                          style: TextStyle(
+                                              letterSpacing: 0.5,
+                                              color: AppColors.lightBlack,
+                                              fontSize: AppSize.small,
+                                              fontWeight: FontWeight.w600))
+                                    ]))
                                   ],
                                 ),
                               ),
-                              const Gap(5),
                               Expanded(
+                                flex: 2,
                                 child: SizedBox(
-                                  height: height * 0.04,
-                                  width: width * 0.15,
-                                  child: CustomButton(
-                                    onPressed: () {
-                                      ticketSellDialog(context: context);
-                                    },
-                                    textColor: AppColors.white,
-                                    textSize: AppSize.medium,
-                                    btnText: 'Sell',
-                                    gradient: customGradient,
-                                    weight: FontWeight.w600,
-                                  ),
-                                ),
+                                    height: height * 0.04,
+                                    width: width * 0.15,
+                                    child: isCurrentUserTicket
+                                        ? CustomButton(
+                                            onPressed: () {
+                                              ticketSellDialog(
+                                                  context: context);
+                                            },
+                                            textColor: AppColors.white,
+                                            textSize: AppSize.medium,
+                                            btnText: 'Sell',
+                                            gradient: customGradient,
+                                            weight: FontWeight.w600,
+                                          )
+                                        : const SizedBox.shrink()),
                               )
                             ],
                           ),

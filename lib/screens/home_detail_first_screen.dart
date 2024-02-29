@@ -1,14 +1,16 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:svg_flutter/svg_flutter.dart';
 import 'package:ticket_resale/constants/constants.dart';
+import 'package:ticket_resale/db_services/db_services.dart';
 import 'package:ticket_resale/models/models.dart';
 import 'package:ticket_resale/utils/app_utils.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 import '../components/components.dart';
 
-class HomeDetailFirstScreen extends StatelessWidget {
+class HomeDetailFirstScreen extends StatefulWidget {
   EventModal eventModal;
   HomeDetailFirstScreen({
     Key? key,
@@ -16,14 +18,30 @@ class HomeDetailFirstScreen extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<HomeDetailFirstScreen> createState() => _HomeDetailFirstScreenState();
+}
+
+class _HomeDetailFirstScreenState extends State<HomeDetailFirstScreen> {
+  late Stream<List<TicketModel>> displayTickets;
+  String photoURL = '';
+  @override
+  void initState() {
+    displayTickets =
+        FireStoreServices.fetchTicketsData(docID: widget.eventModal.docId!);
+    photoURL = '${AuthServices.getCurrentUser.photoURL}';
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    print('Model id is : ${widget.eventModal.docId}');
     Size size = MediaQuery.of(context).size;
     final double height = size.height;
     final double width = size.width;
     return Scaffold(
       backgroundColor: AppColors.pastelBlue.withOpacity(0.3),
       body: AppBackground(
-        networkImage: eventModal.imageUrl,
+        networkImage: widget.eventModal.imageUrl,
         isAssetImage: false,
         isBackButton: true,
         child: Padding(
@@ -38,7 +56,7 @@ class HomeDetailFirstScreen extends StatelessWidget {
                     children: [
                       Expanded(
                         child: CustomText(
-                          title: eventModal.festivalName,
+                          title: widget.eventModal.festivalName,
                           size: AppSize.large,
                           weight: FontWeight.w600,
                           softWrap: true,
@@ -131,13 +149,13 @@ class HomeDetailFirstScreen extends StatelessWidget {
                                   children: [
                                     CustomText(
                                       title:
-                                          '${AppUtils.formatDate(eventModal.date!)}, ${eventModal.time}',
+                                          '${AppUtils.formatDate(widget.eventModal.date!)}, ${widget.eventModal.time}',
                                       color:
                                           AppColors.lightGrey.withOpacity(0.6),
                                       size: AppSize.xsmall,
                                       weight: FontWeight.w400,
                                     ),
-                                  
+                                    const Gap(2),
                                     RichText(
                                         text: TextSpan(children: [
                                       TextSpan(
@@ -145,12 +163,14 @@ class HomeDetailFirstScreen extends StatelessWidget {
                                           style: TextStyle(
                                               color: AppColors.lightGrey
                                                   .withOpacity(0.6),
+                                              letterSpacing: 0.8,
                                               fontSize: AppSize.xsmall,
                                               fontWeight: FontWeight.w400)),
                                       TextSpan(
-                                          text: '${eventModal.city}',
+                                          text: '${widget.eventModal.city}',
                                           style: const TextStyle(
                                               color: AppColors.jetBlack,
+                                              letterSpacing: 0.8,
                                               fontSize: AppSize.small,
                                               fontWeight: FontWeight.w600)),
                                     ])),
@@ -171,7 +191,7 @@ class HomeDetailFirstScreen extends StatelessWidget {
                     color: AppColors.jetBlack,
                   ),
                   CustomText(
-                    title: '${eventModal.description}',
+                    title: '${widget.eventModal.description}',
                     size: AppSize.medium,
                     softWrap: true,
                     weight: FontWeight.w400,
@@ -185,27 +205,68 @@ class HomeDetailFirstScreen extends StatelessWidget {
                     color: AppColors.jetBlack,
                   ),
                   const Gap(15),
-                  ListView.builder(
-                    padding: EdgeInsets.zero,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: 4,
-                    itemExtent: 140,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.only(top: 15),
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.pushNamed(
-                                context, AppRoutes.detailSecondScreen,
-                                arguments: eventModal);
-                          },
-                          child: _tileContainer(
-                            title: 'VIP PLUS TICKET AVAILABLE',
-                            subTitle: 'VIP Seats + Exclusive braclets',
-                          ),
-                        ),
-                      );
+                  StreamBuilder(
+                    stream: displayTickets,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: CupertinoActivityIndicator(),
+                        );
+                      } else if (snapshot.hasData && snapshot.data != null) {
+                        final tickets = snapshot.data!;
+                        if (tickets.isNotEmpty) {
+                          return ListView.builder(
+                            padding: EdgeInsets.zero,
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: tickets.length,
+                            itemExtent: 140,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.only(top: 15),
+                                child: InkWell(
+                                  onTap: () {
+                                    TicketModel ticketModel = TicketModel(
+                                      imageUrl: photoURL,
+                                      ticketType: tickets[index].ticketType,
+                                      description: tickets[index].description,
+                                      status: tickets[index].status,
+                                      price: tickets[index].price,
+                                      uid: tickets[index].uid,
+                                    );
+                                    Navigator.pushNamed(
+                                      context,
+                                      AppRoutes.detailSecondScreen,
+                                      arguments: {
+                                        'eventModal': widget.eventModal,
+                                        'ticketModel': ticketModel,
+                                      },
+                                    );
+                                  },
+                                  child: _tileContainer(
+                                      title:
+                                          '${tickets[index].ticketType} TICKET AVAILABLE',
+                                      subTitle:
+                                          'VIP Seats + Exclusive braclets',
+                                      price: '${tickets[index].price}',
+                                      imagePath: '${tickets[index].imageUrl}',
+                                      userImage: photoURL),
+                                ),
+                              );
+                            },
+                          );
+                        } else {
+                          return const Center(
+                              child: Column(
+                            children: [
+                              Gap(30),
+                              Text('No Ticket Available'),
+                            ],
+                          ));
+                        }
+                      } else {
+                        return const Text('No Ticket Available');
+                      }
                     },
                   ),
                   const Gap(10)
@@ -221,6 +282,9 @@ class HomeDetailFirstScreen extends StatelessWidget {
   Widget _tileContainer({
     String? title,
     String? subTitle,
+    String? price,
+    String? imagePath,
+    String? userImage,
   }) {
     return Container(
       decoration: BoxDecoration(
@@ -247,12 +311,10 @@ class HomeDetailFirstScreen extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.only(bottom: 5),
                           child: CircleAvatar(
-                              backgroundColor: AppColors.white,
-                              radius: 20,
-                              child: SvgPicture.asset(
-                                AppSvgs.ticket,
-                                height: 25,
-                              )),
+                            backgroundColor: AppColors.white,
+                            radius: 20,
+                            backgroundImage: NetworkImage('$imagePath'),
+                          ),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 8, top: 15),
@@ -277,11 +339,11 @@ class HomeDetailFirstScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.only(right: 12),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 12),
                     child: CustomText(
-                      title: '\$ 500',
-                      color: Color(0XffAC8AF7),
+                      title: '\$ $price',
+                      color: const Color(0XffAC8AF7),
                       size: 18,
                       weight: FontWeight.w900,
                     ),
@@ -304,8 +366,12 @@ class HomeDetailFirstScreen extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 8),
                     child: Row(
                       children: [
-                        const CircleAvatar(
-                          backgroundImage: AssetImage(AppImages.profile),
+                        CircleAvatar(
+                          backgroundImage:
+                              userImage != null && userImage != 'null'
+                                  ? NetworkImage(userImage)
+                                  : const AssetImage(AppImages.profileImage)
+                                      as ImageProvider,
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 8, top: 15),
@@ -319,7 +385,8 @@ class HomeDetailFirstScreen extends StatelessWidget {
                                 weight: FontWeight.w300,
                               ),
                               CustomText(
-                                title: 'Ralph Edwards',
+                                title:
+                                    '${AuthServices.getCurrentUser.displayName}',
                                 color: AppColors.lightBlack.withOpacity(0.6),
                                 size: AppSize.intermediate,
                                 weight: FontWeight.w600,
