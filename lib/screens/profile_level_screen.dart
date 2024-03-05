@@ -1,35 +1,53 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:provider/provider.dart';
 import 'package:svg_flutter/svg_flutter.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/db_services/db_services.dart';
+import 'package:ticket_resale/models/models.dart';
+import 'package:ticket_resale/providers/providers.dart';
+import 'package:ticket_resale/utils/utils.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
-
 class ProfileLevelScreen extends StatefulWidget {
-  const ProfileLevelScreen({super.key});
-
+  bool isBackButton;
+  ProfileLevelScreen({
+    Key? key,
+    required this.isBackButton,
+  }) : super(key: key);
   @override
   State<ProfileLevelScreen> createState() => _ProfileLevelScreenState();
 }
-
 class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
   String? photoUrl;
+  late Stream<List<UserModel>> fetchUserLevel;
+  TextEditingController instagramController = TextEditingController();
+  GlobalKey<FormState> defaultFormKey = GlobalKey<FormState>();
+  late BottomSheetProvider bottomSheetProvider;
   @override
   void initState() {
+    bottomSheetProvider =
+        Provider.of<BottomSheetProvider>(context, listen: false);
     photoUrl = AuthServices.getCurrentUser.photoURL;
+    fetchUserLevel = FireStoreServices.fetchUserLevels();
     super.initState();
   }
-
+  @override
+  void dispose() {
+    instagramController.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    final double height = size.height;
     final double width = size.width;
     return Scaffold(
-      //  backgroundColor: AppColors.white.withOpacity(0.2),
-      appBar: const CustomAppBar(
+      appBar: CustomAppBar(
         title: 'Profile Level',
+        isBackButton: widget.isBackButton,
       ),
       body: Column(
         children: [
@@ -39,14 +57,22 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
           Stack(
             children: [
               SizedBox(
-                height: 140,
-                width: 140,
-                child: CircleAvatar(
-                    backgroundImage: photoUrl != null
-                        ? NetworkImage("$photoUrl")
-                        : const AssetImage(AppImages.profileImage)
-                            as ImageProvider),
-              ),
+                  height: 140,
+                  width: 140,
+                  child: photoUrl != null
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.circular(100),
+                          child: CachedNetworkImage(
+                            imageUrl: "$photoUrl",
+                            placeholder: (context, url) =>
+                                const CupertinoActivityIndicator(
+                              color: AppColors.blueViolet,
+                            ),
+                            fit: BoxFit.cover,
+                          ),
+                        )
+                      : const CircleAvatar(
+                          backgroundImage: AssetImage(AppImages.profileImage))),
               Positioned(
                   left: 90, top: 70, child: SvgPicture.asset(AppSvgs.levelOne))
             ],
@@ -99,53 +125,111 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
                     Expanded(
                       child: SingleChildScrollView(
                         scrollDirection: Axis.vertical,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Gap(20),
-                            _buildContainer(
-                                AppSvgs.levelOne,
-                                'Verify your email',
-                                'Level 1 verified',
-                                width,
-                                AppColors.yellow,
-                                AppColors.yellow),
-                            _buildContainer(
-                                AppSvgs.levelTwo,
-                                'Verify your Phone No',
-                                'Level 2 verified',
-                                width,
-                                AppColors.yellow,
-                                AppColors.yellow),
-                            _buildContainer(
-                                AppSvgs.levelThree,
-                                'Connect you PayPal',
-                                'Verify for Level 3',
-                                width,
-                                AppColors.blueViolet,
-                                AppColors.blueViolet),
-                            _buildContainer(
-                                AppSvgs.levelFour,
-                                'Add Instagram profile',
-                                'Verify for Level 4',
-                                width,
-                                AppColors.blueViolet,
-                                AppColors.blueViolet),
-                            _buildContainer(
-                                AppSvgs.levelFive,
-                                'Post your 1st Ticket',
-                                'Verify for Level 5',
-                                width,
-                                AppColors.blueViolet,
-                                AppColors.blueViolet),
-                            _buildContainer(
-                                AppSvgs.levelSix,
-                                'Make your 1st transaction',
-                                'Verify for Level 6',
-                                width,
-                                AppColors.blueViolet,
-                                AppColors.blueViolet),
-                          ],
+                        child: StreamBuilder(
+                          stream: fetchUserLevel,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              final data = snapshot.data!;
+
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Gap(20),
+                                  _buildContainer(
+                                    AppSvgs.levelOne,
+                                    'Verify Your Email',
+                                    'Level 1 Verified',
+                                    'Verify for Level 1',
+                                    width,
+                                    data[0].profileLevels!['isEmailVerified'] ??
+                                        false,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.pushNamed(
+                                          context, AppRoutes.profileSettings);
+                                    },
+                                    child: _buildContainer(
+                                        AppSvgs.levelTwo,
+                                        'Verify your Phone No',
+                                        'Level 2 Verified',
+                                        'Verify for Level 2',
+                                        width,
+                                        data[0].profileLevels![
+                                                'isPhoneNoVerified'] ??
+                                            false),
+                                  ),
+                                  _buildContainer(
+                                      AppSvgs.levelThree,
+                                      'Connect Your PayPal',
+                                      'Level 3 Verified',
+                                      'Verify for Level 3',
+                                      width,
+                                      data[0].profileLevels![
+                                              'isPaypalVerified'] ??
+                                          false),
+                                  GestureDetector(
+                                    onTap: () {
+                                      CustomBottomSheet.showInstaBottomSheet(
+                                        context: context,
+                                        controller: instagramController,
+                                        defaultFormKey: defaultFormKey,
+                                        onTape: () async {
+                                          if (defaultFormKey.currentState!
+                                              .validate()) {
+                                            bottomSheetProvider
+                                                .setInstaProgress = true;
+                                            await FireStoreServices
+                                                    .verifyInstagram(
+                                                        instagram:
+                                                            instagramController
+                                                                .text)
+                                                .then((value) {
+                                              FocusScope.of(context).unfocus();
+                                              Navigator.pop(context);
+                                            });
+                                            bottomSheetProvider
+                                                .setInstaProgress = false;
+                                          }
+                                        },
+                                      );
+                                    },
+                                    child: _buildContainer(
+                                      AppSvgs.levelFour,
+                                      'Add Instagram Profile',
+                                      'Level 4 Verified',
+                                      'Verify for Level 4',
+                                      width,
+                                      data[0].profileLevels![
+                                              'isInstaVerified'] ??
+                                          false,
+                                    ),
+                                  ),
+                                  _buildContainer(
+                                    AppSvgs.levelFive,
+                                    'Make 5 Buy/Sell Transaction',
+                                    'Level 5 Verified',
+                                    'Verify for Level 5',
+                                    width,
+                                    data[0].profileLevels![
+                                            'isTransactionVerified'] ??
+                                        false,
+                                  ),
+                                  _buildContainer(
+                                    AppSvgs.levelSix,
+                                    'Tier 5 Super Verified',
+                                    'Level 6 Verified',
+                                    'Verify for Level 6',
+                                    width,
+                                    data[0].profileLevels!['isSuperVerified'] ??
+                                        false,
+                                  ),
+                                ],
+                              );
+                            } else {
+                              return const SizedBox();
+                            }
+                          },
                         ),
                       ),
                     ),
@@ -159,8 +243,9 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
     );
   }
 
-  Widget _buildContainer(String svgPath, String title, String leveltext,
-      double width, Color textColor, Color svgColor) {
+  Widget _buildContainer(String svgPath, String title, String levelText,
+      String leveltext, double width, bool isVerified) {
+    Color borderColor = isVerified ? AppColors.yellow : Colors.transparent;
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: Container(
@@ -169,52 +254,59 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(43),
             color: AppColors.white,
-            border: Border.all(color: AppColors.yellow)),
+            border: Border.all(color: borderColor)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              children: [
-                SizedBox(
-                  width: width < 370 ? 2 : 5,
-                ),
-                SizedBox(
-                    height: 30, width: 30, child: SvgPicture.asset(svgPath)),
-                SizedBox(
-                  width: width < 370 ? 0 : 2,
-                ),
-                CustomText(
-                  title: title,
-                  size: AppSize.intermediate,
-                  weight: FontWeight.w400,
-                ),
-                SizedBox(
-                  width: width < 370 ? 0 : 5,
-                ),
-              ],
+            Expanded(
+              flex: 7,
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: width < 370 ? 2 : 5,
+                  ),
+                  SizedBox(
+                      height: 25, width: 25, child: SvgPicture.asset(svgPath)),
+                  SizedBox(
+                    width: width < 370 ? 0 : 2,
+                  ),
+                  Expanded(
+                    child: CustomText(
+                      title: title,
+                      size: AppSize.intermediate,
+                      weight: FontWeight.w400,
+                    ),
+                  ),
+                ],
+              ),
             ),
-            Row(
-              children: [
-                SizedBox(
-                  width: width < 370 ? 0 : 5,
-                ),
-                SvgPicture.asset(
-                  AppSvgs.verified,
-                  colorFilter: ColorFilter.mode(svgColor, BlendMode.srcIn),
-                ),
-                SizedBox(
-                  width: width < 370 ? 0 : 5,
-                ),
-                CustomText(
-                  title: leveltext,
-                  size: AppSize.verySmall,
-                  weight: FontWeight.w400,
-                  color: textColor,
-                ),
-                SizedBox(
-                  width: width < 370 ? 5 : 9,
-                ),
-              ],
+            Expanded(
+              flex: 4,
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: width < 370 ? 0 : 7,
+                  ),
+                  SvgPicture.asset(
+                    AppSvgs.verified,
+                    colorFilter: ColorFilter.mode(
+                        isVerified ? AppColors.yellow : AppColors.purple,
+                        BlendMode.srcIn),
+                  ),
+                  SizedBox(
+                    width: width < 370 ? 0 : 5,
+                  ),
+                  CustomText(
+                    title: isVerified ? levelText : leveltext,
+                    size: AppSize.verySmall,
+                    weight: FontWeight.w400,
+                    color: isVerified ? AppColors.yellow : AppColors.purple,
+                  ),
+                  SizedBox(
+                    width: width < 370 ? 5 : 9,
+                  ),
+                ],
+              ),
             )
           ],
         ),

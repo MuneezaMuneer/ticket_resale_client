@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 import 'package:svg_flutter/svg_flutter.dart';
-import 'package:ticket_resale/admin_panel/sign_in_screen.dart';
 import '../components/components.dart';
 import '../constants/constants.dart';
 import '../providers/search_provider.dart';
@@ -13,10 +12,13 @@ class CustomAppBarAdmin extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
   final Widget? child;
   final bool isNotification;
+  final bool isSearchIcon;
+
   const CustomAppBarAdmin({
     super.key,
     this.title,
     this.child,
+    this.isSearchIcon = true,
     this.isNotification = true,
   });
 
@@ -58,37 +60,37 @@ class CustomAppBarAdmin extends StatelessWidget implements PreferredSizeWidget {
             SizedBox(
               width: width * 0.2,
             ),
-            GestureDetector(
-              onTap: () {
-                searchProvider.toggleSearch();
-              },
-              child: Container(
-                height: 40,
-                width: 40,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.white.withOpacity(0.1),
-                ),
-                child: const Padding(
-                  padding: EdgeInsets.all(10.0),
-                  child: Icon(
-                    Icons.search,
-                    color: AppColors.white,
+            if (isSearchIcon!)
+              GestureDetector(
+                onTap: () {
+                  searchProvider.toggleSearch();
+                },
+                child: Container(
+                  height: 40,
+                  width: 40,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: AppColors.white.withOpacity(0.1),
+                  ),
+                  child: const Padding(
+                    padding: EdgeInsets.all(10.0),
+                    child: Icon(
+                      Icons.search,
+                      color: AppColors.white,
+                    ),
                   ),
                 ),
               ),
-            ),
             Padding(
               padding: const EdgeInsets.only(right: 20),
               child: GestureDetector(
                 onTap: () async {
-                  await FirebaseAuth.instance
-                      .signOut()
-                      .then((value) => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const SignInAdmin(),
-                          )));
+                  await FirebaseAuth.instance.signOut().then((value) {
+                    AppText.preference!.remove(AppText.isAdminPrefKey);
+
+                    return Navigator.pushNamedAndRemoveUntil(
+                        context, AppRoutes.logoutAdmin, (route) => false);
+                  });
                 },
                 child: Container(
                   height: 40,

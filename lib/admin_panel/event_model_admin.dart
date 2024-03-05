@@ -6,6 +6,7 @@ class EventModelAdmin {
   String? status;
   String? userID;
   String? id;
+  String? username;
   EventModelAdmin(
       {this.festivalName,
       this.ticketType,
@@ -13,6 +14,7 @@ class EventModelAdmin {
       this.date,
       this.status,
       this.userID,
+      this.username,
       this.id});
 
   Map<String, dynamic> toMap() {
@@ -31,6 +33,7 @@ class EventModelAdmin {
         festivalName: map['festival_name'] ?? '',
         ticketType: map['ticket_type'] ?? '',
         price: map['price'] ?? '',
+        username: map['user_name'] ?? '',
         date: map['date'] ?? '',
         status: map['status'] ?? '',
         userID: map['user_id'] ?? '',

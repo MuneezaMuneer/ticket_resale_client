@@ -8,18 +8,19 @@ class EventModal {
   String? userId;
   String? time;
   String? status;
+  String? city;
 
-  EventModal({
-    this.imageUrl,
-    this.festivalName,
-    this.ticketType,
-    this.date,
-    this.price,
-    this.description,
-    this.userId,
-    this.time,
-    this.status,
-  });
+  EventModal(
+      {this.imageUrl,
+      this.festivalName,
+      this.ticketType,
+      this.date,
+      this.price,
+      this.description,
+      this.userId,
+      this.time,
+      this.status,
+      this.city});
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -31,20 +32,23 @@ class EventModal {
       'description': description,
       'user_id': userId,
       'time': time,
-      'status': status
+      'status': status,
+      'city': city
     };
   }
 
   factory EventModal.fromMap(Map<String, dynamic> map) {
     return EventModal(
-        imageUrl: map['image_url'] ?? '',
-        festivalName: map['festival_name'] ?? '',
-        ticketType: map['ticket_type'] ?? '',
-        date: map['date'] ?? '',
-        price: map['price'] ?? '',
-        description: map['description'] ?? '',
-        userId: map['user_id'] ?? '',
-        time: map['time'] ?? '',
-        status: map['status'] ?? '');
+      imageUrl: map['image_url'] ?? '',
+      festivalName: map['festival_name'] ?? '',
+      ticketType: map['ticket_type'] ?? '',
+      date: map['date'] ?? '',
+      price: map['price'] ?? '',
+      description: map['description'] ?? '',
+      userId: map['user_id'] ?? '',
+      time: map['time'] ?? '',
+      status: map['status'] ?? '',
+      city: map['city'] ?? '',
+    );
   }
 }

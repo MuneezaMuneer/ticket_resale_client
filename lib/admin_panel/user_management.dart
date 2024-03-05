@@ -3,24 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 import 'package:ticket_resale/admin_panel/custom_appbar.dart';
-
 import 'package:ticket_resale/admin_panel/firestore_services.dart';
 import 'package:ticket_resale/admin_panel/user_model_admin.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
-
 import '../constants/constants.dart';
 import '../providers/search_provider.dart';
 import '../utils/utils.dart';
-
 class UserManagement extends StatefulWidget {
   const UserManagement({super.key});
-
   @override
   State<UserManagement> createState() => _UserManagementState();
 }
-
 late List<UserModelAdmin?> userData = [];
-
 class _UserManagementState extends State<UserManagement> {
   late Stream<List<UserModelAdmin?>> fetchUserData;
   ValueNotifier<String> searchNotifier = ValueNotifier('');
@@ -40,7 +34,8 @@ class _UserManagementState extends State<UserManagement> {
       builder: (context, searchprovider, child) => Scaffold(
           appBar: searchprovider.isSearching
               ? PreferredSize(
-                  preferredSize: Size.fromHeight(60),
+                  
+                  preferredSize: const Size.fromHeight(60),
                   child: CustomAppBarField(
                       searchController: searchcontroller,
                       setSearchValue: (searchQuery) {
@@ -147,8 +142,10 @@ class _UserManagementState extends State<UserManagement> {
                                             _createDataCell(
                                                 userData.instaUsername!),
                                             _createDataCell(userData.phoneNo!),
-                                            DataCell(
-                                                createTableCell('Pending')),
+                                            DataCell(createTableCell(
+                                                userData.status!,
+                                                userData.id!,
+                                                userData.status!)),
                                           ],
                                         );
                                       }).toList());
@@ -195,7 +192,7 @@ DataCell _createDataCell(String text) {
 DataColumn _buildTableCell(String text) {
   return DataColumn(
     label: Center(
-      child: Text(AppUtils.limitTextTo32Characters(text),
+      child: Text(AppUtils.textTo32Characters(text),
           style: const TextStyle(
               fontSize: AppSize.regular,
               fontWeight: FontWeight.w600,
@@ -204,32 +201,39 @@ DataColumn _buildTableCell(String text) {
   );
 }
 
-Widget createTableCell(String cellText) {
+Widget createTableCell(
+    String cellText, String documentId, String currentStatus) {
   Color backgroundColor;
   Color textColor = Colors.white;
 
   if (cellText == 'Active') {
     backgroundColor = AppColors.green;
-  } else if (cellText == 'Disabled') {
+  } else if (cellText == 'Disable') {
     backgroundColor = AppColors.red;
   } else {
     backgroundColor = AppColors.blue;
   }
 
-  return Container(
-    height: 30,
-    width: 100,
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(38),
-      color: backgroundColor,
-    ),
-    child: Center(
-      child: Text(
-        cellText,
-        style: TextStyle(
-          color: textColor,
-          fontSize: AppSize.small,
-          fontWeight: FontWeight.w600,
+  return GestureDetector(
+    onTap: () {
+      String status = (currentStatus == 'Active') ? 'Disable' : 'Active';
+      FirestoreServices.updateUserStatus(documentId, status);
+    },
+    child: Container(
+      height: 30,
+      width: 100,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(38),
+        color: backgroundColor,
+      ),
+      child: Center(
+        child: Text(
+          cellText,
+          style: TextStyle(
+            color: textColor,
+            fontSize: AppSize.small,
+            fontWeight: FontWeight.w600,
+          ),
         ),
       ),
     ),

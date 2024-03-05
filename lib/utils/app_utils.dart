@@ -1,10 +1,8 @@
 import 'dart:io';
-
 import 'package:bottom_picker/bottom_picker.dart';
 import 'package:bottom_picker/resources/arrays.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:ticket_resale/constants/app_colors.dart';
@@ -19,6 +17,23 @@ class AppUtils {
       return image.path;
     } else {
       return '';
+    }
+  }
+
+  static String getGreeting() {
+    DateTime now = DateTime.now();
+    int hour = now.hour;
+
+    if (hour >= 6 && hour < 12) {
+      return 'Good Morning,';
+    } else if (hour >= 12 && hour < 14) {
+      return 'Good Noon,';
+    } else if (hour >= 14 && hour < 16) {
+      return 'Good Afternoon,';
+    } else if (hour >= 16 && hour < 21) {
+      return 'Good Evening,';
+    } else {
+      return 'Good Night,';
     }
   }
 
@@ -38,9 +53,23 @@ class AppUtils {
     return formattedDate;
   }
 
-  static String limitTextTo32Characters(String inputText) {
+  static String formatDate(String inputDate) {
+    DateTime dateTime = DateTime.parse(inputDate);
+    String formattedDate = DateFormat('dd MMM yyyy').format(dateTime);
+    return formattedDate;
+  }
+
+  static String limitTo42Char(String inputText) {
     if (inputText.length > 43) {
       return '${inputText.substring(0, 43)}...';
+    } else {
+      return inputText;
+    }
+  }
+
+  static String limitTo33Char(String inputText) {
+    if (inputText.length > 33) {
+      return '${inputText.substring(0, 33)}...';
     } else {
       return inputText;
     }

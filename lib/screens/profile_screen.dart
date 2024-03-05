@@ -1,41 +1,36 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:svg_flutter/svg.dart';
 import 'package:ticket_resale/constants/constants.dart';
-import 'package:ticket_resale/db_services/auth_services.dart';
+import 'package:ticket_resale/db_services/db_services.dart';
 import 'package:ticket_resale/providers/providers.dart';
-
-import 'package:ticket_resale/utils/app_dialouge.dart';
-
+import 'package:ticket_resale/utils/utils.dart';
 import '../widgets/widgets.dart';
-
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
-
 class _ProfileScreenState extends State<ProfileScreen> {
   late SwitchProvider switchProvider;
   String? photoUrl;
-
-  @override
+ @override
   void initState() {
     photoUrl = AuthServices.getCurrentUser.photoURL;
     Provider.of<SwitchProvider>(context, listen: false).loadPreferences();
     switchProvider = Provider.of<SwitchProvider>(context, listen: false);
-
     super.initState();
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.pastelBlue.withOpacity(0.3),
       appBar: const CustomAppBar(
         title: 'Profile',
+        isBackButton: false,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -46,14 +41,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Stack(
               children: [
                 SizedBox(
-                  height: 140,
-                  width: 140,
-                  child: CircleAvatar(
-                      backgroundImage: photoUrl != null
-                          ? NetworkImage("$photoUrl")
-                          : const AssetImage(AppImages.profileImage)
-                              as ImageProvider),
-                ),
+                    height: 140,
+                    width: 140,
+                    child: photoUrl != null
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(100),
+                            child: CachedNetworkImage(
+                              imageUrl: "$photoUrl",
+                              placeholder: (context, url) =>
+                                  const CupertinoActivityIndicator(
+                                color: AppColors.blueViolet,
+                              ),
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                        : const CircleAvatar(
+                            backgroundImage:
+                                AssetImage(AppImages.profileImage))),
                 Positioned(
                     left: 90,
                     top: 70,
@@ -80,7 +84,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Column(
                 children: [
-                  GestureDetector(
+                  InkWell(
                     onTap: () {
                       Navigator.pushNamed(context, AppRoutes.profileSettings);
                     },
@@ -91,10 +95,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       iconColor: AppColors.lightGrey,
                     ),
                   ),
-                  GestureDetector(
+                  InkWell(
                     onTap: () {
                       Navigator.pushNamed(
-                          context, AppRoutes.profileLevelScreen);
+                        context,
+                        AppRoutes.profileLevelScreen,
+                        arguments: true,
+                      );
                     },
                     child: const CustomProfileRow(
                       svgImage: AppSvgs.level,
@@ -104,7 +111,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       iconColor: AppColors.lightGrey,
                     ),
                   ),
-                  GestureDetector(
+                  InkWell(
                     onTap: () {
                       Navigator.pushNamed(
                           context, AppRoutes.notificationScreen);
@@ -117,7 +124,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       iconColor: AppColors.lightGrey,
                     ),
                   ),
-                  GestureDetector(
+                  InkWell(
                     onTap: () {
                       Navigator.pushNamed(context, AppRoutes.connectScreen);
                     },
@@ -129,7 +136,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       iconColor: AppColors.electricBlue,
                     ),
                   ),
-                  GestureDetector(
+                  InkWell(
                     onTap: () {
                       Navigator.pushNamed(context, AppRoutes.privacyScreen);
                     },
@@ -140,7 +147,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       iconColor: AppColors.lightGrey,
                     ),
                   ),
-                  GestureDetector(
+                  InkWell(
                     onTap: () {
                       Navigator.pushNamed(context, AppRoutes.termOfUseScreen);
                     },
@@ -154,8 +161,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   InkWell(
                     onTap: () {
-                      AuthServices.signOut();
-                      Navigator.pushNamed(context, AppRoutes.logIn);
+                      AuthServices.signOut().then((value) {
+                        AppText.preference!.remove(AppText.isAdminPrefKey);
+                        Navigator.pushNamed(context, AppRoutes.logIn);
+                      });
                     },
                     child: const CustomProfileRow(
                       leadingIcon: Icons.logout,
@@ -165,7 +174,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       iconColor: AppColors.blueViolet,
                     ),
                   ),
-                  GestureDetector(
+                  InkWell(
                     onTap: () {
                       deleteDialog(context: context);
                     },

@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
-
 class PaymentConnectScreen extends StatelessWidget {
   const PaymentConnectScreen({super.key});
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;

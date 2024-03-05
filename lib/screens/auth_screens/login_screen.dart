@@ -1,36 +1,30 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:ticket_resale/db_services/auth_services.dart';
+import 'package:gap/gap.dart';
+import 'package:ticket_resale/db_services/db_services.dart';
 import '../../components/components.dart';
 import '../../constants/constants.dart';
 import '../../widgets/widgets.dart';
-
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
-
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
-
-
-ValueNotifier<bool> googleNotifier = ValueNotifier<bool>(false);
+class _LoginScreenState extends State<LoginScreen> {
+  ValueNotifier<bool> googleNotifier = ValueNotifier<bool>(false);
 ValueNotifier<bool> fbNotifier = ValueNotifier<bool>(false);
 ValueNotifier<bool> appleNotifier = ValueNotifier<bool>(false);
-
-class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
     double height = size.height;
-
     return Scaffold(
       body: AppBackground(
         imagePath: AppImages.authImage,
         isBackButton: false,
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             child: Column(
               children: [
                 RichText(
@@ -74,9 +68,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       isSocial: true,
                       onPressed: () async {
                         googleNotifier.value = true;
-                        await AuthServices.signInWithGoogle(context)
-                            .then((value) {
-                          googleNotifier.value = false;
+                        await AuthServices.signInWithGoogle(
+                                context, googleNotifier)
+                            .then((credential) {
+                          if (credential != null) {
+                            googleNotifier.value = false;
+                            Navigator.pushNamedAndRemoveUntil(context,
+                                AppRoutes.navigationScreen, (route) => false);
+                          }
                         });
                       },
                     );
@@ -133,9 +132,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     Navigator.pushNamed(context, AppRoutes.signIn);
                   },
                 ),
-                SizedBox(
-                  height: height * 0.1,
-                ),
+                const Gap(30),
                 RichText(
                   text: TextSpan(
                     text: 'Not a member? ',

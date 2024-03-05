@@ -5,6 +5,7 @@ import 'package:ticket_resale/constants/aapp_routes.dart';
 import 'package:ticket_resale/constants/app_colors.dart';
 import 'package:ticket_resale/constants/app_images.dart';
 import 'package:ticket_resale/constants/app_textsize.dart';
+import 'package:ticket_resale/db_services/auth_services.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
 deleteDialog({required BuildContext context}) {
@@ -70,7 +71,10 @@ deleteDialog({required BuildContext context}) {
                 width: 110,
                 child: CustomButton(
                   onPressed: () {
-                    Navigator.pop(context);
+                    AuthServices.deleteUserAccount().then((user) {
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, AppRoutes.logIn, (route) => false);
+                    });
                   },
                   btnText: 'Delete',
                   backgroundColor: AppColors.raddishPink,

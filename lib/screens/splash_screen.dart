@@ -1,8 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:svg_flutter/svg.dart';
 
+import '../admin_panel/custom_navigation_admin.dart';
 import '../constants/constants.dart';
+import '../widgets/widgets.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -15,7 +18,26 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Future.delayed(const Duration(seconds: 3)).then((value) {
-      Navigator.pushNamed(context, AppRoutes.logIn);
+      if (FirebaseAuth.instance.currentUser != null) {
+        if (AppText.preference?.getString(AppText.isAdminPrefKey) == null) {
+          Navigator.pushNamed(context, AppRoutes.logIn);
+        } else if (AppText.preference!.getString(AppText.isAdminPrefKey) ==
+            AppText.client) {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const CustomNavigation(),
+              ));
+        } else {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const CustomNavigationAdmin(),
+              ));
+        }
+      } else {
+        Navigator.pushNamed(context, AppRoutes.logIn);
+      }
     });
   }
 

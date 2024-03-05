@@ -1,51 +1,61 @@
+import 'dart:developer';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
-import 'package:ticket_resale/db_services/auth_services.dart';
-import 'package:ticket_resale/models/user_model.dart';
-import 'package:ticket_resale/utils/app_utils.dart';
+import 'package:provider/provider.dart';
+import 'package:ticket_resale/db_services/db_services.dart';
+import 'package:ticket_resale/models/models.dart';
+import 'package:ticket_resale/providers/providers.dart';
+import 'package:ticket_resale/utils/utils.dart';
 import '../../components/components.dart';
 import '../../constants/constants.dart';
 import '../../widgets/widgets.dart';
-
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
-
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
 }
-
-TextEditingController firstNameController = TextEditingController();
-TextEditingController lastNameController = TextEditingController();
-TextEditingController gmailController = TextEditingController();
-TextEditingController passwordController = TextEditingController();
-TextEditingController confirmPasswordController = TextEditingController();
-TextEditingController instaController = TextEditingController();
-TextEditingController phoneController = TextEditingController();
-ValueNotifier<bool> passwordVisibility = ValueNotifier<bool>(true);
-ValueNotifier<bool> confirmpasswordVisibility = ValueNotifier<bool>(true);
 GlobalKey<FormState> formKey = GlobalKey<FormState>();
-ValueNotifier<bool> loading = ValueNotifier<bool>(false);
-
+String emailVerificationCode = '';
+late BottomSheetProvider bottomSheetProvider;
 class _SignUpScreenState extends State<SignUpScreen> {
+  TextEditingController firstNameController = TextEditingController();
+  ValueNotifier<bool> loading = ValueNotifier<bool>(false);
+  TextEditingController lastNameController = TextEditingController();
+  TextEditingController gmailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
+  TextEditingController instaController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  ValueNotifier<bool> passwordVisibility = ValueNotifier<bool>(true);
+  ValueNotifier<bool> confirmpasswordVisibility = ValueNotifier<bool>(true);
   @override
   void initState() {
-    firstNameController.clear();
-    lastNameController.clear();
-    gmailController.clear();
-    passwordController.clear();
-    confirmPasswordController.clear();
-    phoneController.clear();
-    instaController.clear();
+    bottomSheetProvider =
+        Provider.of<BottomSheetProvider>(context, listen: false);
+
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    firstNameController.dispose();
+    lastNameController.dispose();
+    gmailController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    phoneController.dispose();
+    instaController.dispose();
+
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     double height = size.height;
-    double width = size.width;
+    // double width = size.width;
     return Scaffold(
       body: AppBackground(
         imagePath: AppImages.authImage,
@@ -194,11 +204,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   CustomTextField(
                     controller: instaController,
                     hintStyle: const TextStyle(color: AppColors.silver),
-                    hintText: 'Instagram Profile Url',
+                    hintText: 'Instagram @',
                     keyBoardType: TextInputType.emailAddress,
                     validator: (url) {
                       if (url!.isEmpty) {
-                        return 'Please enter instagram url';
+                        return 'Please enter valid instagram';
                       } else {
                         return null;
                       }
@@ -274,10 +284,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           textSize: AppSize.regular,
                           onPressed: () async {
                             if (formKey.currentState!.validate()) {
-                              if (passwordController.text ==
-                                  confirmPasswordController.text) {
-                                loading.value = true;
+                              bool isEmailExist =
+                                  await FireStoreServices.checkUserEmail(
+                                      email: gmailController.text);
+                              loading.value = true;
 
+                              if (isEmailExist) {
+                                AppUtils.toastMessage('Email already exists');
+                                loading.value = false;
+                              } else {
+                                loading.value = true;
                                 UserModel userModel = UserModel(
                                   displayName:
                                       '${firstNameController.text} ${lastNameController.text}',
@@ -286,23 +302,87 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   phoneNo: phoneController.text,
                                 );
 
-                                await AuthServices.signUp(
-                                  email: gmailController.text,
-                                  password: passwordController.text,
-                                  context: context,
-                                ).then((value) {
-                                  AuthServices.storeUserData(
-                                          userModel: userModel)
-                                      .then((value) {
-                                    Navigator.pushNamed(
-                                        context, AppRoutes.navigationScreen);
-                                  });
+                                int otp =
+                                    VerifyUserEmail.generateRandomNumber();
+                                log('Email of user ==  ${gmailController.text}');
 
+                                try {
+                                  bool isSend = await VerifyUserEmail.sendEmail(
+                                    toEmail: gmailController.text,
+                                    fromEmail: 'info@flutterstudio.dev',
+                                    subject: 'Here is your verification code',
+                                    body:
+                                        'Hello!\nWe have received your request to verify your Email.'
+                                        ' Please use the following code to verify your Email:\n\n$otp'
+                                        '\n\nIf you have not requested this, you can simply ignore this email.'
+                                        '\nRave Trade',
+                                  );
+
+                                  if (isSend) {
+                                    bool isValidEmail = false;
+
+                                    CustomBottomSheet.showOTPBottomSheet(
+                                      context: context,
+                                      onChanged: (code) {
+                                        emailVerificationCode = code;
+                                        print('The code is : $code');
+
+                                        if (code == otp.toString()) {
+                                          isValidEmail = true;
+                                        } else {
+                                          isValidEmail = false;
+                                        }
+                                      },
+                                      email: gmailController.text,
+                                      onTape: () async {
+                                        if (emailVerificationCode.length == 4 &&
+                                            isValidEmail) {
+                                          bottomSheetProvider
+                                              .setLoadingProgress = true;
+
+                                          try {
+                                            await AuthServices.signUp(
+                                              email: gmailController.text,
+                                              password: passwordController.text,
+                                              context: context,
+                                            ).then((userCredentials) async {
+                                              if (userCredentials != null) {
+                                                await AuthServices
+                                                    .storeUserData(
+                                                  userModel: userModel,
+                                                );
+                                                loading.value = false;
+                                                Navigator.pushNamed(
+                                                  context,
+                                                  AppRoutes.navigationScreen,
+                                                );
+                                              }
+                                            });
+                                          } catch (e) {
+                                            print('Error: $e');
+                                            AppUtils.toastMessage(
+                                                'An error occurred. Please try again.');
+                                          } finally {
+                                            bottomSheetProvider
+                                                .setLoadingProgress = false;
+                                          }
+                                        } else {
+                                          AppUtils.toastMessage(
+                                              'Please enter a valid OTP');
+                                        }
+                                      },
+                                    );
+                                  } else {
+                                    AppUtils.toastMessage(
+                                        'Failed to send verification email');
+                                  }
+                                } catch (e) {
+                                  print('Error: $e');
+                                  AppUtils.toastMessage(
+                                      'An error occurred. Please try again.');
+                                } finally {
                                   loading.value = false;
-                                });
-                              } else {
-                                AppUtils.toastMessage(
-                                    'Password does not match');
+                                }
                               }
                             }
                           },

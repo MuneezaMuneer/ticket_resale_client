@@ -224,9 +224,9 @@ class _CustomNavigationState extends State<CustomNavigation> {
 
   static final List<Widget> _widgetOptions = <Widget>[
     const HomeScreen(),
-    const EventScreen(),
+    const EventScreen(isBackButton: false),
     const TicketScreen(),
-    const ProfileLevelScreen(),
+    ProfileLevelScreen(isBackButton: false),
     const ProfileScreen(),
   ];
 }

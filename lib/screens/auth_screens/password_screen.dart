@@ -1,18 +1,15 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:ticket_resale/admin_panel/snackBar.dart';
 import 'package:ticket_resale/components/components.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/db_services/db_services.dart';
-import 'package:ticket_resale/utils/app_utils.dart';
+import 'package:ticket_resale/utils/utils.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
-
-import '../../admin_panel/snackBar.dart';
 
 class PasswordScreen extends StatefulWidget {
   const PasswordScreen({super.key});
-
   @override
   State<PasswordScreen> createState() => _PasswordScreenState();
 }
@@ -21,6 +18,12 @@ class _PasswordScreenState extends State<PasswordScreen> {
   GlobalKey<FormState> key = GlobalKey<FormState>();
   final ValueNotifier<bool> loadingNotifier = ValueNotifier(false);
   TextEditingController emailController = TextEditingController();
+  @override
+  void dispose() {
+    emailController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     log('$key');
@@ -141,9 +144,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
                               SnackBarHelper.showSnackBar(context,
                                   'Password reset email sent successfully!');
                             } else {
-                              AppUtils.toastMessage(
-                                result,
-                              );
+                              SnackBarHelper.showSnackBar(context, result);
                               loadingNotifier.value = false;
                             }
                             loadingNotifier.value = false;

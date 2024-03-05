@@ -51,4 +51,6 @@ class AppSvgs {
   static const event = 'assets/svgs/event.svg';
   static const dollarSign = 'assets/svgs/dollar_sign.svg';
   static const ticketListing = 'assets/svgs/ticket_listing.svg';
+  static const userManagement = 'assets/svgs/user_managemnt.svg';
+  static const notifications = 'assets/svgs/notification.svg';
 }

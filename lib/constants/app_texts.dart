@@ -1,3 +1,5 @@
+import 'package:shared_preferences/shared_preferences.dart';
+
 class PrivacyPolicyText {
   static const String privacyPolicy = '1. Introduction\n\n'
       ' Thank you for choosing our RaveTrade App. This Privacy Policy is designed to inform you about how we collect, use, and safeguard your personal information. By using our app, you agree to the terms outlined in this policy.'
@@ -49,4 +51,11 @@ class TermOfUseText {
       '10. Changes to Terms\n\n'
       'We reserve the right to modify these Terms of Use at any time. Changes will be effective upon posting, and your continued use of the app constitutes acceptance of the modified terms.\n\n'
       'Last Updated: 5 Feb, 2024\n\n';
+}
+
+class AppText {
+  static SharedPreferences? preference;
+  static const isAdminPrefKey = 'isAdmin';
+  static const admin = 'admin';
+  static const client = 'client';
 }

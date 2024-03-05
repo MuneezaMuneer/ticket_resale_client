@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:svg_flutter/svg.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
-
 class PaymentDisconnectScreen extends StatelessWidget {
   const PaymentDisconnectScreen({super.key});
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;

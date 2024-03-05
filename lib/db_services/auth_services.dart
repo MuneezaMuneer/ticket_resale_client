@@ -7,11 +7,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:ticket_resale/constants/aapp_routes.dart';
-import 'package:ticket_resale/constants/app_colors.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/models/models.dart';
-import 'package:ticket_resale/utils/app_utils.dart';
+import 'package:ticket_resale/utils/utils.dart';
+
+import '../admin_panel/custom_navigation_admin.dart';
 
 class AuthServices {
   static User get getCurrentUser {
@@ -19,9 +22,13 @@ class AuthServices {
   }
 
   //Google Authentication
-  static Future<UserCredential?> signInWithGoogle(BuildContext context) async {
+
+  static Future<UserCredential?> signInWithGoogle(
+      BuildContext context, ValueNotifier<bool> googleNotifier) async {
     try {
+      googleNotifier.value = true;
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
       if (googleUser == null) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -32,6 +39,7 @@ class AuthServices {
             ),
           ),
         );
+        googleNotifier.value = false;
         return null;
       }
 
@@ -41,14 +49,41 @@ class AuthServices {
       final credential = GoogleAuthProvider.credential(
           idToken: googleAuth.idToken, accessToken: googleAuth.accessToken);
 
-      Navigator.pushNamedAndRemoveUntil(
-          context, AppRoutes.navigationScreen, (route) => false);
+      final userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
 
-      return await FirebaseAuth.instance.signInWithCredential(credential);
+      //store user google credentials to firestore
+
+      await storeGoogleData(userCredential);
+
+      return userCredential;
     } catch (e) {
       log("Error signing in with Google: $e");
+      googleNotifier.value = false;
     }
     return null;
+  }
+
+  static Future<void> storeGoogleData(UserCredential userCredential) async {
+    final user = userCredential.user;
+    final userData = {
+      'user_name': user!.displayName,
+      'email': user.email,
+      // 'photoURL': user.photoURL,
+      'profile_levels': {
+        'isEmailVerified': true,
+        // 'isPhoneNoVerified': false,
+        // 'isPaypalVerified': false,
+        // 'isInstaVerified': false,
+        // 'isTransactionVerified': false,
+        // 'isSuperVerified': false
+      }
+    };
+
+    final userDocumentReference =
+        FirebaseFirestore.instance.collection('user_data').doc(user.uid);
+
+    await userDocumentReference.set(userData, SetOptions(merge: true));
   }
 
   static Future<UserCredential?> signUp({
@@ -90,10 +125,22 @@ class AuthServices {
           .signInWithEmailAndPassword(email: email, password: password);
       if (userCredential.user != null) {
         SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-          Navigator.of(context).pushNamedAndRemoveUntil(
-            AppRoutes.navigationScreen,
-            (route) => false,
-          );
+          if (email == 'test@gmail.com') {
+            AppText.preference!
+                .setString(AppText.isAdminPrefKey, AppText.admin);
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const CustomNavigationAdmin(),
+                ));
+          } else {
+            AppText.preference!
+                .setString(AppText.isAdminPrefKey, AppText.client);
+            Navigator.of(context).pushNamedAndRemoveUntil(
+              AppRoutes.navigationScreen,
+              (route) => false,
+            );
+          }
         });
         return true;
       } else {
@@ -114,6 +161,135 @@ class AuthServices {
     }
   }
 
+  // static Future<bool> phoneNoVerification(
+  //     {required String phoneNumber, required BuildContext context}) async {
+  //   FirebaseAuth auth = FirebaseAuth.instance;
+
+  //   try {
+  //     await auth.verifyPhoneNumber(
+  //       phoneNumber: phoneNumber,
+  //       timeout: const Duration(seconds: 60),
+  //       verificationCompleted: (PhoneAuthCredential credential) async {
+  //         await auth.signInWithCredential(credential);
+  //       },
+  //       verificationFailed: (FirebaseAuthException e) {
+  //         log('Phone number verification failed: ${e.message}');
+  //       },
+  //       codeSent: (String verificationId, int? resendToken) async {
+  //         String smsCode = '';
+
+  //         CustomBottomSheet.showOTPBottomSheet(
+  //             email: phoneNumber,
+  //             onTape: () async {
+  //               PhoneAuthCredential credential = PhoneAuthProvider.credential(
+  //                   verificationId: verificationId, smsCode: smsCode);
+  //             },
+  //             onChanged: (code) {
+  //               smsCode = code;
+  //             },
+  //             context: context);
+  //         // await auth.signInWithCredential(credential);
+  //       },
+  //       codeAutoRetrievalTimeout: (String verificationId) {
+  //         log('Auto-retrieval timeout. Please enter the code manually.');
+  //       },
+  //     );
+  //     return true;
+  //   } catch (e) {
+  //     log('Error during phone number verification: $e');
+
+  //     return false;
+  //   }
+  // }
+
+  static Future<void> deleteUserAccount() async {
+    try {
+      await deleteUserData();
+      await deleteUserEvents();
+      await AuthServices.getCurrentUser.delete();
+    } on FirebaseAuthException catch (e) {
+      log(e.toString());
+
+      if (e.code == "requires-recent-login") {
+        await _reauthenticateAndDelete();
+      } else {}
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
+  static Future<void> deleteUserData() async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('user_data')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .delete();
+    } catch (e) {
+      log("Error deleting user data: $e");
+    }
+  }
+
+  static Future<void> deleteUserEvents() async {
+    try {
+      String uid = AuthServices.getCurrentUser.uid;
+
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('event_ticket')
+          .where('user_id', isEqualTo: uid)
+          .get();
+
+      for (QueryDocumentSnapshot document in querySnapshot.docs) {
+        await document.reference.delete();
+      }
+    } catch (e) {
+      log("Error deleting user data: $e");
+    }
+  }
+
+  static Future<void> _reauthenticateAndDelete() async {
+    try {
+      final providerData = AuthServices.getCurrentUser.providerData.first;
+
+      if (AppleAuthProvider().providerId == providerData.providerId) {
+        await AuthServices.getCurrentUser
+            .reauthenticateWithProvider(AppleAuthProvider());
+      } else if (GoogleAuthProvider().providerId == providerData.providerId) {
+        await AuthServices.getCurrentUser
+            .reauthenticateWithProvider(GoogleAuthProvider());
+      }
+
+      await AuthServices.getCurrentUser.delete();
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
+  static Future<void> storeUserImage({required UserModel userModel}) async {
+    try {
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
+      DocumentReference user =
+          firestore.collection('user_data').doc(getCurrentUser.uid);
+
+      await getCurrentUser.updatePhotoURL(userModel.photoUrl);
+      await getCurrentUser.updateDisplayName(userModel.displayName);
+      await user.set(
+          {
+            'birth_date': userModel.birthDate,
+            'phone_number': userModel.phoneNo,
+            'instagram_username': userModel.instaUsername,
+            'user_name': userModel.displayName,
+            'profile_levels': {
+              'isInstaVerified': true,
+            },
+          },
+          SetOptions(
+            merge: true,
+          ));
+    } catch (e) {
+      log('Error storing photo url: ${e.toString()}');
+    }
+  }
+
   static Future<String> forgotPassword(
       {required String email, required BuildContext context}) async {
     FirebaseAuth firebaseAuth = FirebaseAuth.instance;
@@ -127,6 +303,7 @@ class AuthServices {
 
   static Future<void> signOut() async {
     await FirebaseAuth.instance.signOut();
+    await GoogleSignIn().signOut();
   }
 
   static Future<void> storeUserData({required UserModel userModel}) async {
@@ -139,30 +316,20 @@ class AuthServices {
         "phone_number": userModel.phoneNo,
         "instagram_username": userModel.instaUsername,
         "email": userModel.email,
-        "user_name": userModel.displayName
+        "user_name": userModel.displayName,
+        'profile_levels': {
+          'isEmailVerified': true,
+          // 'isPhoneNoVerified': false,
+          // 'isPaypalVerified': false,
+          'isInstaVerified': true,
+          // 'isTransactionVerified': false,
+          // 'isSuperVerified': false
+        }
       });
 
       await getCurrentUser.updateDisplayName(userModel.displayName);
     } catch (e) {
       log('Error storing user data: ${e.toString()}');
-    }
-  }
-
-  static Future<void> storeUserImage({required UserModel userModel}) async {
-    try {
-      FirebaseFirestore firestore = FirebaseFirestore.instance;
-      DocumentReference user =
-          firestore.collection('user_data').doc(getCurrentUser.uid);
-
-      await getCurrentUser.updatePhotoURL(userModel.photoUrl);
-      await getCurrentUser.updateDisplayName(userModel.displayName);
-      await user.set({
-        'birth_date': userModel.birthDate,
-        'phone_number': userModel.phoneNo,
-        'instagram_username': userModel.instaUsername,
-      }, SetOptions(merge: true));
-    } catch (e) {
-      log('Error storing photo url: ${e.toString()}');
     }
   }
 
@@ -222,6 +389,34 @@ class AuthServices {
     } catch (e) {
       log('Error fetching user data: ${e.toString()}');
       return null;
+    }
+  }
+
+  static Future<Uint8List?> getImageFromGallery(
+      {required BuildContext context}) async {
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      Uint8List image = await pickedFile.readAsBytes();
+      return image;
+    } else {
+      return null;
+    }
+  }
+
+  static Future<String> storeImageToFirebase(
+      {required BuildContext context, required Uint8List image}) async {
+    final FirebaseStorage firebaseStorage = FirebaseStorage.instance;
+    final profileImage = firebaseStorage
+        .ref('event_images')
+        .child("${DateTime.timestamp().millisecondsSinceEpoch}");
+    try {
+      await profileImage.putData(
+          image, SettableMetadata(contentType: "image/png"));
+      return await profileImage.getDownloadURL();
+    } on FirebaseException catch (error) {
+      log('Image Uploading Error:$error ');
+      return '';
     }
   }
 }

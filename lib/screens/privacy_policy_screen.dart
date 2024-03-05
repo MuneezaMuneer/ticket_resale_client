@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
-
 class PrivacyPolicy extends StatelessWidget {
   const PrivacyPolicy({super.key});
-
   @override
   Widget build(BuildContext context) {
     return const Scaffold(

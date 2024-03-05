@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
@@ -7,27 +6,24 @@ import 'package:provider/provider.dart';
 import 'package:ticket_resale/admin_panel/snackBar.dart';
 import 'package:ticket_resale/utils/app_utils.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
-
 import '../constants/constants.dart';
 import '../providers/drop_down_provider.dart';
-
+import 'ticket_listing_screen.dart';
 class CustomDropDown extends StatelessWidget {
   final Function(String) onSelectedStatus;
   final Function(double, double) onSelectedPrice;
   final Function(DateTime, DateTime) onSelectedDate;
-
   const CustomDropDown(
       {super.key,
       required this.onSelectedStatus,
       required this.onSelectedDate,
       required this.onSelectedPrice});
-
   @override
   Widget build(BuildContext context) {
     return Consumer<DropDownProvider>(
       builder: (context, provider, _) {
         return Padding(
-          padding: const EdgeInsets.only(left: 20),
+          padding: EdgeInsets.only(left: 20),
           child: PopupMenuButton<String>(
             icon: const Icon(Icons.filter_alt_outlined),
             onSelected: (String value) {
@@ -69,6 +65,14 @@ class CustomDropDown extends StatelessWidget {
               const PopupMenuItem(
                 value: 'Status',
                 child: Text('Status'),
+              ),
+              PopupMenuItem(
+                value: 'See all',
+                child: GestureDetector(
+                    onTap: () {
+                      searchNotifier.value = '';
+                    },
+                    child: Text('See all')),
               ),
             ],
           ),
@@ -149,7 +153,6 @@ class CustomDropDown extends StatelessWidget {
             padding: const EdgeInsets.all(20.0),
             child: Center(
               child: Column(
-                //  crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Align(
                     alignment: Alignment.topLeft,
@@ -171,7 +174,7 @@ class CustomDropDown extends StatelessWidget {
                               dateController: startDateController);
                         },
                         child: const Padding(
-                          padding: const EdgeInsets.only(right: 15),
+                          padding: EdgeInsets.only(right: 15),
                           child:
                               Icon(Icons.calendar_today, color: Colors.white),
                         ),

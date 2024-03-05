@@ -3,31 +3,27 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:gap/gap.dart';
-import 'package:ticket_resale/components/app_background.dart';
+import 'package:ticket_resale/components/components.dart';
 import 'package:ticket_resale/constants/constants.dart';
-import 'package:ticket_resale/db_services/auth_services.dart';
+import 'package:ticket_resale/db_services/db_services.dart';
 import '../../widgets/widgets.dart';
-
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
-
   @override
   State<SignInScreen> createState() => _SignInScreenState();
 }
-
-TextEditingController emailController = TextEditingController();
-TextEditingController passwordController = TextEditingController();
-GlobalKey<FormState> globalKey = GlobalKey<FormState>();
-ValueNotifier<bool> passwordVisibility = ValueNotifier<bool>(true);
-ValueNotifier<bool> loading = ValueNotifier<bool>(false);
-
 class _SignInScreenState extends State<SignInScreen> {
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  GlobalKey<FormState> globalKey = GlobalKey<FormState>();
+  ValueNotifier<bool> passwordVisibility = ValueNotifier<bool>(true);
+  ValueNotifier<bool> loading = ValueNotifier<bool>(false);
   @override
-  void initState() {
-    emailController.clear();
-    passwordController.clear();
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
 
-    super.initState();
+    super.dispose();
   }
 
   @override
@@ -157,7 +153,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     },
                   ),
                   SizedBox(
-                    height: height * 0.2,
+                    height: height * 0.15,
                   ),
                   InkWell(
                     onTap: () {

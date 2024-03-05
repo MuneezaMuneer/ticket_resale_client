@@ -1,42 +1,35 @@
+// ignore_for_file: use_build_context_synchronously
+import 'dart:developer';
 import 'dart:io';
-
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:provider/provider.dart';
 import 'package:svg_flutter/svg_flutter.dart';
-import 'package:ticket_resale/db_services/auth_services.dart';
+import 'package:ticket_resale/db_services/db_services.dart';
 import 'package:ticket_resale/models/models.dart';
-import 'package:ticket_resale/providers/image_picker_provider.dart';
-import 'package:ticket_resale/screens/auth_screens/signup_screen.dart';
-import 'package:ticket_resale/utils/app_utils.dart';
+import 'package:ticket_resale/providers/providers.dart';
+import 'package:ticket_resale/utils/utils.dart';
 import '../../constants/constants.dart';
 import '../../widgets/widgets.dart';
-
 class ProfileSettings extends StatefulWidget {
   const ProfileSettings({super.key});
-
   @override
   State<ProfileSettings> createState() => _ProfileSettingsState();
 }
-
-TextEditingController nameController = TextEditingController();
-TextEditingController instaController = TextEditingController();
-TextEditingController emailController = TextEditingController();
-TextEditingController phoneNoController = TextEditingController();
-TextEditingController birthController = TextEditingController();
-ValueNotifier<bool> loading = ValueNotifier<bool>(false);
-GlobalKey<FormState> formKey = GlobalKey<FormState>();
 late ImagePickerProvider imagePickerProvider;
 String? photoUrl;
-// bool validateImage() {
-//   return imagePickerProvider.getImageBytes.isNotEmpty &&
-//       File(imagePickerProvider.getImageBytes).existsSync();
-// }
-
+String countryCode = '';
 class _ProfileSettingsState extends State<ProfileSettings> {
+  TextEditingController nameController = TextEditingController();
+  TextEditingController instaController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController phoneNoController = TextEditingController();
+  TextEditingController birthController = TextEditingController();
+  ValueNotifier<bool> loading = ValueNotifier<bool>(false);
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
   @override
   void initState() {
     imagePickerProvider =
@@ -45,29 +38,18 @@ class _ProfileSettingsState extends State<ProfileSettings> {
     AuthServices.fetchUserDetails().then((userModel) {
       if (userModel != null) {
         instaController.text = '${userModel.instaUsername}';
-        phoneController.text = '${userModel.phoneNo}';
+        phoneNoController.text = userModel.phoneNo ?? '';
         birthController.text = userModel.birthDate ?? '';
       } else {
         instaController.text = '';
-        phoneController.text = '';
+        phoneNoController.text = '';
         birthController.text = '';
       }
       return userModel;
     });
     nameController.text = '${AuthServices.getCurrentUser.displayName}';
     emailController.text = '${AuthServices.getCurrentUser.email}';
-
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    emailController.dispose();
-    birthController.dispose();
-    nameController.dispose();
-    instaController.dispose();
-    phoneController.dispose();
-    super.dispose();
   }
 
   @override
@@ -101,8 +83,16 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                                     File(imageProvider.getImageBytes)),
                               )
                             : (photoUrl != null && photoUrl != 'null')
-                                ? CircleAvatar(
-                                    backgroundImage: NetworkImage('$photoUrl'),
+                                ? ClipRRect(
+                                    borderRadius: BorderRadius.circular(100),
+                                    child: CachedNetworkImage(
+                                      imageUrl: "$photoUrl",
+                                      placeholder: (context, url) =>
+                                          const CupertinoActivityIndicator(
+                                        color: AppColors.blueViolet,
+                                      ),
+                                      fit: BoxFit.cover,
+                                    ),
                                   )
                                 : const CircleAvatar(
                                     backgroundImage:
@@ -175,7 +165,6 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                       ),
                       CustomTextField(
                         controller: instaController,
-                        //     hintText: '@SamanthaPate',
                         hintStyle: const TextStyle(
                             color: AppColors.lightBlack,
                             fontWeight: FontWeight.w400,
@@ -199,7 +188,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                       CustomTextField(
                         controller: emailController,
                         readOnly: true,
-                        trailingText: 'Verify',
+                        trailingText: 'Verified',
                         isTrailingText: true,
                         hintStyle: _buildTextFieldstyle(),
                         validator: (value) {
@@ -225,7 +214,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                           SizedBox(
                             height: 70,
                             child: IntlPhoneField(
-                              controller: phoneController,
+                              controller: phoneNoController,
                               flagsButtonPadding: const EdgeInsets.all(8),
                               dropdownIcon: const Icon(
                                 Icons.keyboard_arrow_down_sharp,
@@ -268,17 +257,24 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                                   return null;
                                 }
                               },
-                              onChanged: (phone) {},
+                              onChanged: (phone) {
+                                
+                              },
                             ),
                           ),
-                          const Positioned(
+                          Positioned(
                             right: 20,
                             top: 15,
-                            child: CustomText(
-                              title: 'Verify',
-                              color: AppColors.springGreen,
-                              weight: FontWeight.w600,
-                              size: AppSize.medium,
+                            child: GestureDetector(
+                              onTap: () async {
+                               
+                              },
+                              child: const CustomText(
+                                title: 'Verify',
+                                color: AppColors.springGreen,
+                                weight: FontWeight.w600,
+                                size: AppSize.medium,
+                              ),
                             ),
                           ),
                         ],
@@ -350,16 +346,16 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                                   UserModel userModel = UserModel(
                                     displayName: nameController.text,
                                     instaUsername: instaController.text,
-                                    phoneNo: phoneController.text,
+                                    phoneNo: phoneNoController.text,
                                     birthDate: birthController.text,
                                     photoUrl: imageUrl,
                                   );
 
                                   await AuthServices.storeUserImage(
                                       userModel: userModel);
+                                  FocusScope.of(context).unfocus();
                                 } catch (e) {
-                                  print(
-                                      'Error storing user data: ${e.toString()}');
+                                  log('Error storing user data: ${e.toString()}');
                                 } finally {
                                   loading.value = false;
                                 }

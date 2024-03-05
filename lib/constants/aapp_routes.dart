@@ -19,4 +19,7 @@ class AppRoutes {
   static const navigationScreen = '/navigationScreen';
   static const passwordScreen = '/passwordScreen';
   static const termOfUseScreen = '/termUseScreen';
+  static const signInAdmin = '/adminSignIn';
+  static const logoutAdmin = '/logoutAdmin';
+  static const createEvent = '/createEvent';
 }

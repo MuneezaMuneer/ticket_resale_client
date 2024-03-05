@@ -1,15 +1,13 @@
 import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 import 'package:ticket_resale/admin_panel/custom_appbar.dart';
 import 'package:ticket_resale/admin_panel/drop_down_menu.dart';
 import 'package:ticket_resale/admin_panel/firestore_services.dart';
 import 'package:ticket_resale/constants/constants.dart';
-
+import '../models/tickets_model.dart';
 import '../providers/search_provider.dart';
 import '../utils/utils.dart';
 import '../widgets/widgets.dart';
@@ -17,12 +15,11 @@ import 'event_model_admin.dart';
 
 class TicketListing extends StatefulWidget {
   const TicketListing({super.key});
-
   @override
   State<TicketListing> createState() => _TicketListingState();
 }
 
-late Stream<List<EventModelAdmin?>> fetchEvents;
+late Future<List<TicketModel?>> fetchEvents;
 ValueNotifier<String> searchNotifier = ValueNotifier('');
 TextEditingController searchcontroller = TextEditingController();
 List<EventModelAdmin?> eventData = [];
@@ -32,9 +29,8 @@ late SearchProvider searchProvider;
 class _TicketListingState extends State<TicketListing> {
   @override
   void initState() {
-    fetchEvents = FirestoreServices.fetchEvents();
+    fetchEvents = FirestoreServices.fetchTickets();
     searchProvider = Provider.of<SearchProvider>(context, listen: false);
-
     super.initState();
   }
 
@@ -56,7 +52,9 @@ class _TicketListingState extends State<TicketListing> {
                                 data!.festivalName!
                                     .toLowerCase()
                                     .contains(searchQuery.toLowerCase()) ||
-                                // data.sellerName!.toLowerCase().contains(query.toLowerCase()) ||
+                                data.username!
+                                    .toLowerCase()
+                                    .contains(searchQuery.toLowerCase()) ||
                                 data.ticketType!
                                     .toLowerCase()
                                     .contains(searchQuery.toLowerCase()))
@@ -139,109 +137,103 @@ class _TicketListingState extends State<TicketListing> {
                               spreadRadius: 2,
                               offset: Offset(0, 0))
                         ]),
-                    child: StreamBuilder<List<EventModelAdmin?>>(
-                        stream: fetchEvents,
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const Center(
-                                child: CupertinoActivityIndicator());
-                          } else if (snapshot.hasError) {
-                            return Center(
-                                child: Text('Error: ${snapshot.error}'));
-                          } else if (snapshot.hasData) {
-                            eventData = snapshot.data!;
-                            return SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: ValueListenableBuilder(
-                                  valueListenable: searchNotifier,
-                                  builder: (context, query, child) {
-                                    List<EventModelAdmin?> eventData =
-                                        query.isEmpty
-                                            ? snapshot.data!
-                                            : filterEventData;
-                                    if (eventData.isNotEmpty) {
-                                      return DataTable(
-                                          columnSpacing: width * 0.1,
-                                          dividerThickness:
-                                              0.0000000000000000001,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                const BorderRadius.only(
-                                                    topLeft:
-                                                        Radius.circular(25),
-                                                    topRight:
-                                                        Radius.circular(25)),
-                                            color: AppColors.lightPurple,
-                                            border: Border.all(
-                                                color: Colors.transparent),
-                                          ),
-                                          columns: [
-                                            _buildTableCell(
-                                              'Event Name',
-                                            ),
-                                            _buildTableCell('Seller Name'),
-                                            _buildTableCell('Ticket Type'),
-                                            _buildTableCell('Date'),
-                                            _buildTableCell('Price'),
-                                            _buildTableCell('Status')
-                                          ],
-                                          rows: eventData.asMap().entries.map(
-                                              (MapEntry<int, EventModelAdmin?>
-                                                  entry) {
-                                            EventModelAdmin? eventData =
-                                                entry.value;
-                                            int id = entry.key;
-                                            final bool isOdd = entry.key.isOdd;
-                                            final Color rowColor = isOdd
-                                                ? AppColors.lightPurple
-                                                : AppColors.white;
-                                            print(
-                                                'User id is:       ${eventData!.userID}');
-                                            return DataRow(
-                                              color: MaterialStateProperty
-                                                  .resolveWith<Color?>(
-                                                      (Set<MaterialState>
-                                                          states) {
-                                                return rowColor;
-                                              }),
-                                              cells: [
-                                                _createDataCell(
-                                                  eventData!.festivalName ??
-                                                      'N/A',
-                                                ),
-                                                _createDataCell('Huma Safdar'),
-                                                _createDataCell(
-                                                    eventData.ticketType!),
-                                                _createDataCell(
-                                                    eventData.date!),
-                                                _createDataCell(
-                                                    eventData.price!),
-                                                DataCell(createTableCell(
-                                                    eventData.status!,
-                                                    eventData.id!,
-                                                    eventData.status!)),
-                                              ],
-                                            );
-                                          }).toList());
-                                    } else {
-                                      return SizedBox(
-                                        width: width,
-                                        child: const Center(
-                                          child: CustomText(
-                                            title: 'No record found here',
-                                            size: AppSize.regular,
-                                            color: AppColors.jetBlack,
-                                          ),
+                    child: FutureBuilder<List<TicketModel?>>(
+                      future: fetchEvents,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                              child: CupertinoActivityIndicator());
+                        } else if (snapshot.hasError) {
+                          return Center(
+                              child: Text('Error: ${snapshot.error}'));
+                        } else if (snapshot.hasData) {
+                          return SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: ValueListenableBuilder(
+                              valueListenable: searchNotifier,
+                              builder: (context, query, child) {
+                                List<TicketModel?> ticketData = query.isEmpty
+                                    ? snapshot.data!
+                                    : snapshot.data!
+                                        .where((data) => data!.status!
+                                            .toLowerCase()
+                                            .contains(query.toLowerCase()))
+                                        .toList();
+
+                                ;
+                                if (ticketData.isNotEmpty) {
+                                  return DataTable(
+                                      columnSpacing: width * 0.066,
+                                      dividerThickness: 0.0000000000000000001,
+                                      decoration: BoxDecoration(
+                                        borderRadius: const BorderRadius.only(
+                                            topLeft: Radius.circular(25),
+                                            topRight: Radius.circular(25)),
+                                        color: AppColors.lightPurple,
+                                        border: Border.all(
+                                            color: Colors.transparent),
+                                      ),
+                                      columns: [
+                                        _buildTableCell(
+                                          'Image',
                                         ),
-                                      );
-                                    }
-                                  }),
-                            );
-                          } else {
-                            return const Text('');
-                          }
-                        }),
+                                        _buildTableCell('Event name'),
+                                        _buildTableCell('Seller name'),
+                                        _buildTableCell('Ticket type'),
+                                        _buildTableCell('Price'),
+                                        _buildTableCell('Status')
+                                      ],
+                                      rows: ticketData.asMap().entries.map(
+                                          (MapEntry<int, TicketModel?> entry) {
+                                        TicketModel? ticketData = entry.value;
+                                        final bool isOdd = entry.key.isOdd;
+                                        final Color rowColor = isOdd
+                                            ? AppColors.lightPurple
+                                            : AppColors.white;
+
+                                        return DataRow(
+                                          color: MaterialStateProperty
+                                              .resolveWith<Color?>(
+                                                  (Set<MaterialState> states) {
+                                            return rowColor;
+                                          }),
+                                          cells: [
+                                            DataCell(CircleAvatar(
+                                              radius: 15,
+                                              backgroundImage: NetworkImage(
+                                                  ticketData!.image!),
+                                            )),
+                                            _dataCellForNames(
+                                                id: ticketData.eventID!,
+                                                isUser: false),
+                                            _dataCellForNames(
+                                                id: ticketData.userID!,
+                                                isUser: true),
+                                            _createDataCell(
+                                                ticketData.ticketType!),
+                                            _createDataCell(ticketData.price!),
+                                            DataCell(createTableCell(
+                                              ticketID: ticketData.ticketID!,
+                                            )),
+                                          ],
+                                        );
+                                      }).toList());
+                                } else {
+                                  return const CustomText(
+                                    title: 'No record found here',
+                                    size: AppSize.regular,
+                                    color: AppColors.jetBlack,
+                                  );
+                                }
+                              },
+                            ),
+                          );
+                        } else {
+                          return const Text('');
+                        }
+                      },
+                    ),
                   ),
                 ),
               ),
@@ -269,7 +261,7 @@ DataCell _createDataCell(String text) {
 DataColumn _buildTableCell(String text) {
   return DataColumn(
     label: Center(
-      child: Text(AppUtils.limitTextTo32Characters(text),
+      child: Text(AppUtils.textTo32Characters(text),
           style: const TextStyle(
               fontSize: AppSize.regular,
               fontWeight: FontWeight.w600,
@@ -278,47 +270,78 @@ DataColumn _buildTableCell(String text) {
   );
 }
 
-Widget createTableCell(
-    String cellText, String documentId, String currentStatus) {
+Widget createTableCell({
+  required String ticketID,
+}) {
   Color backgroundColor;
   Color textColor = Colors.white;
+  return StreamBuilder(
+      stream: FirestoreServices.fetchTicketStatus(ticketID: ticketID),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          String status = snapshot.data!;
 
-  if (cellText == 'Active') {
-    backgroundColor = AppColors.green;
-  } else if (cellText == 'Disable') {
-    backgroundColor = AppColors.red;
-  } else {
-    backgroundColor = AppColors.blue;
-  }
-
-  return GestureDetector(
-    onTap: () {
-      String status = (currentStatus == 'Active') ? 'Disable' : 'Active';
-      for (var element in filterEventData) {
-        if (element!.id == documentId) {
-          element.status = status;
-          break;
+          if (status == 'Active') {
+            backgroundColor = AppColors.green;
+          } else if (status == 'Disable') {
+            backgroundColor = AppColors.red;
+          } else {
+            backgroundColor = AppColors.blue;
+          }
+          return GestureDetector(
+            onTap: () {
+              String currentStatus =
+                  (status == 'Active') ? 'Disable' : 'Active';
+              FirestoreServices.updateTicketStatus(ticketID, currentStatus);
+            },
+            child: Container(
+              height: 30,
+              width: 100,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(38),
+                color: backgroundColor,
+              ),
+              child: Center(
+                child: Text(
+                  status,
+                  style: TextStyle(
+                    color: textColor,
+                    fontSize: AppSize.small,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ),
+          );
+        } else {
+          return const SizedBox(
+            width: 100,
+          );
         }
-      }
-      FirestoreServices.updateStatus(documentId, status);
-    },
-    child: Container(
-      height: 30,
-      width: 100,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(38),
-        color: backgroundColor,
-      ),
-      child: Center(
-        child: Text(
-          cellText,
-          style: TextStyle(
-            color: textColor,
-            fontSize: AppSize.small,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ),
-    ),
+      });
+}
+
+DataCell _dataCellForNames({required String id, required bool isUser}) {
+  return DataCell(
+    StreamBuilder(
+        stream: isUser
+            ? FirestoreServices.fetchUserName(userID: id)
+            : FirestoreServices.fetchEventName(eventID: id),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Text(
+              AppUtils.textTo32Characters('${snapshot.data}'),
+              style: const TextStyle(
+                fontSize: AppSize.small,
+                fontWeight: FontWeight.w400,
+                color: AppColors.grey,
+              ),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 2,
+            );
+          } else {
+            return const SizedBox();
+          }
+        }),
   );
 }
