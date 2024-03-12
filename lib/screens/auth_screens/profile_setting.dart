@@ -1,5 +1,4 @@
 // ignore_for_file: use_build_context_synchronously
-
 import 'dart:developer';
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -13,7 +12,6 @@ import 'package:ticket_resale/db_services/db_services.dart';
 import 'package:ticket_resale/models/models.dart';
 import 'package:ticket_resale/providers/providers.dart';
 import 'package:ticket_resale/utils/utils.dart';
-
 import '../../constants/constants.dart';
 import '../../widgets/widgets.dart';
 
@@ -278,9 +276,6 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                             top: 15,
                             child: GestureDetector(
                               onTap: () async {
-                                AuthServices.sendVerificationCode(
-                                    '$countryCode${phoneNoController.text}',
-                                    '67687');
                                 CustomBottomSheet.showOTPBottomSheet(
                                   context: context,
                                   btnText: 'Verify Number',
@@ -365,12 +360,12 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                                   }
 
                                   UserModel userModel = UserModel(
-                                    displayName: nameController.text,
-                                    instaUsername: instaController.text,
-                                    phoneNo: phoneNoController.text,
-                                    birthDate: birthController.text,
-                                    photoUrl: imageUrl,
-                                  );
+                                      displayName: nameController.text,
+                                      instaUsername: instaController.text,
+                                      phoneNo: phoneNoController.text,
+                                      birthDate: birthController.text,
+                                      photoUrl: imageUrl,
+                                      status: 'Active');
 
                                   await AuthServices.storeUserImage(
                                       userModel: userModel);

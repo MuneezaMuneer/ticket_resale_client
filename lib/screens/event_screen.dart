@@ -126,10 +126,10 @@ class _EventScreenState extends State<EventScreen> {
                                 ? snapshot.data!
                                 : snapshot.data!
                                     .where((data) =>
-                                        data.festivalName!
+                                        data.eventName!
                                             .toLowerCase()
                                             .contains(query.toLowerCase()) ||
-                                        data.city!
+                                        data.location!
                                             .toLowerCase()
                                             .contains(query.toLowerCase()))
                                     .toList();
@@ -231,7 +231,7 @@ class _EventScreenState extends State<EventScreen> {
                                                 child: CustomText(
                                                   softWrap: true,
                                                   title: AppUtils.limitTo42Char(
-                                                      '${data[index].festivalName}'),
+                                                      '${data[index].eventName}'),
                                                   color: AppColors.jetBlack,
                                                   size: AppSize.xsmall,
                                                   weight: FontWeight.w600,
@@ -301,15 +301,14 @@ class _EventScreenState extends State<EventScreen> {
                                                             data[index].docId,
                                                         description: data[index]
                                                             .description!,
-                                                        festivalName:
-                                                            data[index]
-                                                                .festivalName!,
+                                                        eventName: data[index]
+                                                            .eventName!,
                                                         imageUrl: data[index]
                                                             .imageUrl!,
                                                         date: data[index].date!,
                                                         time: data[index].time!,
-                                                        city:
-                                                            data[index].city!);
+                                                        location: data[index]
+                                                            .location!);
                                                 Navigator.pushNamed(context,
                                                     AppRoutes.detailFirstScreen,
                                                     arguments: eventModal);

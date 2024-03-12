@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:ticket_resale/models/event_modal.dart';
 import 'package:ticket_resale/models/models.dart';
+import 'package:ticket_resale/screens/chat_detail_screen.dart';
+import 'package:ticket_resale/screens/chat_screen.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 import '../constants/constants.dart';
 import '../screens/auth_screens/signin_screen.dart';
@@ -12,6 +13,9 @@ Route onGenerateRoute(RouteSettings settings) {
     return animatePage(const LoginScreen());
   } else if (settings.name == AppRoutes.signIn) {
     return animatePage(const SignInScreen());
+  } else if (settings.name == AppRoutes.payPalAuthorization) {
+    return animatePage(
+        const PaypalAuthorization(title: 'PayPal Authorization'));
   } else if (settings.name == AppRoutes.signUp) {
     return animatePage(const SignUpScreen());
   } else if (settings.name == AppRoutes.navigationScreen) {
@@ -21,8 +25,16 @@ Route onGenerateRoute(RouteSettings settings) {
   } else if (settings.name == AppRoutes.homeScreen) {
     return animatePage(const HomeScreen());
   } else if (settings.name == AppRoutes.commentScreen) {
-    final id = settings.arguments as String;
-    return animatePage(CommentScreen(id: id));
+    final Map<String, dynamic> arguments =
+        settings.arguments as Map<String, dynamic>;
+    final EventModal eventModal = arguments['eventModal'] as EventModal;
+    final TicketModel ticketModal = arguments['ticketModal'] as TicketModel;
+    final String price = arguments['price'] as String;
+    return animatePage(CommentScreen(
+      eventModal: eventModal,
+      ticketModal: ticketModal,
+      price: price,
+    ));
   } else if (settings.name == AppRoutes.feedbackScreen) {
     return animatePage(const FeedBackScreen());
   } else if (settings.name == AppRoutes.privacyScreen) {
@@ -31,15 +43,29 @@ Route onGenerateRoute(RouteSettings settings) {
     final eventModal = settings.arguments as EventModal;
     return animatePage(HomeDetailFirstScreen(eventModal: eventModal));
   } else if (settings.name == AppRoutes.detailSecondScreen) {
-     final Map<String, dynamic> arguments = settings.arguments as Map<String, dynamic>;
-  final EventModal eventModal = arguments['eventModal'] as EventModal;
-  final TicketModel ticketModal = arguments['ticketModel'] as TicketModel;
-  return animatePage(HomeDetailSecondScreen(
-    eventModal: eventModal,
-    ticketModel: ticketModal,
-  ));
+    final Map<String, dynamic> arguments =
+        settings.arguments as Map<String, dynamic>;
+    final EventModal eventModal = arguments['eventModal'] as EventModal;
+    final TicketModel ticketModal = arguments['ticketModel'] as TicketModel;
+    return animatePage(HomeDetailSecondScreen(
+      eventModal: eventModal,
+      ticketModel: ticketModal,
+    ));
   } else if (settings.name == AppRoutes.ticketScreen) {
     return animatePage(const TicketScreen());
+  } else if (settings.name == AppRoutes.chatScreen) {
+    return animatePage(const ChatScreen());
+  } else if (settings.name == AppRoutes.chatDetailScreen) {
+    final Map<String, dynamic> arguments =
+        settings.arguments as Map<String, dynamic>;
+    final UserModel userModal = arguments['userModel'] as UserModel;
+    final String receiverId = arguments['receiverId'] as String;
+    final String hashKey = arguments['hashKey'] as String;
+    return animatePage(ChatDetailScreen(
+      receiverId: receiverId,
+      hashKey: hashKey,
+      userModel: userModal,
+    ));
   } else if (settings.name == AppRoutes.eventScreen) {
     final isBackButton = settings.arguments as bool;
     return animatePage(EventScreen(isBackButton: isBackButton));

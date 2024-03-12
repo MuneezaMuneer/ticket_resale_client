@@ -1,7 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
-
 import 'dart:developer';
-
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -333,7 +331,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       context: context,
                                       onChanged: (code) {
                                         emailVerificationCode = code;
-                                        print('The code is : $code');
+                                        log('The code is : $code');
 
                                         if (code == otp.toString()) {
                                           isValidEmail = true;
@@ -367,7 +365,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                               }
                                             });
                                           } catch (e) {
-                                            print('Error: $e');
+                                            log('Error: $e');
                                             AppUtils.toastMessage(
                                                 'An error occurred. Please try again.');
                                           } finally {
@@ -385,7 +383,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                         'Failed to send verification email');
                                   }
                                 } catch (e) {
-                                  print('Error: $e');
+                                  log('Error: $e');
                                   AppUtils.toastMessage(
                                       'An error occurred. Please try again.');
                                 } finally {

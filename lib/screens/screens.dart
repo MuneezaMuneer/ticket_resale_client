@@ -8,12 +8,14 @@ export 'home_detail_first_screen.dart';
 export 'home_detail_second_screen.dart';
 export 'home_screen.dart';
 export 'notification_screen.dart';
-export 'payment_connect_screen.dart';
-export 'payment_disconnect_screen.dart';
+export 'payment_screens/payment_connect_screen.dart';
+export 'payment_screens/payment_disconnect_screen.dart';
 export 'profile_level_screen.dart';
 export 'splash_screen.dart';
 export 'privacy_policy_screen.dart';
 export 'ticket_screen.dart';
 export 'term_of_use_screen.dart';
 export 'profile_screen.dart';
-
+export 'payment_screens/payment_screen.dart';
+export 'payment_screens/paypal_services.dart';
+export 'payment_screens/authorize_paypal.dart';

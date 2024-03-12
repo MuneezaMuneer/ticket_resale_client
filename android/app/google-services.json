@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:831456807199:android:4f5ff927e55adb29cb882a",
+        "mobilesdk_app_id": "1:831456807199:android:6322ce8e2e2724accb882a",
         "android_client_info": {
-          "package_name": "ravetrade.com.ticketresale"
+          "package_name": "com.RaveTradeApp.RaveTrade"
         }
       },
       "oauth_client": [

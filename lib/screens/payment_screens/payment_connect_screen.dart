@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ticket_resale/constants/constants.dart';
-import 'package:ticket_resale/utils/paypal_services.dart';
+import 'package:ticket_resale/screens/screens.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
 class PaymentConnectScreen extends StatefulWidget {
@@ -11,18 +11,14 @@ class PaymentConnectScreen extends StatefulWidget {
 }
 
 class _PaymentConnectScreenState extends State<PaymentConnectScreen> {
-  PayPalService payPalService = PayPalService();
-  @override
-  void initState() {
-   payPalService.initPayPal();
-    super.initState();
-  }
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     final double height = size.height;
     final double width = size.width;
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: const Color.fromARGB(255, 230, 234, 248),
       appBar: const CustomAppBar(
         title: 'Payment Method',
@@ -78,8 +74,29 @@ class _PaymentConnectScreenState extends State<PaymentConnectScreen> {
               width: width * 0.8,
               child: CustomButton(
                 onPressed: () async {
-                  PayPalService.makePayPalPayment();
-                  //  Navigator.pushNamed(context, AppRoutes.disconnectScreen);
+                  // PaypalPaymentServices paypalServices =
+                  //     PaypalPaymentServices();
+                  // Navigator.of(context).push(
+                  //   MaterialPageRoute(
+                  //     builder: (BuildContext context) => PaymentScreen(
+                  //       onFinish: (paymentId) async {
+                  //         paypalServices.fetchPaymentDetails("$paymentId");
+                  //         final snackBar = SnackBar(
+                  //           content: const Text("Payment done Successfully"),
+                  //           duration: const Duration(seconds: 5),
+                  //           action: SnackBarAction(
+                  //             label: 'Close',
+                  //             onPressed: () {
+                  //               Navigator.pop(context);
+                  //             },
+                  //           ),
+                  //         );
+                  //         ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  //       },
+                  //     ),
+                  //   ),
+                  // );
+                  Navigator.pushNamed(context, AppRoutes.payPalAuthorization);
                 },
                 textColor: AppColors.white,
                 textSize: AppSize.regular,

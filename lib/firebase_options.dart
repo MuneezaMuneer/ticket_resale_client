@@ -28,7 +28,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -48,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyABWdHcAzfetx405yG6TvZp4MJ6DrVbS_Y',
-    appId: '1:831456807199:android:4f5ff927e55adb29cb882a',
+    appId: '1:831456807199:android:6322ce8e2e2724accb882a',
     messagingSenderId: '831456807199',
     projectId: 'rave-trade-ca544',
     storageBucket: 'rave-trade-ca544.appspot.com',
@@ -56,23 +59,12 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyCB8pwIjcM_BQEdaPMT_hQDZNtWeLgR2WI',
-    appId: '1:831456807199:ios:fdaa6845bbedeb81cb882a',
+    appId: '1:831456807199:ios:540c7548cabf8a6ecb882a',
     messagingSenderId: '831456807199',
     projectId: 'rave-trade-ca544',
     storageBucket: 'rave-trade-ca544.appspot.com',
     androidClientId: '831456807199-1otc8peen525k4ihn80rf081s6igd8sb.apps.googleusercontent.com',
-    iosClientId: '831456807199-56rfb40d8h4tvk9lj2ammhk7bc8hqjv7.apps.googleusercontent.com',
-    iosBundleId: 'ravetrade.com.ticketresale',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyCB8pwIjcM_BQEdaPMT_hQDZNtWeLgR2WI',
-    appId: '1:831456807199:ios:fdaa6845bbedeb81cb882a',
-    messagingSenderId: '831456807199',
-    projectId: 'rave-trade-ca544',
-    storageBucket: 'rave-trade-ca544.appspot.com',
-    androidClientId: '831456807199-1otc8peen525k4ihn80rf081s6igd8sb.apps.googleusercontent.com',
-    iosClientId: '831456807199-56rfb40d8h4tvk9lj2ammhk7bc8hqjv7.apps.googleusercontent.com',
-    iosBundleId: 'ravetrade.com.ticketresale',
+    iosClientId: '831456807199-uuivtrqimk2453j0i6dshmf75a9luhn7.apps.googleusercontent.com',
+    iosBundleId: 'com.RaveTradeApp.RaveTrade',
   );
 }

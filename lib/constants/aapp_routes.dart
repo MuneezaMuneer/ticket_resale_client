@@ -19,4 +19,8 @@ class AppRoutes {
   static const navigationScreen = '/navigationScreen';
   static const passwordScreen = '/passwordScreen';
   static const termOfUseScreen = '/termUseScreen';
+  static const connectPaypal = '/connectPaypalScreen';
+  static const chatScreen = '/chatScreen';
+  static const chatDetailScreen = 'chatDetailScreen';
+  static const payPalAuthorization = '/payPalAuthorization';
 }

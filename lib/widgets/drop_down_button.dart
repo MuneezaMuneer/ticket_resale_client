@@ -20,7 +20,7 @@ class DropDownWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 90,
+      width: 110,
       child: DropdownButton(
         isExpanded: true,
         icon: Padding(

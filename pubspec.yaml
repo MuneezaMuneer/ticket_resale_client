@@ -40,7 +40,7 @@ dependencies:
   avatar_stack: ^1.2.0
   google_fonts: ^6.1.0
   intl_phone_field: ^3.2.0 
-  provider:   
+  provider: ^6.1.2
   firebase_core: ^2.25.4
   firebase_auth: ^4.17.4 
   google_sign_in: ^6.2.1
@@ -57,9 +57,14 @@ dependencies:
   uuid: ^4.3.3
   intl: ^0.18.1
   flutter_otp_text_field: ^1.1.1
-  http:
   twilio_flutter: ^0.3.0
   flutter_paypal_native: ^2.1.0
+  webview_flutter: ^4.7.0
+  http: ^1.2.0
+  http_auth: ^1.0.4
+  grouped_list: ^5.1.2
+  
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

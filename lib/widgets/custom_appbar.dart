@@ -10,12 +10,16 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? child;
   final bool isNotification;
   final bool isBackButton;
+  final bool isNetworkImage;
+  final String? networkImage;
   const CustomAppBar(
       {super.key,
       this.title,
       this.child,
       this.isNotification = true,
-      this.isBackButton = true});
+      this.isBackButton = true,
+      this.isNetworkImage = false,
+      this.networkImage});
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +56,16 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                               size: 18,
                             )
                           : const SizedBox.shrink()),
-                  const Gap(10),
+                  SizedBox(
+                      child: isNetworkImage
+                          ? Padding(
+                              padding: const EdgeInsets.only(top: 6, left: 10),
+                              child: CircleAvatar(
+                                backgroundImage: NetworkImage('$networkImage'),
+                              ),
+                            )
+                          : const SizedBox.shrink()),
+                  const Gap(15),
                   CustomText(
                     title: '$title',
                     weight: FontWeight.w600,

@@ -5,14 +5,17 @@ class TicketModel {
   String? description;
   String? status;
   String? uid;
-  TicketModel({
-    this.imageUrl,
-    this.status,
-    this.ticketType,
-    this.price,
-    this.description,
-    this.uid,
-  });
+  String? eventId;
+  String? docId;
+  TicketModel(
+      {this.imageUrl,
+      this.status,
+      this.ticketType,
+      this.price,
+      this.description,
+      this.uid,
+      this.eventId,
+      this.docId});
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -21,17 +24,21 @@ class TicketModel {
       'ticket_type': ticketType,
       'price': price,
       'description': description,
-      'uid': uid
+      'user_uid': uid,
+      'event_id': eventId
     };
   }
 
-  factory TicketModel.fromMap(Map<String, dynamic> map) {
+  factory TicketModel.fromMap(Map<String, dynamic> map, String docId) {
     return TicketModel(
-        imageUrl: map['image_url'] ?? '',
-        ticketType: map['ticket_type'] ?? '',
-        price: map['price'] ?? '',
-        description: map['description'] ?? '',
-        status: map['status'] ?? '',
-        uid: map['uid'] ?? '');
+      imageUrl: map['image_url'] ?? '',
+      ticketType: map['ticket_type'] ?? '',
+      price: map['price'] ?? '',
+      description: map['description'] ?? '',
+      status: map['status'] ?? '',
+      uid: map['user_uid'] ?? '',
+      eventId: map['event_id'] ?? '',
+      docId: docId
+    );
   }
 }

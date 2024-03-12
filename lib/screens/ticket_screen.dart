@@ -170,10 +170,10 @@ class _TicketScreenState extends State<TicketScreen> {
                   StreamBuilder(
                     stream: displayEventData,
                     builder: (context, snapshot) {
-                      final data = snapshot.data;
                       if (snapshot.hasData) {
+                        final data = snapshot.data;
                         for (int i = 0; i < data!.length; i++) {
-                          festivalNames.add(data[i].festivalName!);
+                          festivalNames.add(data[i].eventName!);
                           festivalDocId.add(data[i].docId!);
                         }
 
@@ -201,22 +201,18 @@ class _TicketScreenState extends State<TicketScreen> {
                                   selectedFestivalName = '$selectOption';
                                   festivalNameController.text =
                                       selectedFestivalName;
-                                  print(
-                                      'Selected Festival Name: $selectedFestivalName');
+                                  log('Selected Festival Name: $selectedFestivalName');
                                   int selectedIndex = festivalNames
                                       .indexOf(selectedFestivalName);
-                                  print(
-                                      'Selected Festival Name Index: $selectedIndex');
+                                  log('Selected Festival Name Index: $selectedIndex');
 
                                   if (selectedIndex >= 0 &&
                                       selectedIndex < festivalDocId.length) {
                                     selectedFestivalDocId =
                                         festivalDocId[selectedIndex];
-                                    print(
-                                        'Selected Festival DocId: $selectedFestivalDocId');
+                                    log('Selected Festival DocId: $selectedFestivalDocId');
                                   } else {
-                                    print(
-                                        'Error: Invalid index or docId not found.');
+                                    log('Error: Invalid index or docId not found.');
                                   }
                                 },
                               ),
@@ -372,20 +368,19 @@ class _TicketScreenState extends State<TicketScreen> {
                                 price: priceController.text,
                                 description: descriptionController.text,
                                 uid: AuthServices.getCurrentUser.uid,
+                                eventId: selectedFestivalDocId,
                                 status: 'Pending');
 
                             if (imageUrl != null && imageUrl != '') {
                               String selectedFestivalDocId = festivalDocId[
                                   festivalNames.indexOf(selectedFestivalName)];
-                              print(
-                                  ' the selected id : $selectedFestivalDocId');
+                              log(' the selected id : $selectedFestivalDocId');
                               await FireStoreServices.createTickets(
-                                      id: selectedFestivalDocId,
                                       ticketModel: ticketModel)
                                   .then((value) {
                                 imagePickerProvider.setImageUrl = '';
                                 AppUtils.toastMessage(
-                                    'Event Created Successfully');
+                                    'Ticket Created Successfully');
                                 FocusScope.of(context).unfocus();
                                 notifier.value = false;
 

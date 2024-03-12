@@ -24,10 +24,12 @@ class UserModel {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'instagram_username': instaUsername,
+      'user_name': displayName,
       'phone_number': phoneNo,
       'birth_date': birthDate,
       'profile_levels': profileLevels,
-      'status': status
+      'status': status,
+      'image_url': photoUrl
     };
   }
 
@@ -39,7 +41,9 @@ class UserModel {
       phoneNo:
           map['phone_number'] != null ? map['phone_number'] as String : null,
       birthDate: map['birth_date'] != null ? map['birth_date'] as String : null,
+      photoUrl: map['image_url'] != null ? map['image_url'] as String : null,
       profileLevels: map['profile_levels'] as Map<String, dynamic>,
+      displayName: map['user_name'] != null ? map['user_name'] as String : null,
     );
   }
 }

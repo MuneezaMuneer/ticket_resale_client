@@ -1,33 +1,54 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable
+// ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable, use_build_context_synchronously
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 import 'package:svg_flutter/svg_flutter.dart';
-
 import 'package:ticket_resale/components/components.dart';
 import 'package:ticket_resale/constants/constants.dart';
-import 'package:ticket_resale/db_services/auth_services.dart';
+import 'package:ticket_resale/db_services/db_services.dart';
+import 'package:ticket_resale/models/message_model.dart';
+import 'package:ticket_resale/models/models.dart';
 import 'package:ticket_resale/providers/providers.dart';
 import 'package:ticket_resale/utils/utils.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
 class CommentScreen extends StatefulWidget {
-  String id;
-  CommentScreen({
-    Key? key,
-    required this.id,
-  }) : super(key: key);
+  final EventModal eventModal;
+  final TicketModel ticketModal;
+  final String price;
+  const CommentScreen(
+      {Key? key,
+      required this.eventModal,
+      required this.ticketModal,
+      required this.price})
+      : super(key: key);
 
   @override
   State<CommentScreen> createState() => _CommentScreenState();
 }
 
 class _CommentScreenState extends State<CommentScreen> {
+  TextEditingController commentController = TextEditingController();
+  TextEditingController priceController = TextEditingController();
+  ValueNotifier<bool> isDataSend = ValueNotifier<bool>(true);
+  late Stream<List<CommentModel>> commentData;
   @override
   void initState() {
     Provider.of<SwitchProvider>(context, listen: false).loadPreferences();
+    priceController.text = '\$ ${widget.price}';
+    commentData =
+        FireStoreServices.fetchCommentsData(docId: widget.ticketModal.docId!);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    commentController.dispose();
+    priceController.dispose();
+    super.dispose();
   }
 
   @override
@@ -37,206 +58,432 @@ class _CommentScreenState extends State<CommentScreen> {
     final double width = size.width;
     return Scaffold(
       backgroundColor: AppColors.pastelBlue.withOpacity(0.3),
+      resizeToAvoidBottomInset: false,
       body: AppBackground(
-        imagePath: AppImages.concert,
+        networkImage: widget.eventModal.imageUrl,
         isBackButton: true,
-        child: SingleChildScrollView(
-          child: Padding(
-            padding:
-                const EdgeInsets.only(left: 28, right: 28, top: 20, bottom: 20),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const CustomText(
-                      title: 'Comments',
-                      size: AppSize.regular,
-                      color: AppColors.jetBlack,
-                      weight: FontWeight.w600,
-                    ),
-                    Row(
-                      children: [
-                        const CustomText(
-                          title: 'Subcribe to comments',
-                          size: AppSize.medium,
-                          weight: FontWeight.w400,
-                          color: AppColors.lightGrey,
-                        ),
-                        Consumer<SwitchProvider>(
-                          builder: (context, provider, child) {
-                            return Transform.scale(
-                              scale: 0.8,
-                              child: CupertinoSwitch(
-                                activeColor: AppColors.blueViolet,
-                                thumbColor: Colors.white,
-                                trackColor: AppColors.pastelBlue,
-                                value: provider.getComment,
-                                onChanged: (bool value) {
-                                  provider.setComment(value);
-                                },
-                              ),
-                            );
-                          },
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-                SizedBox(
-                    height: height * 0.4,
-                    child: ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      padding: const EdgeInsets.only(top: 6),
-                      itemCount: 5,
-                      itemBuilder: (context, index) {
-                        bool isCurrentUserTicket =
-                            AuthServices.getCurrentUser.uid == widget.id;
+        isAssetImage: false,
+        isCommentScreen: true,
+        child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+            child: StreamBuilder(
+              stream: commentData,
+              builder: (context, snapshot) {
+                if (snapshot.hasData &&
+                    snapshot.data is List<CommentModel> &&
+                    snapshot.data != null) {
+                  final commentData = snapshot.data;
 
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 7),
-                          child: Row(
-                            children: [
-                              const CircleAvatar(
-                                backgroundImage: AssetImage(AppImages.profile),
-                              ),
-                              const Gap(20),
-                              Expanded(
-                                flex: 8,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                  return Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const CustomText(
+                                  title: 'Comments',
+                                  size: AppSize.regular,
+                                  color: AppColors.jetBlack,
+                                  weight: FontWeight.w600,
+                                ),
+                                Row(
                                   children: [
-                                    Row(
-                                      children: [
-                                        const CustomText(
-                                          title: 'Lucy Lure',
-                                          size: AppSize.intermediate,
-                                          weight: FontWeight.w600,
-                                          color: AppColors.jetBlack,
-                                        ),
-                                        const Gap(15),
-                                        Container(
-                                          height: 5,
-                                          width: 5,
-                                          decoration: BoxDecoration(
-                                              color: AppColors.lightGrey
-                                                  .withOpacity(0.7),
-                                              shape: BoxShape.circle),
-                                        ),
-                                        const Gap(5),
-                                        CustomText(
-                                          title: '2 mintues ago',
-                                          size: AppSize.medium,
-                                          weight: FontWeight.w400,
-                                          color: AppColors.lightGrey
-                                              .withOpacity(0.7),
-                                        ),
-                                      ],
-                                    ),
                                     const CustomText(
-                                      title:
-                                          'Sed ut est eget dolor finibus the way is',
-                                      size: AppSize.intermediate,
+                                      title: 'Subscribe to comments',
+                                      size: AppSize.medium,
                                       weight: FontWeight.w400,
                                       color: AppColors.lightGrey,
-                                      maxLines: 2,
-                                      softWrap: true,
                                     ),
-                                    const Gap(5),
-                                    RichText(
-                                        text: const TextSpan(children: [
-                                      TextSpan(
-                                          text: 'Offered Price is',
-                                          style: TextStyle(
-                                              letterSpacing: 0.5,
-                                              color: AppColors.lightGrey,
-                                              fontSize: AppSize.small,
-                                              fontWeight: FontWeight.w400)),
-                                      WidgetSpan(
-                                        child: SizedBox(width: 5.0),
-                                      ),
-                                      TextSpan(
-                                          text: '\$420',
-                                          style: TextStyle(
-                                              letterSpacing: 0.5,
-                                              color: AppColors.lightBlack,
-                                              fontSize: AppSize.small,
-                                              fontWeight: FontWeight.w600))
-                                    ]))
-                                  ],
-                                ),
-                              ),
-                              Expanded(
-                                flex: 2,
-                                child: SizedBox(
-                                    height: height * 0.04,
-                                    width: width * 0.15,
-                                    child: isCurrentUserTicket
-                                        ? CustomButton(
-                                            onPressed: () {
-                                              ticketSellDialog(
-                                                  context: context);
+                                    Consumer<SwitchProvider>(
+                                      builder: (context, provider, child) {
+                                        return Transform.scale(
+                                          scale: 0.8,
+                                          child: CupertinoSwitch(
+                                            activeColor: AppColors.blueViolet,
+                                            thumbColor: Colors.white,
+                                            trackColor: AppColors.pastelBlue,
+                                            value: provider.getComment,
+                                            onChanged: (bool value) {
+                                              provider.setComment(value);
                                             },
-                                            textColor: AppColors.white,
-                                            textSize: AppSize.medium,
-                                            btnText: 'Sell',
-                                            gradient: customGradient,
-                                            weight: FontWeight.w600,
-                                          )
-                                        : const SizedBox.shrink()),
-                              )
-                            ],
-                          ),
-                        );
-                      },
-                    )),
-                const Gap(15),
-                SizedBox(
-                  height: height * 0.07,
-                  width: width * 0.9,
-                  child: CustomTextField(
-                    hintText: 'Enter your comment here',
-                    fillColor: AppColors.white,
-                    isFilled: true,
-                    suffixIcon: Padding(
-                      padding: const EdgeInsets.only(right: 8),
-                      child: Container(
-                        height: 35,
-                        width: 35,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          gradient: customGradient,
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ],
                         ),
-                        child: Center(child: SvgPicture.asset(AppSvgs.send)),
                       ),
-                    ),
-                  ),
-                ),
-                const Gap(10),
-                Row(
-                  children: [
-                    Container(
-                      height: 20,
-                      width: 20,
-                      decoration: BoxDecoration(
-                          color: AppColors.white,
-                          border: Border.all(color: AppColors.lightGrey),
-                          borderRadius: BorderRadius.circular(4)),
-                    ),
-                    const Gap(10),
-                    const CustomText(
-                      title: 'I need help (Alert Rave Trade Staff)',
-                      color: AppColors.lightGrey,
-                      weight: FontWeight.w400,
-                      size: AppSize.medium,
-                    )
-                  ],
-                )
-              ],
-            ),
-          ),
-        ),
+                      commentData!.isEmpty
+                          ? const Expanded(
+                              child: Center(child: Text('No Comment Here')))
+                          : Expanded(
+                              child: ListView.builder(
+                                itemCount: commentData.length,
+                                itemBuilder: (context, index) {
+                                  return StreamBuilder(
+                                    stream: FireStoreServices.fetchUserData(
+                                      userId: commentData[index].userId!,
+                                    ),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasData) {
+                                        final userData = snapshot.data;
+                                        if (userData != null) {
+                                          bool isCurrentUserTicket =
+                                              AuthServices.getCurrentUser.uid ==
+                                                  widget.ticketModal.uid;
+
+                                          return Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 15),
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                CircleAvatar(
+                                                  backgroundImage: NetworkImage(
+                                                      '${userData.photoUrl}'),
+                                                ),
+                                                const Gap(10),
+                                                Expanded(
+                                                  flex: 9,
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Row(
+                                                        children: [
+                                                          CustomText(
+                                                            title:
+                                                                '${userData.displayName}',
+                                                            size: AppSize
+                                                                .intermediate,
+                                                            weight:
+                                                                FontWeight.w600,
+                                                            color: AppColors
+                                                                .jetBlack,
+                                                          ),
+                                                          const Gap(15),
+                                                          Container(
+                                                            height: 5,
+                                                            width: 5,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color: AppColors
+                                                                  .lightGrey
+                                                                  .withOpacity(
+                                                                      0.7),
+                                                              shape: BoxShape
+                                                                  .circle,
+                                                            ),
+                                                          ),
+                                                          const Gap(5),
+                                                          CustomText(
+                                                            title: AppUtils
+                                                                .convertDateTimeToMMMMDY(
+                                                                    dateTime: (commentData[
+                                                                            index]
+                                                                        .time!)),
+                                                            size:
+                                                                AppSize.xsmall,
+                                                            weight:
+                                                                FontWeight.w400,
+                                                            color: AppColors
+                                                                .lightGrey
+                                                                .withOpacity(
+                                                                    0.7),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      RichText(
+                                                        text: TextSpan(
+                                                          children: [
+                                                            const TextSpan(
+                                                              text:
+                                                                  'Offered Price is',
+                                                              style: TextStyle(
+                                                                letterSpacing:
+                                                                    0.5,
+                                                                color: AppColors
+                                                                    .lightGrey,
+                                                                fontSize:
+                                                                    AppSize
+                                                                        .small,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400,
+                                                              ),
+                                                            ),
+                                                            const WidgetSpan(
+                                                              child: SizedBox(
+                                                                  width: 5.0),
+                                                            ),
+                                                            TextSpan(
+                                                              text: commentData[
+                                                                      index]
+                                                                  .offerPrice,
+                                                              style:
+                                                                  const TextStyle(
+                                                                letterSpacing:
+                                                                    0.5,
+                                                                color: AppColors
+                                                                    .lightBlack,
+                                                                fontSize:
+                                                                    AppSize
+                                                                        .small,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      CustomText(
+                                                        title:
+                                                            commentData[index]
+                                                                .comment,
+                                                        size: AppSize
+                                                            .intermediate,
+                                                        weight: FontWeight.w400,
+                                                        color:
+                                                            AppColors.lightGrey,
+                                                        softWrap: true,
+                                                      ),
+                                                      const Gap(3),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  flex: 2,
+                                                  child: isCurrentUserTicket
+                                                      ? SizedBox(
+                                                          height: height * 0.04,
+                                                          width: width * 0.15,
+                                                          child: CustomButton(
+                                                            onPressed: () {
+                                                              String? hashKey =
+                                                                  FireStoreServices
+                                                                      .getMessagesHashCodeID(
+                                                                          userIDReceiver:
+                                                                              '${userData.id}');
+                                                              MessageModel
+                                                                  messageModel =
+                                                                  MessageModel(
+                                                                message:
+                                                                    'Hey, I hope you are good.You have to pay the offered price to purchase the ticket',
+                                                                userIDReceiver:
+                                                                    '${userData.id}',
+                                                                userIDSender:
+                                                                    AuthServices
+                                                                        .getCurrentUser
+                                                                        .uid,
+                                                              );
+                                                              ticketSellDialog(
+                                                                  context:
+                                                                      context,
+                                                                  ticketImage:
+                                                                      '${widget.ticketModal.imageUrl}',
+                                                                  offeredPrice:
+                                                                      '${commentData[index].offerPrice}',
+                                                                  buyerImage:
+                                                                      '${userData.photoUrl}',
+                                                                  buyerName:
+                                                                      '${userData.displayName}',
+                                                                  messageModel:
+                                                                      messageModel,
+                                                                  userModel:
+                                                                      userData,
+                                                                  hashKey:
+                                                                      hashKey);
+                                                            },
+                                                            textColor:
+                                                                AppColors.white,
+                                                            textSize:
+                                                                AppSize.medium,
+                                                            btnText: 'Sell',
+                                                            gradient:
+                                                                customGradient,
+                                                            weight:
+                                                                FontWeight.w600,
+                                                          ),
+                                                        )
+                                                      : const SizedBox.shrink(),
+                                                )
+                                              ],
+                                            ),
+                                          );
+                                        } else {
+                                          return const Center(
+                                              child: Text('No Comment Here'));
+                                        }
+                                      } else {
+                                        return const Text('No Comment Here');
+                                      }
+                                    },
+                                  );
+                                },
+                              ),
+                            ),
+                      const Gap(15),
+                      SizedBox(
+                          child: AuthServices.getCurrentUser.uid !=
+                                  widget.ticketModal.uid
+                              ? Align(
+                                  alignment: AlignmentDirectional.bottomEnd,
+                                  child: ValueListenableBuilder<bool>(
+                                    valueListenable: isDataSend,
+                                    builder: (context, value, child) {
+                                      return SizedBox(
+                                        child: value
+                                            ? Column(
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      const Expanded(
+                                                        child: CustomTextField(
+                                                          readOnly: true,
+                                                          hintText:
+                                                              'Offered price is:',
+                                                          fillColor:
+                                                              AppColors.white,
+                                                          isFilled: true,
+                                                        ),
+                                                      ),
+                                                      const Gap(15),
+                                                      Expanded(
+                                                        child: CustomTextField(
+                                                          controller:
+                                                              priceController,
+                                                          fillColor:
+                                                              AppColors.white,
+                                                          isFilled: true,
+                                                          keyBoardType:
+                                                              TextInputType
+                                                                  .number,
+                                                          inputFormatters: <TextInputFormatter>[
+                                                            FilteringTextInputFormatter
+                                                                .allow(RegExp(
+                                                                    r'[0-9]')),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  const Gap(15),
+                                                  SizedBox(
+                                                    width: width * 0.9,
+                                                    child: CustomTextField(
+                                                      controller:
+                                                          commentController,
+                                                      hintText:
+                                                          'Enter your comment here',
+                                                      fillColor:
+                                                          AppColors.white,
+                                                      isFilled: true,
+                                                      suffixIcon: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(right: 8),
+                                                        child: Container(
+                                                          height: 35,
+                                                          width: 35,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            shape:
+                                                                BoxShape.circle,
+                                                            gradient:
+                                                                customGradient,
+                                                          ),
+                                                          child: InkWell(
+                                                              onTap: () async {
+                                                                CommentModel commentModel = CommentModel(
+                                                                    comment:
+                                                                        commentController
+                                                                            .text,
+                                                                    userId: AuthServices
+                                                                        .getCurrentUser
+                                                                        .uid,
+                                                                    time: DateTime
+                                                                        .now(),
+                                                                    offerPrice:
+                                                                        priceController
+                                                                            .text);
+                                                                await FireStoreServices.createChatSystem(
+                                                                    commentModel:
+                                                                        commentModel,
+                                                                    docId: widget
+                                                                        .ticketModal
+                                                                        .docId!);
+                                                                isDataSend
+                                                                        .value =
+                                                                    false;
+                                                                commentController
+                                                                    .text = '';
+                                                                priceController
+                                                                    .text = '';
+                                                              },
+                                                              child: Center(
+                                                                  child: SvgPicture
+                                                                      .asset(AppSvgs
+                                                                          .send))),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              )
+                                            : const Center(
+                                                child: CustomText(
+                                                  title:
+                                                      'Your offer is submitted',
+                                                  size: AppSize.regular,
+                                                  color: AppColors.jetBlack,
+                                                ),
+                                              ),
+                                      );
+                                    },
+                                  ),
+                                )
+                              : const SizedBox.shrink()),
+                      const Gap(10),
+                      Row(
+                        children: [
+                          Container(
+                            height: 20,
+                            width: 20,
+                            decoration: BoxDecoration(
+                                color: AppColors.white,
+                                border: Border.all(color: AppColors.lightGrey),
+                                borderRadius: BorderRadius.circular(4)),
+                          ),
+                          const Gap(10),
+                          const CustomText(
+                            title: 'I need help (Alert Rave Trade Staff)',
+                            color: AppColors.lightGrey,
+                            weight: FontWeight.w400,
+                            size: AppSize.medium,
+                          )
+                        ],
+                      )
+                    ],
+                  );
+                } else {
+                  return const Center(
+                    child: CupertinoActivityIndicator(),
+                  );
+                }
+              },
+            )),
       ),
     );
   }

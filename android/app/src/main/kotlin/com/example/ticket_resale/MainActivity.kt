@@ -1,4 +1,4 @@
-package ravetrade.com.ticketresale
+package com.RaveTradeApp.RaveTrade
 
 import io.flutter.embedding.android.FlutterActivity
 

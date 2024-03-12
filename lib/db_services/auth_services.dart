@@ -1,5 +1,4 @@
 // ignore_for_file: use_build_context_synchronously
-
 import 'dart:developer';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -11,7 +10,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/models/models.dart';
 import 'package:ticket_resale/utils/utils.dart';
-import 'package:twilio_flutter/twilio_flutter.dart';
 
 class AuthServices {
   static User get getCurrentUser {
@@ -67,14 +65,9 @@ class AuthServices {
       'user_name': user!.displayName,
       'email': user.email,
       'status': 'Active',
-      // 'photoURL': user.photoURL,
+      'image_url': user.photoURL,
       'profile_levels': {
         'isEmailVerified': true,
-        // 'isPhoneNoVerified': false,
-        // 'isPaypalVerified': false,
-        // 'isInstaVerified': false,
-        // 'isTransactionVerified': false,
-        // 'isSuperVerified': false
       }
     };
 
@@ -147,33 +140,10 @@ class AuthServices {
     }
   }
 
- static Future<void> sendVerificationCode(
-      String toPhoneNumber, String verificationCode) async {
-    // Initialize Twilio
-    TwilioFlutter twilioFlutter = TwilioFlutter(
-      accountSid: 'AC4a81b930d51a35fab421fa39ab8bbaf0',
-      authToken: '2cc0b71ea0aab26f0f00d26ae4e03849',
-      twilioNumber: '',
-    );
-
-    try {
-      String messageBody = 'Your verification code is: $verificationCode';
-      
-      await twilioFlutter.sendSMS(
-        toNumber: toPhoneNumber,
-        messageBody: messageBody,
-      );
-
-      print('Verification code sent successfully.');
-    } catch (e) {
-      print('Error sending verification code: $e');
-    }
-  }
-
   static Future<void> deleteUserAccount() async {
     try {
       await deleteUserData();
-      await deleteUserEvents();
+      await deleteUserTickets();
       await AuthServices.getCurrentUser.delete();
     } on FirebaseAuthException catch (e) {
       log(e.toString());
@@ -197,13 +167,13 @@ class AuthServices {
     }
   }
 
-  static Future<void> deleteUserEvents() async {
+  static Future<void> deleteUserTickets() async {
     try {
       String uid = AuthServices.getCurrentUser.uid;
 
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-          .collection('event_ticket')
-          .where('user_id', isEqualTo: uid)
+          .collection('tickets')
+          .where('user_uid', isEqualTo: uid)
           .get();
 
       for (QueryDocumentSnapshot document in querySnapshot.docs) {
@@ -240,12 +210,10 @@ class AuthServices {
 
       await getCurrentUser.updatePhotoURL(userModel.photoUrl);
       await getCurrentUser.updateDisplayName(userModel.displayName);
+      Map<String, dynamic> userData = userModel.toMap();
       await user.set(
           {
-            'birth_date': userModel.birthDate,
-            'phone_number': userModel.phoneNo,
-            'instagram_username': userModel.instaUsername,
-            'user_name': userModel.displayName,
+            ...userData,
             'profile_levels': {
               'isInstaVerified': true,
             },
@@ -279,20 +247,12 @@ class AuthServices {
       FirebaseFirestore firestore = FirebaseFirestore.instance;
       DocumentReference user =
           firestore.collection('user_data').doc(getCurrentUser.uid);
-
+      Map<String, dynamic> userData = userModel.toMap();
       await user.set({
-        "phone_number": userModel.phoneNo,
-        "instagram_username": userModel.instaUsername,
-        "email": userModel.email,
-        "user_name": userModel.displayName,
-        "status": userModel.status,
+        ...userData,
         'profile_levels': {
           'isEmailVerified': true,
-          // 'isPhoneNoVerified': false,
-          // 'isPaypalVerified': false,
           'isInstaVerified': true,
-          // 'isTransactionVerified': false,
-          // 'isSuperVerified': false
         }
       });
 
@@ -326,7 +286,7 @@ class AuthServices {
   }) async {
     try {
       Reference ref = FirebaseStorage.instance
-          .ref('event_image')
+          .ref('ticket_image')
           .child(AuthServices.getCurrentUser.uid)
           .child(
               '${AuthServices.getCurrentUser.uid}${DateTime.timestamp().millisecond}');

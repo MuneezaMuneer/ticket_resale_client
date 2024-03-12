@@ -76,7 +76,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Center(
-                            child: CupertinoActivityIndicator());
+                            child: Column(
+                          children: [
+                            Gap(50),
+                            CupertinoActivityIndicator(),
+                          ],
+                        ));
                       } else if (snapshot.hasData &&
                           snapshot.data != null &&
                           snapshot.data!.isNotEmpty) {
@@ -131,7 +136,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           top: 10, left: 15),
                                       child: CustomText(
                                         title: AppUtils.limitTo33Char(
-                                            '${nearestEvent.festivalName}'),
+                                            '${nearestEvent.eventName}'),
                                         color: AppColors.jetBlack,
                                         size: 15,
                                         weight: FontWeight.w700,
@@ -261,20 +266,26 @@ class _HomeScreenState extends State<HomeScreen> {
                       return StreamBuilder(
                         stream: displayEventData,
                         builder: (context, snapshot) {
-                          if (snapshot.hasData) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                                child: Column(
+                              children: [
+                                Gap(50),
+                                CupertinoActivityIndicator(),
+                              ],
+                            ));
+                          } else if (snapshot.hasData) {
                             final data = query.isEmpty
                                 ? snapshot.data
                                 : snapshot.data!
                                     .where((element) =>
-                                        element.festivalName!
+                                        element.eventName!
                                             .toLowerCase()
                                             .contains(query.toLowerCase()) ||
-                                        element.city!
+                                        element.location!
                                             .toLowerCase()
-                                            .contains(query.toLowerCase())
-                                        
-                                            
-                                            )
+                                            .contains(query.toLowerCase()))
                                     .toList();
 
                             if (data!.isNotEmpty) {
@@ -296,7 +307,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             data[index].date!),
                                         time: data[index].time,
                                         posttitle: AppUtils.limitTo42Char(
-                                            '${data[index].festivalName}'),
+                                            '${data[index].eventName}'),
                                         postBy: 'Jacob Jones',
                                         imagePath: data[index].imageUrl,
                                       ),
