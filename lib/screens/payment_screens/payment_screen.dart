@@ -7,8 +7,10 @@ import 'package:ticket_resale/screens/screens.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class PaymentScreen extends StatefulWidget {
+  final String offeredPrice;
   final Function(String?) onFinish;
-  const PaymentScreen({super.key, required this.onFinish});
+  const PaymentScreen(
+      {super.key, required this.onFinish, required this.offeredPrice});
 
   @override
   State<PaymentScreen> createState() => _PaymentScreenState();
@@ -45,7 +47,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
         accessToken = await services.getAccessToken();
         log(".....................accessToken : $accessToken");
 
-        final transactions = getOrderParams();
+        final transactions = getOrderParams(widget.offeredPrice.trim());
+
         final res =
             await services.createPaypalPayment(transactions, accessToken);
         if (res != null) {
@@ -95,6 +98,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
           });
         }
       } catch (ex) {
+        print("Error: $ex");
         final snackBar = SnackBar(
           content: Text(ex.toString()),
           duration: const Duration(seconds: 10),
@@ -112,32 +116,33 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   // item name, price and quantity here
   String itemName = 'One plus 10';
-  String itemPrice = '100';
+
   int quantity = 1;
 
-  Map<String, dynamic> getOrderParams() {
+  Map<String, dynamic> getOrderParams(String offeredPrice) {
     List<Map<String, dynamic>> items = [
       {
         "name": itemName,
         "quantity": quantity,
         "price":
-            itemPrice, // Assuming itemPrice is a string representing the price
+            offeredPrice, // Assuming itemPrice is a string representing the price
         "currency": defaultCurrency["currency"]
       }
     ];
 
     // Checkout Invoice Specifics
-    String totalAmount = itemPrice; // Set total amount to match the item price
+    String totalAmount =
+        widget.offeredPrice.trim(); // Set total amount to match the item price
     String shippingCost = '0';
     int shippingDiscountCost = 0;
-    String userFirstName = 'Yaseen';
-    String userLastName = 'Khan';
+    String userFirstName = 'Muneeza';
+    String userLastName = 'Muneer';
     String addressCity = 'USA';
     String addressStreet = "i-10";
     String addressZipCode = '44000';
     String addressCountry = 'Pakistan';
     String addressState = 'Islamabad';
-    String addressPhoneNumber = '4088172126';
+    String addressPhoneNumber = '3095237159';
 
     Map<String, dynamic> temp = {
       "intent": "AUTHORIZE",

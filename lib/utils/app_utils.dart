@@ -99,6 +99,32 @@ class AppUtils {
     return formattedDate;
   }
 
+
+static String formatTimeAgo(DateTime dateTime) {
+  DateTime now = DateTime.now();
+  Duration difference = now.difference(dateTime);
+
+  if (difference.inSeconds < 60) {
+    return '${difference.inSeconds} seconds ago';
+  } else if (difference.inMinutes < 60) {
+    return '${difference.inMinutes} minutes ago';
+  } else if (difference.inHours < 24) {
+    return '${difference.inHours} hours ago';
+  } else if (difference.inDays < 7) {
+    return '${difference.inDays} days ago';
+  } else if ((difference.inDays / 7).floor() < 5) {
+    return '${(difference.inDays / 7).floor()} weeks ago';
+  } else {
+    int months = now.month - dateTime.month + (12 * (now.year - dateTime.year));
+    if (months == 1) {
+      return '1 month ago';
+    } else {
+      return '$months months ago';
+    }
+  }
+}
+
+
   static String limitTo42Char(String inputText) {
     if (inputText.length > 43) {
       return '${inputText.substring(0, 43)}...';

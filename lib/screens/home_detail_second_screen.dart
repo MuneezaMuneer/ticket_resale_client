@@ -1,4 +1,5 @@
 // ignore_for_file: must_be_immutable, use_build_context_synchronously
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
@@ -25,7 +26,10 @@ class HomeDetailSecondScreen extends StatefulWidget {
 
 class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
   final formKey = GlobalKey<FormState>();
+
   TextEditingController priceController = TextEditingController();
+  late String networkImage;
+  late String name;
 
   @override
   void dispose() {
@@ -243,7 +247,10 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                     onTap: () async {
                       FocusScope.of(context).unfocus();
                       Future.delayed(const Duration(milliseconds: 300), () {
-                        sellerRatingDialog(context: context);
+                        sellerRatingDialog(
+                            context: context,
+                            networkImage: networkImage,
+                            name: name);
                       });
                     },
                     child: StreamBuilder(
@@ -252,6 +259,8 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           final data = snapshot.data!;
+                          networkImage = data.photoUrl!;
+                          name = data.displayName!;
                           return Container(
                               height: height * 0.1,
                               width: width,
@@ -350,36 +359,54 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                   ),
                   const Gap(25),
                   SizedBox(
-                      child: AuthServices.getCurrentUser.uid !=
-                              widget.ticketModel.uid
-                          ? CustomTextField(
-                              controller: priceController,
-                              hintText: 'Offer you price',
-                              hintStyle: TextStyle(
-                                  color: AppColors.lightBlack.withOpacity(0.5)),
-                              fillColor: AppColors.white,
-                              keyBoardType: TextInputType.number,
-                              inputFormatters: <TextInputFormatter>[
-                                FilteringTextInputFormatter.allow(
-                                    RegExp(r'[0-9]')),
-                              ],
-                              suffixIcon: InkWell(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: SvgPicture.asset(
-                                    AppSvgs.dollarSign,
-                                  ),
-                                ),
-                              ),
-                              validator: (price) {
-                                if (price == null || price.isEmpty) {
-                                  return 'Please enter price';
+                    child: AuthServices.getCurrentUser.uid !=
+                            widget.ticketModel.uid
+                        ? StreamBuilder(
+                            stream: FireStoreServices.fetchCommentUserLength(
+                                docId: widget.ticketModel.docId!),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                int length = snapshot.data!;
+
+                                if (length > 0) {
+                                  return const SizedBox.shrink();
                                 } else {
-                                  return null;
+                                  return CustomTextField(
+                                    controller: priceController,
+                                    hintText: 'Offer your price',
+                                    hintStyle: TextStyle(
+                                        color: AppColors.lightBlack
+                                            .withOpacity(0.5)),
+                                    fillColor: AppColors.white,
+                                    keyBoardType: TextInputType.number,
+                                    inputFormatters: <TextInputFormatter>[
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp(r'[0-9]')),
+                                    ],
+                                    suffixIcon: InkWell(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(16.0),
+                                        child: SvgPicture.asset(
+                                          AppSvgs.dollarSign,
+                                        ),
+                                      ),
+                                    ),
+                                    validator: (price) {
+                                      if (price == null || price.isEmpty) {
+                                        return 'Please enter price';
+                                      } else {
+                                        return null;
+                                      }
+                                    },
+                                  );
                                 }
-                              },
-                            )
-                          : const SizedBox.shrink()),
+                              } else {
+                                return const CupertinoActivityIndicator();
+                              }
+                            },
+                          )
+                        : const SizedBox.shrink(),
+                  ),
                   SizedBox(
                     height: height * 0.04,
                   ),

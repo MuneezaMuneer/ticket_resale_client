@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class PaypalAuthorization extends StatefulWidget {
-  const PaypalAuthorization({Key? key, required this.title}) : super(key: key);
-  final String title;
+  const PaypalAuthorization({Key? key,}) : super(key: key);
+  
 
   @override
   State<PaypalAuthorization> createState() => _PaypalAuthorizationState();
@@ -45,9 +45,7 @@ class _PaypalAuthorizationState extends State<PaypalAuthorization> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-        ),
+       
         body: WebViewWidget(controller: controller));
   }
 }

@@ -14,8 +14,7 @@ Route onGenerateRoute(RouteSettings settings) {
   } else if (settings.name == AppRoutes.signIn) {
     return animatePage(const SignInScreen());
   } else if (settings.name == AppRoutes.payPalAuthorization) {
-    return animatePage(
-        const PaypalAuthorization(title: 'PayPal Authorization'));
+    return animatePage(const PaypalAuthorization());
   } else if (settings.name == AppRoutes.signUp) {
     return animatePage(const SignUpScreen());
   } else if (settings.name == AppRoutes.navigationScreen) {
@@ -30,6 +29,7 @@ Route onGenerateRoute(RouteSettings settings) {
     final EventModal eventModal = arguments['eventModal'] as EventModal;
     final TicketModel ticketModal = arguments['ticketModal'] as TicketModel;
     final String price = arguments['price'] as String;
+
     return animatePage(CommentScreen(
       eventModal: eventModal,
       ticketModal: ticketModal,
@@ -61,10 +61,14 @@ Route onGenerateRoute(RouteSettings settings) {
     final UserModel userModal = arguments['userModel'] as UserModel;
     final String receiverId = arguments['receiverId'] as String;
     final String hashKey = arguments['hashKey'] as String;
+    final String offeredPrice = arguments['offeredPrice'] as String;
+    final bool isOpened = arguments['isOpened'] as bool;
     return animatePage(ChatDetailScreen(
       receiverId: receiverId,
       hashKey: hashKey,
       userModel: userModal,
+      isOpened: isOpened,
+      offeredPrice:offeredPrice ,
     ));
   } else if (settings.name == AppRoutes.eventScreen) {
     final isBackButton = settings.arguments as bool;

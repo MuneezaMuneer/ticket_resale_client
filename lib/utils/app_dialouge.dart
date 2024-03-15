@@ -94,7 +94,11 @@ deleteDialog({required BuildContext context}) {
   );
 }
 
-sellerRatingDialog({required BuildContext context}) {
+sellerRatingDialog(
+    {required BuildContext context,
+    required String networkImage,
+    required String name,
+    bool isNetworkImage = true}) {
   return showDialog(
     context: context,
     builder: (context) {
@@ -106,8 +110,11 @@ sellerRatingDialog({required BuildContext context}) {
               const Gap(20),
               Stack(
                 children: [
-                  const CircleAvatar(
-                    backgroundImage: AssetImage(AppImages.profileImage),
+                  CircleAvatar(
+                    backgroundImage: isNetworkImage
+                        ? NetworkImage(networkImage)
+                        : const AssetImage(AppImages.profileImage)
+                            as ImageProvider,
                     radius: 70,
                   ),
                   Positioned(
@@ -119,8 +126,8 @@ sellerRatingDialog({required BuildContext context}) {
               const SizedBox(
                 height: 13,
               ),
-              const CustomText(
-                title: 'Cameron Williamson',
+              CustomText(
+                title: name,
                 weight: FontWeight.w600,
                 size: AppSize.large,
                 color: AppColors.jetBlack,
@@ -212,15 +219,16 @@ sellerRatingDialog({required BuildContext context}) {
   );
 }
 
-ticketSellDialog(
-    {required BuildContext context,
-    required String ticketImage,
-    required String offeredPrice,
-    required String buyerImage,
-    required String buyerName,
-    required MessageModel messageModel,
-    required String hashKey,
-    required UserModel userModel}) {
+ticketSellDialog({
+  required BuildContext context,
+  required String ticketImage,
+  required String offeredPrice,
+  required String buyerImage,
+  required String buyerName,
+  required MessageModel messageModel,
+  required String hashKey,
+  required UserModel userModel,
+}) {
   return showDialog(
     context: context,
     builder: (context) {
@@ -338,7 +346,9 @@ ticketSellDialog(
                           arguments: {
                             'receiverId': messageModel.userIDReceiver,
                             'hashKey': hashKey,
-                            'userModel': userModel
+                            'userModel': userModel,
+                            'isOpened': true,
+                            'offeredPrice': offeredPrice
                           },
                         );
                       });

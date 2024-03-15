@@ -1,5 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable, use_build_context_synchronously
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,12 +19,13 @@ class CommentScreen extends StatefulWidget {
   final EventModal eventModal;
   final TicketModel ticketModal;
   final String price;
-  const CommentScreen(
-      {Key? key,
-      required this.eventModal,
-      required this.ticketModal,
-      required this.price})
-      : super(key: key);
+
+  const CommentScreen({
+    Key? key,
+    required this.eventModal,
+    required this.ticketModal,
+    required this.price,
+  }) : super(key: key);
 
   @override
   State<CommentScreen> createState() => _CommentScreenState();
@@ -38,7 +39,7 @@ class _CommentScreenState extends State<CommentScreen> {
   @override
   void initState() {
     Provider.of<SwitchProvider>(context, listen: false).loadPreferences();
-    priceController.text = '\$ ${widget.price}';
+    priceController.text = widget.price;
     commentData =
         FireStoreServices.fetchCommentsData(docId: widget.ticketModal.docId!);
     super.initState();
@@ -58,7 +59,6 @@ class _CommentScreenState extends State<CommentScreen> {
     final double width = size.width;
     return Scaffold(
       backgroundColor: AppColors.pastelBlue.withOpacity(0.3),
-      resizeToAvoidBottomInset: false,
       body: AppBackground(
         networkImage: widget.eventModal.imageUrl,
         isBackButton: true,
@@ -189,8 +189,8 @@ class _CommentScreenState extends State<CommentScreen> {
                                                           const Gap(5),
                                                           CustomText(
                                                             title: AppUtils
-                                                                .convertDateTimeToMMMMDY(
-                                                                    dateTime: (commentData[
+                                                                .formatTimeAgo(
+                                                                    (commentData[
                                                                             index]
                                                                         .time!)),
                                                             size:
@@ -415,6 +415,8 @@ class _CommentScreenState extends State<CommentScreen> {
                                                                         .uid,
                                                                     time: DateTime
                                                                         .now(),
+                                                                    status:
+                                                                        'Sell',
                                                                     offerPrice:
                                                                         priceController
                                                                             .text);

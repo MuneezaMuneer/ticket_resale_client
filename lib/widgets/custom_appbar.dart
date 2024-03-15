@@ -10,6 +10,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? child;
   final bool isNotification;
   final bool isBackButton;
+  final bool isOpenedFromDialog;
   final bool isNetworkImage;
   final String? networkImage;
   const CustomAppBar(
@@ -19,7 +20,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       this.isNotification = true,
       this.isBackButton = true,
       this.isNetworkImage = false,
-      this.networkImage});
+      this.networkImage,
+      this.isOpenedFromDialog = false});
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +49,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 children: [
                   InkWell(
                       onTap: () {
-                        Navigator.pop(context);
+                        if (isOpenedFromDialog == true) {
+                          Navigator.pushNamedAndRemoveUntil(context,
+                              AppRoutes.navigationScreen, (route) => false);
+                        } else {
+                          Navigator.pop(context);
+                        }
                       },
                       child: isBackButton
                           ? const Icon(

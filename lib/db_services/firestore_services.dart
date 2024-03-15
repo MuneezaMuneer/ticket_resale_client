@@ -85,6 +85,24 @@ class FireStoreServices {
     });
   }
 
+static Future<void> updateCommentsData({required String docId, required String offerId}) async {
+  FirebaseFirestore.instance
+      .collection('tickets')
+      .doc(docId)
+      .collection('offers')
+      .doc(offerId) 
+      .update({'status': 'Confirm'});
+}
+  static Stream<int> fetchCommentUserLength({required String docId}) {
+    return FirebaseFirestore.instance
+        .collection('tickets')
+        .doc(docId)
+        .collection('offers')
+        .where('user_id', isEqualTo: AuthServices.getCurrentUser.uid)
+        .snapshots()
+        .map((event) => event.docs.length);
+  }
+
   static Stream<List<UserModel>> fetchUserLevels() {
     return FirebaseFirestore.instance
         .collection('user_data')

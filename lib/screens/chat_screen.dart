@@ -25,7 +25,11 @@ class ChatScreen extends StatelessWidget {
               return const Center(
                 child: CupertinoActivityIndicator(),
               );
-            } else if (snapshot.hasData) {
+            } else if (!snapshot.hasData || (snapshot.data as List).isEmpty) {
+              return const Center(
+                child: Text('No Active Connections'),
+              );
+            } else {
               final currentUserId = snapshot.data as List<String>;
 
               return ListView.builder(
@@ -49,7 +53,9 @@ class ChatScreen extends StatelessWidget {
                               arguments: {
                                 'receiverId': firstUserId,
                                 'hashKey': hashKey,
-                                'userModel': userData
+                                'userModel': userData,
+                                'isOpened': false,
+                                'offeredPrice': '1'
                               },
                             );
                           },
@@ -83,20 +89,13 @@ class ChatScreen extends StatelessWidget {
                             ),
                           ),
                         );
-                      } else if (snapshot.connectionState ==
-                          ConnectionState.waiting) {
-                        return const Center(
-                          child: CupertinoActivityIndicator(),
-                        );
                       } else {
-                        return const Text('No User Found');
+                        return const Text('Loading...');
                       }
                     },
                   );
                 },
               );
-            } else {
-              return const Text('No User Found');
             }
           },
         ),
