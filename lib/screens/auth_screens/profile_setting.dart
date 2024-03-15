@@ -14,14 +14,17 @@ import 'package:ticket_resale/providers/providers.dart';
 import 'package:ticket_resale/utils/utils.dart';
 import '../../constants/constants.dart';
 import '../../widgets/widgets.dart';
+
 class ProfileSettings extends StatefulWidget {
   const ProfileSettings({super.key});
   @override
   State<ProfileSettings> createState() => _ProfileSettingsState();
 }
+
 late ImagePickerProvider imagePickerProvider;
 String? photoUrl;
 String countryCode = '';
+
 class _ProfileSettingsState extends State<ProfileSettings> {
   TextEditingController nameController = TextEditingController();
   TextEditingController instaController = TextEditingController();
@@ -258,7 +261,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                                 }
                               },
                               onChanged: (phone) {
-                                
+                                countryCode = phone.countryCode;
                               },
                             ),
                           ),
@@ -267,7 +270,14 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                             top: 15,
                             child: GestureDetector(
                               onTap: () async {
-                               
+                                CustomBottomSheet.showOTPBottomSheet(
+                                  context: context,
+                                  btnText: 'Verify Number',
+                                  onChanged: (p0) {},
+                                  email:
+                                      '$countryCode${phoneNoController.text}',
+                                  onTape: () {},
+                                );
                               },
                               child: const CustomText(
                                 title: 'Verify',
@@ -344,12 +354,12 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                                   }
 
                                   UserModel userModel = UserModel(
-                                    displayName: nameController.text,
-                                    instaUsername: instaController.text,
-                                    phoneNo: phoneNoController.text,
-                                    birthDate: birthController.text,
-                                    photoUrl: imageUrl,
-                                  );
+                                      displayName: nameController.text,
+                                      instaUsername: instaController.text,
+                                      phoneNo: phoneNoController.text,
+                                      birthDate: birthController.text,
+                                      photoUrl: imageUrl,
+                                      status: 'Active');
 
                                   await AuthServices.storeUserImage(
                                       userModel: userModel);

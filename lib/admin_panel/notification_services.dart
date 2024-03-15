@@ -1,16 +1,17 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_messaging/firebase_messaging.dart';
+
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class NotificationServices {
   static final FirebaseMessaging _messaging = FirebaseMessaging.instance;
   static final FlutterLocalNotificationsPlugin
       _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-static const _fcmAPI = 'https://fcm.googleapis.com/fcm/send';
-static const _serverKEy =
+  static const _fcmAPI = 'https://fcm.googleapis.com/fcm/send';
+  static const _serverKEy =
       'AAAAwZawCR8:APA91bGv744R5IO8MZdhSvTjkzoBgV7nPt33A4DO8F5Oopw8GWuFZEJ3Whnz_mf4NCYf0jOuy4MjiRKSgiUDxmZTyNmsAe7Gf_XdD9jI6wCx0VJ7mcxxl2ABFpQ5XDlu5TAK7c9JTmRR';
 
   static Future<String?> getToken() async {

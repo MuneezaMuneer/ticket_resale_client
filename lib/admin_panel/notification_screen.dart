@@ -4,7 +4,6 @@ import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 import 'package:svg_flutter/svg.dart';
 import 'package:ticket_resale/admin_panel/custom_appbar.dart';
-import 'package:ticket_resale/admin_panel/notification_services.dart';
 import '../constants/constants.dart';
 import '../providers/search_provider.dart';
 import '../widgets/widgets.dart';
@@ -29,6 +28,7 @@ class _AdminNotificationState extends State<AdminNotification> {
                   ? PreferredSize(
                       preferredSize: Size.fromHeight(60),
                       child: CustomAppBarField(
+                          text: 'Search via name & phoneNo',
                           searchController: searchcontroller,
                           setSearchValue: (searchQuery) {
                             searchNotifier.value = searchQuery;
@@ -99,7 +99,7 @@ class _AdminNotificationState extends State<AdminNotification> {
                       borderRadius: BorderRadius.circular(50),
                     ),
                     child:
-                        Center(child: SvgPicture.asset(AppSvgs.notification)),
+                        Center(child: SvgPicture.asset(AppSvgs.notifications)),
                   ),
                 ),
               ),

@@ -101,7 +101,7 @@ class _HomeAppBarState extends State<HomeAppBar> {
               right: 5,
               child: GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, AppRoutes.notificationScreen);
+                  Navigator.pushNamed(context, AppRoutes.notificationScreen,);
                 },
                 child: Container(
                     height: 40,
@@ -113,6 +113,29 @@ class _HomeAppBarState extends State<HomeAppBar> {
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: SvgPicture.asset(AppSvgs.sms),
+                    )),
+              ),
+            ),
+            Positioned(
+              right: 5,
+              top: 50,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, AppRoutes.chatScreen);
+                },
+                child: Container(
+                    height: 40,
+                    width: 40,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppColors.white.withOpacity(0.1),
+                    ),
+                    child: const Center(
+                      child: Icon(
+                        Icons.comment,
+                        color: AppColors.white,
+                        size: 20,
+                      ),
                     )),
               ),
             ),

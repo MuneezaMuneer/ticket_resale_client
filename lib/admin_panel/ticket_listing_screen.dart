@@ -1,18 +1,19 @@
 import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 import 'package:ticket_resale/admin_panel/custom_appbar.dart';
-import 'package:ticket_resale/admin_panel/drop_down_menu.dart';
 import 'package:ticket_resale/admin_panel/firestore_services.dart';
-import 'package:ticket_resale/constants/constants.dart';
+import 'package:ticket_resale/providers/clear_provider.dart';
+import '../constants/constants.dart';
+import '../models/fetch_ticket_model.dart';
 import '../models/tickets_model.dart';
 import '../providers/search_provider.dart';
 import '../utils/utils.dart';
 import '../widgets/widgets.dart';
-import 'event_model_admin.dart';
-import 'notification_services.dart';
+import 'drop_down_menu.dart';
 
 class TicketListing extends StatefulWidget {
   const TicketListing({super.key});
@@ -20,18 +21,26 @@ class TicketListing extends StatefulWidget {
   State<TicketListing> createState() => _TicketListingState();
 }
 
-late Future<List<TicketModel?>> fetchEvents;
-ValueNotifier<String> searchNotifier = ValueNotifier('');
-TextEditingController searchcontroller = TextEditingController();
-List<EventModelAdmin?> eventData = [];
-List<EventModelAdmin?> filterEventData = [];
-late SearchProvider searchProvider;
+List<TicketModal> userData = [];
+TextEditingController searchController = TextEditingController();
 
 class _TicketListingState extends State<TicketListing> {
+  late Stream<List<TicketModal>> fetchEvents;
+  TextEditingController controller = TextEditingController();
+  ValueNotifier<String> searchNotifier = ValueNotifier('');
+  TextEditingController searchcontroller = TextEditingController();
+  List<TicketModal> filterEventData = [];
+  List<TicketModal> eventData = [];
+  late ClearProvider clearProvider;
   @override
   void initState() {
-    fetchEvents = FirestoreServices.fetchTickets();
-    searchProvider = Provider.of<SearchProvider>(context, listen: false);
+    fetchEvents = FirestoreServices.fetchTicket();
+    clearProvider = Provider.of<ClearProvider>(context, listen: false);
+
+    SchedulerBinding.instance.addPostFrameCallback((timings) {
+      clearProvider.clearSearchText();
+    });
+
     super.initState();
   }
 
@@ -39,92 +48,79 @@ class _TicketListingState extends State<TicketListing> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     double width = size.width;
+    double height = size.height;
     return Consumer<SearchProvider>(
       builder: (context, searchprovider, child) => Scaffold(
-          appBar: searchprovider.isSearching
-              ? PreferredSize(
-                  preferredSize: const Size.fromHeight(60),
-                  child: CustomAppBarField(
-                      searchController: searchcontroller,
-                      setSearchValue: (searchQuery) {
-                        searchNotifier.value = searchQuery;
+        appBar: searchprovider.isSearching
+            ? PreferredSize(
+                preferredSize: const Size.fromHeight(60),
+                child: CustomAppBarField(
+                    text: 'Search via Event name, seller & ticket type',
+                    searchController: searchcontroller,
+                    setSearchValue: (searchQuery) {
+                      searchNotifier.value = searchQuery;
+                      filterEventData = eventData
+                          .where((data) =>
+                              data.eventName!
+                                  .toLowerCase()
+                                  .contains(searchQuery.toLowerCase()) ||
+                              data.userName!
+                                  .toLowerCase()
+                                  .contains(searchQuery.toLowerCase()) ||
+                              data.ticketType!
+                                  .toLowerCase()
+                                  .contains(searchQuery.toLowerCase()))
+                          .toList();
+                    }))
+            : const PreferredSize(
+                preferredSize: Size.fromHeight(60), child: CustomAppBarAdmin()),
+        body: Padding(
+          padding: const EdgeInsets.fromLTRB(30, 10, 0, 0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                width: width * 0.9,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const CustomText(
+                      title: 'Ticket listing',
+                      weight: FontWeight.w600,
+                      size: AppSize.regular,
+                    ),
+                    CustomDropDown(
+                      onSelectedPrice: (min, max) {
+                        clearProvider.setSearchText = '$min$max';
+                        filterEventData = eventData.where((item) {
+                          double itemPrice = double.tryParse(item.price!) ?? 0;
+                          return itemPrice <= min && itemPrice >= max;
+                        }).toList();
+                      },
+                      onSelectedStatus: (slectedValue) {
+                        log('.........................on ui $slectedValue}');
+                        clearProvider.setSearchText = slectedValue;
                         filterEventData = eventData
-                            .where((data) =>
-                                data!.festivalName!
-                                    .toLowerCase()
-                                    .contains(searchQuery.toLowerCase()) ||
-                                data.username!
-                                    .toLowerCase()
-                                    .contains(searchQuery.toLowerCase()) ||
-                                data.ticketType!
-                                    .toLowerCase()
-                                    .contains(searchQuery.toLowerCase()))
+                            .where((data) => data.status!
+                                .toLowerCase()
+                                .contains(slectedValue.toLowerCase()))
                             .toList();
-                      }))
-              : const PreferredSize(
-                  preferredSize: Size.fromHeight(60),
-                  child: CustomAppBarAdmin()),
-          body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            const Gap(30),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                InkWell(
-                  onTap: () {
-                    searchNotifier.value = '';
-                  },
-                  child: const CustomText(
-                    title: 'Ticket listing',
-                    weight: FontWeight.w600,
-                    size: AppSize.regular,
-                  ),
+                      },
+                    ),
+                  ],
                 ),
-                const Gap(50),
-                CustomDropDown(
-                  onSelectedDate: (startDate, endDate) {
-                    searchNotifier.value = '$startDate';
-
-                    filterEventData = eventData.where((item) {
-                      DateTime itemDate = DateTime.parse(item!.date!);
-                      return itemDate.isAfter(
-                              startDate.subtract(const Duration(days: 1))) &&
-                          itemDate
-                              .isBefore(endDate.add(const Duration(days: 1)));
-                    }).toList();
-                  },
-                  onSelectedPrice: (min, max) {
-                    searchNotifier.value = '$min$max';
-                    filterEventData = eventData.where((item) {
-                      double itemPrice = double.tryParse(item!.price!) ??
-                          0; // Parse string to double
-                      return itemPrice <= min && itemPrice >= max;
-                    }).toList();
-                  },
-                  onSelectedStatus: (slectedValue) {
-                    log('.........................on ui $slectedValue}');
-                    searchNotifier.value = slectedValue;
-                    filterEventData = eventData
-                        .where((data) => data!.status!
-                            .toLowerCase()
-                            .contains(slectedValue.toLowerCase()))
-                        .toList();
-                  },
-                )
-              ],
-            ),
-            const Gap(25),
-            Expanded(
-                child: Padding(
-              padding: const EdgeInsets.only(left: 20),
-              child: SingleChildScrollView(
+              ),
+              const Gap(25),
+              Expanded(
                 child: SizedBox(
-                  height: size.height * .75,
+                  width: width,
+                  height: height,
                   child: Container(
                     decoration: BoxDecoration(
                         color: AppColors.white,
                         borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(25),
-                        ),
+                            topLeft: Radius.circular(25),
+                            topRight: Radius.circular(25)),
                         boxShadow: [
                           BoxShadow(
                             color: AppColors.purple.withOpacity(0.3),
@@ -138,8 +134,8 @@ class _TicketListingState extends State<TicketListing> {
                               spreadRadius: 2,
                               offset: Offset(0, 0))
                         ]),
-                    child: FutureBuilder<List<TicketModel?>>(
-                      future: fetchEvents,
+                    child: StreamBuilder<List<TicketModal>>(
+                      stream: fetchEvents,
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
@@ -149,22 +145,18 @@ class _TicketListingState extends State<TicketListing> {
                           return Center(
                               child: Text('Error: ${snapshot.error}'));
                         } else if (snapshot.hasData) {
-                          return SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: ValueListenableBuilder(
-                              valueListenable: searchNotifier,
-                              builder: (context, query, child) {
-                                List<TicketModel?> ticketData = query.isEmpty
-                                    ? snapshot.data!
-                                    : snapshot.data!
-                                        .where((data) => data!.status!
-                                            .toLowerCase()
-                                            .contains(query.toLowerCase()))
-                                        .toList();
+                          eventData = snapshot.data!;
+                          return Consumer<ClearProvider>(
+                            builder: (context, query, child) {
+                              List<TicketModal?> ticketData =
+                                  query.searchText.isEmpty
+                                      ? snapshot.data!
+                                      : filterEventData;
 
-                                ;
-                                if (ticketData.isNotEmpty) {
-                                  return DataTable(
+                              if (ticketData.isNotEmpty) {
+                                return SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: DataTable(
                                       columnSpacing: width * 0.066,
                                       dividerThickness: 0.0000000000000000001,
                                       decoration: BoxDecoration(
@@ -186,8 +178,8 @@ class _TicketListingState extends State<TicketListing> {
                                         _buildTableCell('Status')
                                       ],
                                       rows: ticketData.asMap().entries.map(
-                                          (MapEntry<int, TicketModel?> entry) {
-                                        TicketModel? ticketData = entry.value;
+                                          (MapEntry<int, TicketModal?> entry) {
+                                        TicketModal? ticketData = entry.value;
                                         final bool isOdd = entry.key.isOdd;
                                         final Color rowColor = isOdd
                                             ? AppColors.lightPurple
@@ -206,11 +198,11 @@ class _TicketListingState extends State<TicketListing> {
                                                   ticketData!.image!),
                                             )),
                                             _dataCellForNames(
-                                                id: ticketData.eventID!,
-                                                isUser: false),
+                                              name: ticketData.eventName!,
+                                            ),
                                             _dataCellForNames(
-                                                id: ticketData.userID!,
-                                                isUser: true),
+                                              name: ticketData.userName!,
+                                            ),
                                             _createDataCell(
                                                 ticketData.ticketType!),
                                             _createDataCell(ticketData.price!),
@@ -219,16 +211,18 @@ class _TicketListingState extends State<TicketListing> {
                                             )),
                                           ],
                                         );
-                                      }).toList());
-                                } else {
-                                  return const CustomText(
+                                      }).toList()),
+                                );
+                              } else {
+                                return const Center(
+                                  child: CustomText(
                                     title: 'No record found here',
                                     size: AppSize.regular,
                                     color: AppColors.jetBlack,
-                                  );
-                                }
-                              },
-                            ),
+                                  ),
+                                );
+                              }
+                            },
                           );
                         } else {
                           return const Text('');
@@ -238,10 +232,27 @@ class _TicketListingState extends State<TicketListing> {
                   ),
                 ),
               ),
-            ))
-          ])),
+            ],
+          ),
+        ),
+      ),
     );
   }
+}
+
+DataCell _dataCellForNames({
+  required String name,
+}) {
+  return DataCell(Text(
+    AppUtils.textTo32Characters(name),
+    style: const TextStyle(
+      fontSize: AppSize.small,
+      fontWeight: FontWeight.w400,
+      color: AppColors.grey,
+    ),
+    overflow: TextOverflow.ellipsis,
+    maxLines: 2,
+  ));
 }
 
 DataCell _createDataCell(String text) {
@@ -293,13 +304,6 @@ Widget createTableCell({
             onTap: () {
               String currentStatus =
                   (status == 'Active') ? 'Disable' : 'Active';
-
-              NotificationServices.sendPushNotification(
-                  title: 'Ticket listing',
-                  body: 'Your ticket is $currentStatus',
-                  token:
-                      'dqpv4lNjS9eovGSl3oNvkJ:APA91bGJDwpMS7rXp6aJNrHs0qxNEYgbn2MmUpM02L9B0iZglcMQAYzFt_H9yU6RqUANSheAy8IoC-59mFWtitseaeU7Z0UlLmdtOeKK80G883iwDWFWNS0tNg9O42oHZThFz9TWQ2pH');
-
               FirestoreServices.updateTicketStatus(ticketID, currentStatus);
             },
             child: Container(
@@ -327,29 +331,4 @@ Widget createTableCell({
           );
         }
       });
-}
-
-DataCell _dataCellForNames({required String id, required bool isUser}) {
-  return DataCell(
-    StreamBuilder(
-        stream: isUser
-            ? FirestoreServices.fetchUserName(userID: id)
-            : FirestoreServices.fetchEventName(eventID: id),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return Text(
-              AppUtils.textTo32Characters('${snapshot.data}'),
-              style: const TextStyle(
-                fontSize: AppSize.small,
-                fontWeight: FontWeight.w400,
-                color: AppColors.grey,
-              ),
-              overflow: TextOverflow.ellipsis,
-              maxLines: 2,
-            );
-          } else {
-            return const SizedBox();
-          }
-        }),
-  );
 }

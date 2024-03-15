@@ -121,13 +121,10 @@ class _EventScreenState extends State<EventScreen> {
                                 ? snapshot.data!
                                 : snapshot.data!
                                     .where((data) =>
-                                        data.festivalName!
+                                        data.eventName!
                                             .toLowerCase()
                                             .contains(query.toLowerCase()) ||
-                                        data.city!
-                                            .toLowerCase()
-                                            .contains(query.toLowerCase()) ||
-                                        data.ticketType!
+                                        data.location!
                                             .toLowerCase()
                                             .contains(query.toLowerCase()))
                                     .toList();
@@ -139,7 +136,7 @@ class _EventScreenState extends State<EventScreen> {
                                         mainAxisSpacing: 10,
                                         crossAxisSpacing: 10,
                                         crossAxisCount: 2,
-                                        mainAxisExtent: 240),
+                                        mainAxisExtent: 220),
                                 itemCount: data.length,
                                 itemBuilder: (context, index) {
                                   return Container(
@@ -222,14 +219,14 @@ class _EventScreenState extends State<EventScreen> {
                                                   ),
                                                 ),
                                               ),
-                                              const Gap(8),
+                                              const Gap(5),
                                               Padding(
                                                 padding: const EdgeInsets.only(
                                                     left: 3),
                                                 child: CustomText(
                                                   softWrap: true,
                                                   title: AppUtils.limitTo42Char(
-                                                      '${data[index].festivalName}'),
+                                                      '${data[index].eventName}'),
                                                   color: AppColors.jetBlack,
                                                   size: AppSize.xsmall,
                                                   weight: FontWeight.w600,
@@ -295,17 +292,18 @@ class _EventScreenState extends State<EventScreen> {
                                               onPressed: () {
                                                 EventModal eventModal =
                                                     EventModal(
+                                                        docId:
+                                                            data[index].docId,
                                                         description: data[index]
                                                             .description!,
-                                                        festivalName:
-                                                            data[index]
-                                                                .festivalName!,
+                                                        eventName: data[index]
+                                                            .eventName!,
                                                         imageUrl: data[index]
                                                             .imageUrl!,
                                                         date: data[index].date!,
                                                         time: data[index].time!,
-                                                        city:
-                                                            data[index].city!);
+                                                        location: data[index]
+                                                            .location!);
                                                 Navigator.pushNamed(context,
                                                     AppRoutes.detailFirstScreen,
                                                     arguments: eventModal);

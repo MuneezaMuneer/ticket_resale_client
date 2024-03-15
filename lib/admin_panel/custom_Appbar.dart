@@ -119,9 +119,10 @@ class CustomAppBarAdmin extends StatelessWidget implements PreferredSizeWidget {
 class CustomAppBarField extends StatefulWidget implements PreferredSizeWidget {
   final TextEditingController? searchController;
   final SearchCallbackFunc? setSearchValue;
+  final String? text;
 
   const CustomAppBarField(
-      {Key? key, this.searchController, this.setSearchValue})
+      {Key? key, this.searchController, this.setSearchValue,required this.text})
       : super(key: key);
 
   @override
@@ -151,7 +152,7 @@ class _CustomAppBarFieldState extends State<CustomAppBarField> {
               widget.setSearchValue!(widget.searchController!.text);
             },
             fillColor: AppColors.white,
-            hintText: 'Search here',
+            hintText: widget.text,
             hintStyle: const TextStyle(
               fontWeight: FontWeight.w400,
               fontSize: AppSize.medium,

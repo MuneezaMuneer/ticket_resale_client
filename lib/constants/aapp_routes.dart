@@ -22,4 +22,8 @@ class AppRoutes {
   static const signInAdmin = '/adminSignIn';
   static const logoutAdmin = '/logoutAdmin';
   static const createEvent = '/createEvent';
+  static const connectPaypal = '/connectPaypalScreen';
+  static const chatScreen = '/chatScreen';
+  static const chatDetailScreen = 'chatDetailScreen';
+  static const payPalAuthorization = '/payPalAuthorization';
 }

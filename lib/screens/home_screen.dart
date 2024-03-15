@@ -1,4 +1,5 @@
 import 'package:avatar_stack/avatar_stack.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:svg_flutter/svg.dart';
@@ -8,11 +9,13 @@ import 'package:ticket_resale/db_services/db_services.dart';
 import 'package:ticket_resale/models/models.dart';
 import 'package:ticket_resale/utils/utils.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
+
 class _HomeScreenState extends State<HomeScreen> {
   TextEditingController searchController = TextEditingController();
   ValueNotifier<String> searchNotifier = ValueNotifier<String>('');
@@ -22,6 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
     searchController.dispose();
     super.dispose();
   }
+
   @override
   void initState() {
     displayEventData = FireStoreServices.fetchEventData();
@@ -68,7 +72,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   StreamBuilder(
                     stream: displayEventData,
                     builder: (context, snapshot) {
-                      if (snapshot.hasData &&
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                            child: Column(
+                          children: [
+                            Gap(50),
+                            CupertinoActivityIndicator(),
+                          ],
+                        ));
+                      } else if (snapshot.hasData &&
                           snapshot.data != null &&
                           snapshot.data!.isNotEmpty) {
                         final data = snapshot.data;
@@ -122,7 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           top: 10, left: 15),
                                       child: CustomText(
                                         title: AppUtils.limitTo33Char(
-                                            '${nearestEvent.festivalName}'),
+                                            '${nearestEvent.eventName}'),
                                         color: AppColors.jetBlack,
                                         size: 15,
                                         weight: FontWeight.w700,
@@ -137,7 +149,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           rowText(
-                                              AppUtils.formatDate(
+                                              AppUtils.formatDatee(
                                                 nearestEvent.date!,
                                               ),
                                               AppSvgs.calender),
@@ -153,7 +165,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         );
                       } else {
-                        return const Text('No Event Yet');
+                        return const Center(
+                            child: Column(
+                          children: [
+                            Gap(30),
+                            Text('No Event Yet'),
+                          ],
+                        ));
                       }
                     },
                   ),
@@ -246,18 +264,24 @@ class _HomeScreenState extends State<HomeScreen> {
                       return StreamBuilder(
                         stream: displayEventData,
                         builder: (context, snapshot) {
-                          if (snapshot.hasData) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                                child: Column(
+                              children: [
+                                Gap(50),
+                                CupertinoActivityIndicator(),
+                              ],
+                            ));
+                          } else if (snapshot.hasData) {
                             final data = query.isEmpty
                                 ? snapshot.data
                                 : snapshot.data!
                                     .where((element) =>
-                                        element.festivalName!
+                                        element.eventName!
                                             .toLowerCase()
                                             .contains(query.toLowerCase()) ||
-                                        element.city!
-                                            .toLowerCase()
-                                            .contains(query.toLowerCase()) ||
-                                        element.ticketType!
+                                        element.location!
                                             .toLowerCase()
                                             .contains(query.toLowerCase()))
                                     .toList();
@@ -281,7 +305,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             data[index].date!),
                                         time: data[index].time,
                                         posttitle: AppUtils.limitTo42Char(
-                                            '${data[index].festivalName}'),
+                                            '${data[index].eventName}'),
                                         postBy: 'Jacob Jones',
                                         imagePath: data[index].imageUrl,
                                       ),

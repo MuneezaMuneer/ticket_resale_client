@@ -1,5 +1,4 @@
 // ignore_for_file: use_build_context_synchronously
-
 import 'dart:developer';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -69,14 +68,10 @@ class AuthServices {
     final userData = {
       'user_name': user!.displayName,
       'email': user.email,
-      // 'photoURL': user.photoURL,
+      'status': 'Active',
+      'image_url': user.photoURL,
       'profile_levels': {
         'isEmailVerified': true,
-        // 'isPhoneNoVerified': false,
-        // 'isPaypalVerified': false,
-        // 'isInstaVerified': false,
-        // 'isTransactionVerified': false,
-        // 'isSuperVerified': false
       }
     };
 
@@ -161,51 +156,10 @@ class AuthServices {
     }
   }
 
-  // static Future<bool> phoneNoVerification(
-  //     {required String phoneNumber, required BuildContext context}) async {
-  //   FirebaseAuth auth = FirebaseAuth.instance;
-
-  //   try {
-  //     await auth.verifyPhoneNumber(
-  //       phoneNumber: phoneNumber,
-  //       timeout: const Duration(seconds: 60),
-  //       verificationCompleted: (PhoneAuthCredential credential) async {
-  //         await auth.signInWithCredential(credential);
-  //       },
-  //       verificationFailed: (FirebaseAuthException e) {
-  //         log('Phone number verification failed: ${e.message}');
-  //       },
-  //       codeSent: (String verificationId, int? resendToken) async {
-  //         String smsCode = '';
-
-  //         CustomBottomSheet.showOTPBottomSheet(
-  //             email: phoneNumber,
-  //             onTape: () async {
-  //               PhoneAuthCredential credential = PhoneAuthProvider.credential(
-  //                   verificationId: verificationId, smsCode: smsCode);
-  //             },
-  //             onChanged: (code) {
-  //               smsCode = code;
-  //             },
-  //             context: context);
-  //         // await auth.signInWithCredential(credential);
-  //       },
-  //       codeAutoRetrievalTimeout: (String verificationId) {
-  //         log('Auto-retrieval timeout. Please enter the code manually.');
-  //       },
-  //     );
-  //     return true;
-  //   } catch (e) {
-  //     log('Error during phone number verification: $e');
-
-  //     return false;
-  //   }
-  // }
-
   static Future<void> deleteUserAccount() async {
     try {
       await deleteUserData();
-      await deleteUserEvents();
+      await deleteUserTickets();
       await AuthServices.getCurrentUser.delete();
     } on FirebaseAuthException catch (e) {
       log(e.toString());
@@ -229,13 +183,13 @@ class AuthServices {
     }
   }
 
-  static Future<void> deleteUserEvents() async {
+  static Future<void> deleteUserTickets() async {
     try {
       String uid = AuthServices.getCurrentUser.uid;
 
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-          .collection('event_ticket')
-          .where('user_id', isEqualTo: uid)
+          .collection('tickets')
+          .where('user_uid', isEqualTo: uid)
           .get();
 
       for (QueryDocumentSnapshot document in querySnapshot.docs) {
@@ -272,12 +226,10 @@ class AuthServices {
 
       await getCurrentUser.updatePhotoURL(userModel.photoUrl);
       await getCurrentUser.updateDisplayName(userModel.displayName);
+      Map<String, dynamic> userData = userModel.toMap();
       await user.set(
           {
-            'birth_date': userModel.birthDate,
-            'phone_number': userModel.phoneNo,
-            'instagram_username': userModel.instaUsername,
-            'user_name': userModel.displayName,
+            ...userData,
             'profile_levels': {
               'isInstaVerified': true,
             },
@@ -311,19 +263,12 @@ class AuthServices {
       FirebaseFirestore firestore = FirebaseFirestore.instance;
       DocumentReference user =
           firestore.collection('user_data').doc(getCurrentUser.uid);
-
+      Map<String, dynamic> userData = userModel.toMap();
       await user.set({
-        "phone_number": userModel.phoneNo,
-        "instagram_username": userModel.instaUsername,
-        "email": userModel.email,
-        "user_name": userModel.displayName,
+        ...userData,
         'profile_levels': {
           'isEmailVerified': true,
-          // 'isPhoneNoVerified': false,
-          // 'isPaypalVerified': false,
           'isInstaVerified': true,
-          // 'isTransactionVerified': false,
-          // 'isSuperVerified': false
         }
       });
 
@@ -357,7 +302,7 @@ class AuthServices {
   }) async {
     try {
       Reference ref = FirebaseStorage.instance
-          .ref('event_image')
+          .ref('ticket_image')
           .child(AuthServices.getCurrentUser.uid)
           .child(
               '${AuthServices.getCurrentUser.uid}${DateTime.timestamp().millisecond}');
@@ -382,7 +327,7 @@ class AuthServices {
 
       if (documentSnapshot.exists) {
         Map<String, dynamic> mapData = documentSnapshot.data()!;
-        return UserModel.fromMap(mapData);
+        return UserModel.fromMap(mapData, documentSnapshot.id);
       } else {
         return null;
       }

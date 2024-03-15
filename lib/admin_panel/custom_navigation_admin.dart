@@ -37,7 +37,7 @@ class _CustomNavigationAdminState extends State<CustomNavigationAdmin> {
         return Scaffold(
           body: _widgetOptions[indexValue.selectedIndex],
           bottomNavigationBar: Container(
-            height: 70,
+            height: 75,
             decoration: const BoxDecoration(color: AppColors.white, boxShadow: [
               BoxShadow(color: AppColors.purple, blurRadius: 10)
             ]),
@@ -62,7 +62,7 @@ class _CustomNavigationAdminState extends State<CustomNavigationAdmin> {
                                       AppColors.blueViolet, BlendMode.srcIn),
                                 ),
                                 const CustomText(
-                                  title: 'Event Listing',
+                                  title: 'Event Management',
                                   size: AppSize.xxsmall,
                                   color: AppColors.blueViolet,
                                 )
@@ -71,11 +71,13 @@ class _CustomNavigationAdminState extends State<CustomNavigationAdmin> {
                           : Column(
                               children: [
                                 SvgPicture.asset(AppSvgs.ticketListing,
+                                    height: 20,
+                                    width: 20,
                                     colorFilter: ColorFilter.mode(
                                         AppColors.blueViolet.withOpacity(0.4),
                                         BlendMode.srcIn)),
                                 CustomText(
-                                  title: 'Event Listing',
+                                  title: 'Event Management',
                                   size: AppSize.xxsmall,
                                   color: AppColors.blueViolet.withOpacity(0.4),
                                 )
@@ -91,6 +93,8 @@ class _CustomNavigationAdminState extends State<CustomNavigationAdmin> {
                               children: [
                                 SvgPicture.asset(
                                   AppSvgs.ticketListing,
+                                  height: 20,
+                                  width: 20,
                                   colorFilter: const ColorFilter.mode(
                                       AppColors.blueViolet, BlendMode.srcIn),
                                 ),
@@ -104,6 +108,8 @@ class _CustomNavigationAdminState extends State<CustomNavigationAdmin> {
                           : Column(
                               children: [
                                 SvgPicture.asset(AppSvgs.ticketListing,
+                                    height: 20,
+                                    width: 20,
                                     colorFilter: ColorFilter.mode(
                                         AppColors.blueViolet.withOpacity(0.4),
                                         BlendMode.srcIn)),

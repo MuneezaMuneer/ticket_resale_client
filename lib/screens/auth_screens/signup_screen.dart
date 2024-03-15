@@ -1,3 +1,4 @@
+// ignore_for_file: use_build_context_synchronously
 import 'dart:developer';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
@@ -11,14 +12,17 @@ import 'package:ticket_resale/utils/utils.dart';
 import '../../components/components.dart';
 import '../../constants/constants.dart';
 import '../../widgets/widgets.dart';
+
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
 }
+
 GlobalKey<FormState> formKey = GlobalKey<FormState>();
 String emailVerificationCode = '';
 late BottomSheetProvider bottomSheetProvider;
+
 class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController firstNameController = TextEditingController();
   ValueNotifier<bool> loading = ValueNotifier<bool>(false);
@@ -295,12 +299,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               } else {
                                 loading.value = true;
                                 UserModel userModel = UserModel(
-                                  displayName:
-                                      '${firstNameController.text} ${lastNameController.text}',
-                                  email: gmailController.text,
-                                  instaUsername: instaController.text,
-                                  phoneNo: phoneController.text,
-                                );
+                                    displayName:
+                                        '${firstNameController.text} ${lastNameController.text}',
+                                    email: gmailController.text,
+                                    instaUsername: instaController.text,
+                                    phoneNo: phoneController.text,
+                                    status: 'Active');
 
                                 int otp =
                                     VerifyUserEmail.generateRandomNumber();
@@ -322,10 +326,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     bool isValidEmail = false;
 
                                     CustomBottomSheet.showOTPBottomSheet(
+                                      btnText: 'Verify Email',
                                       context: context,
                                       onChanged: (code) {
                                         emailVerificationCode = code;
-                                        print('The code is : $code');
+                                        log('The code is : $code');
 
                                         if (code == otp.toString()) {
                                           isValidEmail = true;
@@ -359,7 +364,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                               }
                                             });
                                           } catch (e) {
-                                            print('Error: $e');
+                                            log('Error: $e');
                                             AppUtils.toastMessage(
                                                 'An error occurred. Please try again.');
                                           } finally {
@@ -377,7 +382,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                         'Failed to send verification email');
                                   }
                                 } catch (e) {
-                                  print('Error: $e');
+                                  log('Error: $e');
                                   AppUtils.toastMessage(
                                       'An error occurred. Please try again.');
                                 } finally {

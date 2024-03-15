@@ -1,14 +1,14 @@
-import 'dart:developer';
-
+import 'package:device_preview/device_preview.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ticket_resale/admin_panel/notification_services.dart';
 import 'package:ticket_resale/constants/app_texts.dart';
 import 'package:ticket_resale/firebase_options.dart';
+import 'package:ticket_resale/providers/clear_provider.dart';
 import 'package:ticket_resale/providers/event_image_provider.dart';
 import 'package:ticket_resale/providers/providers.dart';
 import 'package:ticket_resale/screens/splash_screen.dart';
@@ -21,34 +21,10 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  AppText.preference = await SharedPreferences.getInstance();
+
   SwitchProvider provider = SwitchProvider();
   await provider.loadPreferences();
-
-  NotificationServices.requestPermission();
-  NotificationServices.initializeNotification();
-
-  String? token = await NotificationServices.getToken();
-
-  FirebaseMessaging.onMessageOpenedApp.listen((event) {});
-
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    print('Got a message whilst in the foreground!');
-    print('Message data: ${message.data}');
-
-    if (message.notification != null) {
-      NotificationServices.showNotification(
-          body: message.notification!.body!,
-          title: message.notification!.title!);
-      print(
-          'Message also contained a notification: ${message.notification!.body}');
-    }
-  });
-
-  // FirestoreServices.storeFCMToken(token: '$token');
-
-  log('.............token.......... $token............................');
-
+  AppText.preference = await SharedPreferences.getInstance();
   runApp(
     const TicketResale(),
   );
@@ -60,6 +36,9 @@ class TicketResale extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider<ClearProvider>(
+          create: (context) => ClearProvider(),
+        ),
         ChangeNotifierProvider<EventImagePickerProvider>(
           create: (context) => EventImagePickerProvider(),
         ),

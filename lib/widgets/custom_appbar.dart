@@ -10,12 +10,18 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? child;
   final bool isNotification;
   final bool isBackButton;
+  final bool isOpenedFromDialog;
+  final bool isNetworkImage;
+  final String? networkImage;
   const CustomAppBar(
       {super.key,
       this.title,
       this.child,
       this.isNotification = true,
-      this.isBackButton = true});
+      this.isBackButton = true,
+      this.isNetworkImage = false,
+      this.networkImage,
+      this.isOpenedFromDialog = false});
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +49,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 children: [
                   InkWell(
                       onTap: () {
-                        Navigator.pop(context);
+                        if (isOpenedFromDialog == true) {
+                          Navigator.pushNamedAndRemoveUntil(context,
+                              AppRoutes.navigationScreen, (route) => false);
+                        } else {
+                          Navigator.pop(context);
+                        }
                       },
                       child: isBackButton
                           ? const Icon(
@@ -52,7 +63,16 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                               size: 18,
                             )
                           : const SizedBox.shrink()),
-                  const Gap(10),
+                  SizedBox(
+                      child: isNetworkImage
+                          ? Padding(
+                              padding: const EdgeInsets.only(top: 6, left: 10),
+                              child: CircleAvatar(
+                                backgroundImage: NetworkImage('$networkImage'),
+                              ),
+                            )
+                          : const SizedBox.shrink()),
+                  const Gap(15),
                   CustomText(
                     title: '$title',
                     weight: FontWeight.w600,

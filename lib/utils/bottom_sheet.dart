@@ -12,6 +12,7 @@ class CustomBottomSheet {
       {required BuildContext context,
       required OnChanged onChanged,
       required String email,
+      required String btnText,
       required OnTape onTape}) {
     showModalBottomSheet(
       isScrollControlled: true,
@@ -63,7 +64,10 @@ class CustomBottomSheet {
                       child: CustomButton(
                         loading: loadingProvider.getLoadingProgress,
                         gradient: customGradient,
-                        btnText: 'Verify Email',
+                        btnText: btnText,
+                        textColor: AppColors.white,
+                        textSize: AppSize.regular,
+                        weight: FontWeight.w500,
                         onPressed: onTape,
                       ),
                     ),
@@ -128,6 +132,9 @@ class CustomBottomSheet {
                           loading: instaProgress.getInstaProgress,
                           fixedWidth: 200,
                           gradient: customGradient,
+                          textColor: AppColors.white,
+                          textSize: AppSize.regular,
+                          weight: FontWeight.w500,
                           btnText: 'Save',
                           onPressed: onTape,
                         ),

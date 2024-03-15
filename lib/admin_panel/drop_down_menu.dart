@@ -4,19 +4,23 @@ import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 import 'package:ticket_resale/admin_panel/snackBar.dart';
-import 'package:ticket_resale/utils/app_utils.dart';
-import 'package:ticket_resale/widgets/widgets.dart';
+import 'package:ticket_resale/providers/clear_provider.dart';
+
 import '../constants/constants.dart';
+
 import '../providers/drop_down_provider.dart';
-import 'ticket_listing_screen.dart';
+import '../utils/utils.dart';
+
+import '../widgets/widgets.dart';
+
 class CustomDropDown extends StatelessWidget {
   final Function(String) onSelectedStatus;
+
   final Function(double, double) onSelectedPrice;
-  final Function(DateTime, DateTime) onSelectedDate;
+
   const CustomDropDown(
       {super.key,
       required this.onSelectedStatus,
-      required this.onSelectedDate,
       required this.onSelectedPrice});
   @override
   Widget build(BuildContext context) {
@@ -29,14 +33,7 @@ class CustomDropDown extends StatelessWidget {
             onSelected: (String value) {
               provider.setSelectedOption(value);
 
-              if (value == 'Date') {
-                _showBottomSheetDate(
-                  context: context,
-                  onSelected: (startDate, endDate) {
-                    onSelectedDate(startDate, endDate);
-                  },
-                );
-              } else if (value == 'Status') {
+              if (value == 'Status') {
                 _showBottomSheet(
                   context: context,
                   onSelected: (selectedValue) {
@@ -51,13 +48,12 @@ class CustomDropDown extends StatelessWidget {
                     onSelectedPrice(min, max);
                   },
                 );
+              } else if (value == 'See all') {
+                Provider.of<ClearProvider>(context, listen: false)
+                    .clearSearchText();
               }
             },
             itemBuilder: (context) => [
-              const PopupMenuItem(
-                value: 'Date',
-                child: Text('Date'),
-              ),
               const PopupMenuItem(
                 value: 'Price',
                 child: Text('Price'),
@@ -66,13 +62,9 @@ class CustomDropDown extends StatelessWidget {
                 value: 'Status',
                 child: Text('Status'),
               ),
-              PopupMenuItem(
+              const PopupMenuItem(
                 value: 'See all',
-                child: GestureDetector(
-                    onTap: () {
-                      searchNotifier.value = '';
-                    },
-                    child: Text('See all')),
+                child: Text('See all'),
               ),
             ],
           ),

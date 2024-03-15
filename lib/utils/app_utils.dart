@@ -47,13 +47,84 @@ class AppUtils {
         fontSize: 16.0);
   }
 
-  static dateFormat(String date) {
+  static String dateFormat(String date) {
     DateTime dateFormat = DateTime.parse(date);
-    String formattedDate = DateFormat('d MMM').format(dateFormat);
+    String day = dateFormat.day.toString();
+
+    String suffix = 'th';
+    if (day.endsWith('1') && !day.endsWith('11')) {
+      suffix = 'st';
+    } else if (day.endsWith('2') && !day.endsWith('12')) {
+      suffix = 'nd';
+    } else if (day.endsWith('3') && !day.endsWith('13')) {
+      suffix = 'rd';
+    }
+
+    String formattedDate = '${DateFormat('d').format(dateFormat)}$suffix';
     return formattedDate;
   }
 
+  static String convertDateTimeToMMMMDY({DateTime? dateTime}) {
+    if (dateTime != null) {
+      DateTime time = dateTime;
+
+      DateTime currentDate = DateTime.now();
+
+      DateFormat dateFormat = DateFormat.yMd();
+
+      String formattedServerDate = dateFormat.format(time);
+
+      String formattedCurrentDate = dateFormat.format(currentDate);
+
+      if (formattedServerDate == formattedCurrentDate) {
+        return 'Today';
+      } else {
+        DateFormat dateFormat = DateFormat("MMMM d, y");
+        String formattedDate = dateFormat.format(time);
+        return formattedDate;
+      }
+    }
+    return '';
+  }
+
+  static String convertDateTimeToOnlyTime(timeStamp) {
+    DateFormat timeFormat = DateFormat("h:mm a");
+    String formattedTime = timeFormat.format(timeStamp);
+    return formattedTime;
+  }
+
   static String formatDate(String inputDate) {
+    DateTime dateTime = DateTime.parse(inputDate);
+    String formattedDate = DateFormat('dd MMM yyyy').format(dateTime);
+    return formattedDate;
+  }
+
+  static String formatTimeAgo(DateTime dateTime) {
+    DateTime now = DateTime.now();
+    Duration difference = now.difference(dateTime);
+
+    if (difference.inSeconds < 60) {
+      return '${difference.inSeconds} seconds ago';
+    } else if (difference.inMinutes < 60) {
+      return '${difference.inMinutes} minutes ago';
+    } else if (difference.inHours < 24) {
+      return '${difference.inHours} hours ago';
+    } else if (difference.inDays < 7) {
+      return '${difference.inDays} days ago';
+    } else if ((difference.inDays / 7).floor() < 5) {
+      return '${(difference.inDays / 7).floor()} weeks ago';
+    } else {
+      int months =
+          now.month - dateTime.month + (12 * (now.year - dateTime.year));
+      if (months == 1) {
+        return '1 month ago';
+      } else {
+        return '$months months ago';
+      }
+    }
+  }
+
+  static String formatDatee(String inputDate) {
     DateTime dateTime = DateTime.parse(inputDate);
     String formattedDate = DateFormat('dd MMM yyyy').format(dateTime);
     return formattedDate;

@@ -43,21 +43,10 @@ class _EventListingState extends State<EventListing> {
                 ? PreferredSize(
                     preferredSize: const Size.fromHeight(60),
                     child: CustomAppBarField(
-                        searchController: searchcontroller,
+                        text: 'Search via event name & place',
+                        searchController: controller,
                         setSearchValue: (searchQuery) {
                           searchNotifier.value = searchQuery;
-                          filterEventData = eventData
-                              .where((data) =>
-                                  data!.festivalName!
-                                      .toLowerCase()
-                                      .contains(searchQuery.toLowerCase()) ||
-                                  data.username!
-                                      .toLowerCase()
-                                      .contains(searchQuery.toLowerCase()) ||
-                                  data.ticketType!
-                                      .toLowerCase()
-                                      .contains(searchQuery.toLowerCase()))
-                              .toList();
                         }))
                 : const PreferredSize(
                     preferredSize: Size.fromHeight(60),
@@ -143,16 +132,21 @@ class _EventListingState extends State<EventListing> {
                                       child: ValueListenableBuilder(
                                           valueListenable: searchNotifier,
                                           builder: (context, query, child) {
-                                            List<CreateEvents> eventsdata =
-                                                query.isEmpty
-                                                    ? snapshot.data!
-                                                    : snapshot.data!
-                                                        .where((data) => data
-                                                            .eventName!
+                                            List<
+                                                CreateEvents> eventsdata = query
+                                                    .isEmpty
+                                                ? snapshot.data!
+                                                : snapshot.data!
+                                                    .where((data) =>
+                                                        data.eventName!
+                                                            .toLowerCase()
+                                                            .contains(query
+                                                                .toLowerCase()) ||
+                                                        data.location!
                                                             .toLowerCase()
                                                             .contains(query
                                                                 .toLowerCase()))
-                                                        .toList();
+                                                    .toList();
 
                                             if (eventsdata.isNotEmpty) {
                                               return DataTable(

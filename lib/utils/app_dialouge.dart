@@ -5,7 +5,9 @@ import 'package:ticket_resale/constants/aapp_routes.dart';
 import 'package:ticket_resale/constants/app_colors.dart';
 import 'package:ticket_resale/constants/app_images.dart';
 import 'package:ticket_resale/constants/app_textsize.dart';
-import 'package:ticket_resale/db_services/auth_services.dart';
+import 'package:ticket_resale/db_services/db_services.dart';
+import 'package:ticket_resale/models/message_model.dart';
+import 'package:ticket_resale/models/models.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
 deleteDialog({required BuildContext context}) {
@@ -92,7 +94,11 @@ deleteDialog({required BuildContext context}) {
   );
 }
 
-sellerRatingDialog({required BuildContext context}) {
+sellerRatingDialog(
+    {required BuildContext context,
+    required String networkImage,
+    required String name,
+    bool isNetworkImage = true}) {
   return showDialog(
     context: context,
     builder: (context) {
@@ -104,8 +110,11 @@ sellerRatingDialog({required BuildContext context}) {
               const Gap(20),
               Stack(
                 children: [
-                  const CircleAvatar(
-                    backgroundImage: AssetImage(AppImages.profileImage),
+                  CircleAvatar(
+                    backgroundImage: isNetworkImage
+                        ? NetworkImage(networkImage)
+                        : const AssetImage(AppImages.profileImage)
+                            as ImageProvider,
                     radius: 70,
                   ),
                   Positioned(
@@ -117,8 +126,8 @@ sellerRatingDialog({required BuildContext context}) {
               const SizedBox(
                 height: 13,
               ),
-              const CustomText(
-                title: 'Cameron Williamson',
+              CustomText(
+                title: name,
                 weight: FontWeight.w600,
                 size: AppSize.large,
                 color: AppColors.jetBlack,
@@ -210,7 +219,16 @@ sellerRatingDialog({required BuildContext context}) {
   );
 }
 
-ticketSellDialog({required BuildContext context}) {
+ticketSellDialog({
+  required BuildContext context,
+  required String ticketImage,
+  required String offeredPrice,
+  required String buyerImage,
+  required String buyerName,
+  required MessageModel messageModel,
+  required String hashKey,
+  required UserModel userModel,
+}) {
   return showDialog(
     context: context,
     builder: (context) {
@@ -220,13 +238,11 @@ ticketSellDialog({required BuildContext context}) {
             const EdgeInsets.only(left: 25, right: 25, bottom: 10, top: 0),
         title: Column(
           children: [
-            SizedBox(
-                height: 150,
-                width: 150,
-                child: Image.asset(
-                  AppImages.tickets,
-                  fit: BoxFit.cover,
-                )),
+            const Gap(10),
+            CircleAvatar(
+              backgroundImage: NetworkImage(ticketImage),
+              radius: 90,
+            ),
             const CustomText(
               title: 'Are you sure?',
               color: AppColors.jetBlack,
@@ -244,27 +260,27 @@ ticketSellDialog({required BuildContext context}) {
               textAlign: TextAlign.center,
             ),
             const Gap(20),
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                CustomText(
+                const CustomText(
                   title: 'Price offered',
                   size: AppSize.regular,
                   weight: FontWeight.w400,
                   color: AppColors.jetBlack,
                 ),
                 CustomText(
-                  title: '\$300',
+                  title: offeredPrice,
                   size: AppSize.regular,
                   weight: FontWeight.w400,
                   color: AppColors.blueViolet,
                 )
               ],
             ),
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                CustomText(
+                const CustomText(
                   title: 'Buyer',
                   size: AppSize.regular,
                   weight: FontWeight.w400,
@@ -276,12 +292,12 @@ ticketSellDialog({required BuildContext context}) {
                       height: 30,
                       width: 30,
                       child: CircleAvatar(
-                        backgroundImage: AssetImage(AppImages.profile),
+                        backgroundImage: NetworkImage(buyerImage),
                       ),
                     ),
-                    Gap(10),
+                    const Gap(10),
                     CustomText(
-                      title: 'Leslie Alexander',
+                      title: buyerName,
                       size: AppSize.intermediate,
                       weight: FontWeight.w400,
                       color: AppColors.jetBlack,
@@ -316,8 +332,27 @@ ticketSellDialog({required BuildContext context}) {
                 height: 50,
                 width: 110,
                 child: CustomButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, AppRoutes.feedbackScreen);
+                  onPressed: () async {
+                    await FireStoreServices.createMessageChat(
+                            messageModel: messageModel, hashKey: hashKey)
+                        .then((value) async {
+                      await FireStoreServices.makeConnection(
+                              userIDReceiver: messageModel.userIDReceiver!)
+                          .then((value) {
+                        Navigator.pushNamedAndRemoveUntil(
+                          context,
+                          AppRoutes.chatDetailScreen,
+                          (route) => false,
+                          arguments: {
+                            'receiverId': messageModel.userIDReceiver,
+                            'hashKey': hashKey,
+                            'userModel': userModel,
+                            'isOpened': true,
+                            'offeredPrice': offeredPrice
+                          },
+                        );
+                      });
+                    });
                   },
                   textColor: AppColors.white,
                   textSize: AppSize.medium,

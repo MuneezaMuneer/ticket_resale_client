@@ -39,6 +39,7 @@ class _UserManagementState extends State<UserManagement> {
               ? PreferredSize(
                   preferredSize: const Size.fromHeight(60),
                   child: CustomAppBarField(
+                      text: 'Search via name & phoneNo',
                       searchController: searchcontroller,
                       setSearchValue: (searchQuery) {
                         searchNotifier.value = searchQuery;

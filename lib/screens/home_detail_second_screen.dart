@@ -1,23 +1,42 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable
+// ignore_for_file: must_be_immutable, use_build_context_synchronously
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:svg_flutter/svg_flutter.dart';
 import 'package:ticket_resale/constants/constants.dart';
+import 'package:ticket_resale/db_services/db_services.dart';
 import 'package:ticket_resale/models/models.dart';
 import 'package:ticket_resale/utils/utils.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 import '../components/components.dart';
+import '../models/ticket_model.dart';
+
 class HomeDetailSecondScreen extends StatefulWidget {
   EventModal eventModal;
+  TicketModel ticketModel;
   HomeDetailSecondScreen({
     Key? key,
     required this.eventModal,
+    required this.ticketModel,
   }) : super(key: key);
   @override
   State<HomeDetailSecondScreen> createState() => _HomeDetailSecondScreenState();
 }
+
 class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
-  ValueNotifier<bool> isTileSelected = ValueNotifier<bool>(false);
+  final formKey = GlobalKey<FormState>();
+
+  TextEditingController priceController = TextEditingController();
+  late String networkImage;
+  late String name;
+
+  @override
+  void dispose() {
+    priceController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -30,24 +49,27 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
         isAssetImage: false,
         isBackButton: true,
         child: Padding(
-          padding: const EdgeInsets.only(top: 4),
+          padding:
+              const EdgeInsets.only(left: 15, top: 10, bottom: 20, right: 15),
           child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.only(
-                  left: 23, top: 20, bottom: 20, right: 23),
+            child: Form(
+              key: formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     children: [
                       Expanded(
-                        child: CustomText(
-                          title: widget.eventModal.festivalName,
-                          size: AppSize.large,
-                          weight: FontWeight.w600,
-                          softWrap: true,
-                          color: AppColors.jetBlack,
-                          textAlign: TextAlign.start,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: CustomText(
+                            title: widget.eventModal.eventName,
+                            size: AppSize.large,
+                            weight: FontWeight.w600,
+                            softWrap: true,
+                            color: AppColors.jetBlack,
+                            textAlign: TextAlign.start,
+                          ),
                         ),
                       ),
                       SvgPicture.asset(
@@ -107,7 +129,6 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                   ),
                   const Gap(10),
                   Container(
-                    height: height * 0.08,
                     width: width * 0.9,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(56),
@@ -128,36 +149,43 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                                     height: 30,
                                   )),
                               Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 12, top: 13),
+                                padding: const EdgeInsets.only(
+                                    left: 12, top: 7, bottom: 7),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     CustomText(
-                                      title: '${AppUtils.formatDate(
-                                        widget.eventModal.date!,
-                                      )}, ${widget.eventModal.time}',
+                                      title:
+                                          '${AppUtils.formatDatee(widget.eventModal.date!)}, ${widget.eventModal.time}',
                                       color:
                                           AppColors.lightGrey.withOpacity(0.6),
                                       size: AppSize.xsmall,
                                       weight: FontWeight.w400,
                                     ),
-                                    RichText(
-                                        text: TextSpan(children: [
-                                      TextSpan(
-                                          text: 'at ',
-                                          style: TextStyle(
-                                              color: AppColors.lightGrey
-                                                  .withOpacity(0.6),
-                                              fontSize: AppSize.xsmall,
-                                              fontWeight: FontWeight.w400)),
-                                      TextSpan(
-                                          text: '${widget.eventModal.city}',
-                                          style: const TextStyle(
-                                              color: AppColors.jetBlack,
-                                              fontSize: AppSize.small,
-                                              fontWeight: FontWeight.w600)),
-                                    ])),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.65,
+                                      child: RichText(
+                                          text: TextSpan(children: [
+                                        TextSpan(
+                                            text: 'at ',
+                                            style: TextStyle(
+                                                color: AppColors.lightGrey
+                                                    .withOpacity(0.6),
+                                                letterSpacing: 0.8,
+                                                fontSize: AppSize.xsmall,
+                                                fontWeight: FontWeight.w400)),
+                                        TextSpan(
+                                            text:
+                                                '${widget.eventModal.location}',
+                                            style: const TextStyle(
+                                                color: AppColors.jetBlack,
+                                                overflow: TextOverflow.ellipsis,
+                                                letterSpacing: 0.8,
+                                                fontSize: AppSize.small,
+                                                fontWeight: FontWeight.w600)),
+                                      ])),
+                                    ),
                                   ],
                                 ),
                               ),
@@ -188,219 +216,223 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                     weight: FontWeight.w600,
                     color: AppColors.jetBlack,
                   ),
-                  const Gap(7),
-                  ValueListenableBuilder(
-                    valueListenable: isTileSelected,
-                    builder: (context, value, child) {
-                      return GestureDetector(
-                        onTap: () {
-                          isTileSelected.value = true;
-                          // isFirstTileSelected.value =
-                          //     !isFirstTileSelected.value;
-                          // isSecondTileSelected.value = false;
-                        },
-                        child: _tileContainer(
-                          height: height * 0.08,
-                          width: width * 0.9,
-                          containerBorderColor: isTileSelected.value
-                              ? AppColors.blueViolet.withOpacity(0.8)
-                              : const Color(0XffF7F5FF),
-                          isSvg: true,
-                          imagePath: AppSvgs.ticket,
-                          backgroundColor: const Color(0XffF7F5FF),
-                          avatarBg: AppColors.white,
-                          title: 'PREMIUM TICKET AVAILABLE',
-                          titleColor: AppColors.jetBlack,
-                          titleSize: AppSize.small,
-                          titleWeight: FontWeight.w600,
-                          subTitle: 'Premium Seats',
-                          subTitleColor: AppColors.lightGrey.withOpacity(0.6),
-                          subTitleSize: AppSize.xsmall,
-                          subTitleWeight: FontWeight.w400,
-                          child: const Padding(
-                            padding: EdgeInsets.only(right: 12),
-                            child: CustomText(
-                              title: '\$ 500',
-                              color: Color(0XffAC8AF7),
-                              size: 18,
-                              weight: FontWeight.w900,
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
                   const Gap(25),
-                  ValueListenableBuilder(
-                    valueListenable: isTileSelected,
-                    builder: (context, value, child) {
-                      return GestureDetector(
-                        onTap: () {
-                          isTileSelected.value = true;
-                          // isSecondTileSelected.value =
-                          //     !isSecondTileSelected.value;
-                          // isFirstTileSelected.value = false;
-                        },
-                        child: _tileContainer(
-                          height: height * 0.08,
-                          width: width * 0.9,
-                          containerBorderColor: isTileSelected.value
-                              ? AppColors.blueViolet.withOpacity(0.8)
-                              : const Color(0XffF7F5FF),
-                          isSvg: true,
-                          imagePath: AppSvgs.ticket,
-                          backgroundColor: const Color(0XffF7F5FF),
-                          avatarBg: AppColors.white,
-                          title: 'VIP PLUS TICKET AVAILABLE',
-                          titleColor: AppColors.jetBlack,
-                          titleSize: AppSize.small,
-                          titleWeight: FontWeight.w600,
-                          subTitle: 'VIP Seats + Exclusive braclets',
-                          subTitleColor: AppColors.lightGrey.withOpacity(0.6),
-                          subTitleSize: AppSize.xsmall,
-                          subTitleWeight: FontWeight.w400,
-                          child: const Padding(
-                            padding: EdgeInsets.only(right: 12),
-                            child: CustomText(
-                              title: '\$ 400',
-                              color: Color(0XffAC8AF7),
-                              size: 18,
-                              weight: FontWeight.w900,
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                  const Gap(25),
-                  Container(
-                    height: height * 0.1,
-                    width: width,
-                    decoration: BoxDecoration(
-                      color: AppColors.white,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Row(
-                      children: [
-                        const Gap(7),
-                        const CircleAvatar(
-                            backgroundImage: AssetImage(AppImages.profile)),
-                        const Gap(9),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              height: width > 370 ? 14 : 5,
-                            ),
-                            CustomText(
-                              title: 'Sell by',
-                              size: AppSize.verySmall,
-                              weight: FontWeight.w300,
-                              color: AppColors.lightBlack.withOpacity(0.7),
-                            ),
-                            Row(
-                              children: [
-                                CustomText(
-                                  title: 'Cameron Williamson ',
-                                  size: AppSize.intermediate,
-                                  weight: FontWeight.w600,
-                                  color: AppColors.lightBlack.withOpacity(0.5),
-                                ),
-                                CustomText(
-                                  title: '(',
-                                  color: AppColors.lightBlack.withOpacity(0.7),
-                                ),
-                                SvgPicture.asset(
-                                  AppSvgs.fillStar,
-                                  height: 13,
-                                ),
-                                CustomText(
-                                  title: '4.7 )',
-                                  color: AppColors.lightBlack.withOpacity(0.7),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: width > 370 ? 4 : 0,
-                            ),
-                            const Row(
-                              children: [
-                                CustomText(
-                                    title: '23',
-                                    size: AppSize.intermediate,
-                                    weight: FontWeight.w500),
-                                Gap(2),
-                                CustomText(
-                                  title: 'Ticket Sold',
-                                  size: AppSize.xxsmall,
-                                  weight: FontWeight.w400,
-                                )
-                              ],
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          width: width > 370 ? width * 0.15 : width * 0.11,
-                        ),
-                        Align(
-                            alignment: Alignment.topRight,
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 8),
-                              child: SvgPicture.asset(AppSvgs.levelThree),
-                            ))
-                      ],
+                  _tileContainer(
+                    height: height * 0.08,
+                    width: width * 0.9,
+                    containerBorderColor: AppColors.blueViolet.withOpacity(0.8),
+                    imagePath: widget.ticketModel.imageUrl,
+                    backgroundColor: const Color(0XffF7F5FF),
+                    avatarBg: AppColors.white,
+                    title: '${widget.ticketModel.ticketType} TICKET AVAILABLE',
+                    titleColor: AppColors.jetBlack,
+                    titleSize: AppSize.small,
+                    titleWeight: FontWeight.w600,
+                    subTitle: 'VIP Seats + Exclusive braclets',
+                    subTitleColor: AppColors.lightGrey.withOpacity(0.6),
+                    subTitleSize: AppSize.xsmall,
+                    subTitleWeight: FontWeight.w400,
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 7),
+                      child: CustomText(
+                        title: '${widget.ticketModel.price}',
+                        color: const Color(0XffAC8AF7),
+                        size: 18,
+                        weight: FontWeight.w900,
+                      ),
                     ),
                   ),
                   const Gap(25),
-                  ValueListenableBuilder(
-                    valueListenable: isTileSelected,
-                    builder: (context, value, child) {
-                      return SizedBox(
-                        child: value
-                            ? CustomTextField(
-                                hintText: 'Offer you price',
-                                hintStyle: TextStyle(
-                                    color:
-                                        AppColors.lightBlack.withOpacity(0.5)),
-                                fillColor: AppColors.white,
-                                suffixIcon: InkWell(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(16.0),
-                                    child: SvgPicture.asset(
-                                      AppSvgs.dollarSign,
-                                    ),
+                  GestureDetector(
+                    onTap: () async {
+                      FocusScope.of(context).unfocus();
+                      Future.delayed(const Duration(milliseconds: 300), () {
+                        sellerRatingDialog(
+                            context: context,
+                            networkImage: networkImage,
+                            name: name);
+                      });
+                    },
+                    child: StreamBuilder(
+                      stream: FireStoreServices.fetchUserData(
+                          userId: widget.ticketModel.uid!),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          final data = snapshot.data!;
+                          networkImage = data.photoUrl!;
+                          name = data.displayName!;
+                          return Container(
+                              height: height * 0.1,
+                              width: width,
+                              decoration: BoxDecoration(
+                                color: AppColors.white,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Row(
+                                children: [
+                                  const Gap(7),
+                                  CircleAvatar(
+                                      backgroundImage: data.photoUrl != null &&
+                                              data.photoUrl != 'null'
+                                          ? NetworkImage(data.photoUrl!)
+                                          : const AssetImage(
+                                                  AppImages.profileImage)
+                                              as ImageProvider),
+                                  const Gap(9),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(
+                                        height: width > 370 ? 14 : 5,
+                                      ),
+                                      CustomText(
+                                        title: 'Sell by',
+                                        size: AppSize.verySmall,
+                                        weight: FontWeight.w300,
+                                        color: AppColors.lightBlack
+                                            .withOpacity(0.7),
+                                      ),
+                                      Row(
+                                        children: [
+                                          CustomText(
+                                            title: '${data.displayName}',
+                                            size: AppSize.intermediate,
+                                            weight: FontWeight.w600,
+                                            color: AppColors.lightBlack
+                                                .withOpacity(0.5),
+                                          ),
+                                          CustomText(
+                                            title: '(',
+                                            color: AppColors.lightBlack
+                                                .withOpacity(0.7),
+                                          ),
+                                          SvgPicture.asset(
+                                            AppSvgs.fillStar,
+                                            height: 13,
+                                          ),
+                                          CustomText(
+                                            title: '4.7 )',
+                                            color: AppColors.lightBlack
+                                                .withOpacity(0.7),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: width > 370 ? 4 : 0,
+                                      ),
+                                      const Row(
+                                        children: [
+                                          CustomText(
+                                              title: '23',
+                                              size: AppSize.intermediate,
+                                              weight: FontWeight.w500),
+                                          Gap(2),
+                                          CustomText(
+                                            title: 'Ticket Sold',
+                                            size: AppSize.xxsmall,
+                                            weight: FontWeight.w400,
+                                          )
+                                        ],
+                                      ),
+                                    ],
                                   ),
-                                ),
-                              )
-                            : const SizedBox.shrink(),
-                      );
-                    },
+                                  SizedBox(
+                                    width: width > 370
+                                        ? width * 0.15
+                                        : width * 0.11,
+                                  ),
+                                  Align(
+                                      alignment: Alignment.topRight,
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(top: 8),
+                                        child: SvgPicture.asset(
+                                            AppSvgs.levelThree),
+                                      ))
+                                ],
+                              ));
+                        } else {
+                          return const Text('');
+                        }
+                      },
+                    ),
+                  ),
+                  const Gap(25),
+                  SizedBox(
+                    child: AuthServices.getCurrentUser.uid !=
+                            widget.ticketModel.uid
+                        ? StreamBuilder(
+                            stream: FireStoreServices.fetchCommentUserLength(
+                                docId: widget.ticketModel.docId!),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                int length = snapshot.data!;
+
+                                if (length > 0) {
+                                  return const SizedBox.shrink();
+                                } else {
+                                  return CustomTextField(
+                                    controller: priceController,
+                                    hintText: 'Offer your price',
+                                    hintStyle: TextStyle(
+                                        color: AppColors.lightBlack
+                                            .withOpacity(0.5)),
+                                    fillColor: AppColors.white,
+                                    keyBoardType: TextInputType.number,
+                                    inputFormatters: <TextInputFormatter>[
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp(r'[0-9]')),
+                                    ],
+                                    suffixIcon: InkWell(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(16.0),
+                                        child: SvgPicture.asset(
+                                          AppSvgs.dollarSign,
+                                        ),
+                                      ),
+                                    ),
+                                    validator: (price) {
+                                      if (price == null || price.isEmpty) {
+                                        return 'Please enter price';
+                                      } else {
+                                        return null;
+                                      }
+                                    },
+                                  );
+                                }
+                              } else {
+                                return const CupertinoActivityIndicator();
+                              }
+                            },
+                          )
+                        : const SizedBox.shrink(),
                   ),
                   SizedBox(
                     height: height * 0.04,
                   ),
-                  ValueListenableBuilder(
-                    valueListenable: isTileSelected,
-                    builder: (context, value, child) {
-                      return SizedBox(
-                          height: height * 0.07,
-                          width: width * 0.9,
-                          child: CustomButton(
-                            onPressed: () {
-                              // Navigator.pushNamed(
-                              //     context, AppRoutes.commentScreen);
-                              ticketSellDialog(context: context);
-                            },
-                            textColor: AppColors.white,
-                            textSize: AppSize.regular,
-                            btnText: 'Start Conversation',
-                            gradient: isTileSelected.value
-                                ? customGradient
-                                : lightGradient,
-                            weight: FontWeight.w700,
-                          ));
-                    },
-                  ),
+                  SizedBox(
+                      height: height * 0.07,
+                      width: width * 0.9,
+                      child: CustomButton(
+                        onPressed: () async {
+                          if (formKey.currentState!.validate()) {
+                            Navigator.popAndPushNamed(
+                              context,
+                              AppRoutes.commentScreen,
+                              arguments: {
+                                'eventModal': widget.eventModal,
+                                'ticketModal': widget.ticketModel,
+                                'price': priceController.text
+                              },
+                            );
+                          }
+                        },
+                        textColor: AppColors.white,
+                        textSize: AppSize.regular,
+                        btnText: 'Start Conversation',
+                        gradient: customGradient,
+                        weight: FontWeight.w700,
+                      ))
                 ],
               ),
             ),
@@ -414,10 +446,9 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
     double? height,
     double? width,
     Color? containerBorderColor,
-    String? imagePath,
-    bool isSvg = false,
     Color? backgroundColor,
     Color? avatarBg,
+    String? imagePath,
     String? title,
     FontWeight? titleWeight,
     Color? titleColor,
@@ -445,15 +476,9 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                 CircleAvatar(
                     backgroundColor: avatarBg,
                     radius: 15,
-                    child: isSvg
-                        ? SvgPicture.asset(
-                            "$imagePath",
-                            height: 25,
-                          )
-                        : Image.asset(
-                            '$imagePath',
-                            fit: BoxFit.cover,
-                          )),
+                    backgroundImage: NetworkImage(
+                      '$imagePath',
+                    )),
                 Padding(
                   padding: const EdgeInsets.only(left: 13, top: 13),
                   child: Column(

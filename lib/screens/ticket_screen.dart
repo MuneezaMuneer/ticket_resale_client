@@ -16,6 +16,8 @@ import 'package:ticket_resale/utils/utils.dart';
 
 import 'package:ticket_resale/widgets/widgets.dart';
 
+import '../models/ticket_model.dart';
+
 class TicketScreen extends StatefulWidget {
   const TicketScreen({super.key});
 
@@ -25,24 +27,23 @@ class TicketScreen extends StatefulWidget {
 
 class _TicketScreenState extends State<TicketScreen> {
   TextEditingController festivalNameController = TextEditingController();
-  TextEditingController dateController = TextEditingController();
-  TextEditingController startTimeController = TextEditingController();
-  TextEditingController endTimeController = TextEditingController();
   TextEditingController ticketTypeController = TextEditingController();
   TextEditingController priceController = TextEditingController();
-  TextEditingController cityController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   ValueNotifier<bool> notifier = ValueNotifier<bool>(false);
   late ImagePickerProvider imagePickerProvider;
-  late String startTime;
-  late String endTime;
+  late Stream<List<EventModal>> displayEventData;
+  List<String> festivalDocId = [];
+  List<String> festivalNames = [];
+  late String selectedFestivalName;
+  late String selectedFestivalDocId;
   @override
   void initState() {
     imagePickerProvider =
         Provider.of<ImagePickerProvider>(context, listen: false);
-    startTime = '';
-    endTime = '';
+    displayEventData = FireStoreServices.fetchEventData();
+
     super.initState();
   }
 
@@ -50,9 +51,6 @@ class _TicketScreenState extends State<TicketScreen> {
   void dispose() {
     super.dispose();
     festivalNameController.dispose();
-    dateController.dispose();
-    startTimeController.dispose();
-    endTimeController.dispose();
     ticketTypeController.dispose();
     priceController.dispose();
     descriptionController.dispose();
@@ -171,182 +169,96 @@ class _TicketScreenState extends State<TicketScreen> {
                   const SizedBox(
                     height: 5,
                   ),
-                  CustomTextField(
-                    hintText: 'Festival Name',
-                    weight: FontWeight.w400,
-                    controller: festivalNameController,
-                    hintStyle: _buildHintStyle(),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter festival name';
-                      }
+                  StreamBuilder(
+                    stream: displayEventData,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        final data = snapshot.data;
+                        for (int i = 0; i < data!.length; i++) {
+                          festivalNames.add(data[i].eventName!);
+                          festivalDocId.add(data[i].docId!);
+                        }
 
-                      return null;
-                    },
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  const CustomText(
-                    title: 'Date',
-                    color: AppColors.gryishBlue,
-                    weight: FontWeight.w600,
-                    size: AppSize.medium,
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  CustomTextField(
-                    controller: dateController,
-                    hintText: 'Date',
-                    suffixIcon: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: GestureDetector(
-                        onTap: () {
-                          AppUtils.openDatePicker(context,
-                              dateController: dateController);
-                        },
-                        child: SvgPicture.asset(
-                          AppSvgs.date,
-                        ),
-                      ),
-                    ),
-                    hintStyle: _buildHintStyle(),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return ' Enter Date';
-                      }
+                        return Stack(
+                          children: [
+                            CustomTextField(
+                              hintText: 'Festival Name',
+                              readOnly: true,
+                              controller: festivalNameController,
+                              hintStyle: _buildHintStyle(),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter festival name';
+                                }
+                                return null;
+                              },
+                            ),
+                            Align(
+                              alignment: Alignment.topRight,
+                              child: FestivalDropDownWidget(
+                                itemList: festivalNames,
+                                icon: Icons.keyboard_arrow_down_rounded,
+                                controller: festivalNameController,
+                                onChanged: (String? selectOption) {
+                                  selectedFestivalName = '$selectOption';
+                                  festivalNameController.text =
+                                      selectedFestivalName;
+                                  log('Selected Festival Name: $selectedFestivalName');
+                                  int selectedIndex = festivalNames
+                                      .indexOf(selectedFestivalName);
+                                  log('Selected Festival Name Index: $selectedIndex');
 
-                      return null;
-                    },
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  const CustomText(
-                    title: 'City',
-                    color: AppColors.gryishBlue,
-                    weight: FontWeight.w600,
-                    size: AppSize.medium,
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  CustomTextField(
-                    controller: cityController,
-                    hintText: 'Enter City',
-                    hintStyle: _buildHintStyle(),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter city';
-                      }
-
-                      return null;
-                    },
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  const Row(
-                    children: [
-                      Expanded(
-                        child: CustomText(
-                          title: 'Start Time',
-                          color: AppColors.gryishBlue,
-                          weight: FontWeight.w600,
-                          size: AppSize.medium,
-                        ),
-                      ),
-                      Gap(35),
-                      Expanded(
-                        child: CustomText(
-                          title: 'End Time',
-                          color: AppColors.gryishBlue,
-                          weight: FontWeight.w600,
-                          size: AppSize.medium,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: CustomTextField(
-                          controller: startTimeController,
-                          hintText: 'Start Time',
-                          suffixIcon: Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: GestureDetector(
-                                onTap: () async {
-                                  TimeOfDay? time = await showTimePicker(
-                                      context: context,
-                                      initialTime: TimeOfDay.now());
-                                  if (time != null) {
-                                    startTimeController.text =
-                                        time.format(context);
-                                    startTime = startTimeController.text;
+                                  if (selectedIndex >= 0 &&
+                                      selectedIndex < festivalDocId.length) {
+                                    selectedFestivalDocId =
+                                        festivalDocId[selectedIndex];
+                                    log('Selected Festival DocId: $selectedFestivalDocId');
+                                  } else {
+                                    log('Error: Invalid index or docId not found.');
                                   }
                                 },
-                                child: const Icon(
-                                  Icons.alarm,
-                                  color: AppColors.lightGrey,
-                                )),
-                          ),
-                          hintStyle: _buildHintStyle(),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Enter valid time';
-                            }
-
-                            return null;
-                          },
-                        ),
-                      ),
-                      const Gap(20),
-                      Expanded(
-                        child: CustomTextField(
-                          controller: endTimeController,
-                          hintText: 'End Time',
-                          suffixIcon: Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: GestureDetector(
-                              onTap: () async {
-                                TimeOfDay? pickedTime = await showTimePicker(
-                                  context: context,
-                                  initialTime: TimeOfDay.now(),
-                                );
-
-                                if (pickedTime != null) {
-                                  endTimeController.text =
-                                      pickedTime.format(context);
-
-                                  endTime = endTimeController.text;
-                                }
-                              },
-                              child: const Icon(
-                                Icons.alarm,
-                                color: AppColors.lightGrey,
                               ),
                             ),
-                          ),
-                          hintStyle: _buildHintStyle(),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Enter valid time';
-                            }
-
-                            return null;
-                          },
-                        ),
-                      ),
-                    ],
+                          ],
+                        );
+                      } else {
+                        return const SizedBox();
+                      }
+                    },
                   ),
                   const SizedBox(
                     height: 15,
                   ),
+                  // CustomTextField(
+                  //         controller: startTimeController,
+                  //         hintText: 'Start Time',
+                  //         suffixIcon: Padding(
+                  //           padding: const EdgeInsets.all(10),
+                  //           child: GestureDetector(
+                  //               onTap: () async {
+                  //                 TimeOfDay? time = await showTimePicker(
+                  //                     context: context,
+                  //                     initialTime: TimeOfDay.now());
+                  //                 if (time != null) {
+                  //                   startTimeController.text =
+                  //                       time.format(context);
+                  //                   startTime = startTimeController.text;
+                  //                 }
+                  //               },
+                  //               child: const Icon(
+                  //                 Icons.alarm,
+                  //                 color: AppColors.lightGrey,
+                  //               )),
+                  //         ),
+                  //         hintStyle: _buildHintStyle(),
+                  //         validator: (value) {
+                  //           if (value == null || value.isEmpty) {
+                  //             return 'Enter valid time';
+                  //           }
+
+                  //           return null;
+                  //         },
+                  //       ),
                   const CustomText(
                     title: 'Ticket Type',
                     color: AppColors.gryishBlue,
@@ -361,7 +273,7 @@ class _TicketScreenState extends State<TicketScreen> {
                     controller: ticketTypeController,
                     isSuffixIcon: true,
                     suffixIcon: DropDownWidget(
-                      itemList: const ['VIP', 'Basic', 'Professional'],
+                      itemList: const ['VIP', 'BASIC', 'PROFESSIONAL'],
                       icon: Icons.keyboard_arrow_down_rounded,
                       controller: ticketTypeController,
                       onChanged: (String? selectOption) {
@@ -452,25 +364,25 @@ class _TicketScreenState extends State<TicketScreen> {
                             String? imageUrl =
                                 await AuthServices.uploadEventImage(
                                     imagePath: imagePickerProvider.getImageUrl);
-                            EventModal eventModal = EventModal(
+                            TicketModel ticketModel = TicketModel(
                                 imageUrl: imageUrl,
-                                festivalName: festivalNameController.text,
                                 ticketType: ticketTypeController.text,
-                                date: dateController.text,
                                 price: priceController.text,
                                 description: descriptionController.text,
-                                userId: AuthServices.getCurrentUser.uid,
-                                time: '$startTime - $endTime',
-                                city: cityController.text,
+                                uid: AuthServices.getCurrentUser.uid,
+                                eventId: selectedFestivalDocId,
                                 status: 'Pending');
 
                             if (imageUrl != null && imageUrl != '') {
-                              await FireStoreServices.uploadEventData(
-                                      eventModal: eventModal)
+                              String selectedFestivalDocId = festivalDocId[
+                                  festivalNames.indexOf(selectedFestivalName)];
+                              log(' the selected id : $selectedFestivalDocId');
+                              await FireStoreServices.createTickets(
+                                      ticketModel: ticketModel)
                                   .then((value) {
                                 imagePickerProvider.setImageUrl = '';
                                 AppUtils.toastMessage(
-                                    'Event Created Successfully');
+                                    'Ticket Created Successfully');
                                 FocusScope.of(context).unfocus();
                                 notifier.value = false;
 

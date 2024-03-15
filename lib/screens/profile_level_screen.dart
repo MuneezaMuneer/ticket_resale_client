@@ -128,9 +128,17 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
                         child: StreamBuilder(
                           stream: fetchUserLevel,
                           builder: (context, snapshot) {
+                            UserModel? currentUser;
                             if (snapshot.hasData) {
                               final data = snapshot.data!;
 
+                              for (UserModel user in data) {
+                                if (user.id ==
+                                    FirebaseAuth.instance.currentUser?.uid) {
+                                  currentUser = user;
+                                  break;
+                                }
+                              }
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -141,7 +149,8 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
                                     'Level 1 Verified',
                                     'Verify for Level 1',
                                     width,
-                                    data[0].profileLevels!['isEmailVerified'] ??
+                                    currentUser!.profileLevels![
+                                            'isEmailVerified'] ??
                                         false,
                                   ),
                                   GestureDetector(
@@ -155,7 +164,7 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
                                         'Level 2 Verified',
                                         'Verify for Level 2',
                                         width,
-                                        data[0].profileLevels![
+                                        currentUser.profileLevels![
                                                 'isPhoneNoVerified'] ??
                                             false),
                                   ),
@@ -165,7 +174,7 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
                                       'Level 3 Verified',
                                       'Verify for Level 3',
                                       width,
-                                      data[0].profileLevels![
+                                      currentUser.profileLevels![
                                               'isPaypalVerified'] ??
                                           false),
                                   GestureDetector(
@@ -200,7 +209,7 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
                                       'Level 4 Verified',
                                       'Verify for Level 4',
                                       width,
-                                      data[0].profileLevels![
+                                      currentUser.profileLevels![
                                               'isInstaVerified'] ??
                                           false,
                                     ),
@@ -211,7 +220,7 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
                                     'Level 5 Verified',
                                     'Verify for Level 5',
                                     width,
-                                    data[0].profileLevels![
+                                    currentUser.profileLevels![
                                             'isTransactionVerified'] ??
                                         false,
                                   ),
@@ -221,7 +230,8 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
                                     'Level 6 Verified',
                                     'Verify for Level 6',
                                     width,
-                                    data[0].profileLevels!['isSuperVerified'] ??
+                                    currentUser.profileLevels![
+                                            'isSuperVerified'] ??
                                         false,
                                   ),
                                 ],
