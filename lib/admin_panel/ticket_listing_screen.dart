@@ -12,6 +12,7 @@ import '../providers/search_provider.dart';
 import '../utils/utils.dart';
 import '../widgets/widgets.dart';
 import 'event_model_admin.dart';
+import 'notification_services.dart';
 
 class TicketListing extends StatefulWidget {
   const TicketListing({super.key});
@@ -292,6 +293,13 @@ Widget createTableCell({
             onTap: () {
               String currentStatus =
                   (status == 'Active') ? 'Disable' : 'Active';
+
+              NotificationServices.sendPushNotification(
+                  title: 'Ticket listing',
+                  body: 'Your ticket is $currentStatus',
+                  token:
+                      'dqpv4lNjS9eovGSl3oNvkJ:APA91bGJDwpMS7rXp6aJNrHs0qxNEYgbn2MmUpM02L9B0iZglcMQAYzFt_H9yU6RqUANSheAy8IoC-59mFWtitseaeU7Z0UlLmdtOeKK80G883iwDWFWNS0tNg9O42oHZThFz9TWQ2pH');
+
               FirestoreServices.updateTicketStatus(ticketID, currentStatus);
             },
             child: Container(

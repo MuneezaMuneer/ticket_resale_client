@@ -71,13 +71,13 @@ class _EventListingState extends State<EventListing> {
                   SizedBox(
                     width: width * 0.9,
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const CustomText(
                           title: 'Event listing',
                           weight: FontWeight.w600,
                           size: AppSize.regular,
                         ),
-                        const Gap(120),
                         InkWell(
                           onTap: () {
                             Navigator.pushNamed(context, AppRoutes.createEvent);
@@ -132,9 +132,7 @@ class _EventListingState extends State<EventListing> {
                                 builder: (context, snapshot) {
                                   if (snapshot.connectionState ==
                                       ConnectionState.waiting) {
-                                    return Align(
-                                        alignment: Alignment.center,
-                                        child: CupertinoActivityIndicator());
+                                    return const CupertinoActivityIndicator();
                                   } else if (snapshot.hasError) {
                                     return Center(
                                         child:

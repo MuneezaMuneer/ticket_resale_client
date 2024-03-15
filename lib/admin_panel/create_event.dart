@@ -1,12 +1,9 @@
-import 'dart:typed_data';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter/widgets.dart';
+
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
-import 'package:svg_flutter/svg_flutter.dart';
+
 import 'package:ticket_resale/admin_panel/custom_appbar.dart';
 import 'package:ticket_resale/admin_panel/snackbar.dart';
 import 'package:ticket_resale/providers/event_image_provider.dart';
@@ -426,7 +423,6 @@ class _CreateEventState extends State<CreateEvent> {
                                           docId: uv4,
                                         );
 
-                                        // ignore: use_build_context_synchronously
                                         SnackBarHelper.showSnackBar(context,
                                             'Event created successfully');
                                       } catch (error) {

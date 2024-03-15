@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ticket_resale/admin_panel/event_model_admin.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:ticket_resale/models/create_event.dart';
 import '../models/tickets_model.dart';
 import 'user_model_admin.dart';
@@ -7,19 +7,17 @@ import 'user_model_admin.dart';
 class FirestoreServices {
   static final fireStore = FirebaseFirestore.instance;
   static Stream<List<UserModelAdmin>> fetchUserData() {
-    return FirebaseFirestore.instance
-        .collection('user_data')
-        .snapshots()
-        .map((query) {
-      return query.docs
-          .map((doc) => UserModelAdmin.fromMap(doc.data(), doc.id))
-          .toList();
-    });
+    return FirebaseFirestore.instance.collection('user_data').snapshots().map(
+      (query) {
+        return query.docs
+            .map((doc) => UserModelAdmin.fromMap(doc.data(), doc.id))
+            .toList();
+      },
+    );
   }
 
   static Future<List<TicketModel>> fetchTickets() async {
     var querySnapshot = await fireStore.collection('tickets').get();
-
     List<TicketModel> tickets = querySnapshot.docs
         .map((doc) => TicketModel.fromMap(map: doc.data(), ticketID: doc.id))
         .toList();
@@ -77,6 +75,14 @@ class FirestoreServices {
         .collection('event')
         .doc(docId)
         .set(createEvent.toMap());
+  }
+
+  static Future<void> storeFCMToken({required String token}) async {
+    String userUID = FirebaseAuth.instance.currentUser!.uid;
+    FirebaseFirestore.instance
+        .collection('admin_data')
+        .doc(userUID)
+        .set({'fcm_token': token});
   }
 
   // fetch event name

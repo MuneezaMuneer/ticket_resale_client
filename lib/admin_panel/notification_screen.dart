@@ -4,14 +4,17 @@ import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 import 'package:svg_flutter/svg.dart';
 import 'package:ticket_resale/admin_panel/custom_appbar.dart';
+import 'package:ticket_resale/admin_panel/notification_services.dart';
 import '../constants/constants.dart';
 import '../providers/search_provider.dart';
 import '../widgets/widgets.dart';
+
 class AdminNotification extends StatefulWidget {
   const AdminNotification({super.key});
   @override
   State<AdminNotification> createState() => _AdminNotificationState();
 }
+
 class _AdminNotificationState extends State<AdminNotification> {
   ValueNotifier<String> searchNotifier = ValueNotifier('');
   TextEditingController searchcontroller = TextEditingController();
@@ -150,20 +153,26 @@ class _AdminNotificationState extends State<AdminNotification> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Container(
-                  height: 30,
-                  width: 120,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: AppColors.midNight,
-                  ),
-                  child: const Center(
-                    child: Text(
-                      'View Details',
-                      style: TextStyle(
-                        color: AppColors.darkGrey,
-                        fontSize: AppSize.small,
-                        fontWeight: FontWeight.w600,
+                InkWell(
+                  onTap: () {},
+                  child: InkWell(
+                    onTap: () {},
+                    child: Container(
+                      height: 30,
+                      width: 120,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: AppColors.midNight,
+                      ),
+                      child: const Center(
+                        child: Text(
+                          'View Details',
+                          style: TextStyle(
+                            color: AppColors.darkGrey,
+                            fontSize: AppSize.small,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                       ),
                     ),
                   ),

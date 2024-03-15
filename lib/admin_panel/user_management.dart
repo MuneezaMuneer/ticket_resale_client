@@ -9,12 +9,15 @@ import 'package:ticket_resale/widgets/widgets.dart';
 import '../constants/constants.dart';
 import '../providers/search_provider.dart';
 import '../utils/utils.dart';
+
 class UserManagement extends StatefulWidget {
   const UserManagement({super.key});
   @override
   State<UserManagement> createState() => _UserManagementState();
 }
-late List<UserModelAdmin?> userData = [];
+
+List<UserModelAdmin?> userData = [];
+
 class _UserManagementState extends State<UserManagement> {
   late Stream<List<UserModelAdmin?>> fetchUserData;
   ValueNotifier<String> searchNotifier = ValueNotifier('');
@@ -34,7 +37,6 @@ class _UserManagementState extends State<UserManagement> {
       builder: (context, searchprovider, child) => Scaffold(
           appBar: searchprovider.isSearching
               ? PreferredSize(
-                  
                   preferredSize: const Size.fromHeight(60),
                   child: CustomAppBarField(
                       searchController: searchcontroller,
