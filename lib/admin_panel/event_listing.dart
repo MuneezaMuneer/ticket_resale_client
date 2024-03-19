@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:ticket_resale/admin_panel/create_event.dart';
 import 'package:ticket_resale/admin_panel/custom_appbar.dart';
 import 'package:ticket_resale/admin_panel/firestore_services.dart';
-import 'package:ticket_resale/admin_panel/ticket_listing_screen.dart';
 import 'package:ticket_resale/providers/search_provider.dart';
 import '../constants/constants.dart';
 import '../models/create_event.dart';

@@ -26,7 +26,7 @@ class _AdminNotificationState extends State<AdminNotification> {
         builder: (context, searchprovider, child) => Scaffold(
               appBar: searchprovider.isSearching
                   ? PreferredSize(
-                      preferredSize: Size.fromHeight(60),
+                      preferredSize: const Size.fromHeight(60),
                       child: CustomAppBarField(
                           text: 'Search via name & phoneNo',
                           searchController: searchcontroller,

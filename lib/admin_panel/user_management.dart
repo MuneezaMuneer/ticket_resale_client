@@ -9,15 +9,12 @@ import 'package:ticket_resale/widgets/widgets.dart';
 import '../constants/constants.dart';
 import '../providers/search_provider.dart';
 import '../utils/utils.dart';
-
 class UserManagement extends StatefulWidget {
   const UserManagement({super.key});
   @override
   State<UserManagement> createState() => _UserManagementState();
 }
-
 List<UserModelAdmin?> userData = [];
-
 class _UserManagementState extends State<UserManagement> {
   late Stream<List<UserModelAdmin?>> fetchUserData;
   ValueNotifier<String> searchNotifier = ValueNotifier('');
@@ -28,7 +25,7 @@ class _UserManagementState extends State<UserManagement> {
     fetchUserData = FirestoreServices.fetchUserData();
     super.initState();
   }
-
+  
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
