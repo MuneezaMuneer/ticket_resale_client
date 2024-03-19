@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ticket_resale/admin_panel/notification_services.dart';
 import 'package:ticket_resale/constants/app_texts.dart';
 import 'package:ticket_resale/firebase_options.dart';
 import 'package:ticket_resale/providers/clear_provider.dart';

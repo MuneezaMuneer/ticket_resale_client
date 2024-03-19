@@ -9,12 +9,15 @@ import 'package:ticket_resale/widgets/widgets.dart';
 import '../constants/constants.dart';
 import '../providers/search_provider.dart';
 import '../utils/utils.dart';
+
 class UserManagement extends StatefulWidget {
   const UserManagement({super.key});
   @override
   State<UserManagement> createState() => _UserManagementState();
 }
+
 List<UserModelAdmin?> userData = [];
+
 class _UserManagementState extends State<UserManagement> {
   late Stream<List<UserModelAdmin?>> fetchUserData;
   ValueNotifier<String> searchNotifier = ValueNotifier('');
@@ -25,7 +28,7 @@ class _UserManagementState extends State<UserManagement> {
     fetchUserData = FirestoreServices.fetchUserData();
     super.initState();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -117,7 +120,7 @@ class _UserManagementState extends State<UserManagement> {
                                         _buildTableCell('Email'),
                                         _buildTableCell('Instagram'),
                                         _buildTableCell('Phone No.'),
-                                        _buildTableCell('Status')
+                                        //  _buildTableCell('Status')
                                       ],
                                       rows: eventData.asMap().entries.map(
                                           (MapEntry<int, UserModelAdmin?>
@@ -142,10 +145,10 @@ class _UserManagementState extends State<UserManagement> {
                                             _createDataCell(
                                                 userData.instaUsername!),
                                             _createDataCell(userData.phoneNo!),
-                                            DataCell(createTableCell(
-                                                userData.status!,
-                                                userData.id!,
-                                                userData.status!)),
+                                            // DataCell(createTableCell(
+                                            //     userData.status!,
+                                            //     userData.id!,
+                                            //     userData.status!)),
                                           ],
                                         );
                                       }).toList());
