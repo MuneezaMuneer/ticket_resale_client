@@ -8,7 +8,7 @@ import 'package:ticket_resale/widgets/custom_appbar.dart';
 import 'package:ticket_resale/widgets/custom_text.dart';
 
 class ChatScreen extends StatelessWidget {
-  const ChatScreen({Key? key});
+  const ChatScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -58,11 +58,12 @@ dependencies:
   intl: ^0.18.1
   flutter_otp_text_field: ^1.1.1
   twilio_flutter: ^0.3.0
-  flutter_paypal_native: ^2.1.0
   webview_flutter: ^4.7.0
   http: ^1.2.0
   http_auth: ^1.0.4
   grouped_list: ^5.1.2
+  firebase_messaging: 
+  flutter_local_notifications: 
   
 
 dev_dependencies:

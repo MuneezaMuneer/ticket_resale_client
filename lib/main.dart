@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:ticket_resale/firebase_options.dart';
 import 'package:ticket_resale/providers/providers.dart';
 import 'package:ticket_resale/screens/screens.dart';
-import 'package:ticket_resale/utils/app_routes.dart';
+import 'package:ticket_resale/utils/utils.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
 void main() async {
@@ -16,17 +16,18 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  
+
   SwitchProvider provider = SwitchProvider();
   await provider.loadPreferences();
-runApp(
-  DevicePreview(
-    enabled: !kReleaseMode,
-    builder: (context) => const TicketResale(), // Wrap your app
-  ),
-);
 
+  NotificationServices.initNotification();
 
+  runApp(
+    DevicePreview(
+      enabled: !kReleaseMode,
+      builder: (context) => const TicketResale(),
+    ),
+  );
 }
 
 class TicketResale extends StatelessWidget {
@@ -34,6 +35,7 @@ class TicketResale extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    NotificationServices.forGroundNotifications(context);
     return MultiProvider(
         providers: [
           ChangeNotifierProvider<NavigationProvider>(

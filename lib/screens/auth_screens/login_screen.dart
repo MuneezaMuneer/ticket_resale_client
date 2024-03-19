@@ -1,7 +1,10 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:ticket_resale/db_services/db_services.dart';
+import 'package:ticket_resale/utils/notification_services.dart';
 import '../../components/components.dart';
 import '../../constants/constants.dart';
 import '../../widgets/widgets.dart';
@@ -73,8 +76,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       isSocial: true,
                       onPressed: () async {
                         googleNotifier.value = true;
+                        String? fcmToken = await NotificationServices
+                            .getFCMCurrentDeviceToken();
                         await AuthServices.signInWithGoogle(
-                                context, googleNotifier)
+                                context, googleNotifier, '$fcmToken')
                             .then((credential) {
                           if (credential != null) {
                             googleNotifier.value = false;

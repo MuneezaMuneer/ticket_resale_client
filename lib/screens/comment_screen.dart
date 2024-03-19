@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable, use_build_context_synchronously
 
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -264,11 +265,10 @@ class _CommentScreenState extends State<CommentScreen> {
                                                   ),
                                                 ),
                                                 Expanded(
-                                                  flex: 2,
+                                                  flex: 3,
                                                   child: isCurrentUserTicket
                                                       ? SizedBox(
                                                           height: height * 0.04,
-                                                          width: width * 0.15,
                                                           child: CustomButton(
                                                             onPressed: () {
                                                               String? hashKey =
@@ -288,29 +288,78 @@ class _CommentScreenState extends State<CommentScreen> {
                                                                         .getCurrentUser
                                                                         .uid,
                                                               );
-                                                              ticketSellDialog(
-                                                                  context:
+
+                                                              TicketsSoldModel
+                                                                  soldModel =
+                                                                  TicketsSoldModel(
+                                                                status:
+                                                                    'Unpaid',
+                                                                ticketPrice:
+                                                                    commentData[
+                                                                            index]
+                                                                        .offerPrice,
+                                                                ticketImage: widget
+                                                                    .ticketModal
+                                                                    .imageUrl,
+                                                                ticketName: widget
+                                                                    .ticketModal
+                                                                    .ticketType,
+                                                              );
+                                                              commentData[index]
+                                                                          .status ==
+                                                                      'Sell'
+                                                                  ? ticketSellDialog(
+                                                                      docId:
+                                                                          '${widget.ticketModal.docId}',
+                                                                      offerId:
+                                                                          '${commentData[index].offerId}',
+                                                                      context:
+                                                                          context,
+                                                                      ticketImage:
+                                                                          '${widget.ticketModal.imageUrl}',
+                                                                      offeredPrice:
+                                                                          '${commentData[index].offerPrice}',
+                                                                      buyerImage:
+                                                                          '${userData.photoUrl}',
+                                                                      buyerName:
+                                                                          '${userData.displayName}',
+                                                                      messageModel:
+                                                                          messageModel,
+                                                                      userModel:
+                                                                          userData,
+                                                                      hashKey:
+                                                                          hashKey,
+                                                                      soldModel:
+                                                                          soldModel,
+                                                                      buyerId:
+                                                                          '${userData.id}')
+                                                                  : Navigator.pushNamedAndRemoveUntil(
                                                                       context,
-                                                                  ticketImage:
-                                                                      '${widget.ticketModal.imageUrl}',
-                                                                  offeredPrice:
-                                                                      '${commentData[index].offerPrice}',
-                                                                  buyerImage:
-                                                                      '${userData.photoUrl}',
-                                                                  buyerName:
-                                                                      '${userData.displayName}',
-                                                                  messageModel:
-                                                                      messageModel,
-                                                                  userModel:
-                                                                      userData,
-                                                                  hashKey:
-                                                                      hashKey);
+                                                                      AppRoutes
+                                                                          .chatDetailScreen,
+                                                                      (route) =>
+                                                                          false,
+                                                                      arguments: {
+                                                                          'receiverId':
+                                                                              messageModel.userIDReceiver,
+                                                                          'hashKey':
+                                                                              hashKey,
+                                                                          'userModel':
+                                                                              userData,
+                                                                          'isOpened':
+                                                                              true,
+                                                                          'offeredPrice':
+                                                                              commentData[index].offerPrice
+                                                                        });
                                                             },
                                                             textColor:
                                                                 AppColors.white,
                                                             textSize:
                                                                 AppSize.medium,
-                                                            btnText: 'Sell',
+                                                            btnText:
+                                                                commentData[
+                                                                        index]
+                                                                    .status,
                                                             gradient:
                                                                 customGradient,
                                                             weight:

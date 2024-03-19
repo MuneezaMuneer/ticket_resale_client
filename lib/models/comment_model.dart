@@ -6,13 +6,16 @@ class CommentModel {
   String? offerPrice;
   String? comment;
   String? status;
+  String? offerId;
 
   CommentModel(
       {this.userId,
       required this.time,
       this.offerPrice,
       this.comment,
-      this.status});
+      this.status,
+      this.offerId
+      });
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -24,7 +27,7 @@ class CommentModel {
     };
   }
 
-  factory CommentModel.fromMap(Map<String, dynamic> map) {
+  factory CommentModel.fromMap(Map<String, dynamic> map,String offerId) {
     Timestamp? time = map['time'];
     final dateTime = time!.toDate();
     return CommentModel(
@@ -32,6 +35,9 @@ class CommentModel {
         time: dateTime,
         offerPrice: map['offer_price'] ?? '',
         comment: map['comment'] ?? '',
-        status: map['status'] ?? '');
+        status: map['status'] ?? '',
+        offerId: offerId
+        );
+
   }
 }
