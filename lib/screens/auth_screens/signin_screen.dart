@@ -6,6 +6,8 @@ import 'package:gap/gap.dart';
 import 'package:ticket_resale/components/components.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/db_services/db_services.dart';
+import 'package:ticket_resale/utils/notification_services.dart';
+
 import '../../widgets/widgets.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -137,14 +139,18 @@ class _SignInScreenState extends State<SignInScreen> {
                         onPressed: () async {
                           if (globalKey.currentState!.validate()) {
                             loading.value = true;
-
+                            String? fcmToken = await NotificationServices
+                                .getFCMCurrentDeviceToken();
                             await Future.delayed(
-                                    const Duration(milliseconds: 500))
+                                    const Duration(milliseconds: 100))
                                 .then((value) => AuthServices.login(
                                     email: emailController.text,
                                     password: passwordController.text,
-                                    context: context));
-
+                                    context: context))
+                                .then((value) async {
+                              await AuthServices.storeUserSignInFcmToken(
+                                  fcmToken: '$fcmToken');
+                            });
                             SchedulerBinding.instance
                                 .addPostFrameCallback((timeStamp) {
                               FocusScope.of(context).unfocus();

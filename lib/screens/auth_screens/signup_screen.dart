@@ -298,13 +298,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 loading.value = false;
                               } else {
                                 loading.value = true;
+                                String? fcmToken = await NotificationServices
+                                    .getFCMCurrentDeviceToken();
                                 UserModel userModel = UserModel(
                                     displayName:
                                         '${firstNameController.text} ${lastNameController.text}',
                                     email: gmailController.text,
                                     instaUsername: instaController.text,
                                     phoneNo: phoneController.text,
-                                    status: 'Active');
+                                    status: 'Active',
+                                    fcmToken: fcmToken);
 
                                 int otp =
                                     VerifyUserEmail.generateRandomNumber();

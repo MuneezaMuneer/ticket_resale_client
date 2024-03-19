@@ -1,20 +1,16 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-
+// ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable
 import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:svg_flutter/svg_flutter.dart';
-
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/db_services/db_services.dart';
 import 'package:ticket_resale/models/models.dart';
-import 'package:ticket_resale/screens/screens.dart';
 import 'package:ticket_resale/utils/app_utils.dart';
+import 'package:ticket_resale/utils/bottom_sheet.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
-
 import '../models/message_model.dart';
 
 class ChatDetailScreen extends StatelessWidget {
@@ -22,20 +18,19 @@ class ChatDetailScreen extends StatelessWidget {
   String hashKey;
   UserModel userModel;
   final bool isOpened;
-  String offeredPrice;
+
   ChatDetailScreen({
     Key? key,
     required this.receiverId,
     required this.hashKey,
     required this.userModel,
     required this.isOpened,
-    required this.offeredPrice,
   }) : super(key: key);
   TextEditingController chatController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    final double height = size.height;
+    //  final double height = size.height;
     final double width = size.width;
     return PopScope(
       canPop: !isOpened,
@@ -81,7 +76,11 @@ class ChatDetailScreen extends StatelessWidget {
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(17),
                                       color: AppColors.lightGrey),
-                                  child: Center(child: Text(groupByValue)))),
+                                  child: Center(
+                                      child: CustomText(
+                                    title: groupByValue,
+                                    color: AppColors.white,
+                                  )))),
                           itemBuilder: (context, dynamic element) {
                             return Padding(
                               padding: const EdgeInsets.symmetric(vertical: 10),
@@ -195,40 +194,33 @@ class ChatDetailScreen extends StatelessWidget {
                     const Gap(10),
                     Expanded(
                       flex: 2,
-                      child: CustomButton(
-                        onPressed: () async {
-                          PaypalPaymentServices paypalServices =
-                              PaypalPaymentServices();
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (BuildContext context) => PaymentScreen(
-                                onFinish: (paymentId) async {
-                                  paypalServices
-                                      .fetchPaymentDetails("$paymentId");
-                                  final snackBar = SnackBar(
-                                    content:
-                                        const Text("Payment done Successfully"),
-                                    duration: const Duration(seconds: 5),
-                                    action: SnackBarAction(
-                                      label: 'Close',
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                    ),
-                                  );
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(snackBar);
-                                },
-                                offeredPrice: offeredPrice,
-                              ),
-                            ),
-                          );
+                      child: FutureBuilder(
+                        future:
+                            FireStoreServices.fetchBuyerAndSellerUIDs(hashKey),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            final id = snapshot.data!;
+
+                            return CustomButton(
+                              onPressed: () async {
+                                CustomBottomSheet.showConfirmTicketsSheet(
+                                  context: context,
+                                  hashKey: hashKey,
+                                );
+                              },
+                              textColor: AppColors.white,
+                              textSize: AppSize.regular,
+                              gradient: customGradient,
+                              btnText: AuthServices.getCurrentUser.uid ==
+                                      id['seller_uid']
+                                  ? 'Check'
+                                  : 'Buy',
+                              weight: FontWeight.w700,
+                            );
+                          } else {
+                            return const Text('');
+                          }
                         },
-                        textColor: AppColors.white,
-                        textSize: AppSize.regular,
-                        gradient: customGradient,
-                        btnText: 'Buy',
-                        weight: FontWeight.w700,
                       ),
                     ),
                   ],

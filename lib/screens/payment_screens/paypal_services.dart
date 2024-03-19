@@ -2,25 +2,15 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'package:http_auth/http_auth.dart';
+import 'package:ticket_resale/constants/constants.dart';
 
 class PaypalPaymentServices {
-  /// for testing mode
-  String domain = "https://api.sandbox.paypal.com";
-
-//String domain = "https://api.paypal.com"; /// for production mode
-
-  /// Change the clientId and secret given by PayPal to your own.
-  String clientId =
-      'AbLx2Ge05BRCcYjAU4-ShGkM0w4XdQHDN7hfw3zEH263kTW6nuwBOoXL_5XJJKWwwVV8iW4j1FlderyM';
-  String secret =
-      'EAFBMFvQqfvGb2y_flxhFTNFoxFqwJBn4ruGHO2f_zQHvQrDOxL8g4ufwz_rZwh5t6ltmluD02Jz4BPK';
-
   /// for obtaining the access token from Paypal
-  Future<String?> getAccessToken() async {
+  static Future<String?> getAccessToken() async {
     try {
-      var client = BasicAuthClient(clientId, secret);
+      var client = BasicAuthClient(ApiURLS.clientId, ApiURLS.secret);
       var response = await client.post(
-        Uri.parse('$domain/v1/oauth2/token?grant_type=client_credentials'),
+        Uri.parse(ApiURLS.accessTokenURL),
       );
       if (response.statusCode == 200) {
         final body = jsonDecode(response.body);
@@ -33,16 +23,18 @@ class PaypalPaymentServices {
   }
 
   // for generating the PayPal payment request
-  Future<Map<String, String>?> createPaypalPayment(
-      transactions, accessToken) async {
+  static Future<Map<String, String>?> createPaypalPayment(
+      {required String token,
+      required String totalPrice,
+      required List<Map<String, dynamic>> item}) async {
     try {
-      var response = await http.post(Uri.parse("$domain/v1/payments/payment"),
-          body: jsonEncode(transactions),
+      var response = await http.post(Uri.parse(ApiURLS.paymentURL),
+          body: jsonEncode(_getOrderBody(totalPrice: totalPrice, items: item)),
           headers: {
             "content-type": "application/json",
-            'Authorization': 'Bearer $accessToken'
+            'Authorization': 'Bearer $token'
           });
-      log(".......................Response : ${response.body}");
+      log("................create payment Response : ${response.body}");
       final body = jsonDecode(response.body);
       if (response.statusCode == 201) {
         if (body["links"] != null && body["links"].length > 0) {
@@ -76,7 +68,7 @@ class PaypalPaymentServices {
   }
 
   /// for carrying out the payment process
-  Future<String?> executePayment(url, payerId, accessToken) async {
+  static Future<String?> executePayment(url, payerId, accessToken) async {
     try {
       var response = await http.post(Uri.parse(url),
           body: jsonEncode({"payer_id": payerId}),
@@ -87,6 +79,7 @@ class PaypalPaymentServices {
 
       final body = jsonDecode(response.body);
       if (response.statusCode == 200) {
+        log('...........payment done body = ${response.body}');
         return body["id"];
       }
       return null;
@@ -95,9 +88,9 @@ class PaypalPaymentServices {
     }
   }
 
-  Future<Map<String, dynamic>> fetchPaymentDetails(String paymentId) async {
-    final String apiUrl =
-        'https://api.sandbox.paypal.com/v1/payments/payment/$paymentId';
+  static Future<Map<String, dynamic>> fetchPaymentDetails(
+      String paymentId) async {
+    final String apiUrl = '${ApiURLS.fetchPaymentInfoURLById}$paymentId';
     final String? accessToken =
         await getAccessToken(); // Replace with your actual access token
 
@@ -123,5 +116,58 @@ class PaypalPaymentServices {
       log('Failed to fetch payment details. Status code: ${response.statusCode}, Body: ${response.body}');
       throw Exception('Failed to fetch payment details');
     }
+  }
+
+  static Map<String, dynamic> _getOrderBody(
+      {required String totalPrice, required List<Map<String, dynamic>> items}) {
+    String shippingCost = '0';
+    int shippingDiscountCost = 0;
+    // String userFirstName = 'Muneeza';
+    // String userLastName = 'Muneer';
+    // String addressCity = 'USA';
+    // String addressStreet = "i-10";
+    // String addressZipCode = '44000';
+    // String addressCountry = 'Pakistan';
+    // String addressState = 'Islamabad';
+    // String addressPhoneNumber = '3095237159';
+
+    Map<String, dynamic> temp = {
+      "intent": "sale",
+      "payer": {"payment_method": "paypal"},
+      "transactions": [
+        {
+          "amount": {
+            "total": totalPrice,
+            "currency": 'USD',
+            "details": {
+              "shipping": shippingCost,
+              "shipping_discount": ((-1.0) * shippingDiscountCost).toString()
+            }
+          },
+          "description": "The payment transaction description.",
+          "payment_options": {
+            "allowed_payment_method": "INSTANT_FUNDING_SOURCE"
+          },
+          "item_list": {"items": items},
+          // if (isEnableShipping && isEnableAddress)
+          //   "shipping_address": {
+          //     "recipient_name": "$userFirstName $userLastName",
+          //     "line1": addressStreet,
+          //     "line2": "",
+          //     "city": addressCity,
+          //     "country_code": addressCountry,
+          //     "postal_code": addressZipCode,
+          //     "phone": addressPhoneNumber,
+          //     "state": addressState
+          //   },
+        }
+      ],
+      "note_to_payer": "Contact us for any questions on your order.",
+      "redirect_urls": {
+        "return_url": ApiURLS.returnURL,
+        "cancel_url": ApiURLS.cancelURL
+      }
+    };
+    return temp;
   }
 }

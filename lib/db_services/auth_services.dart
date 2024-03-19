@@ -22,8 +22,8 @@ class AuthServices {
 
   //Google Authentication
 
-  static Future<UserCredential?> signInWithGoogle(
-      BuildContext context, ValueNotifier<bool> googleNotifier) async {
+  static Future<UserCredential?> signInWithGoogle(BuildContext context,
+      ValueNotifier<bool> googleNotifier, String fcmToken) async {
     try {
       googleNotifier.value = true;
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
@@ -53,7 +53,7 @@ class AuthServices {
 
       //store user google credentials to firestore
 
-      await storeGoogleData(userCredential);
+      await storeGoogleData(userCredential, fcmToken: fcmToken);
 
       return userCredential;
     } catch (e) {
@@ -63,12 +63,14 @@ class AuthServices {
     return null;
   }
 
-  static Future<void> storeGoogleData(UserCredential userCredential) async {
+  static Future<void> storeGoogleData(UserCredential userCredential,
+      {required String fcmToken}) async {
     final user = userCredential.user;
     final userData = {
       'user_name': user!.displayName,
       'email': user.email,
       'status': 'Active',
+      'fcm_token': fcmToken,
       'image_url': user.photoURL,
       'profile_levels': {
         'isEmailVerified': true,
@@ -258,19 +260,28 @@ class AuthServices {
     await GoogleSignIn().signOut();
   }
 
+  static Future<void> storeUserSignInFcmToken({
+    required String fcmToken,
+  }) async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    DocumentReference user =
+        firestore.collection('user_data').doc(getCurrentUser.uid);
+    await user.set({'fcm_token': fcmToken}, SetOptions(merge: true));
+  }
+
   static Future<void> storeUserData({required UserModel userModel}) async {
     try {
       FirebaseFirestore firestore = FirebaseFirestore.instance;
       DocumentReference user =
           firestore.collection('user_data').doc(getCurrentUser.uid);
-      Map<String, dynamic> userData = userModel.toMap();
+      Map<String, dynamic> userData = userModel.toWithTokenMap();
       await user.set({
         ...userData,
         'profile_levels': {
           'isEmailVerified': true,
           'isInstaVerified': true,
         }
-      });
+      }, SetOptions(merge: true));
 
       await getCurrentUser.updateDisplayName(userModel.displayName);
     } catch (e) {

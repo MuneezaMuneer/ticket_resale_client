@@ -77,14 +77,13 @@ Route onGenerateRoute(RouteSettings settings) {
     final UserModel userModal = arguments['userModel'] as UserModel;
     final String receiverId = arguments['receiverId'] as String;
     final String hashKey = arguments['hashKey'] as String;
-    final String offeredPrice = arguments['offeredPrice'] as String;
+
     final bool isOpened = arguments['isOpened'] as bool;
     return animatePage(ChatDetailScreen(
       receiverId: receiverId,
       hashKey: hashKey,
       userModel: userModal,
       isOpened: isOpened,
-      offeredPrice: offeredPrice,
     ));
   } else if (settings.name == AppRoutes.eventScreen) {
     final isBackButton = settings.arguments as bool;

@@ -27,6 +27,76 @@ class FireStoreServices {
         .set(commentModel.toMap(), SetOptions(merge: true));
   }
 
+  static Future<void> saveSoldTicketsData({
+    required TicketsSoldModel soldModel,
+    required String hashKey,
+    required String sellerUid,
+    required String buyerUid,
+  }) async {
+    FirebaseFirestore.instance.collection('tickets_sold').doc(hashKey).set({
+      'buyer_uid': buyerUid,
+      'seller_uid': sellerUid,
+    }).then((_) {
+      return FirebaseFirestore.instance
+          .collection('tickets_sold')
+          .doc(hashKey)
+          .collection('tickets_sold')
+          .doc(uid.v4())
+          .set(soldModel.toMap(), SetOptions(merge: true));
+    });
+  }
+
+static Future<void> updateStatusInSoldTicketsCollection({
+  required String hashKey,
+  required List<String> selectedDocIds,
+  required String newStatus,
+}) async {
+  final CollectionReference soldTicketsCollection = FirebaseFirestore.instance
+      .collection('tickets_sold')
+      .doc(hashKey)
+      .collection('tickets_sold');
+  for (String docId in selectedDocIds) {
+    await soldTicketsCollection
+        .doc(docId)
+        .update({'status': newStatus});
+  }
+}
+  static Future<Map<String, String>> fetchBuyerAndSellerUIDs(
+      String hashKey) async {
+    DocumentSnapshot snapshot = await FirebaseFirestore.instance
+        .collection('tickets_sold')
+        .doc(hashKey)
+        .get();
+
+    if (snapshot.exists) {
+      Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+
+      String buyerUid = data['buyer_uid'];
+      String sellerUid = data['seller_uid'];
+
+   
+
+      return {'buyer_uid': buyerUid, 'seller_uid': sellerUid};
+    } else {
+      throw Exception('Snapshot does not exist');
+    }
+  }
+
+  static Stream<List<TicketsSoldModel>> fetchSoldTicketsData({
+    required String hashKey,
+  }) {
+    return FirebaseFirestore.instance
+        .collection('tickets_sold')
+        .doc(hashKey)
+        .collection('tickets_sold')
+        .snapshots()
+        .map((querySnapshot) {
+      return querySnapshot.docs.map((doc) {
+        return TicketsSoldModel.fromMap(doc.data(), doc.id);
+      }).toList();
+    });
+  }
+
   static Future<void> verifyInstagram({required String instagram}) async {
     try {
       FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -82,7 +152,7 @@ class FireStoreServices {
         .snapshots()
         .map((event) {
       return event.docs.map((doc) {
-        return CommentModel.fromMap(doc.data());
+        return CommentModel.fromMap(doc.data(), doc.id);
       }).toList();
     });
   }

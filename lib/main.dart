@@ -8,8 +8,11 @@ import 'package:ticket_resale/firebase_options.dart';
 import 'package:ticket_resale/providers/clear_provider.dart';
 import 'package:ticket_resale/providers/event_image_provider.dart';
 import 'package:ticket_resale/providers/providers.dart';
+import 'package:ticket_resale/screens/screens.dart';
+import 'package:ticket_resale/utils/utils.dart';
+
 import 'package:ticket_resale/screens/splash_screen.dart';
-import 'package:ticket_resale/utils/app_routes.dart';
+
 import 'providers/drop_down_provider.dart';
 import 'providers/search_provider.dart';
 
@@ -21,6 +24,12 @@ void main() async {
 
   SwitchProvider provider = SwitchProvider();
   await provider.loadPreferences();
+
+  NotificationServices.initNotification();
+
+  runApp(
+    const TicketResale(),
+  );
   AppText.preference = await SharedPreferences.getInstance();
   runApp(
     const TicketResale(),
@@ -31,6 +40,7 @@ class TicketResale extends StatelessWidget {
   const TicketResale({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    NotificationServices.forGroundNotifications(context);
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<ClearProvider>(

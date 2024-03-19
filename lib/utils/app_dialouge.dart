@@ -224,9 +224,13 @@ ticketSellDialog({
   required String ticketImage,
   required String offeredPrice,
   required String buyerImage,
+  required String buyerId,
   required String buyerName,
-  required MessageModel messageModel,
   required String hashKey,
+  required String docId,
+  required String offerId,
+  required MessageModel messageModel,
+  required TicketsSoldModel soldModel,
   required UserModel userModel,
 }) {
   return showDialog(
@@ -338,7 +342,16 @@ ticketSellDialog({
                         .then((value) async {
                       await FireStoreServices.makeConnection(
                               userIDReceiver: messageModel.userIDReceiver!)
-                          .then((value) {
+                          .then((value) async {
+                        await FireStoreServices.updateCommentsData(
+                            docId: docId, offerId: offerId);
+                      }).then((value) async {
+                        await FireStoreServices.saveSoldTicketsData(
+                            soldModel: soldModel,
+                            hashKey: hashKey,
+                            buyerUid: buyerId,
+                            sellerUid: AuthServices.getCurrentUser.uid);
+                      }).then((value) {
                         Navigator.pushNamedAndRemoveUntil(
                           context,
                           AppRoutes.chatDetailScreen,
