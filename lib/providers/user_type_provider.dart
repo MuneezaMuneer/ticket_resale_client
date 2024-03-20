@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class UserTypeProvider extends ChangeNotifier {
-  UserType _userType = UserType.Client;
+  UserType _userType = UserType.client;
 
   UserType get userType => _userType;
 
@@ -12,6 +12,6 @@ class UserTypeProvider extends ChangeNotifier {
 }
 
 enum UserType {
-  Client,
-  Admin,
+  client,
+  admin,
 }

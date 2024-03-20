@@ -7,11 +7,12 @@ import 'package:ticket_resale/models/message_model.dart';
 import 'package:ticket_resale/models/models.dart';
 import 'package:ticket_resale/models/user_models.dart';
 import 'package:uuid/uuid.dart';
-import '../models/ticket_model.dart';
+import '../models/ticket_models.dart';
 
 class FireStoreServicesClient {
   static Uuid uid = const Uuid();
-  static Future<void> createTickets({required TicketModel ticketModel}) async {
+  static Future<void> createTickets(
+      {required TicketModelClient ticketModel}) async {
     FirebaseFirestore.instance
         .collection('tickets')
         .doc(uid.v4())
@@ -129,7 +130,8 @@ class FireStoreServicesClient {
     });
   }
 
-  static Stream<List<TicketModel>> fetchTicketsData({required String docID}) {
+  static Stream<List<TicketModelClient>> fetchTicketsData(
+      {required String docID}) {
     return FirebaseFirestore.instance
         .collection('tickets')
         .where('event_id', isEqualTo: docID)
@@ -137,7 +139,7 @@ class FireStoreServicesClient {
         .snapshots()
         .map((event) {
       return event.docs.map((doc) {
-        return TicketModel.fromMap(doc.data(), doc.id);
+        return TicketModelClient.fromMap(doc.data(), doc.id);
       }).toList();
     });
   }

@@ -15,7 +15,7 @@ class UserManagement extends StatefulWidget {
   State<UserManagement> createState() => _UserManagementState();
 }
 
-List<UserModelAdmin?> userData = [];
+
 
 class _UserManagementState extends State<UserManagement> {
   late Stream<List<UserModelAdmin?>> fetchUserData;

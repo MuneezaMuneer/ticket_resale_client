@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ticket_resale/models/create_event.dart';
-import 'package:ticket_resale/models/fetch_ticket_model.dart';
+
 import 'package:ticket_resale/models/user_models.dart';
 
+import '../models/models.dart';
 
 class FirestoreServicesAdmin {
   static final fireStore = FirebaseFirestore.instance;
@@ -66,7 +67,7 @@ class FirestoreServicesAdmin {
         .set({'fcm_token': token});
   }
 
-  static Stream<List<TicketModal>> fetchTicket() async* {
+  static Stream<List<TicketModalAdmin>> fetchTicket() async* {
     var ticketsCollection = FirebaseFirestore.instance.collection('tickets');
 
     // Map to store event and user data
@@ -75,7 +76,7 @@ class FirestoreServicesAdmin {
 
     // Listen for changes in the tickets collection
     await for (var snapshot in ticketsCollection.snapshots()) {
-      List<TicketModal> ticketsList = [];
+      List<TicketModalAdmin> ticketsList = [];
 
       // Fetch event and user data in batches
       var eventIDs = snapshot.docs
@@ -109,7 +110,7 @@ class FirestoreServicesAdmin {
         String userID = ticketData['user_uid'].toString();
 
         // Build ticket model and add to the list
-        ticketsList.add(TicketModal.fromMap(
+        ticketsList.add(TicketModalAdmin.fromMap(
           map: ticketData.data(),
           ticketID: ticketData.id,
           eventName: eventDataMap[eventID]['event_name'],

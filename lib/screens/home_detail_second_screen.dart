@@ -11,11 +11,11 @@ import 'package:ticket_resale/models/event_modals.dart';
 import 'package:ticket_resale/utils/utils.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 import '../components/components.dart';
-import '../models/ticket_model.dart';
+import '../models/ticket_models.dart';
 
 class HomeDetailSecondScreen extends StatefulWidget {
   EventModalClient eventModal;
-  TicketModel ticketModel;
+  TicketModelClient ticketModel;
   HomeDetailSecondScreen({
     Key? key,
     required this.eventModal,

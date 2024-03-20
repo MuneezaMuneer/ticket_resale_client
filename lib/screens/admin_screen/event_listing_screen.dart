@@ -4,7 +4,6 @@ import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 import 'package:ticket_resale/db_services/firestore_services_admin.dart';
 import 'package:ticket_resale/providers/search_provider.dart';
-import 'package:ticket_resale/screens/admin_screen/create_event_screen.dart';
 import '../../constants/constants.dart';
 import '../../models/create_event.dart';
 import '../../utils/utils.dart';
@@ -16,8 +15,6 @@ class EventListing extends StatefulWidget {
   State<EventListing> createState() => _EventListingState();
 }
 
-List<CreateEvent> userData = [];
-TextEditingController searchController = TextEditingController();
 
 class _EventListingState extends State<EventListing> {
   late Stream<List<CreateEvents>> fetchEvents;
@@ -245,50 +242,7 @@ class _EventListingState extends State<EventListing> {
               ),
             )));
   }
-}
-
-DataCell _dataCellForNames({required String title}) {
-  return DataCell(
-    Text(
-      AppUtils.textTo32Characters(title),
-      style: const TextStyle(
-        fontSize: AppSize.small,
-        fontWeight: FontWeight.w400,
-        color: AppColors.grey,
-      ),
-      overflow: TextOverflow.ellipsis,
-      maxLines: 2,
-    ),
-  );
-}
-
-DataCell _createDataCell(String text) {
-  return DataCell(
-    Text(
-      AppUtils.textTo32Characters(text),
-      style: const TextStyle(
-        fontSize: AppSize.small,
-        fontWeight: FontWeight.w400,
-        color: AppColors.grey,
-      ),
-      overflow: TextOverflow.ellipsis,
-      maxLines: 2,
-    ),
-  );
-}
-
-DataColumn _buildTableCell(String text) {
-  return DataColumn(
-    label: Center(
-      child: Text(AppUtils.textTo32Characters(text),
-          style: const TextStyle(
-              fontSize: AppSize.regular,
-              fontWeight: FontWeight.w600,
-              color: Colors.black)),
-    ),
-  );
-}
-
+  
 Widget createTableCell({
   required String ticketID,
 }) {
@@ -337,4 +291,48 @@ Widget createTableCell({
           return const SizedBox();
         }
       });
+}
+
+}
+
+DataCell _dataCellForNames({required String title}) {
+  return DataCell(
+    Text(
+      AppUtils.textTo32Characters(title),
+      style: const TextStyle(
+        fontSize: AppSize.small,
+        fontWeight: FontWeight.w400,
+        color: AppColors.grey,
+      ),
+      overflow: TextOverflow.ellipsis,
+      maxLines: 2,
+    ),
+  );
+}
+
+DataCell _createDataCell(String text) {
+  return DataCell(
+    Text(
+      AppUtils.textTo32Characters(text),
+      style: const TextStyle(
+        fontSize: AppSize.small,
+        fontWeight: FontWeight.w400,
+        color: AppColors.grey,
+      ),
+      overflow: TextOverflow.ellipsis,
+      maxLines: 2,
+    ),
+  );
+}
+
+DataColumn _buildTableCell(String text) {
+  return DataColumn(
+    label: Center(
+      child: Text(AppUtils.textTo32Characters(text),
+          style: const TextStyle(
+              fontSize: AppSize.regular,
+              fontWeight: FontWeight.w600,
+              color: Colors.black)),
+    ),
+  );
 }

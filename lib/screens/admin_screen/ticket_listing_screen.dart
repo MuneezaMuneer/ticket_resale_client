@@ -7,13 +7,13 @@ import 'package:provider/provider.dart';
 import 'package:ticket_resale/components/filter_menu_admin.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/db_services/firestore_services_admin.dart';
+import 'package:ticket_resale/models/models.dart';
 import 'package:ticket_resale/providers/clear_provider.dart';
 import 'package:ticket_resale/providers/search_provider.dart';
 import 'package:ticket_resale/utils/app_utils.dart';
 import 'package:ticket_resale/utils/notification_services.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
-import '../../models/fetch_ticket_model.dart';
 
 
 class TicketListing extends StatefulWidget {
@@ -22,16 +22,13 @@ class TicketListing extends StatefulWidget {
   State<TicketListing> createState() => _TicketListingState();
 }
 
-List<TicketModal> userData = [];
-TextEditingController searchController = TextEditingController();
-
 class _TicketListingState extends State<TicketListing> {
-  late Stream<List<TicketModal>> fetchEvents;
+  late Stream<List<TicketModalAdmin>> fetchEvents;
   TextEditingController controller = TextEditingController();
   ValueNotifier<String> searchNotifier = ValueNotifier('');
   TextEditingController searchcontroller = TextEditingController();
-  List<TicketModal> filterEventData = [];
-  List<TicketModal> eventData = [];
+  List<TicketModalAdmin> filterEventData = [];
+  List<TicketModalAdmin> eventData = [];
   late ClearProvider clearProvider;
   @override
   void initState() {
@@ -135,7 +132,7 @@ class _TicketListingState extends State<TicketListing> {
                               spreadRadius: 2,
                               offset: Offset(0, 0))
                         ]),
-                    child: StreamBuilder<List<TicketModal>>(
+                    child: StreamBuilder<List<TicketModalAdmin>>(
                       stream: fetchEvents,
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
@@ -149,7 +146,7 @@ class _TicketListingState extends State<TicketListing> {
                           eventData = snapshot.data!;
                           return Consumer<ClearProvider>(
                             builder: (context, query, child) {
-                              List<TicketModal?> ticketData =
+                              List<TicketModalAdmin?> ticketData =
                                   query.searchText.isEmpty
                                       ? snapshot.data!
                                       : filterEventData;
@@ -179,8 +176,10 @@ class _TicketListingState extends State<TicketListing> {
                                         _buildTableCell('Status')
                                       ],
                                       rows: ticketData.asMap().entries.map(
-                                          (MapEntry<int, TicketModal?> entry) {
-                                        TicketModal? ticketData = entry.value;
+                                          (MapEntry<int, TicketModalAdmin?>
+                                              entry) {
+                                        TicketModalAdmin? ticketData =
+                                            entry.value;
                                         final bool isOdd = entry.key.isOdd;
                                         final Color rowColor = isOdd
                                             ? AppColors.lightPurple
@@ -240,49 +239,7 @@ class _TicketListingState extends State<TicketListing> {
       ),
     );
   }
-}
-
-DataCell _dataCellForNames({
-  required String name,
-}) {
-  return DataCell(Text(
-    AppUtils.textTo32Characters(name),
-    style: const TextStyle(
-      fontSize: AppSize.small,
-      fontWeight: FontWeight.w400,
-      color: AppColors.grey,
-    ),
-    overflow: TextOverflow.ellipsis,
-    maxLines: 2,
-  ));
-}
-
-DataCell _createDataCell(String text) {
-  return DataCell(
-    Text(
-      AppUtils.textTo32Characters(text),
-      style: const TextStyle(
-        fontSize: AppSize.small,
-        fontWeight: FontWeight.w400,
-        color: AppColors.grey,
-      ),
-      overflow: TextOverflow.ellipsis,
-      maxLines: 2,
-    ),
-  );
-}
-
-DataColumn _buildTableCell(String text) {
-  return DataColumn(
-    label: Center(
-      child: Text(AppUtils.textTo32Characters(text),
-          style: const TextStyle(
-              fontSize: AppSize.regular,
-              fontWeight: FontWeight.w600,
-              color: Colors.black)),
-    ),
-  );
-}
+  
 
 Widget createTableCell({
   required String ticketID,
@@ -340,4 +297,48 @@ Widget createTableCell({
           );
         }
       });
+}
+
+}
+
+DataCell _dataCellForNames({
+  required String name,
+}) {
+  return DataCell(Text(
+    AppUtils.textTo32Characters(name),
+    style: const TextStyle(
+      fontSize: AppSize.small,
+      fontWeight: FontWeight.w400,
+      color: AppColors.grey,
+    ),
+    overflow: TextOverflow.ellipsis,
+    maxLines: 2,
+  ));
+}
+
+DataCell _createDataCell(String text) {
+  return DataCell(
+    Text(
+      AppUtils.textTo32Characters(text),
+      style: const TextStyle(
+        fontSize: AppSize.small,
+        fontWeight: FontWeight.w400,
+        color: AppColors.grey,
+      ),
+      overflow: TextOverflow.ellipsis,
+      maxLines: 2,
+    ),
+  );
+}
+
+DataColumn _buildTableCell(String text) {
+  return DataColumn(
+    label: Center(
+      child: Text(AppUtils.textTo32Characters(text),
+          style: const TextStyle(
+              fontSize: AppSize.regular,
+              fontWeight: FontWeight.w600,
+              color: Colors.black)),
+    ),
+  );
 }

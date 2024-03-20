@@ -9,12 +9,12 @@ import 'package:provider/provider.dart';
 import 'package:svg_flutter/svg_flutter.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/db_services/db_services.dart';
-import 'package:ticket_resale/db_services/firestore_services_client.dart';
 import 'package:ticket_resale/models/event_modals.dart';
 import 'package:ticket_resale/providers/providers.dart';
 import 'package:ticket_resale/utils/utils.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
-import '../models/ticket_model.dart';
+import '../models/ticket_models.dart';
+
 class TicketScreen extends StatefulWidget {
   const TicketScreen({super.key});
 
@@ -361,7 +361,7 @@ class _TicketScreenState extends State<TicketScreen> {
                             String? imageUrl =
                                 await AuthServices.uploadEventImage(
                                     imagePath: imagePickerProvider.getImageUrl);
-                            TicketModel ticketModel = TicketModel(
+                            TicketModelClient ticketModel = TicketModelClient(
                                 imageUrl: imageUrl,
                                 ticketType: ticketTypeController.text,
                                 price: priceController.text,
@@ -376,9 +376,9 @@ class _TicketScreenState extends State<TicketScreen> {
                               log(' the selected id : $selectedFestivalDocId');
                               await FireStoreServicesClient.createTickets(
                                       ticketModel: ticketModel)
-                                  .then((value)async {
+                                  .then((value) async {
                                 imagePickerProvider.setImageUrl = '';
-                                  String? token =
+                                String? token =
                                     await NotificationServices.getFCMToken();
                                 NotificationServices.sendNotification(
                                     context: context,

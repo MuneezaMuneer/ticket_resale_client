@@ -10,7 +10,7 @@ import 'package:ticket_resale/models/event_modals.dart';
 import 'package:ticket_resale/utils/app_utils.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 import '../components/components.dart';
-import '../models/ticket_model.dart';
+import '../models/ticket_models.dart';
 
 class HomeDetailFirstScreen extends StatefulWidget {
   EventModalClient eventModal;
@@ -24,7 +24,7 @@ class HomeDetailFirstScreen extends StatefulWidget {
 }
 
 class _HomeDetailFirstScreenState extends State<HomeDetailFirstScreen> {
-  late Stream<List<TicketModel>> displayTickets;
+  late Stream<List<TicketModelClient>> displayTickets;
 
   @override
   void initState() {
@@ -231,15 +231,17 @@ class _HomeDetailFirstScreenState extends State<HomeDetailFirstScreen> {
                               padding: const EdgeInsets.only(top: 15),
                               child: InkWell(
                                 onTap: () {
-                                  TicketModel ticketModel = TicketModel(
-                                      docId: tickets[index].docId,
-                                      imageUrl: tickets[index].imageUrl,
-                                      ticketType: tickets[index].ticketType,
-                                      description: tickets[index].description,
-                                      status: tickets[index].status,
-                                      price: tickets[index].price,
-                                      uid: tickets[index].uid,
-                                      eventId: tickets[index].eventId);
+                                  TicketModelClient ticketModel =
+                                      TicketModelClient(
+                                          docId: tickets[index].docId,
+                                          imageUrl: tickets[index].imageUrl,
+                                          ticketType: tickets[index].ticketType,
+                                          description:
+                                              tickets[index].description,
+                                          status: tickets[index].status,
+                                          price: tickets[index].price,
+                                          uid: tickets[index].uid,
+                                          eventId: tickets[index].eventId);
                                   Navigator.pushNamed(
                                     context,
                                     AppRoutes.detailSecondScreen,
