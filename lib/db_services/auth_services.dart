@@ -9,11 +9,12 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:ticket_resale/db_services/firestore_services_admin.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/models/models.dart';
 import 'package:ticket_resale/utils/utils.dart';
 
-import '../admin_panel/custom_navigation_admin.dart';
+import '../widgets/custom_navigation_admin.dart';
 
 class AuthServices {
   static User get getCurrentUser {
@@ -118,11 +119,13 @@ class AuthServices {
     required BuildContext context,
   }) async {
     try {
+      String? fcmToken = await NotificationServices.getFCMCurrentDeviceToken();
       UserCredential userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
       if (userCredential.user != null) {
         SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
           if (email == 'test@gmail.com') {
+            FirestoreServicesAdmin.storeFCMToken(token: '$fcmToken');
             AppText.preference!
                 .setString(AppText.isAdminPrefKey, AppText.admin);
             Navigator.pushReplacement(
@@ -131,6 +134,7 @@ class AuthServices {
                   builder: (context) => const CustomNavigationAdmin(),
                 ));
           } else {
+            AuthServices.storeUserSignInFcmToken(fcmToken: '$fcmToken');
             AppText.preference!
                 .setString(AppText.isAdminPrefKey, AppText.client);
             Navigator.of(context).pushNamedAndRemoveUntil(
@@ -220,7 +224,8 @@ class AuthServices {
     }
   }
 
-  static Future<void> storeUserImage({required UserModel userModel}) async {
+  static Future<void> storeUserImage(
+      {required UserModelClient userModel}) async {
     try {
       FirebaseFirestore firestore = FirebaseFirestore.instance;
       DocumentReference user =
@@ -269,7 +274,8 @@ class AuthServices {
     await user.set({'fcm_token': fcmToken}, SetOptions(merge: true));
   }
 
-  static Future<void> storeUserData({required UserModel userModel}) async {
+  static Future<void> storeUserData(
+      {required UserModelClient userModel}) async {
     try {
       FirebaseFirestore firestore = FirebaseFirestore.instance;
       DocumentReference user =
@@ -328,7 +334,7 @@ class AuthServices {
     return null;
   }
 
-  static Future<UserModel?> fetchUserDetails() async {
+  static Future<UserModelClient?> fetchUserDetails() async {
     try {
       DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
           await FirebaseFirestore.instance
@@ -338,7 +344,7 @@ class AuthServices {
 
       if (documentSnapshot.exists) {
         Map<String, dynamic> mapData = documentSnapshot.data()!;
-        return UserModel.fromMap(mapData, documentSnapshot.id);
+        return UserModelClient.fromMap(mapData, documentSnapshot.id);
       } else {
         return null;
       }

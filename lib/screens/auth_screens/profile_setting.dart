@@ -63,7 +63,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 230, 234, 248),
-      appBar: const CustomAppBar(
+      appBar: const CustomAppBarClient(
         title: 'Profile Settings',
       ),
       body: SingleChildScrollView(
@@ -353,7 +353,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                                     );
                                   }
 
-                                  UserModel userModel = UserModel(
+                                  UserModelClient userModel = UserModelClient(
                                       displayName: nameController.text,
                                       instaUsername: instaController.text,
                                       phoneNo: phoneNoController.text,

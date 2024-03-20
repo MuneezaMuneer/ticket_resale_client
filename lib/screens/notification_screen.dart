@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
+
 class NotificationScreen extends StatelessWidget {
   NotificationScreen({super.key});
   bool isRead = false;
@@ -10,7 +11,7 @@ class NotificationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 230, 234, 248),
-      appBar: const CustomAppBar(
+      appBar: const CustomAppBarClient(
         title: 'Notification',
         isNotification: false,
       ),

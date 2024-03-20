@@ -19,7 +19,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   TextEditingController searchController = TextEditingController();
   ValueNotifier<String> searchNotifier = ValueNotifier<String>('');
-  late Stream<List<EventModal>> displayEventData;
+  late Stream<List<EventModalClient>> displayEventData;
   @override
   void dispose() {
     searchController.dispose();
@@ -28,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    displayEventData = FireStoreServices.fetchEventData();
+    displayEventData = FireStoreServicesClient.fetchEventData();
     super.initState();
   }
 

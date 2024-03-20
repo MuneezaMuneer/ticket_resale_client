@@ -12,6 +12,7 @@ import 'package:ticket_resale/models/models.dart';
 import 'package:ticket_resale/providers/providers.dart';
 import 'package:ticket_resale/utils/utils.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
+
 class ProfileLevelScreen extends StatefulWidget {
   bool isBackButton;
   ProfileLevelScreen({
@@ -21,9 +22,10 @@ class ProfileLevelScreen extends StatefulWidget {
   @override
   State<ProfileLevelScreen> createState() => _ProfileLevelScreenState();
 }
+
 class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
   String? photoUrl;
-  late Stream<List<UserModel>> fetchUserLevel;
+  late Stream<List<UserModelClient>> fetchUserLevel;
   TextEditingController instagramController = TextEditingController();
   GlobalKey<FormState> defaultFormKey = GlobalKey<FormState>();
   late BottomSheetProvider bottomSheetProvider;
@@ -32,20 +34,22 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
     bottomSheetProvider =
         Provider.of<BottomSheetProvider>(context, listen: false);
     photoUrl = AuthServices.getCurrentUser.photoURL;
-    fetchUserLevel = FireStoreServices.fetchUserLevels();
+    fetchUserLevel = FireStoreServicesClient.fetchUserLevels();
     super.initState();
   }
+
   @override
   void dispose() {
     instagramController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     final double width = size.width;
     return Scaffold(
-      appBar: CustomAppBar(
+      appBar: CustomAppBarClient(
         title: 'Profile Level',
         isBackButton: widget.isBackButton,
       ),
@@ -128,11 +132,11 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
                         child: StreamBuilder(
                           stream: fetchUserLevel,
                           builder: (context, snapshot) {
-                            UserModel? currentUser;
+                            UserModelClient? currentUser;
                             if (snapshot.hasData) {
                               final data = snapshot.data!;
 
-                              for (UserModel user in data) {
+                              for (UserModelClient user in data) {
                                 if (user.id ==
                                     FirebaseAuth.instance.currentUser?.uid) {
                                   currentUser = user;
@@ -188,7 +192,7 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
                                               .validate()) {
                                             bottomSheetProvider
                                                 .setInstaProgress = true;
-                                            await FireStoreServices
+                                            await FireStoreServicesClient
                                                     .verifyInstagram(
                                                         instagram:
                                                             instagramController

@@ -13,13 +13,13 @@ class ChatScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(
+      appBar: const CustomAppBarClient(
         title: 'Chat System',
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 10),
         child: StreamBuilder(
-          stream: FireStoreServices.getUsersConnections(),
+          stream: FireStoreServicesClient.getUsersConnections(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
@@ -38,15 +38,15 @@ class ChatScreen extends StatelessWidget {
                   final String firstUserId =
                       currentUserId.isNotEmpty ? currentUserId[index] : '';
                   return StreamBuilder(
-                    stream:
-                        FireStoreServices.fetchUserData(userId: firstUserId),
+                    stream: FireStoreServicesClient.fetchUserData(
+                        userId: firstUserId),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         final userData = snapshot.data;
                         return GestureDetector(
                           onTap: () {
                             String hashKey =
-                                FireStoreServices.getMessagesHashCodeID(
+                                FireStoreServicesClient.getMessagesHashCodeID(
                                     userIDReceiver: firstUserId);
                             Navigator.of(context).pushNamed(
                               AppRoutes.chatDetailScreen,

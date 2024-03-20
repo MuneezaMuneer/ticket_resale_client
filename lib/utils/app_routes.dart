@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ticket_resale/admin_panel/create_event.dart';
+import 'package:ticket_resale/admin_panel/screens/create_event_screen.dart';
 import 'package:ticket_resale/models/models.dart';
 import 'package:ticket_resale/screens/chat_detail_screen.dart';
 import 'package:ticket_resale/screens/chat_screen.dart';
@@ -32,7 +32,8 @@ Route onGenerateRoute(RouteSettings settings) {
   } else if (settings.name == AppRoutes.commentScreen) {
     final Map<String, dynamic> arguments =
         settings.arguments as Map<String, dynamic>;
-    final EventModal eventModal = arguments['eventModal'] as EventModal;
+    final EventModalClient eventModal =
+        arguments['eventModal'] as EventModalClient;
     final TicketModel ticketModal = arguments['ticketModal'] as TicketModel;
     final String price = arguments['price'] as String;
 
@@ -46,10 +47,10 @@ Route onGenerateRoute(RouteSettings settings) {
   } else if (settings.name == AppRoutes.privacyScreen) {
     return animatePage(const PrivacyPolicy());
   } else if (settings.name == AppRoutes.detailFirstScreen) {
-    final eventModal = settings.arguments as EventModal;
+    final eventModal = settings.arguments as EventModalClient;
     return animatePage(HomeDetailFirstScreen(eventModal: eventModal));
   } else if (settings.name == AppRoutes.detailSecondScreen) {
-    final eventModal = settings.arguments as EventModal;
+    final eventModal = settings.arguments as EventModalClient;
     final ticketModel = settings.arguments as TicketModel;
     return animatePage(HomeDetailSecondScreen(
       eventModal: eventModal,
@@ -74,7 +75,7 @@ Route onGenerateRoute(RouteSettings settings) {
   } else if (settings.name == AppRoutes.chatDetailScreen) {
     final Map<String, dynamic> arguments =
         settings.arguments as Map<String, dynamic>;
-    final UserModel userModal = arguments['userModel'] as UserModel;
+    final UserModelClient userModal = arguments['userModel'] as UserModelClient;
     final String receiverId = arguments['receiverId'] as String;
     final String hashKey = arguments['hashKey'] as String;
 

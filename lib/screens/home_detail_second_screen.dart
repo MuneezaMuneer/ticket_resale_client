@@ -13,7 +13,7 @@ import '../components/components.dart';
 import '../models/ticket_model.dart';
 
 class HomeDetailSecondScreen extends StatefulWidget {
-  EventModal eventModal;
+  EventModalClient eventModal;
   TicketModel ticketModel;
   HomeDetailSecondScreen({
     Key? key,
@@ -254,7 +254,7 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                       });
                     },
                     child: StreamBuilder(
-                      stream: FireStoreServices.fetchUserData(
+                      stream: FireStoreServicesClient.fetchUserData(
                           userId: widget.ticketModel.uid!),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
@@ -362,8 +362,9 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                     child: AuthServices.getCurrentUser.uid !=
                             widget.ticketModel.uid
                         ? StreamBuilder(
-                            stream: FireStoreServices.fetchCommentUserLength(
-                                docId: widget.ticketModel.docId!),
+                            stream:
+                                FireStoreServicesClient.fetchCommentUserLength(
+                                    docId: widget.ticketModel.docId!),
                             builder: (context, snapshot) {
                               if (snapshot.hasData) {
                                 int length = snapshot.data!;

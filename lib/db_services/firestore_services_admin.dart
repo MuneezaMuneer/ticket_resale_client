@@ -1,12 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:ticket_resale/models/create_event.dart';
 import 'package:ticket_resale/models/fetch_ticket_model.dart';
-import '../models/tickets_model.dart';
 import 'user_model_admin.dart';
 
-class FirestoreServices {
+class FirestoreServicesAdmin {
   static final fireStore = FirebaseFirestore.instance;
+
   static Stream<List<UserModelAdmin>> fetchUserData() {
     return FirebaseFirestore.instance.collection('user_data').snapshots().map(
       (query) {
@@ -15,25 +14,6 @@ class FirestoreServices {
             .toList();
       },
     );
-  }
-
-  static Future<List<TicketModel>> fetchTickets() async {
-    var querySnapshot = await fireStore.collection('tickets').get();
-    List<TicketModel> tickets = querySnapshot.docs
-        .map((doc) => TicketModel.fromMap(map: doc.data(), ticketID: doc.id))
-        .toList();
-
-    return tickets;
-  }
-
-  static Future<void> updateStatus(String documentId, String newValue) async {
-    try {
-      final docRef =
-          FirebaseFirestore.instance.collection('event_ticket').doc(documentId);
-      await docRef.update({'status': newValue});
-    } catch (e) {
-      print('Error updating status: $e');
-    }
   }
 
   static Future<void> updateUserStatus(
@@ -79,25 +59,10 @@ class FirestoreServices {
   }
 
   static Future<void> storeFCMToken({required String token}) async {
-    String userUID = FirebaseAuth.instance.currentUser!.uid;
     FirebaseFirestore.instance
         .collection('admin_data')
-        .doc(userUID)
+        .doc('admin_token')
         .set({'fcm_token': token});
-  }
-
-  // fetch event name
-  static Stream<String> fetchEventName({required String eventID}) {
-    var querySnapshot = fireStore.collection('event').doc(eventID).snapshots();
-    return querySnapshot.map((event) => event['event_name']);
-  }
-
-  // fetch user name
-  static Stream<String> fetchUserName({required String userID}) {
-    var querySnapshot =
-        fireStore.collection('user_data').doc(userID).snapshots();
-
-    return querySnapshot.map((event) => event['user_name']);
   }
 
   static Stream<List<TicketModal>> fetchTicket() async* {
@@ -148,6 +113,7 @@ class FirestoreServices {
           ticketID: ticketData.id,
           eventName: eventDataMap[eventID]['event_name'],
           userName: userDataMap[userID]['user_name'],
+          //  fcmtoken: userDataMap[userID]['fcm_token'],
         ));
       }
 

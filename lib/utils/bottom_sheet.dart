@@ -176,7 +176,8 @@ class CustomBottomSheet {
           padding:
               EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
           child: StreamBuilder<List<TicketsSoldModel>>(
-            stream: FireStoreServices.fetchSoldTicketsData(hashKey: hashKey),
+            stream:
+                FireStoreServicesClient.fetchSoldTicketsData(hashKey: hashKey),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CupertinoActivityIndicator());

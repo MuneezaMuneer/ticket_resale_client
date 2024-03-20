@@ -231,7 +231,7 @@ ticketSellDialog({
   required String offerId,
   required MessageModel messageModel,
   required TicketsSoldModel soldModel,
-  required UserModel userModel,
+  required UserModelClient userModel,
 }) {
   return showDialog(
     context: context,
@@ -337,16 +337,16 @@ ticketSellDialog({
                 width: 110,
                 child: CustomButton(
                   onPressed: () async {
-                    await FireStoreServices.createMessageChat(
+                    await FireStoreServicesClient.createMessageChat(
                             messageModel: messageModel, hashKey: hashKey)
                         .then((value) async {
-                      await FireStoreServices.makeConnection(
+                      await FireStoreServicesClient.makeConnection(
                               userIDReceiver: messageModel.userIDReceiver!)
                           .then((value) async {
-                        await FireStoreServices.updateCommentsData(
+                        await FireStoreServicesClient.updateCommentsData(
                             docId: docId, offerId: offerId);
                       }).then((value) async {
-                        await FireStoreServices.saveSoldTicketsData(
+                        await FireStoreServicesClient.saveSoldTicketsData(
                             soldModel: soldModel,
                             hashKey: hashKey,
                             buyerUid: buyerId,

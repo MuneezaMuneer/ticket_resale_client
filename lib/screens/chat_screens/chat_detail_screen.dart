@@ -16,7 +16,7 @@ import '../models/message_model.dart';
 class ChatDetailScreen extends StatelessWidget {
   String receiverId;
   String hashKey;
-  UserModel userModel;
+  UserModelClient userModel;
   final bool isOpened;
 
   ChatDetailScreen({
@@ -41,7 +41,7 @@ class ChatDetailScreen extends StatelessWidget {
         }
       },
       child: Scaffold(
-        appBar: CustomAppBar(
+        appBar: CustomAppBarClient(
           title: userModel.displayName,
           isNotification: false,
           isNetworkImage: true,
@@ -54,7 +54,7 @@ class ChatDetailScreen extends StatelessWidget {
             children: [
               Expanded(
                 child: StreamBuilder<List<MessageModel>>(
-                  stream: FireStoreServices.getMessagesChat(hashKey),
+                  stream: FireStoreServicesClient.getMessagesChat(hashKey),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       List<MessageModel> messages = snapshot.data!;
@@ -179,9 +179,10 @@ class ChatDetailScreen extends StatelessWidget {
                                         AuthServices.getCurrentUser.uid,
                                   );
                                   if (chatController.text.isNotEmpty) {
-                                    await FireStoreServices.createMessageChat(
-                                        messageModel: messageModel,
-                                        hashKey: hashKey);
+                                    await FireStoreServicesClient
+                                        .createMessageChat(
+                                            messageModel: messageModel,
+                                            hashKey: hashKey);
                                     chatController.text = '';
                                   }
                                 },
@@ -195,8 +196,8 @@ class ChatDetailScreen extends StatelessWidget {
                     Expanded(
                       flex: 2,
                       child: FutureBuilder(
-                        future:
-                            FireStoreServices.fetchBuyerAndSellerUIDs(hashKey),
+                        future: FireStoreServicesClient.fetchBuyerAndSellerUIDs(
+                            hashKey),
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             final id = snapshot.data!;

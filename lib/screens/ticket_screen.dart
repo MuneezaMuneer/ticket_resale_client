@@ -33,7 +33,7 @@ class _TicketScreenState extends State<TicketScreen> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   ValueNotifier<bool> notifier = ValueNotifier<bool>(false);
   late ImagePickerProvider imagePickerProvider;
-  late Stream<List<EventModal>> displayEventData;
+  late Stream<List<EventModalClient>> displayEventData;
   List<String> festivalDocId = [];
   List<String> festivalNames = [];
   late String selectedFestivalName;
@@ -42,7 +42,7 @@ class _TicketScreenState extends State<TicketScreen> {
   void initState() {
     imagePickerProvider =
         Provider.of<ImagePickerProvider>(context, listen: false);
-    displayEventData = FireStoreServices.fetchEventData();
+    displayEventData = FireStoreServicesClient.fetchEventData();
 
     super.initState();
   }
@@ -67,7 +67,7 @@ class _TicketScreenState extends State<TicketScreen> {
     final double height = size.height;
     final double width = size.width;
     return Scaffold(
-        appBar: const CustomAppBar(
+        appBar: const CustomAppBarClient(
           title: 'Add New Ticket',
           isBackButton: false,
         ),
@@ -377,7 +377,7 @@ class _TicketScreenState extends State<TicketScreen> {
                               String selectedFestivalDocId = festivalDocId[
                                   festivalNames.indexOf(selectedFestivalName)];
                               log(' the selected id : $selectedFestivalDocId');
-                              await FireStoreServices.createTickets(
+                              await FireStoreServicesClient.createTickets(
                                       ticketModel: ticketModel)
                                   .then((value) {
                                 imagePickerProvider.setImageUrl = '';

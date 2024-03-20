@@ -13,7 +13,7 @@ import '../components/components.dart';
 import '../models/ticket_model.dart';
 
 class HomeDetailFirstScreen extends StatefulWidget {
-  EventModal eventModal;
+  EventModalClient eventModal;
   HomeDetailFirstScreen({
     Key? key,
     required this.eventModal,
@@ -28,8 +28,8 @@ class _HomeDetailFirstScreenState extends State<HomeDetailFirstScreen> {
 
   @override
   void initState() {
-    displayTickets =
-        FireStoreServices.fetchTicketsData(docID: widget.eventModal.docId!);
+    displayTickets = FireStoreServicesClient.fetchTicketsData(
+        docID: widget.eventModal.docId!);
 
     super.initState();
   }
@@ -359,7 +359,7 @@ class _HomeDetailFirstScreenState extends State<HomeDetailFirstScreen> {
           ),
           Expanded(
             child: StreamBuilder(
-              stream: FireStoreServices.fetchUserData(userId: userId!),
+              stream: FireStoreServicesClient.fetchUserData(userId: userId!),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   final data = snapshot.data!;

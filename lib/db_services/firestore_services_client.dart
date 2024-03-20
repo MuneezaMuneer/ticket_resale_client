@@ -5,10 +5,9 @@ import 'package:ticket_resale/db_services/db_services.dart';
 import 'package:ticket_resale/models/message_model.dart';
 import 'package:ticket_resale/models/models.dart';
 import 'package:uuid/uuid.dart';
-
 import '../models/ticket_model.dart';
 
-class FireStoreServices {
+class FireStoreServicesClient {
   static Uuid uid = const Uuid();
   static Future<void> createTickets({required TicketModel ticketModel}) async {
     FirebaseFirestore.instance
@@ -46,21 +45,20 @@ class FireStoreServices {
     });
   }
 
-static Future<void> updateStatusInSoldTicketsCollection({
-  required String hashKey,
-  required List<String> selectedDocIds,
-  required String newStatus,
-}) async {
-  final CollectionReference soldTicketsCollection = FirebaseFirestore.instance
-      .collection('tickets_sold')
-      .doc(hashKey)
-      .collection('tickets_sold');
-  for (String docId in selectedDocIds) {
-    await soldTicketsCollection
-        .doc(docId)
-        .update({'status': newStatus});
+  static Future<void> updateStatusInSoldTicketsCollection({
+    required String hashKey,
+    required List<String> selectedDocIds,
+    required String newStatus,
+  }) async {
+    final CollectionReference soldTicketsCollection = FirebaseFirestore.instance
+        .collection('tickets_sold')
+        .doc(hashKey)
+        .collection('tickets_sold');
+    for (String docId in selectedDocIds) {
+      await soldTicketsCollection.doc(docId).update({'status': newStatus});
+    }
   }
-}
+
   static Future<Map<String, String>> fetchBuyerAndSellerUIDs(
       String hashKey) async {
     DocumentSnapshot snapshot = await FirebaseFirestore.instance
@@ -73,8 +71,6 @@ static Future<void> updateStatusInSoldTicketsCollection({
 
       String buyerUid = data['buyer_uid'];
       String sellerUid = data['seller_uid'];
-
-   
 
       return {'buyer_uid': buyerUid, 'seller_uid': sellerUid};
     } else {
@@ -118,13 +114,13 @@ static Future<void> updateStatusInSoldTicketsCollection({
     }
   }
 
-  static Stream<List<EventModal>> fetchEventData() {
+  static Stream<List<EventModalClient>> fetchEventData() {
     return FirebaseFirestore.instance
         .collection('event')
         .snapshots()
         .map((event) {
       return event.docs.map((doc) {
-        return EventModal.fromMap(
+        return EventModalClient.fromMap(
           doc.data(),
         );
       }).toList();
@@ -177,24 +173,24 @@ static Future<void> updateStatusInSoldTicketsCollection({
         .map((event) => event.docs.length);
   }
 
-  static Stream<List<UserModel>> fetchUserLevels() {
+  static Stream<List<UserModelClient>> fetchUserLevels() {
     return FirebaseFirestore.instance
         .collection('user_data')
         .snapshots()
         .map((event) {
       return event.docs.map((doc) {
-        return UserModel.fromMap(doc.data(), doc.id);
+        return UserModelClient.fromMap(doc.data(), doc.id);
       }).toList();
     });
   }
 
-  static Stream<UserModel> fetchUserData({required String userId}) {
+  static Stream<UserModelClient> fetchUserData({required String userId}) {
     return FirebaseFirestore.instance
         .collection('user_data')
         .doc(userId)
         .snapshots()
         .map((event) {
-      return UserModel.fromMap(event.data() ?? {}, event.id);
+      return UserModelClient.fromMap(event.data() ?? {}, event.id);
     });
   }
 

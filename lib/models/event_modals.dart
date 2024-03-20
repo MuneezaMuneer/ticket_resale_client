@@ -1,3 +1,48 @@
+class EventModalClient {
+  String? imageUrl;
+  String? eventName;
+  String? date;
+  String? description;
+  String? docId;
+  String? time;
+  String? location;
+
+  EventModalClient(
+      {this.imageUrl,
+      this.eventName,
+      this.date,
+      this.description,
+      this.docId,
+      this.time,
+      this.location});
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'image_url': imageUrl,
+      'event_name': eventName,
+      'date': date,
+      'description': description,
+      'doc_id': docId,
+      'time': time,
+      'location': location,
+    };
+  }
+
+  factory EventModalClient.fromMap(
+    Map<String, dynamic> map,
+  ) {
+    return EventModalClient(
+      imageUrl: map['image_url'] ?? '',
+      eventName: map['event_name'] ?? '',
+      date: map['date'] ?? '',
+      description: map['description'] ?? '',
+      docId: map['doc_id'] ?? '',
+      time: map['time'] ?? '',
+      location: map['location'] ?? '',
+    );
+  }
+}
+
 class EventModelAdmin {
   String? festivalName;
   String? ticketType;
@@ -7,6 +52,7 @@ class EventModelAdmin {
   String? userID;
   String? id;
   String? username;
+
   EventModelAdmin(
       {this.festivalName,
       this.ticketType,

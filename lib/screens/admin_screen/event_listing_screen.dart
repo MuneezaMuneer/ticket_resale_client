@@ -2,14 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
-import 'package:ticket_resale/admin_panel/create_event.dart';
-import 'package:ticket_resale/admin_panel/custom_appbar.dart';
-import 'package:ticket_resale/admin_panel/firestore_services.dart';
+import 'package:ticket_resale/admin_panel/screens/create_event_screen.dart';
+import 'package:ticket_resale/admin_panel/firestore_services_admin.dart';
 import 'package:ticket_resale/providers/search_provider.dart';
-import '../constants/constants.dart';
-import '../models/create_event.dart';
-import '../utils/utils.dart';
-import '../widgets/widgets.dart';
+import '../../constants/constants.dart';
+import '../../models/create_event.dart';
+import '../../utils/utils.dart';
+import '../../widgets/widgets.dart';
 
 class EventListing extends StatefulWidget {
   const EventListing({super.key});
@@ -27,7 +26,7 @@ class _EventListingState extends State<EventListing> {
 
   @override
   void initState() {
-    fetchEvents = FirestoreServices.fetchEventData();
+    fetchEvents = FirestoreServicesAdmin.fetchEventData();
 
     super.initState();
   }
@@ -296,7 +295,7 @@ Widget createTableCell({
   Color backgroundColor;
   Color textColor = Colors.white;
   return StreamBuilder(
-      stream: FirestoreServices.fetchTicketStatus(ticketID: ticketID),
+      stream: FirestoreServicesAdmin.fetchTicketStatus(ticketID: ticketID),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           String status = snapshot.data!;
@@ -312,7 +311,8 @@ Widget createTableCell({
             onTap: () {
               String currentStatus =
                   (status == 'Active') ? 'Disable' : 'Active';
-              FirestoreServices.updateTicketStatus(ticketID, currentStatus);
+              FirestoreServicesAdmin.updateTicketStatus(
+                  ticketID, currentStatus);
             },
             child: Container(
               height: 30,

@@ -289,7 +289,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           onPressed: () async {
                             if (formKey.currentState!.validate()) {
                               bool isEmailExist =
-                                  await FireStoreServices.checkUserEmail(
+                                  await FireStoreServicesClient.checkUserEmail(
                                       email: gmailController.text);
                               loading.value = true;
 
@@ -300,7 +300,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 loading.value = true;
                                 String? fcmToken = await NotificationServices
                                     .getFCMCurrentDeviceToken();
-                                UserModel userModel = UserModel(
+                                UserModelClient userModel = UserModelClient(
                                     displayName:
                                         '${firstNameController.text} ${lastNameController.text}',
                                     email: gmailController.text,

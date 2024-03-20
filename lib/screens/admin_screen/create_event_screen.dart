@@ -4,17 +4,16 @@ import 'package:flutter/scheduler.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 
-import 'package:ticket_resale/admin_panel/custom_appbar.dart';
 import 'package:ticket_resale/admin_panel/snackbar.dart';
 import 'package:ticket_resale/providers/event_image_provider.dart';
 import 'package:uuid/uuid.dart';
-import '../constants/constants.dart';
-import '../db_services/db_services.dart';
-import '../models/create_event.dart';
+import '../../constants/constants.dart';
+import '../../db_services/db_services.dart';
+import '../../models/create_event.dart';
 
-import '../utils/utils.dart';
-import '../widgets/widgets.dart';
-import 'firestore_services.dart';
+import '../../utils/utils.dart';
+import '../../widgets/widgets.dart';
+import '../firestore_services_admin.dart';
 
 class CreateEvent extends StatefulWidget {
   const CreateEvent({super.key});
@@ -418,7 +417,8 @@ class _CreateEventState extends State<CreateEvent> {
                                           time: '$startTime - $endTime',
                                         );
 
-                                        await FirestoreServices.uploadEventData(
+                                        await FirestoreServicesAdmin
+                                            .uploadEventData(
                                           createEvent: createEvents,
                                           docId: uv4,
                                         );

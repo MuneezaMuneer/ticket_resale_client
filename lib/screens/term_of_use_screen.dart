@@ -9,7 +9,7 @@ class TermsOfUseScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      appBar: CustomAppBar(
+      appBar: CustomAppBarClient(
         title: 'Terms of Use',
       ),
       body: Padding(

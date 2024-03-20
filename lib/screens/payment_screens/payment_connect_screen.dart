@@ -19,7 +19,7 @@ class _PaymentConnectScreenState extends State<PaymentConnectScreen> {
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: const Color.fromARGB(255, 230, 234, 248),
-      appBar: const CustomAppBar(
+      appBar: const CustomAppBarClient(
         title: 'Payment Method',
       ),
       body: Center(

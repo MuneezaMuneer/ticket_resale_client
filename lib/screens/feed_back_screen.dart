@@ -5,11 +5,13 @@ import 'package:svg_flutter/svg_flutter.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/providers/providers.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
+
 class FeedBackScreen extends StatefulWidget {
   const FeedBackScreen({super.key});
   @override
   State<FeedBackScreen> createState() => _FeedBackScreenState();
 }
+
 class _FeedBackScreenState extends State<FeedBackScreen> {
   late FeedbackProvider feedbackProvider;
   ValueNotifier<int> selectedStarsNotifier = ValueNotifier<int>(0);
@@ -18,13 +20,14 @@ class _FeedBackScreenState extends State<FeedBackScreen> {
     feedbackProvider = Provider.of<FeedbackProvider>(context, listen: false);
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     final double height = size.height;
     final double width = size.width;
     return Scaffold(
-      appBar: const CustomAppBar(
+      appBar: const CustomAppBarClient(
         title: 'Feedback',
       ),
       body: Stack(

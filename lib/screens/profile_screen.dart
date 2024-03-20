@@ -9,26 +9,29 @@ import 'package:ticket_resale/db_services/db_services.dart';
 import 'package:ticket_resale/providers/providers.dart';
 import 'package:ticket_resale/utils/utils.dart';
 import '../widgets/widgets.dart';
+
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
+
 class _ProfileScreenState extends State<ProfileScreen> {
   late SwitchProvider switchProvider;
   String? photoUrl;
- @override
+  @override
   void initState() {
     photoUrl = AuthServices.getCurrentUser.photoURL;
     Provider.of<SwitchProvider>(context, listen: false).loadPreferences();
     switchProvider = Provider.of<SwitchProvider>(context, listen: false);
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.pastelBlue.withOpacity(0.3),
-      appBar: const CustomAppBar(
+      appBar: const CustomAppBarClient(
         title: 'Profile',
         isBackButton: false,
       ),

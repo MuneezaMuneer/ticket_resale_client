@@ -1,4 +1,4 @@
-class UserModel {
+class UserModelClient {
   final String? displayName;
   final String? email;
   final String? instaUsername;
@@ -10,7 +10,7 @@ class UserModel {
   final String? status;
   final String? fcmToken;
 
-  UserModel({
+  UserModelClient({
     this.fcmToken,
     this.status,
     this.displayName,
@@ -32,9 +32,9 @@ class UserModel {
       'profile_levels': profileLevels,
       'status': status,
       'image_url': photoUrl,
-     
     };
   }
+
   Map<String, dynamic> toWithTokenMap() {
     return <String, dynamic>{
       'instagram_username': instaUsername,
@@ -48,8 +48,8 @@ class UserModel {
     };
   }
 
-  factory UserModel.fromMap(Map<String, dynamic> map, String id) {
-    return UserModel(
+  factory UserModelClient.fromMap(Map<String, dynamic> map, String id) {
+    return UserModelClient(
         id: id,
         status: map['status'] ?? '',
         instaUsername: map['instagram_username'] ?? "",
@@ -62,5 +62,34 @@ class UserModel {
         displayName:
             map['user_name'] != null ? map['user_name'] as String : null,
         fcmToken: map['fcm_token'] ?? '');
+  }
+}
+
+class UserModelAdmin {
+  String? name;
+  String? email;
+  String? phoneNo;
+  String? instaUsername;
+  String? status;
+  String? userID;
+  String? id;
+  UserModelAdmin({
+    this.name,
+    this.email,
+    this.phoneNo,
+    this.instaUsername,
+    this.status,
+    this.id,
+    this.userID,
+  });
+  factory UserModelAdmin.fromMap(Map<String, dynamic> map, String docID) {
+    return UserModelAdmin(
+        name: map['user_name'] ?? '',
+        email: map['email'] ?? '',
+        phoneNo: map['phone_number'] ?? '',
+        instaUsername: map['instagram_username'] ?? '',
+        status: map['status'] ?? '',
+        userID: map['user_id'] ?? '',
+        id: docID);
   }
 }

@@ -7,23 +7,25 @@ class TicketModal {
   String? eventName;
   String? image;
   String? userName;
+  String? fcmToken;
 
-  TicketModal({
-    this.description,
-    this.price,
-    this.ticketType,
-    this.ticketID,
-    this.status,
-    this.eventName,
-    this.image,
-    this.userName,
-  });
+  TicketModal(
+      {this.description,
+      this.price,
+      this.ticketType,
+      this.ticketID,
+      this.status,
+      this.eventName,
+      this.image,
+      this.userName,
+      this.fcmToken});
 
   factory TicketModal.fromMap({
     required Map<String, dynamic> map,
     required String ticketID,
     required String userName,
     required String eventName,
+    // required String fcmtoken,
   }) {
     return TicketModal(
       description: map['description'] ?? '',
@@ -34,6 +36,7 @@ class TicketModal {
       image: map['image_url'] ?? '',
       userName: userName,
       eventName: eventName,
+      //  fcmToken: fcmtoken,
     );
   }
 }

@@ -5,20 +5,17 @@ import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 import 'package:ticket_resale/admin_panel/snackBar.dart';
 import 'package:ticket_resale/providers/clear_provider.dart';
-
 import '../constants/constants.dart';
-
 import '../providers/drop_down_provider.dart';
 import '../utils/utils.dart';
-
 import '../widgets/widgets.dart';
 
-class CustomDropDown extends StatelessWidget {
+class FilterMenuAdmin extends StatelessWidget {
   final Function(String) onSelectedStatus;
 
   final Function(double, double) onSelectedPrice;
 
-  const CustomDropDown(
+  const FilterMenuAdmin(
       {super.key,
       required this.onSelectedStatus,
       required this.onSelectedPrice});
@@ -27,7 +24,7 @@ class CustomDropDown extends StatelessWidget {
     return Consumer<DropDownProvider>(
       builder: (context, provider, _) {
         return Padding(
-          padding: EdgeInsets.only(left: 20),
+          padding: const EdgeInsets.only(left: 20),
           child: PopupMenuButton<String>(
             icon: const Icon(Icons.filter_alt_outlined),
             onSelected: (String value) {
@@ -77,7 +74,7 @@ class CustomDropDown extends StatelessWidget {
       {required BuildContext context, required Function(String) onSelected}) {
     Size size = MediaQuery.of(context).size;
     double width = size.width;
-    double height = size.height;
+
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {

@@ -4,16 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
-import 'package:ticket_resale/admin_panel/custom_appbar.dart';
-import 'package:ticket_resale/admin_panel/firestore_services.dart';
+import 'package:ticket_resale/admin_panel/firestore_services_admin.dart';
 import 'package:ticket_resale/providers/clear_provider.dart';
 import '../constants/constants.dart';
 import '../models/fetch_ticket_model.dart';
-import '../models/tickets_model.dart';
 import '../providers/search_provider.dart';
 import '../utils/utils.dart';
 import '../widgets/widgets.dart';
-import 'drop_down_menu.dart';
+import '../components/filter_menu_admin.dart';
 
 class TicketListing extends StatefulWidget {
   const TicketListing({super.key});
@@ -34,7 +32,7 @@ class _TicketListingState extends State<TicketListing> {
   late ClearProvider clearProvider;
   @override
   void initState() {
-    fetchEvents = FirestoreServices.fetchTicket();
+    fetchEvents = FirestoreServicesAdmin.fetchTicket();
     clearProvider = Provider.of<ClearProvider>(context, listen: false);
 
     SchedulerBinding.instance.addPostFrameCallback((timings) {
@@ -89,7 +87,7 @@ class _TicketListingState extends State<TicketListing> {
                       weight: FontWeight.w600,
                       size: AppSize.regular,
                     ),
-                    CustomDropDown(
+                    FilterMenuAdmin(
                       onSelectedPrice: (min, max) {
                         clearProvider.setSearchText = '$min$max';
                         filterEventData = eventData.where((item) {
@@ -208,6 +206,7 @@ class _TicketListingState extends State<TicketListing> {
                                             _createDataCell(ticketData.price!),
                                             DataCell(createTableCell(
                                               ticketID: ticketData.ticketID!,
+                                              fcmToken: ticketData.fcmToken!,
                                             )),
                                           ],
                                         );
@@ -284,11 +283,12 @@ DataColumn _buildTableCell(String text) {
 
 Widget createTableCell({
   required String ticketID,
+  required String fcmToken,
 }) {
   Color backgroundColor;
   Color textColor = Colors.white;
   return StreamBuilder(
-      stream: FirestoreServices.fetchTicketStatus(ticketID: ticketID),
+      stream: FirestoreServicesAdmin.fetchTicketStatus(ticketID: ticketID),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           String status = snapshot.data!;
@@ -304,7 +304,13 @@ Widget createTableCell({
             onTap: () {
               String currentStatus =
                   (status == 'Active') ? 'Disable' : 'Active';
-              FirestoreServices.updateTicketStatus(ticketID, currentStatus);
+              FirestoreServicesAdmin.updateTicketStatus(
+                  ticketID, currentStatus);
+              NotificationServices.sendNotification(
+                  context: context,
+                  token: fcmToken,
+                  title: currentStatus,
+                  body: 'Your ticket is $currentStatus');
             },
             child: Container(
               height: 30,

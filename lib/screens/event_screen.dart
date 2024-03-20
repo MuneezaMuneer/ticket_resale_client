@@ -7,19 +7,21 @@ import 'package:ticket_resale/db_services/db_services.dart';
 import 'package:ticket_resale/models/models.dart';
 import 'package:ticket_resale/utils/utils.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
+
 class EventScreen extends StatefulWidget {
   final bool isBackButton;
   const EventScreen({super.key, required this.isBackButton});
   @override
   State<EventScreen> createState() => _EventScreenState();
 }
+
 class _EventScreenState extends State<EventScreen> {
-  late Stream<List<EventModal>> displayEventData;
+  late Stream<List<EventModalClient>> displayEventData;
   TextEditingController searchController = TextEditingController();
   ValueNotifier<String> searchNotifier = ValueNotifier<String>('');
   @override
   void initState() {
-    displayEventData = FireStoreServices.fetchEventData();
+    displayEventData = FireStoreServicesClient.fetchEventData();
     super.initState();
   }
 
@@ -37,7 +39,7 @@ class _EventScreenState extends State<EventScreen> {
     final double width = size.width;
 
     return Scaffold(
-      appBar: CustomAppBar(
+      appBar: CustomAppBarClient(
         title: 'Event Video Player',
         isBackButton: widget.isBackButton,
       ),
@@ -290,8 +292,8 @@ class _EventScreenState extends State<EventScreen> {
                                             width: width,
                                             child: CustomButton(
                                               onPressed: () {
-                                                EventModal eventModal =
-                                                    EventModal(
+                                                EventModalClient eventModal =
+                                                    EventModalClient(
                                                         docId:
                                                             data[index].docId,
                                                         description: data[index]

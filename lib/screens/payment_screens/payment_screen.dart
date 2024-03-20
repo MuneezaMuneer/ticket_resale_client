@@ -72,10 +72,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
                           .then((id) {
                         log(".....................Payment Id : $id");
 
-                        FireStoreServices.updateStatusInSoldTicketsCollection(
-                                hashKey: widget.hashKey,
-                                selectedDocIds: widget.docIds,
-                                newStatus: 'Paid')
+                        FireStoreServicesClient
+                                .updateStatusInSoldTicketsCollection(
+                                    hashKey: widget.hashKey,
+                                    selectedDocIds: widget.docIds,
+                                    newStatus: 'Paid')
                             .then((value) {
                           AppUtils.toastMessage('Payment Done Successfully');
                         });

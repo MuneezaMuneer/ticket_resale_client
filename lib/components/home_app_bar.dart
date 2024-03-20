@@ -32,13 +32,13 @@ class _HomeAppBarState extends State<HomeAppBar> {
   String? photoUrl;
 
   ValueNotifier<String> searchNotifier = ValueNotifier<String>('');
-  late Stream<List<EventModal>> displayEventData;
+  late Stream<List<EventModalClient>> displayEventData;
 
   @override
   void initState() {
     displayName = AuthServices.getCurrentUser.displayName ?? '';
     photoUrl = AuthServices.getCurrentUser.photoURL ?? '';
-    displayEventData = FireStoreServices.fetchEventData();
+    displayEventData = FireStoreServicesClient.fetchEventData();
     super.initState();
   }
 
@@ -101,7 +101,10 @@ class _HomeAppBarState extends State<HomeAppBar> {
               right: 5,
               child: GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, AppRoutes.notificationScreen,);
+                  Navigator.pushNamed(
+                    context,
+                    AppRoutes.notificationScreen,
+                  );
                 },
                 child: Container(
                     height: 40,

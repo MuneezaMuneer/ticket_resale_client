@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable, use_build_context_synchronously
 
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,7 +18,7 @@ import 'package:ticket_resale/widgets/widgets.dart';
 import '../models/ticket_model.dart';
 
 class CommentScreen extends StatefulWidget {
-  final EventModal eventModal;
+  final EventModalClient eventModal;
   final TicketModel ticketModal;
   final String price;
 
@@ -43,8 +42,8 @@ class _CommentScreenState extends State<CommentScreen> {
   void initState() {
     Provider.of<SwitchProvider>(context, listen: false).loadPreferences();
     priceController.text = widget.price;
-    commentData =
-        FireStoreServices.fetchCommentsData(docId: widget.ticketModal.docId!);
+    commentData = FireStoreServicesClient.fetchCommentsData(
+        docId: widget.ticketModal.docId!);
     super.initState();
   }
 
@@ -131,7 +130,8 @@ class _CommentScreenState extends State<CommentScreen> {
                                 itemCount: commentData.length,
                                 itemBuilder: (context, index) {
                                   return StreamBuilder(
-                                    stream: FireStoreServices.fetchUserData(
+                                    stream:
+                                        FireStoreServicesClient.fetchUserData(
                                       userId: commentData[index].userId!,
                                     ),
                                     builder: (context, snapshot) {
@@ -274,7 +274,7 @@ class _CommentScreenState extends State<CommentScreen> {
                                                           child: CustomButton(
                                                             onPressed: () {
                                                               String? hashKey =
-                                                                  FireStoreServices
+                                                                  FireStoreServicesClient
                                                                       .getMessagesHashCodeID(
                                                                           userIDReceiver:
                                                                               '${userData.id}');
@@ -471,7 +471,7 @@ class _CommentScreenState extends State<CommentScreen> {
                                                                     offerPrice:
                                                                         priceController
                                                                             .text);
-                                                                await FireStoreServices.createChatSystem(
+                                                                await FireStoreServicesClient.createChatSystem(
                                                                     commentModel:
                                                                         commentModel,
                                                                     docId: widget
