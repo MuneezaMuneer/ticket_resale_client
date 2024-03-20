@@ -4,23 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
-import 'package:ticket_resale/db_services/firestore_services_admin.dart';
-import 'package:ticket_resale/providers/clear_provider.dart';
-import '../../constants/constants.dart';
-import '../../models/ticket_models.dart';
-import '../../providers/search_provider.dart';
-import '../../utils/utils.dart';
-import '../../widgets/widgets.dart';
-import '../../components/filter_menu_admin.dart';
+import 'package:ticket_resale/components/components.dart';
+import 'package:ticket_resale/constants/constants.dart';
+import 'package:ticket_resale/db_services/db_services.dart';
+import 'package:ticket_resale/models/models.dart';
+import 'package:ticket_resale/models/notification_model.dart';
+import 'package:ticket_resale/providers/providers.dart';
+import 'package:ticket_resale/utils/utils.dart';
+import 'package:ticket_resale/widgets/widgets.dart';
 
 class TicketListing extends StatefulWidget {
   const TicketListing({super.key});
   @override
   State<TicketListing> createState() => _TicketListingState();
 }
-
-List<TicketModalAdmin> userData = [];
-TextEditingController searchController = TextEditingController();
 
 class _TicketListingState extends State<TicketListing> {
   late Stream<List<TicketModalAdmin>> fetchEvents;
@@ -207,7 +204,11 @@ class _TicketListingState extends State<TicketListing> {
                                                 ticketData.ticketType!),
                                             _createDataCell(ticketData.price!),
                                             DataCell(createTableCell(
+                                              userID: ticketData.userId!,
                                               ticketID: ticketData.ticketID!,
+                                              eventName: ticketData.eventName!,
+                                              ticketType:
+                                                  ticketData.ticketType!,
                                               fcmToken: ticketData.fcmToken!,
                                             )),
                                           ],
@@ -238,6 +239,79 @@ class _TicketListingState extends State<TicketListing> {
         ),
       ),
     );
+  }
+
+  Widget createTableCell({
+    required String ticketID,
+    required String fcmToken,
+    required String eventName,
+    required String ticketType,
+    required String userID,
+  }) {
+    Color backgroundColor;
+    Color textColor = Colors.white;
+    return StreamBuilder(
+        stream: FirestoreServicesAdmin.fetchTicketStatus(ticketID: ticketID),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            String status = snapshot.data!;
+
+            if (status == 'Active') {
+              backgroundColor = AppColors.green;
+            } else if (status == 'Disable') {
+              backgroundColor = AppColors.red;
+            } else {
+              backgroundColor = AppColors.blue;
+            }
+            return GestureDetector(
+              onTap: () {
+                String currentStatus =
+                    (status == 'Active') ? 'Disable' : 'Active';
+                FirestoreServicesAdmin.updateTicketStatus(
+                    ticketID, currentStatus);
+                NotificationServices.sendNotification(
+                        context: context,
+                        token: fcmToken,
+                        title: 'Ticket listing',
+                        body:
+                            'Your $ticketType ticket is $currentStatus for "$eventName"')
+                    .then((value) {
+                  NotificationModel notificationModel = NotificationModel(
+                      title: 'Ticket listing',
+                      body:
+                          'Your $ticketType ticket is $currentStatus for "$eventName"',
+                      ticketId: ticketID,
+                      userId: userID);
+                  FireStoreServicesClient.storeNotifications(
+                      notificationModel: notificationModel,
+                      name: 'client_notifications');
+                });
+              },
+              child: Container(
+                height: 30,
+                width: 100,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(38),
+                  color: backgroundColor,
+                ),
+                child: Center(
+                  child: Text(
+                    status,
+                    style: TextStyle(
+                      color: textColor,
+                      fontSize: AppSize.small,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+            );
+          } else {
+            return const SizedBox(
+              width: 100,
+            );
+          }
+        });
   }
 }
 
@@ -281,62 +355,4 @@ DataColumn _buildTableCell(String text) {
               color: Colors.black)),
     ),
   );
-}
-
-Widget createTableCell({
-  required String ticketID,
-  required String fcmToken,
-}) {
-  Color backgroundColor;
-  Color textColor = Colors.white;
-  return StreamBuilder(
-      stream: FirestoreServicesAdmin.fetchTicketStatus(ticketID: ticketID),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          String status = snapshot.data!;
-
-          if (status == 'Active') {
-            backgroundColor = AppColors.green;
-          } else if (status == 'Disable') {
-            backgroundColor = AppColors.red;
-          } else {
-            backgroundColor = AppColors.blue;
-          }
-          return GestureDetector(
-            onTap: () {
-              String currentStatus =
-                  (status == 'Active') ? 'Disable' : 'Active';
-              FirestoreServicesAdmin.updateTicketStatus(
-                  ticketID, currentStatus);
-              NotificationServices.sendNotification(
-                  context: context,
-                  token: fcmToken,
-                  title: currentStatus,
-                  body: 'Your ticket is $currentStatus');
-            },
-            child: Container(
-              height: 30,
-              width: 100,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(38),
-                color: backgroundColor,
-              ),
-              child: Center(
-                child: Text(
-                  status,
-                  style: TextStyle(
-                    color: textColor,
-                    fontSize: AppSize.small,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ),
-          );
-        } else {
-          return const SizedBox(
-            width: 100,
-          );
-        }
-      });
 }

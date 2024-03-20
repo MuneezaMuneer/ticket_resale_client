@@ -1,16 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:ticket_resale/screens/admin_screen/create_event_screen.dart';
 import 'package:ticket_resale/models/models.dart';
-import 'package:ticket_resale/screens/chat_screens/chat_detail_screen.dart';
-import 'package:ticket_resale/screens/chat_screens/chat_screen.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 import '../constants/constants.dart';
-
-import '../models/ticket_models.dart';
-import '../screens/auth_screens/signin_screen.dart';
-import '../screens/auth_screens/signup_screen.dart';
-import '../screens/home_detail_first_screen.dart';
-import '../screens/payment_screens/payment_connect_screen.dart';
 import '../screens/screens.dart';
 
 Route onGenerateRoute(RouteSettings settings) {
@@ -25,7 +16,7 @@ Route onGenerateRoute(RouteSettings settings) {
   } else if (settings.name == AppRoutes.signUp) {
     return animatePage(const SignUpScreen());
   } else if (settings.name == AppRoutes.navigationScreen) {
-    return animatePage(const CustomNavigation());
+    return animatePage(const CustomNavigationClient());
   } else if (settings.name == AppRoutes.passwordScreen) {
     return animatePage(const PasswordScreen());
   } else if (settings.name == AppRoutes.homeScreen) {

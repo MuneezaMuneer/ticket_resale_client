@@ -3,12 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 import 'package:svg_flutter/svg_flutter.dart';
-import 'package:ticket_resale/widgets/custom_gradient.dart';
-import 'package:ticket_resale/widgets/custom_text.dart';
+import 'package:ticket_resale/providers/providers.dart';
+import 'package:ticket_resale/widgets/widgets.dart';
 import '../components/components.dart';
 import '../constants/constants.dart';
-import '../providers/search_provider.dart';
-import 'custom_text_field.dart';
 
 class CustomAppBarClient extends StatelessWidget
     implements PreferredSizeWidget {

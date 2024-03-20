@@ -1,7 +1,7 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
-export "FLUTTER_ROOT=D:\Download sdk\flutter_sdk\flutter"
-export "FLUTTER_APPLICATION_PATH=D:\flutter_studio\client_code\ticket_resale"
+export "FLUTTER_ROOT=C:\Users\dell\Downloads\flutter_windows_3.0.0-stable\flutter"
+export "FLUTTER_APPLICATION_PATH=C:\Users\dell\Documents\FlutterStudio Group\ticket_code\ticket_resale"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_BUILD_DIR=build"
 export "FLUTTER_BUILD_NAME=1.0.0"

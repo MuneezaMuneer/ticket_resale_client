@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/db_services/db_services.dart';
-import 'package:ticket_resale/utils/app_utils.dart';
-import 'package:ticket_resale/widgets/custom_appbar.dart';
-import 'package:ticket_resale/widgets/custom_text.dart';
+import 'package:ticket_resale/utils/utils.dart';
+import 'package:ticket_resale/widgets/widgets.dart';
 
 class ChatScreen extends StatelessWidget {
   const ChatScreen({super.key});

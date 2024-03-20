@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ticket_resale/models/create_event.dart';
-import 'package:ticket_resale/models/ticket_models.dart';
-import '../models/user_models.dart';
+import 'package:ticket_resale/models/models.dart';
+import 'package:ticket_resale/models/notification_model.dart';
 
 class FirestoreServicesAdmin {
   static final fireStore = FirebaseFirestore.instance;
@@ -47,6 +46,19 @@ class FirestoreServicesAdmin {
   static Stream<List<CreateEvents>> fetchEventData() {
     return fireStore.collection('event').snapshots().map((query) {
       return query.docs.map((doc) => CreateEvents.fromMap(doc.data())).toList();
+    });
+  }
+
+  static Stream<List<NotificationModel>> fetchNotification() {
+    return fireStore
+        .collection('notifications')
+        .doc('admin_notifications')
+        .collection('admin_notifications')
+        .snapshots()
+        .map((query) {
+      return query.docs
+          .map((doc) => NotificationModel.fromMap(doc.data()))
+          .toList();
     });
   }
 
@@ -110,12 +122,12 @@ class FirestoreServicesAdmin {
 
           // Build ticket model and add to the list
           ticketsList.add(TicketModalAdmin.fromMap(
-            map: ticketData.data(),
-            ticketID: ticketData.id,
-            eventName: eventDataMap[eventID]['event_name'],
-            userName: userDataMap[userID]['user_name'],
-            //  fcmtoken: userDataMap[userID]['fcm_token'],
-          ));
+              map: ticketData.data(),
+              ticketID: ticketData.id,
+              eventName: eventDataMap[eventID]['event_name'],
+              userName: userDataMap[userID]['user_name'],
+              fcmtoken: userDataMap[userID]['fcm_token'],
+              userId: userID));
         }
 
         // Yield the updated list

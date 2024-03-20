@@ -8,6 +8,7 @@ class TicketModalAdmin {
   String? image;
   String? userName;
   String? fcmToken;
+  String? userId;
 
   TicketModalAdmin(
       {this.description,
@@ -17,6 +18,7 @@ class TicketModalAdmin {
       this.status,
       this.eventName,
       this.image,
+      this.userId,
       this.userName,
       this.fcmToken});
 
@@ -25,19 +27,20 @@ class TicketModalAdmin {
     required String ticketID,
     required String userName,
     required String eventName,
-    // required String fcmtoken,
+    required String fcmtoken,
+    required String userId,
   }) {
     return TicketModalAdmin(
-      description: map['description'] ?? '',
-      price: map['price'] ?? '',
-      ticketType: map['ticket_type'] ?? '',
-      status: map['status'] ?? '',
-      ticketID: ticketID,
-      image: map['image_url'] ?? '',
-      userName: userName,
-      eventName: eventName,
-      //  fcmToken: fcmtoken,
-    );
+        description: map['description'] ?? '',
+        price: map['price'] ?? '',
+        ticketType: map['ticket_type'] ?? '',
+        status: map['status'] ?? '',
+        ticketID: ticketID,
+        image: map['image_url'] ?? '',
+        userName: userName,
+        eventName: eventName,
+        fcmToken: fcmtoken,
+        userId: userId);
   }
 }
 

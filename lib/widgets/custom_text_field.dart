@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/services.dart';
-import 'package:ticket_resale/components/call_back_funs.dart';
+import 'package:ticket_resale/components/components.dart';
 import 'package:ticket_resale/constants/constants.dart';
-import 'package:ticket_resale/widgets/custom_text.dart';
+import 'package:ticket_resale/widgets/widgets.dart';
 
 class CustomTextField extends StatelessWidget {
   final TextEditingController? controller;

@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:svg_flutter/svg_flutter.dart';
 import 'package:ticket_resale/constants/constants.dart';
-import 'package:ticket_resale/providers/navigation_provider.dart';
+import 'package:ticket_resale/providers/providers.dart';
 import 'package:ticket_resale/screens/screens.dart';
-import 'package:ticket_resale/widgets/custom_text.dart';
+import 'package:ticket_resale/widgets/widgets.dart';
 
-class CustomNavigation extends StatefulWidget {
-  const CustomNavigation({super.key});
+class CustomNavigationClient extends StatefulWidget {
+  const CustomNavigationClient({super.key});
 
   @override
   // ignore: library_private_types_in_public_api
-  _CustomNavigationState createState() => _CustomNavigationState();
+  _CustomNavigationClientState createState() => _CustomNavigationClientState();
 }
 
-class _CustomNavigationState extends State<CustomNavigation> {
+class _CustomNavigationClientState extends State<CustomNavigationClient> {
   late NavigationProvider navigationProvider;
 
   @override

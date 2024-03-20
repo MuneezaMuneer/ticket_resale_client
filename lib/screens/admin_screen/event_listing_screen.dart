@@ -2,22 +2,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
-import 'package:ticket_resale/screens/admin_screen/create_event_screen.dart';
+import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/db_services/firestore_services_admin.dart';
-import 'package:ticket_resale/providers/search_provider.dart';
-import '../../constants/constants.dart';
-import '../../models/create_event.dart';
-import '../../utils/utils.dart';
-import '../../widgets/widgets.dart';
+import 'package:ticket_resale/models/models.dart';
+import 'package:ticket_resale/providers/providers.dart';
+import 'package:ticket_resale/utils/utils.dart';
+import 'package:ticket_resale/widgets/widgets.dart';
 
 class EventListing extends StatefulWidget {
   const EventListing({super.key});
   @override
   State<EventListing> createState() => _EventListingState();
 }
-
-List<CreateEvent> userData = [];
-TextEditingController searchController = TextEditingController();
 
 class _EventListingState extends State<EventListing> {
   late Stream<List<CreateEvents>> fetchEvents;
@@ -245,6 +241,56 @@ class _EventListingState extends State<EventListing> {
               ),
             )));
   }
+
+  Widget createTableCell({
+    required String ticketID,
+  }) {
+    Color backgroundColor;
+    Color textColor = Colors.white;
+    return StreamBuilder(
+        stream: FirestoreServicesAdmin.fetchTicketStatus(ticketID: ticketID),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            String status = snapshot.data!;
+
+            if (status == 'Active') {
+              backgroundColor = AppColors.green;
+            } else if (status == 'Disable') {
+              backgroundColor = AppColors.red;
+            } else {
+              backgroundColor = AppColors.blue;
+            }
+            return GestureDetector(
+              onTap: () {
+                String currentStatus =
+                    (status == 'Active') ? 'Disable' : 'Active';
+                FirestoreServicesAdmin.updateTicketStatus(
+                    ticketID, currentStatus);
+              },
+              child: Container(
+                height: 30,
+                width: 100,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(38),
+                  color: backgroundColor,
+                ),
+                child: Center(
+                  child: Text(
+                    status,
+                    style: TextStyle(
+                      color: textColor,
+                      fontSize: AppSize.small,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+            );
+          } else {
+            return const SizedBox();
+          }
+        });
+  }
 }
 
 DataCell _dataCellForNames({required String title}) {
@@ -287,54 +333,4 @@ DataColumn _buildTableCell(String text) {
               color: Colors.black)),
     ),
   );
-}
-
-Widget createTableCell({
-  required String ticketID,
-}) {
-  Color backgroundColor;
-  Color textColor = Colors.white;
-  return StreamBuilder(
-      stream: FirestoreServicesAdmin.fetchTicketStatus(ticketID: ticketID),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          String status = snapshot.data!;
-
-          if (status == 'Active') {
-            backgroundColor = AppColors.green;
-          } else if (status == 'Disable') {
-            backgroundColor = AppColors.red;
-          } else {
-            backgroundColor = AppColors.blue;
-          }
-          return GestureDetector(
-            onTap: () {
-              String currentStatus =
-                  (status == 'Active') ? 'Disable' : 'Active';
-              FirestoreServicesAdmin.updateTicketStatus(
-                  ticketID, currentStatus);
-            },
-            child: Container(
-              height: 30,
-              width: 100,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(38),
-                color: backgroundColor,
-              ),
-              child: Center(
-                child: Text(
-                  status,
-                  style: TextStyle(
-                    color: textColor,
-                    fontSize: AppSize.small,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ),
-          );
-        } else {
-          return const SizedBox();
-        }
-      });
 }

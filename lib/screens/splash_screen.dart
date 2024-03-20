@@ -1,9 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import 'package:svg_flutter/svg.dart';
 
-import '../widgets/custom_navigation_admin.dart';
 import '../constants/constants.dart';
 import '../widgets/widgets.dart';
 
@@ -26,7 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const CustomNavigation(),
+                builder: (context) => const CustomNavigationClient(),
               ));
         } else {
           Navigator.pushReplacement(

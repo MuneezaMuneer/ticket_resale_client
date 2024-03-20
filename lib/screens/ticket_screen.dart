@@ -2,7 +2,6 @@
 
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
@@ -13,9 +12,7 @@ import 'package:ticket_resale/db_services/db_services.dart';
 import 'package:ticket_resale/models/models.dart';
 import 'package:ticket_resale/providers/providers.dart';
 import 'package:ticket_resale/utils/utils.dart';
-
 import 'package:ticket_resale/widgets/widgets.dart';
-import '../models/ticket_models.dart';
 
 class TicketScreen extends StatefulWidget {
   const TicketScreen({super.key});
@@ -378,8 +375,17 @@ class _TicketScreenState extends State<TicketScreen> {
                               log(' the selected id : $selectedFestivalDocId');
                               await FireStoreServicesClient.createTickets(
                                       ticketModel: ticketModel)
-                                  .then((value) {
+                                  .then((value) async {
                                 imagePickerProvider.setImageUrl = '';
+                                String? token =
+                                    await NotificationServices.getFCMToken();
+                                NotificationServices.sendNotification(
+                                    context: context,
+                                    token: '$token',
+                                    title:
+                                        '${ticketTypeController.text} Ticket',
+                                    body:
+                                        'Ticket is created for festival $selectedFestivalName by ${AuthServices.getCurrentUser.displayName}');
                                 AppUtils.toastMessage(
                                     'Ticket Created Successfully');
                                 FocusScope.of(context).unfocus();

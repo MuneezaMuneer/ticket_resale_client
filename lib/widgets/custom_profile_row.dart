@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 import 'package:svg_flutter/svg.dart';
-import 'package:ticket_resale/constants/app_colors.dart';
-import 'package:ticket_resale/constants/app_textsize.dart';
+import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/providers/providers.dart';
 import 'widgets.dart';
 

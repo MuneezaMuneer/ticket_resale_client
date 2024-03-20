@@ -8,8 +8,8 @@ import 'package:provider/provider.dart';
 import 'package:ticket_resale/components/components.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/db_services/db_services.dart';
-import 'package:ticket_resale/models/tickets_sold_model.dart';
-import 'package:ticket_resale/providers/bottom_sheet_provider.dart';
+import 'package:ticket_resale/models/models.dart';
+import 'package:ticket_resale/providers/providers.dart';
 import 'package:ticket_resale/screens/screens.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 

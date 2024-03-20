@@ -7,7 +7,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:ticket_resale/constants/api_urls.dart';
+import 'package:ticket_resale/constants/constants.dart';
 
 class NotificationServices {
   static FirebaseMessaging messaging = FirebaseMessaging.instance;

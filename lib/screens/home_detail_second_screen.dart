@@ -10,7 +10,6 @@ import 'package:ticket_resale/models/models.dart';
 import 'package:ticket_resale/utils/utils.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 import '../components/components.dart';
-import '../models/ticket_models.dart';
 
 class HomeDetailSecondScreen extends StatefulWidget {
   EventModalClient eventModal;

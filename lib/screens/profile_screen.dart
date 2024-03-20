@@ -21,9 +21,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String? photoUrl;
   @override
   void initState() {
-    photoUrl = AuthServices.getCurrentUser.photoURL;
-    Provider.of<SwitchProvider>(context, listen: false).loadPreferences();
-    switchProvider = Provider.of<SwitchProvider>(context, listen: false);
+      Future.microtask(() {
+      photoUrl = AuthServices.getCurrentUser.photoURL;
+      Provider.of<SwitchProvider>(context, listen: false).loadPreferences();
+      switchProvider = Provider.of<SwitchProvider>(context, listen: false);
+    });
     super.initState();
   }
 

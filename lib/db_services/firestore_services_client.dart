@@ -2,11 +2,12 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:ticket_resale/db_services/db_services.dart';
-import 'package:ticket_resale/models/message_model.dart';
+
 import 'package:ticket_resale/models/models.dart';
+
 import 'package:uuid/uuid.dart';
 
-import '../models/ticket_models.dart';
+import '../models/notification_model.dart';
 
 class FireStoreServicesClient {
   static Uuid uid = const Uuid();
@@ -303,5 +304,16 @@ class FireStoreServicesClient {
     } catch (e) {
       log('Error making connection between users : ${e.toString()}');
     }
+  }
+
+  static Future<void> storeNotifications(
+      {required NotificationModel notificationModel,
+      required String name}) async {
+    FirebaseFirestore.instance
+        .collection('notifications')
+        .doc(name)
+        .collection(name)
+        .doc()
+        .set(notificationModel.toMap());
   }
 }

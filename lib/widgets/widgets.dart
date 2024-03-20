@@ -6,6 +6,8 @@ export 'custom_profile_row.dart';
 export 'custom_row.dart';
 export 'custom_text_field.dart';
 export 'custom_text.dart';
-export 'custom_navigation.dart';
+export 'custom_navigation_client.dart';
+export 'custom_navigation_admin.dart';
 export 'custom_tile_container.dart';
 export 'drop_down_button.dart';
+

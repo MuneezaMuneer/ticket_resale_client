@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:svg_flutter/svg_flutter.dart';
-import 'package:ticket_resale/screens/admin_screen/event_listing_screen.dart';
-import 'package:ticket_resale/screens/admin_screen/notification_screen.dart';
-import 'package:ticket_resale/screens/admin_screen/ticket_listing_screen.dart';
-import 'package:ticket_resale/screens/admin_screen/user_management_screen.dart';
 import 'package:ticket_resale/constants/constants.dart';
-import 'package:ticket_resale/providers/navigation_provider.dart';
-import 'package:ticket_resale/widgets/custom_text.dart';
+import 'package:ticket_resale/providers/providers.dart';
+import 'package:ticket_resale/screens/admin_screen/admin_screen.dart';
+import 'package:ticket_resale/widgets/widgets.dart';
 
 class CustomNavigationAdmin extends StatefulWidget {
   const CustomNavigationAdmin({super.key});

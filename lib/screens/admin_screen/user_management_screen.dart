@@ -2,11 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
-import 'package:ticket_resale/db_services/firestore_services_admin.dart';
+import 'package:ticket_resale/db_services/db_services.dart';
+import 'package:ticket_resale/models/models.dart';
+import 'package:ticket_resale/providers/providers.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 import '../../constants/constants.dart';
-import '../../models/user_models.dart';
-import '../../providers/search_provider.dart';
 import '../../utils/utils.dart';
 
 class UserManagement extends StatefulWidget {
@@ -14,8 +14,6 @@ class UserManagement extends StatefulWidget {
   @override
   State<UserManagement> createState() => _UserManagementState();
 }
-
-List<UserModelAdmin?> userData = [];
 
 class _UserManagementState extends State<UserManagement> {
   late Stream<List<UserModelAdmin?>> fetchUserData;

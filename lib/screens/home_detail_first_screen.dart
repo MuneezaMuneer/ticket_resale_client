@@ -7,10 +7,9 @@ import 'package:svg_flutter/svg_flutter.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/db_services/db_services.dart';
 import 'package:ticket_resale/models/models.dart';
-import 'package:ticket_resale/utils/app_utils.dart';
+import 'package:ticket_resale/utils/utils.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 import '../components/components.dart';
-import '../models/ticket_models.dart';
 
 class HomeDetailFirstScreen extends StatefulWidget {
   EventModalClient eventModal;

@@ -12,7 +12,6 @@ class CustomTileContainer extends StatelessWidget {
   final String? postBy;
   final double? height;
   final String? imagePath;
-
   const CustomTileContainer({
     Key? key,
     this.width,
