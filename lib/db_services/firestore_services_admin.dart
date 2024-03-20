@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ticket_resale/models/create_event.dart';
 import 'package:ticket_resale/models/fetch_ticket_model.dart';
-import 'user_model_admin.dart';
+import 'package:ticket_resale/models/user_models.dart';
+
 
 class FirestoreServicesAdmin {
   static final fireStore = FirebaseFirestore.instance;

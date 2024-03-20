@@ -7,7 +7,7 @@ import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 import 'package:ticket_resale/components/components.dart';
 import 'package:ticket_resale/constants/constants.dart';
-import 'package:ticket_resale/db_services/db_services.dart';
+import 'package:ticket_resale/db_services/firestore_services_client.dart';
 import 'package:ticket_resale/models/tickets_sold_model.dart';
 import 'package:ticket_resale/providers/bottom_sheet_provider.dart';
 import 'package:ticket_resale/screens/screens.dart';

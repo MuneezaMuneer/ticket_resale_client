@@ -6,8 +6,10 @@ import 'package:ticket_resale/constants/app_colors.dart';
 import 'package:ticket_resale/constants/app_images.dart';
 import 'package:ticket_resale/constants/app_textsize.dart';
 import 'package:ticket_resale/db_services/db_services.dart';
+import 'package:ticket_resale/db_services/firestore_services_client.dart';
 import 'package:ticket_resale/models/message_model.dart';
 import 'package:ticket_resale/models/models.dart';
+import 'package:ticket_resale/models/user_models.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
 deleteDialog({required BuildContext context}) {

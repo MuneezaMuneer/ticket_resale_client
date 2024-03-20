@@ -12,6 +12,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:ticket_resale/db_services/firestore_services_admin.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/models/models.dart';
+import 'package:ticket_resale/models/user_models.dart';
 import 'package:ticket_resale/utils/utils.dart';
 
 import '../widgets/custom_navigation_admin.dart';

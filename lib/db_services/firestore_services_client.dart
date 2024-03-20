@@ -2,8 +2,10 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:ticket_resale/db_services/db_services.dart';
+import 'package:ticket_resale/models/event_modals.dart';
 import 'package:ticket_resale/models/message_model.dart';
 import 'package:ticket_resale/models/models.dart';
+import 'package:ticket_resale/models/user_models.dart';
 import 'package:uuid/uuid.dart';
 import '../models/ticket_model.dart';
 

@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
-
-import 'package:ticket_resale/admin_panel/snackbar.dart';
+import 'package:ticket_resale/db_services/firestore_services_admin.dart';
 import 'package:ticket_resale/providers/event_image_provider.dart';
+import 'package:ticket_resale/utils/custom_snackbar.dart';
 import 'package:uuid/uuid.dart';
 import '../../constants/constants.dart';
 import '../../db_services/db_services.dart';
 import '../../models/create_event.dart';
-
 import '../../utils/utils.dart';
 import '../../widgets/widgets.dart';
-import '../firestore_services_admin.dart';
 
 class CreateEvent extends StatefulWidget {
   const CreateEvent({super.key});

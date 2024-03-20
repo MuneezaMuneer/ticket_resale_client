@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:ticket_resale/admin_panel/screens/create_event_screen.dart';
-import 'package:ticket_resale/models/models.dart';
-import 'package:ticket_resale/screens/chat_detail_screen.dart';
-import 'package:ticket_resale/screens/chat_screen.dart';
+import 'package:ticket_resale/models/event_modals.dart';
+import 'package:ticket_resale/models/user_models.dart';
+import 'package:ticket_resale/screens/admin_screen/create_event_screen.dart';
+import 'package:ticket_resale/screens/chat_screens/chat_detail_screen.dart';
+import 'package:ticket_resale/screens/chat_screens/chat_screen.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 import '../constants/constants.dart';
 import '../models/ticket_model.dart';

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:svg_flutter/svg.dart';
 import 'package:ticket_resale/constants/constants.dart';
-import 'package:ticket_resale/db_services/db_services.dart';
-import 'package:ticket_resale/models/models.dart';
+import 'package:ticket_resale/db_services/firestore_services_client.dart';
+import 'package:ticket_resale/models/event_modals.dart';
 import 'package:ticket_resale/utils/utils.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
