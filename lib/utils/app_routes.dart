@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:ticket_resale/admin_panel/screens/create_event_screen.dart';
+import 'package:ticket_resale/screens/admin_screen/create_event_screen.dart';
 import 'package:ticket_resale/models/models.dart';
-import 'package:ticket_resale/screens/chat_detail_screen.dart';
-import 'package:ticket_resale/screens/chat_screen.dart';
+import 'package:ticket_resale/screens/chat_screens/chat_detail_screen.dart';
+import 'package:ticket_resale/screens/chat_screens/chat_screen.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 import '../constants/constants.dart';
-import '../models/ticket_model.dart';
+
+import '../models/ticket_models.dart';
 import '../screens/auth_screens/signin_screen.dart';
 import '../screens/auth_screens/signup_screen.dart';
 import '../screens/home_detail_first_screen.dart';
@@ -34,7 +35,8 @@ Route onGenerateRoute(RouteSettings settings) {
         settings.arguments as Map<String, dynamic>;
     final EventModalClient eventModal =
         arguments['eventModal'] as EventModalClient;
-    final TicketModel ticketModal = arguments['ticketModal'] as TicketModel;
+    final TicketModelClient ticketModal =
+        arguments['ticketModal'] as TicketModelClient;
     final String price = arguments['price'] as String;
 
     return animatePage(CommentScreen(
@@ -51,7 +53,7 @@ Route onGenerateRoute(RouteSettings settings) {
     return animatePage(HomeDetailFirstScreen(eventModal: eventModal));
   } else if (settings.name == AppRoutes.detailSecondScreen) {
     final eventModal = settings.arguments as EventModalClient;
-    final ticketModel = settings.arguments as TicketModel;
+    final ticketModel = settings.arguments as TicketModelClient;
     return animatePage(HomeDetailSecondScreen(
       eventModal: eventModal,
       ticketModel: ticketModel,

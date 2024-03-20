@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 import 'package:svg_flutter/svg.dart';
-import 'package:ticket_resale/admin_panel/custom_appbar.dart';
-import '../constants/constants.dart';
-import '../providers/search_provider.dart';
-import '../widgets/widgets.dart';
+import '../../constants/constants.dart';
+import '../../providers/search_provider.dart';
+import '../../widgets/widgets.dart';
 
 class AdminNotification extends StatefulWidget {
   const AdminNotification({super.key});

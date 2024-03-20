@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:svg_flutter/svg.dart';
 
-import '../admin_panel/custom_navigation_admin.dart';
+import '../widgets/custom_navigation_admin.dart';
 import '../constants/constants.dart';
 import '../widgets/widgets.dart';
 

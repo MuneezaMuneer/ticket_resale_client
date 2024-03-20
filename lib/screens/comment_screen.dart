@@ -15,11 +15,11 @@ import 'package:ticket_resale/providers/providers.dart';
 import 'package:ticket_resale/utils/utils.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
-import '../models/ticket_model.dart';
+import '../models/ticket_models.dart';
 
 class CommentScreen extends StatefulWidget {
   final EventModalClient eventModal;
-  final TicketModel ticketModal;
+  final TicketModelClient ticketModal;
   final String price;
 
   const CommentScreen({

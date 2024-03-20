@@ -1,11 +1,10 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:ticket_resale/admin_panel/snackBar.dart';
 import 'package:ticket_resale/components/components.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/db_services/db_services.dart';
-import 'package:ticket_resale/utils/utils.dart';
+import 'package:ticket_resale/utils/custom_snackbar.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
 class PasswordScreen extends StatefulWidget {

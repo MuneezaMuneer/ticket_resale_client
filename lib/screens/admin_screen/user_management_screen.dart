@@ -119,7 +119,6 @@ class _UserManagementState extends State<UserManagement> {
                                         _buildTableCell('Email'),
                                         _buildTableCell('Instagram'),
                                         _buildTableCell('Phone No.'),
-                                        //  _buildTableCell('Status')
                                       ],
                                       rows: eventData.asMap().entries.map(
                                           (MapEntry<int, UserModelAdmin?>
@@ -144,10 +143,6 @@ class _UserManagementState extends State<UserManagement> {
                                             _createDataCell(
                                                 userData.instaUsername!),
                                             _createDataCell(userData.phoneNo!),
-                                            // DataCell(createTableCell(
-                                            //     userData.status!,
-                                            //     userData.id!,
-                                            //     userData.status!)),
                                           ],
                                         );
                                       }).toList());

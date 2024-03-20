@@ -15,8 +15,7 @@ import 'package:ticket_resale/providers/providers.dart';
 import 'package:ticket_resale/utils/utils.dart';
 
 import 'package:ticket_resale/widgets/widgets.dart';
-
-import '../models/ticket_model.dart';
+import '../models/ticket_models.dart';
 
 class TicketScreen extends StatefulWidget {
   const TicketScreen({super.key});
@@ -364,7 +363,7 @@ class _TicketScreenState extends State<TicketScreen> {
                             String? imageUrl =
                                 await AuthServices.uploadEventImage(
                                     imagePath: imagePickerProvider.getImageUrl);
-                            TicketModel ticketModel = TicketModel(
+                            TicketModelClient ticketModel = TicketModelClient(
                                 imageUrl: imageUrl,
                                 ticketType: ticketTypeController.text,
                                 price: priceController.text,

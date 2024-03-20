@@ -10,9 +10,7 @@ import 'package:ticket_resale/providers/event_image_provider.dart';
 import 'package:ticket_resale/providers/providers.dart';
 import 'package:ticket_resale/screens/screens.dart';
 import 'package:ticket_resale/utils/utils.dart';
-
 import 'package:ticket_resale/screens/splash_screen.dart';
-
 import 'providers/drop_down_provider.dart';
 import 'providers/search_provider.dart';
 
