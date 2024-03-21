@@ -7,11 +7,8 @@ import 'package:grouped_list/grouped_list.dart';
 import 'package:svg_flutter/svg_flutter.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/db_services/db_services.dart';
-import 'package:ticket_resale/db_services/firestore_services_client.dart';
-import 'package:ticket_resale/models/message_model.dart';
-import 'package:ticket_resale/models/user_models.dart';
-import 'package:ticket_resale/utils/app_utils.dart';
-import 'package:ticket_resale/utils/bottom_sheet.dart';
+import 'package:ticket_resale/models/models.dart';
+import 'package:ticket_resale/utils/utils.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
 class ChatDetailScreen extends StatelessWidget {
@@ -205,10 +202,14 @@ class ChatDetailScreen extends StatelessWidget {
 
                             return CustomButton(
                               onPressed: () async {
+                                log('the payment done ${userModel.fcmToken!}');
+                                print(
+                                    'the payment done ${userModel.fcmToken!}');
                                 CustomBottomSheet.showConfirmTicketsSheet(
-                                  context: context,
-                                  hashKey: hashKey,
-                                );
+                                    context: context,
+                                    id: id,
+                                    hashKey: hashKey,
+                                    token: userModel.fcmToken!);
                               },
                               textColor: AppColors.white,
                               textSize: AppSize.regular,

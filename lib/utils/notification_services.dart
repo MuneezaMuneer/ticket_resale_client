@@ -83,7 +83,7 @@ class NotificationServices {
   }
 
   static Future<void> sendNotification(
-      {required BuildContext context,
+      {
       required String token,
       required String title,
       required String body}) async {
@@ -121,8 +121,11 @@ class NotificationServices {
   }
 
   static Future<String?> getFCMToken() async {
-    DocumentSnapshot<Map<String, dynamic>> fcmToken =
-        await FirebaseFirestore.instance.collection("admin_data").doc().get();
+    DocumentSnapshot<Map<String, dynamic>> fcmToken = await FirebaseFirestore
+        .instance
+        .collection("admin_data")
+        .doc("admin_token")
+        .get();
 
     return fcmToken['fcm_token'];
   }

@@ -45,8 +45,13 @@ Route onGenerateRoute(RouteSettings settings) {
     final eventModal = settings.arguments as EventModalClient;
     return animatePage(HomeDetailFirstScreen(eventModal: eventModal));
   } else if (settings.name == AppRoutes.detailSecondScreen) {
-    final eventModal = settings.arguments as EventModalClient;
-    final ticketModel = settings.arguments as TicketModelClient;
+    final Map<String, dynamic> arguments =
+        settings.arguments as Map<String, dynamic>;
+    final EventModalClient eventModal =
+        arguments['eventModal'] as EventModalClient;
+    final TicketModelClient ticketModel =
+        arguments['ticketModel'] as TicketModelClient;
+
     return animatePage(HomeDetailSecondScreen(
       eventModal: eventModal,
       ticketModel: ticketModel,

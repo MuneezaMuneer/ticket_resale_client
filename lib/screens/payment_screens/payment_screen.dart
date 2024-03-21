@@ -7,6 +7,7 @@ import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/db_services/firestore_services_client.dart';
 import 'package:ticket_resale/screens/screens.dart';
 import 'package:ticket_resale/utils/app_utils.dart';
+import 'package:ticket_resale/utils/notification_services.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class PaymentScreen extends StatefulWidget {
@@ -14,6 +15,7 @@ class PaymentScreen extends StatefulWidget {
   final List<Map<String, dynamic>> items;
   final List<String> docIds;
   final String hashKey;
+  final String token;
 
   // final Function(String?) onFinish;
   const PaymentScreen({
@@ -22,6 +24,7 @@ class PaymentScreen extends StatefulWidget {
     required this.items,
     required this.totalPrice,
     required this.docIds,
+    required this.token,
     required this.hashKey,
   });
 
@@ -71,15 +74,20 @@ class _PaymentScreenState extends State<PaymentScreen> {
                               executeUrl, payerID, accessToken)
                           .then((id) {
                         log(".....................Payment Id : $id");
-
+                        NotificationServices.sendNotification(
+                            token: widget.token,
+                            title: 'Payment Done Successfully',
+                            body:
+                                "The offered'\$${widget.totalPrice}' price is paid successfully");
                         FireStoreServicesClient
-                                .updateStatusInSoldTicketsCollection(
-                                    hashKey: widget.hashKey,
-                                    selectedDocIds: widget.docIds,
-                                    newStatus: 'Paid')
-                            .then((value) {
-                          AppUtils.toastMessage('Payment Done Successfully');
-                        });
+                            .updateStatusInSoldTicketsCollection(
+                                hashKey: widget.hashKey,
+                                selectedDocIds: widget.docIds,
+                                newStatus: 'Paid');
+                        print('The token is ${widget.token}');
+
+                        AppUtils.toastMessage('Payment Done Successfully');
+
                         //  widget.onFinish(id);
                         if (mounted) {
                           Navigator.of(context).pop();

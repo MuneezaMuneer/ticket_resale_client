@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 import 'package:svg_flutter/svg_flutter.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/db_services/db_services.dart';
-import 'package:ticket_resale/db_services/firestore_services_client.dart';
 import 'package:ticket_resale/models/user_models.dart';
 import 'package:ticket_resale/providers/providers.dart';
 import 'package:ticket_resale/utils/utils.dart';
@@ -108,23 +107,30 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
                       topLeft: Radius.circular(40),
                       topRight: Radius.circular(40))),
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(30, 20, 30, 0),
+                padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const CustomText(
-                      title: 'Your Profile Level',
-                      size: AppSize.large,
-                      weight: FontWeight.w600,
-                      color: AppColors.jetBlack,
-                    ),
-                    CustomText(
-                      title:
-                          'Complete below mentioned steps to get higher trust level badge for you profile.',
-                      size: AppSize.medium,
-                      weight: FontWeight.w400,
-                      softWrap: true,
-                      color: AppColors.jetBlack.withOpacity(0.7),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const CustomText(
+                              title: 'Your Profile Level',
+                              size: AppSize.large,
+                              weight: FontWeight.w600,
+                              color: AppColors.jetBlack,
+                            ),
+                            CustomText(
+                              title:
+                                  'Complete below mentioned steps to get higher trust level badge for you profile.',
+                              size: AppSize.medium,
+                              weight: FontWeight.w400,
+                              softWrap: true,
+                              color: AppColors.jetBlack.withOpacity(0.7),
+                            ),
+                          ]),
                     ),
                     const Gap(7),
                     Expanded(
@@ -277,13 +283,13 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
               flex: 7,
               child: Row(
                 children: [
-                  SizedBox(
-                    width: width < 370 ? 2 : 5,
+                  const SizedBox(
+                    width: 5,
                   ),
                   SizedBox(
                       height: 25, width: 25, child: SvgPicture.asset(svgPath)),
-                  SizedBox(
-                    width: width < 370 ? 0 : 2,
+                  const SizedBox(
+                    width: 2,
                   ),
                   Expanded(
                     child: CustomText(
@@ -299,8 +305,8 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
               flex: 4,
               child: Row(
                 children: [
-                  SizedBox(
-                    width: width < 370 ? 0 : 7,
+                  const SizedBox(
+                    width: 7,
                   ),
                   SvgPicture.asset(
                     AppSvgs.verified,
@@ -308,8 +314,8 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
                         isVerified ? AppColors.yellow : AppColors.purple,
                         BlendMode.srcIn),
                   ),
-                  SizedBox(
-                    width: width < 370 ? 0 : 5,
+                  const SizedBox(
+                    width: 5,
                   ),
                   CustomText(
                     title: isVerified ? levelText : leveltext,
@@ -317,8 +323,8 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
                     weight: FontWeight.w400,
                     color: isVerified ? AppColors.yellow : AppColors.purple,
                   ),
-                  SizedBox(
-                    width: width < 370 ? 5 : 9,
+                  const SizedBox(
+                    width: 9,
                   ),
                 ],
               ),

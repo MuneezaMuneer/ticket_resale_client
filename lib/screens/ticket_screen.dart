@@ -9,11 +9,10 @@ import 'package:provider/provider.dart';
 import 'package:svg_flutter/svg_flutter.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/db_services/db_services.dart';
-import 'package:ticket_resale/models/event_modals.dart';
+import 'package:ticket_resale/models/models.dart';
 import 'package:ticket_resale/providers/providers.dart';
 import 'package:ticket_resale/utils/utils.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
-import '../models/ticket_models.dart';
 
 class TicketScreen extends StatefulWidget {
   const TicketScreen({super.key});
@@ -177,6 +176,7 @@ class _TicketScreenState extends State<TicketScreen> {
                         }
 
                         return Stack(
+                          alignment: Alignment.center,
                           children: [
                             CustomTextField(
                               hintText: 'Festival Name',
@@ -374,19 +374,33 @@ class _TicketScreenState extends State<TicketScreen> {
                               String selectedFestivalDocId = festivalDocId[
                                   festivalNames.indexOf(selectedFestivalName)];
                               log(' the selected id : $selectedFestivalDocId');
+                              String docId = FireStoreServicesClient.uid.v4();
                               await FireStoreServicesClient.createTickets(
-                                      ticketModel: ticketModel)
+                                      ticketModel: ticketModel, docId: docId)
                                   .then((value) async {
                                 imagePickerProvider.setImageUrl = '';
                                 String? token =
                                     await NotificationServices.getFCMToken();
                                 NotificationServices.sendNotification(
-                                    context: context,
-                                    token: '$token',
-                                    title:
-                                        '${ticketTypeController.text} Ticket',
-                                    body:
-                                        'Ticket is created for festival $selectedFestivalName by ${AuthServices.getCurrentUser.displayName}');
+                                      
+                                        token: '$token',
+                                        title: 'Ticket listing request!',
+                                        body:
+                                            '${ticketTypeController.text} TICKET is created for festival "$selectedFestivalName" by ${AuthServices.getCurrentUser.displayName}')
+                                    .then((value) {
+                                  NotificationModel notificationModel =
+                                      NotificationModel(
+                                          title: 'Ticket listing request!',
+                                          body:
+                                              '${ticketTypeController.text} TICKET is created for festival "$selectedFestivalName" by ${AuthServices.getCurrentUser.displayName}',
+                                          id: docId,
+                                          userId:
+                                              AuthServices.getCurrentUser.uid,
+                                          status: 'Unread');
+                                  FireStoreServicesClient.storeNotifications(
+                                      notificationModel: notificationModel,
+                                      name: 'admin_notifications');
+                                });
                                 AppUtils.toastMessage(
                                     'Ticket Created Successfully');
                                 FocusScope.of(context).unfocus();

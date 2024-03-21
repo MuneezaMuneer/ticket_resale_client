@@ -17,6 +17,8 @@ class HomeDetailFirstScreen extends StatefulWidget {
   HomeDetailFirstScreen({
     Key? key,
     required this.eventModal,
+
+    
   }) : super(key: key);
 
   @override
@@ -242,14 +244,14 @@ class _HomeDetailFirstScreenState extends State<HomeDetailFirstScreen> {
                                           price: tickets[index].price,
                                           uid: tickets[index].uid,
                                           eventId: tickets[index].eventId);
-                                  Navigator.pushNamed(
-                                    context,
-                                    AppRoutes.detailSecondScreen,
-                                    arguments: {
-                                      'eventModal': widget.eventModal,
-                                      'ticketModel': ticketModel,
-                                    },
-                                  );
+                                Navigator.pushNamed(
+  context,
+  AppRoutes.detailSecondScreen,
+  arguments: {
+    'eventModal': widget.eventModal,
+    'ticketModel': ticketModel,
+  },
+);
                                 },
                                 child: _tileContainer(
                                   userId: tickets[index].uid,
