@@ -4,33 +4,42 @@ class NotificationModel {
   String? title;
   String? body;
   Timestamp? time;
-  String? ticketId;
+  String? notificationType;
+  String? id;
   String? userId;
-  NotificationModel({
-    this.title,
-    this.body,
-    this.time,
-    this.ticketId,
-    this.userId,
-  });
+  String? status;
+  String? docId;
+  NotificationModel(
+      {this.title,
+      this.body,
+      this.time,
+      this.id,
+      this.userId,
+      this.status,
+      this.notificationType,
+      this.docId});
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'title': title,
       'body': body,
       'time': FieldValue.serverTimestamp(),
-      'ticket_id': ticketId,
+      'id': id,
       'user_id': userId,
+      'status': status,
+      'notification_type': notificationType
     };
   }
 
-  factory NotificationModel.fromMap(Map<String, dynamic> map) {
+  factory NotificationModel.fromMap(Map<String, dynamic> map, String docId) {
     return NotificationModel(
-      title: map['title'] ?? '',
-      body: map['body'] ?? '',
-      time: map['time'] ?? Timestamp.now(),
-      ticketId: map['ticket_id'] ?? '',
-      userId: map['user_id'] ?? '',
-    );
+        title: map['title'] ?? '',
+        body: map['body'] ?? '',
+        time: map['time'] ?? Timestamp.now(),
+        id: map['id'] ?? '',
+        userId: map['user_id'] ?? '',
+        status: map['status'] ?? '',
+        notificationType: map['notification_type'] ?? '',
+        docId: docId);
   }
 }

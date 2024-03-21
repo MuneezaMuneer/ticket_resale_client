@@ -316,4 +316,14 @@ class FireStoreServicesClient {
         .doc()
         .set(notificationModel.toMap());
   }
+
+  static Future<void> updateNotifications(
+      {required String? docId, required String name}) async {
+    FirebaseFirestore.instance
+        .collection('notifications')
+        .doc(name)
+        .collection(name)
+        .doc(docId)
+        .update({'status': 'read'});
+  }
 }

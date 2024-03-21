@@ -248,6 +248,7 @@ class CustomAppBarField extends StatefulWidget implements PreferredSizeWidget {
 class _CustomAppBarFieldState extends State<CustomAppBarField> {
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     final searchProvider = Provider.of<SearchProvider>(context);
 
     return AppBar(
@@ -258,30 +259,33 @@ class _CustomAppBarFieldState extends State<CustomAppBarField> {
             child: const Icon(Icons.arrow_back)),
         title: ValueListenableBuilder(
           valueListenable: widget.searchController!,
-          builder: (context, value, child) => CustomTextField(
-            controller: widget.searchController,
-            onChanged: (query) {
-              widget.setSearchValue!(widget.searchController!.text);
-            },
-            fillColor: AppColors.white,
-            hintText: widget.text,
-            hintStyle: const TextStyle(
-              fontWeight: FontWeight.w400,
-              fontSize: AppSize.medium,
-              color: AppColors.grey,
-            ),
-            suffixIcon: widget.searchController!.text.isEmpty
-                ? const Icon(Icons.search)
-                : GestureDetector(
-                    onTap: () {
-                      widget.searchController!.clear();
-                      widget.setSearchValue!(widget.searchController!.text);
-                    },
-                    child: const Icon(
-                      Icons.close,
-                      color: AppColors.grey,
+          builder: (context, value, child) => SizedBox(
+            width: size.width * 0.99,
+            child: CustomTextField(
+              controller: widget.searchController,
+              onChanged: (query) {
+                widget.setSearchValue!(widget.searchController!.text);
+              },
+              fillColor: AppColors.white,
+              hintText: widget.text,
+              hintStyle: const TextStyle(
+                fontWeight: FontWeight.w400,
+                fontSize: AppSize.medium,
+                color: AppColors.grey,
+              ),
+              suffixIcon: widget.searchController!.text.isEmpty
+                  ? const Icon(Icons.search)
+                  : GestureDetector(
+                      onTap: () {
+                        widget.searchController!.clear();
+                        widget.setSearchValue!(widget.searchController!.text);
+                      },
+                      child: const Icon(
+                        Icons.close,
+                        color: AppColors.grey,
+                      ),
                     ),
-                  ),
+            ),
           ),
         ));
   }

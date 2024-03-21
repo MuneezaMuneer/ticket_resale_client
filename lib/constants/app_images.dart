@@ -45,4 +45,5 @@ class AppSvgs {
   static const logout = 'assets/svgs/logout.svg';
   static const eventManagement = ' assets/svgs/event_managemnt.svg';
   static const ticketListing = 'assets/svgs/ticket_listing.svg';
+  static const events = 'assets/svgs/events.svg';
 }

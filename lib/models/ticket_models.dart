@@ -9,6 +9,7 @@ class TicketModalAdmin {
   String? userName;
   String? fcmToken;
   String? userId;
+  String? eventid;
 
   TicketModalAdmin(
       {this.description,
@@ -19,6 +20,7 @@ class TicketModalAdmin {
       this.eventName,
       this.image,
       this.userId,
+      this.eventid,
       this.userName,
       this.fcmToken});
 
@@ -28,6 +30,7 @@ class TicketModalAdmin {
     required String userName,
     required String eventName,
     required String fcmtoken,
+    required String eventid,
     required String userId,
   }) {
     return TicketModalAdmin(
@@ -38,6 +41,7 @@ class TicketModalAdmin {
         ticketID: ticketID,
         image: map['image_url'] ?? '',
         userName: userName,
+        eventid: eventid,
         eventName: eventName,
         fcmToken: fcmtoken,
         userId: userId);

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:bottom_picker/bottom_picker.dart';
 import 'package:bottom_picker/resources/arrays.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
@@ -99,6 +100,32 @@ class AppUtils {
   }
 
   static String formatTimeAgo(DateTime dateTime) {
+    DateTime now = DateTime.now();
+    Duration difference = now.difference(dateTime);
+
+    if (difference.inSeconds < 60) {
+      return '${difference.inSeconds} seconds ago';
+    } else if (difference.inMinutes < 60) {
+      return '${difference.inMinutes} minutes ago';
+    } else if (difference.inHours < 24) {
+      return '${difference.inHours} hours ago';
+    } else if (difference.inDays < 7) {
+      return '${difference.inDays} days ago';
+    } else if ((difference.inDays / 7).floor() < 5) {
+      return '${(difference.inDays / 7).floor()} weeks ago';
+    } else {
+      int months =
+          now.month - dateTime.month + (12 * (now.year - dateTime.year));
+      if (months == 1) {
+        return '1 month ago';
+      } else {
+        return '$months months ago';
+      }
+    }
+  }
+
+  static String formatTimeStamp(Timestamp timestamp) {
+    DateTime dateTime = timestamp.toDate();
     DateTime now = DateTime.now();
     Duration difference = now.difference(dateTime);
 

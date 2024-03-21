@@ -49,15 +49,17 @@ class FirestoreServicesAdmin {
     });
   }
 
-  static Stream<List<NotificationModel>> fetchNotification() {
+  static Stream<List<NotificationModel>> fetchNotification(
+      {required String status}) {
     return fireStore
         .collection('notifications')
         .doc('admin_notifications')
         .collection('admin_notifications')
+        .where('status', isEqualTo: status)
         .snapshots()
         .map((query) {
       return query.docs
-          .map((doc) => NotificationModel.fromMap(doc.data()))
+          .map((doc) => NotificationModel.fromMap(doc.data(), doc.id))
           .toList();
     });
   }
@@ -127,6 +129,7 @@ class FirestoreServicesAdmin {
               eventName: eventDataMap[eventID]['event_name'],
               userName: userDataMap[userID]['user_name'],
               fcmtoken: userDataMap[userID]['fcm_token'],
+              eventid: eventID,
               userId: userID));
         }
 
@@ -135,6 +138,21 @@ class FirestoreServicesAdmin {
       } else {
         yield List.from(ticketsList);
       }
+    }
+  }
+
+  static Future<void> deleteReadNotifications({required String name}) async {
+    QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore
+        .instance
+        .collection('notifications')
+        .doc(name)
+        .collection(name)
+        .where('status', isEqualTo: 'read')
+        .get();
+
+    for (QueryDocumentSnapshot<Map<String, dynamic>> documentSnapshot
+        in querySnapshot.docs) {
+      await documentSnapshot.reference.delete();
     }
   }
 }

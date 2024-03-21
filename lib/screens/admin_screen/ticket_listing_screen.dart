@@ -70,7 +70,7 @@ class _TicketListingState extends State<TicketListing> {
             : const PreferredSize(
                 preferredSize: Size.fromHeight(60), child: CustomAppBarAdmin()),
         body: Padding(
-          padding: const EdgeInsets.fromLTRB(30, 10, 0, 0),
+          padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -204,8 +204,9 @@ class _TicketListingState extends State<TicketListing> {
                                                 ticketData.ticketType!),
                                             _createDataCell(ticketData.price!),
                                             DataCell(createTableCell(
-                                              userID: ticketData.userId!,
                                               ticketID: ticketData.ticketID!,
+                                              userID: ticketData.userId!,
+                                              eventId: ticketData.eventid!,
                                               eventName: ticketData.eventName!,
                                               ticketType:
                                                   ticketData.ticketType!,
@@ -244,6 +245,7 @@ class _TicketListingState extends State<TicketListing> {
   Widget createTableCell({
     required String ticketID,
     required String fcmToken,
+    required String eventId,
     required String eventName,
     required String ticketType,
     required String userID,
@@ -278,9 +280,11 @@ class _TicketListingState extends State<TicketListing> {
                     .then((value) {
                   NotificationModel notificationModel = NotificationModel(
                       title: 'Ticket listing',
+                      notificationType: 'ticket_listing',
                       body:
                           'Your $ticketType ticket is $currentStatus for "$eventName"',
-                      ticketId: ticketID,
+                      id: eventId,
+                      status: 'Unread',
                       userId: userID);
                   FireStoreServicesClient.storeNotifications(
                       notificationModel: notificationModel,

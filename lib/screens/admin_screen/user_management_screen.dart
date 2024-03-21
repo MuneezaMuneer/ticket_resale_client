@@ -57,7 +57,7 @@ class _UserManagementState extends State<UserManagement> {
             const Gap(25),
             Expanded(
                 child: Padding(
-              padding: const EdgeInsets.only(left: 20),
+              padding: const EdgeInsets.only(left: 10),
               child: Container(
                 decoration: BoxDecoration(
                     color: AppColors.white,
@@ -139,8 +139,17 @@ class _UserManagementState extends State<UserManagement> {
                                             ),
                                             _createDataCell('Huma Safdar'),
                                             _createDataCell(
-                                                userData.instaUsername!),
-                                            _createDataCell(userData.phoneNo!),
+                                                userData.instaUsername !=
+                                                            null &&
+                                                        userData.instaUsername!
+                                                            .isNotEmpty
+                                                    ? userData.instaUsername!
+                                                    : 'xyz'),
+                                            _createDataCell(userData.phoneNo !=
+                                                        null &&
+                                                    userData.phoneNo!.isNotEmpty
+                                                ? userData.phoneNo!
+                                                : 'No Number provider here'),
                                           ],
                                         );
                                       }).toList());

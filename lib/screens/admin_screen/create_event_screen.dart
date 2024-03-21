@@ -26,6 +26,7 @@ class _CreateEventState extends State<CreateEvent> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   late String startTime;
   late String endTime;
+
   late EventImagePickerProvider imagePickerProvider;
   ValueNotifier<bool> isLoading = ValueNotifier<bool>(false);
 
@@ -416,10 +417,11 @@ class _CreateEventState extends State<CreateEvent> {
                                             .uploadEventData(
                                           createEvent: createEvents,
                                           docId: uv4,
-                                        );
-
-                                        SnackBarHelper.showSnackBar(context,
-                                            'Event created successfully');
+                                        ).then((value) {
+                                          SnackBarHelper.showSnackBar(context,
+                                              'Event created successfully');
+                                          Navigator.pop(context);
+                                        });
                                       } catch (error) {
                                         print('Error: $error');
                                         AppUtils.toastMessage(

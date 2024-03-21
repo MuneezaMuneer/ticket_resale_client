@@ -46,7 +46,7 @@ class _EventListingState extends State<EventListing> {
                     preferredSize: Size.fromHeight(60),
                     child: CustomAppBarAdmin()),
             body: Padding(
-              padding: const EdgeInsets.fromLTRB(30, 10, 0, 0),
+              padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -115,7 +115,10 @@ class _EventListingState extends State<EventListing> {
                                 builder: (context, snapshot) {
                                   if (snapshot.connectionState ==
                                       ConnectionState.waiting) {
-                                    return const CupertinoActivityIndicator();
+                                    return SizedBox(
+                                        width: width * 0.9,
+                                        child:
+                                            const CupertinoActivityIndicator());
                                   } else if (snapshot.hasError) {
                                     return Center(
                                         child:
@@ -220,10 +223,12 @@ class _EventListingState extends State<EventListing> {
                                                     );
                                                   }).toList());
                                             } else {
-                                              return const CustomText(
-                                                title: 'No record found here',
-                                                size: AppSize.regular,
-                                                color: AppColors.jetBlack,
+                                              return const Center(
+                                                child: CustomText(
+                                                  title: 'No record found here',
+                                                  size: AppSize.regular,
+                                                  color: AppColors.jetBlack,
+                                                ),
                                               );
                                             }
                                           }),
