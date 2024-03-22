@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
@@ -72,11 +74,20 @@ class CustomAppBarClient extends StatelessWidget
                   SizedBox(
                       child: isNetworkImage
                           ? Padding(
-                              padding: const EdgeInsets.only(top: 6, left: 10),
-                              child: CircleAvatar(
-                                backgroundImage: NetworkImage('$networkImage'),
-                              ),
-                            )
+                              padding: const EdgeInsets.only(top: 8, left: 10),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(100),
+                                child: CachedNetworkImage(
+                                  height: 45,
+                                  width: 45,
+                                  imageUrl: "$networkImage",
+                                  placeholder: (context, url) =>
+                                      const CupertinoActivityIndicator(
+                                    color: AppColors.blueViolet,
+                                  ),
+                                  fit: BoxFit.cover,
+                                ),
+                              ))
                           : const SizedBox.shrink()),
                   const Gap(15),
                   CustomText(

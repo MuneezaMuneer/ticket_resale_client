@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'package:svg_flutter/svg.dart';
 import 'package:ticket_resale/constants/constants.dart';
@@ -21,11 +22,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String? photoUrl;
   @override
   void initState() {
-      Future.microtask(() {
-      photoUrl = AuthServices.getCurrentUser.photoURL;
+    SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
       Provider.of<SwitchProvider>(context, listen: false).loadPreferences();
       switchProvider = Provider.of<SwitchProvider>(context, listen: false);
     });
+    photoUrl = AuthServices.getCurrentUser.photoURL;
+
     super.initState();
   }
 

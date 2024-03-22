@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -54,15 +55,22 @@ class ChatScreen extends StatelessWidget {
                                 'receiverId': firstUserId,
                                 'hashKey': hashKey,
                                 'isOpened': false,
-                               
                               },
                             );
                           },
                           child: ListTile(
-                            leading: CircleAvatar(
-                              radius: 20,
-                              backgroundImage:
-                                  NetworkImage(userData!.photoUrl!),
+                            leading: ClipRRect(
+                              borderRadius: BorderRadius.circular(100),
+                              child: CachedNetworkImage(
+                                height: 43,
+                                width: 43,
+                                imageUrl: "${userData!.photoUrl}",
+                                placeholder: (context, url) =>
+                                    const CupertinoActivityIndicator(
+                                  color: AppColors.blueViolet,
+                                ),
+                                fit: BoxFit.cover,
+                              ),
                             ),
                             title: Row(
                               children: [

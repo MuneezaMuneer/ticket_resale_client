@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -330,10 +331,18 @@ class _HomeDetailFirstScreenState extends State<HomeDetailFirstScreen> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(bottom: 5),
-                          child: CircleAvatar(
-                            backgroundColor: AppColors.white,
-                            radius: 20,
-                            backgroundImage: NetworkImage('$imagePath'),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(100),
+                            child: CachedNetworkImage(
+                              height: 43,
+                              width: 43,
+                              imageUrl: "$imagePath",
+                              placeholder: (context, url) =>
+                                  const CupertinoActivityIndicator(
+                                color: AppColors.blueViolet,
+                              ),
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                         Padding(
