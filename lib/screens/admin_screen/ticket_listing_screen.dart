@@ -22,7 +22,7 @@ class TicketListing extends StatefulWidget {
 class _TicketListingState extends State<TicketListing> {
   late Stream<List<TicketModalAdmin>> fetchEvents;
   TextEditingController controller = TextEditingController();
-  ValueNotifier<String> searchNotifier = ValueNotifier('');
+
   TextEditingController searchcontroller = TextEditingController();
   List<TicketModalAdmin> filterEventData = [];
   List<TicketModalAdmin> eventData = [];
@@ -53,7 +53,7 @@ class _TicketListingState extends State<TicketListing> {
                     text: 'Search via Event name, seller & ticket type',
                     searchController: searchcontroller,
                     setSearchValue: (searchQuery) {
-                      searchNotifier.value = searchQuery;
+                      clearProvider.setSearchText = searchQuery;
                       filterEventData = eventData
                           .where((data) =>
                               data.eventName!

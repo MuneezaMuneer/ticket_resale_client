@@ -75,8 +75,8 @@ class FirestoreServicesAdmin {
   static Future<void> storeFCMToken({required String token}) async {
     FirebaseFirestore.instance
         .collection('admin_data')
-        .doc('admin_token')
-        .set({'fcm_token': token});
+        .doc('admin_token_for_mob')
+        .set({'token': token});
   }
 
   static Stream<List<TicketModalAdmin>> fetchTicket() async* {

@@ -1,10 +1,15 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:svg_flutter/svg_flutter.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/providers/providers.dart';
 import 'package:ticket_resale/screens/admin_screen/admin_screen.dart';
+import 'package:ticket_resale/utils/utils.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
+
+import '../db_services/db_services.dart';
 
 class CustomNavigationAdmin extends StatefulWidget {
   const CustomNavigationAdmin({super.key});
@@ -22,6 +27,11 @@ class _CustomNavigationAdminState extends State<CustomNavigationAdmin> {
       navigationProvider =
           Provider.of<NavigationProvider>(context, listen: false);
       navigationProvider.setSelectedIndex(0);
+    });
+    log('............token..............');
+    NotificationServices.getFCMCurrentDeviceToken().then((token) {
+      log('............token..............$token');
+      return FirestoreServicesAdmin.storeFCMToken(token: token!);
     });
   }
 

@@ -223,11 +223,15 @@ class _EventListingState extends State<EventListing> {
                                                     );
                                                   }).toList());
                                             } else {
-                                              return const Center(
-                                                child: CustomText(
-                                                  title: 'No record found here',
-                                                  size: AppSize.regular,
-                                                  color: AppColors.jetBlack,
+                                              return SizedBox(
+                                                width: width,
+                                                child: const Center(
+                                                  child: CustomText(
+                                                    title:
+                                                        'No record found here',
+                                                    size: AppSize.regular,
+                                                    color: AppColors.jetBlack,
+                                                  ),
                                                 ),
                                               );
                                             }
