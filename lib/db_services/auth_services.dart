@@ -267,9 +267,16 @@ class AuthServices {
   }
 
   static Future<void> storeUserSignInFcmToken({
-    required String fcmToken,
+    required String fcmToken
   }) async {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
+    DocumentReference user =
+        firestore.collection('user_data').doc(getCurrentUser.uid);
+    await user.set({'fcm_token': fcmToken}, SetOptions(merge: true));
+  }
+
+  static Future<void> storeFCMToken({ required String fcmToken})async{
+            FirebaseFirestore firestore = FirebaseFirestore.instance;
     DocumentReference user =
         firestore.collection('user_data').doc(getCurrentUser.uid);
     await user.set({'fcm_token': fcmToken}, SetOptions(merge: true));

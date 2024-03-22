@@ -1,5 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable
-import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -13,12 +12,10 @@ import '../components/components.dart';
 import '../models/ticket_models.dart';
 
 class HomeDetailFirstScreen extends StatefulWidget {
-  EventModalClient eventModal;
+  String eventId;
   HomeDetailFirstScreen({
     Key? key,
-    required this.eventModal,
-
-    
+    required this.eventId,
   }) : super(key: key);
 
   @override
@@ -27,40 +24,45 @@ class HomeDetailFirstScreen extends StatefulWidget {
 
 class _HomeDetailFirstScreenState extends State<HomeDetailFirstScreen> {
   late Stream<List<TicketModelClient>> displayTickets;
-
+  late Stream<EventModalClient> fetchEvents;
   @override
   void initState() {
-    displayTickets = FireStoreServicesClient.fetchTicketsData(
-        docID: widget.eventModal.docId!);
-
+    displayTickets =
+        FireStoreServicesClient.fetchTicketsData(docID: widget.eventId);
+    fetchEvents = FireStoreServicesClient.fetchEventDataBasedOnId(
+        eventId: widget.eventId);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    log('Model id is : ${widget.eventModal.docId}');
     Size size = MediaQuery.of(context).size;
     final double height = size.height;
     final double width = size.width;
     return Scaffold(
       backgroundColor: AppColors.pastelBlue.withOpacity(0.3),
-      body: AppBackground(
-        networkImage: widget.eventModal.imageUrl,
-        isAssetImage: false,
-        isBackButton: true,
-        child: Padding(
-          padding: const EdgeInsets.only(left: 15, top: 10, right: 15),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 10),
+      body: StreamBuilder(
+        stream: fetchEvents,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CupertinoActivityIndicator());
+          } else if (snapshot.hasData) {
+            final EventModalClient? eventData = snapshot.data;
+
+            return AppBackground(
+              networkImage: '${eventData!.imageUrl}',
+              isAssetImage: false,
+              isBackButton: true,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 15, top: 10, right: 15),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10, top: 30),
                         child: CustomText(
-                          title: widget.eventModal.eventName,
+                          title: '${eventData.eventName}',
                           size: AppSize.large,
                           weight: FontWeight.w600,
                           softWrap: true,
@@ -68,116 +70,45 @@ class _HomeDetailFirstScreenState extends State<HomeDetailFirstScreen> {
                           textAlign: TextAlign.start,
                         ),
                       ),
-                    ),
-                    SvgPicture.asset(
-                      AppSvgs.share,
-                      alignment: Alignment.centerRight,
-                      fit: BoxFit.cover,
-                    )
-                  ],
-                ),
-                const Gap(10),
-                Container(
-                  height: height * 0.06,
-                  width: width * 0.9,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(56),
-                      border: Border.all(color: AppColors.white),
-                      color: AppColors.white),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10),
+                      const Gap(40),
+                      Container(
+                        height: height * 0.06,
+                        width: width * 0.9,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(56),
+                            border: Border.all(color: AppColors.white),
+                            color: AppColors.white),
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const CircleAvatar(
-                              backgroundColor: AppColors.paleGrey,
-                              radius: 17,
-                              backgroundImage:
-                                  AssetImage(AppImages.profileImage),
-                            ),
                             Padding(
-                              padding: const EdgeInsets.only(
-                                left: 12,
-                              ),
-                              child: RichText(
-                                  text: TextSpan(children: [
-                                TextSpan(
-                                    text: 'Featured DJ : ',
-                                    style: TextStyle(
-                                        color: AppColors.lightGrey
-                                            .withOpacity(0.6),
-                                        fontSize: AppSize.xsmall,
-                                        fontWeight: FontWeight.w400)),
-                                const TextSpan(
-                                    text: 'Martin Garrix',
-                                    style: TextStyle(
-                                        color: AppColors.blueViolet,
-                                        fontSize: AppSize.medium,
-                                        fontWeight: FontWeight.w600)),
-                              ])),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const Gap(15),
-                Container(
-                  width: width * 0.9,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(56),
-                      border: Border.all(color: AppColors.white),
-                      color: AppColors.white),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10),
-                        child: Row(
-                          children: [
-                            CircleAvatar(
-                                backgroundColor: AppColors.paleGrey,
-                                radius: 20,
-                                child: SvgPicture.asset(
-                                  AppSvgs.clock,
-                                  height: 30,
-                                )),
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 12, top: 7, bottom: 7),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                              padding: const EdgeInsets.only(left: 10),
+                              child: Row(
                                 children: [
-                                  CustomText(
-                                    title:
-                                        '${AppUtils.formatDate(widget.eventModal.date!)}, ${widget.eventModal.time}',
-                                    color: AppColors.lightGrey.withOpacity(0.6),
-                                    size: AppSize.xsmall,
-                                    weight: FontWeight.w400,
+                                  const CircleAvatar(
+                                    backgroundColor: AppColors.paleGrey,
+                                    radius: 17,
+                                    backgroundImage:
+                                        AssetImage(AppImages.profileImage),
                                   ),
-                                  SizedBox(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.65,
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                      left: 12,
+                                    ),
                                     child: RichText(
                                         text: TextSpan(children: [
                                       TextSpan(
-                                          text: 'at ',
+                                          text: 'Featured DJ : ',
                                           style: TextStyle(
                                               color: AppColors.lightGrey
                                                   .withOpacity(0.6),
-                                              letterSpacing: 0.8,
                                               fontSize: AppSize.xsmall,
                                               fontWeight: FontWeight.w400)),
-                                      TextSpan(
-                                          text: '${widget.eventModal.location}',
-                                          style: const TextStyle(
-                                              color: AppColors.jetBlack,
-                                              overflow: TextOverflow.ellipsis,
-                                              letterSpacing: 0.8,
-                                              fontSize: AppSize.small,
+                                      const TextSpan(
+                                          text: 'Martin Garrix',
+                                          style: TextStyle(
+                                              color: AppColors.blueViolet,
+                                              fontSize: AppSize.medium,
                                               fontWeight: FontWeight.w600)),
                                     ])),
                                   ),
@@ -187,103 +118,183 @@ class _HomeDetailFirstScreenState extends State<HomeDetailFirstScreen> {
                           ],
                         ),
                       ),
+                      const Gap(15),
+                      Container(
+                        width: width * 0.9,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(56),
+                            border: Border.all(color: AppColors.white),
+                            color: AppColors.white),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: 10),
+                              child: Row(
+                                children: [
+                                  CircleAvatar(
+                                      backgroundColor: AppColors.paleGrey,
+                                      radius: 20,
+                                      child: SvgPicture.asset(
+                                        AppSvgs.clock,
+                                        height: 30,
+                                      )),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 12, top: 7, bottom: 7),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        CustomText(
+                                          title:
+                                              '${AppUtils.formatDate('${eventData.date}')}, ${eventData.time}',
+                                          color: AppColors.lightGrey
+                                              .withOpacity(0.6),
+                                          size: AppSize.xsmall,
+                                          weight: FontWeight.w400,
+                                        ),
+                                        SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.65,
+                                          child: RichText(
+                                              text: TextSpan(children: [
+                                            TextSpan(
+                                                text: 'at ',
+                                                style: TextStyle(
+                                                    color: AppColors.lightGrey
+                                                        .withOpacity(0.6),
+                                                    letterSpacing: 0.8,
+                                                    fontSize: AppSize.xsmall,
+                                                    fontWeight:
+                                                        FontWeight.w400)),
+                                            TextSpan(
+                                                text: '${eventData.location}',
+                                                style: const TextStyle(
+                                                    color: AppColors.jetBlack,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    letterSpacing: 0.8,
+                                                    fontSize: AppSize.small,
+                                                    fontWeight:
+                                                        FontWeight.w600)),
+                                          ])),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Gap(10),
+                      const CustomText(
+                        title: 'About Event',
+                        size: AppSize.regular,
+                        weight: FontWeight.w600,
+                        color: AppColors.jetBlack,
+                      ),
+                      CustomText(
+                        title: '${eventData.description}',
+                        size: AppSize.medium,
+                        softWrap: true,
+                        weight: FontWeight.w400,
+                        color: AppColors.lightGrey,
+                      ),
+                      const Gap(20),
+                      const CustomText(
+                        title: 'Tickets Available by Sellers',
+                        size: AppSize.regular,
+                        weight: FontWeight.w600,
+                        color: AppColors.jetBlack,
+                      ),
+                      const Gap(15),
+                      StreamBuilder(
+                        stream: displayTickets,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                              child: CupertinoActivityIndicator(),
+                            );
+                          } else if (snapshot.hasData) {
+                            final tickets = snapshot.data!;
+                            if (tickets.isNotEmpty) {
+                              return ListView.builder(
+                                padding: EdgeInsets.zero,
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: tickets.length,
+                                itemExtent: 140,
+                                itemBuilder: (context, index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.only(top: 15),
+                                    child: InkWell(
+                                      onTap: () {
+                                        TicketModelClient ticketModel =
+                                            TicketModelClient(
+                                                docId: tickets[index].docId,
+                                                imageUrl:
+                                                    tickets[index].imageUrl,
+                                                ticketType:
+                                                    tickets[index].ticketType,
+                                                description:
+                                                    tickets[index].description,
+                                                status: tickets[index].status,
+                                                price: tickets[index].price,
+                                                uid: tickets[index].uid,
+                                                eventId:
+                                                    tickets[index].eventId);
+                                        Navigator.pushNamed(
+                                          context,
+                                          AppRoutes.detailSecondScreen,
+                                          arguments: {
+                                            'eventModal': eventData,
+                                            'ticketModel': ticketModel,
+                                          },
+                                        );
+                                      },
+                                      child: _tileContainer(
+                                        userId: tickets[index].uid,
+                                        title:
+                                            '${tickets[index].ticketType} TICKET AVAILABLE',
+                                        subTitle:
+                                            'VIP Seats + Exclusive braclets',
+                                        price: '${tickets[index].price}',
+                                        imagePath: '${tickets[index].imageUrl}',
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                            } else {
+                              return const Center(
+                                  child: Column(
+                                children: [
+                                  Gap(30),
+                                  Text('No Ticket Available'),
+                                ],
+                              ));
+                            }
+                          } else {
+                            return const Text('No Ticket Available');
+                          }
+                        },
+                      ),
+                      const Gap(10)
                     ],
                   ),
                 ),
-                const Gap(10),
-                const CustomText(
-                  title: 'About Event',
-                  size: AppSize.regular,
-                  weight: FontWeight.w600,
-                  color: AppColors.jetBlack,
-                ),
-                CustomText(
-                  title: '${widget.eventModal.description}',
-                  size: AppSize.medium,
-                  softWrap: true,
-                  weight: FontWeight.w400,
-                  color: AppColors.lightGrey,
-                ),
-                const Gap(20),
-                const CustomText(
-                  title: 'Tickets Available by Sellers',
-                  size: AppSize.regular,
-                  weight: FontWeight.w600,
-                  color: AppColors.jetBlack,
-                ),
-                const Gap(15),
-                StreamBuilder(
-                  stream: displayTickets,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(
-                        child: CupertinoActivityIndicator(),
-                      );
-                    } else if (snapshot.hasData) {
-                      final tickets = snapshot.data!;
-                      if (tickets.isNotEmpty) {
-                        return ListView.builder(
-                          padding: EdgeInsets.zero,
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: tickets.length,
-                          itemExtent: 140,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.only(top: 15),
-                              child: InkWell(
-                                onTap: () {
-                                  TicketModelClient ticketModel =
-                                      TicketModelClient(
-                                          docId: tickets[index].docId,
-                                          imageUrl: tickets[index].imageUrl,
-                                          ticketType: tickets[index].ticketType,
-                                          description:
-                                              tickets[index].description,
-                                          status: tickets[index].status,
-                                          price: tickets[index].price,
-                                          uid: tickets[index].uid,
-                                          eventId: tickets[index].eventId);
-                                Navigator.pushNamed(
-  context,
-  AppRoutes.detailSecondScreen,
-  arguments: {
-    'eventModal': widget.eventModal,
-    'ticketModel': ticketModel,
-  },
-);
-                                },
-                                child: _tileContainer(
-                                  userId: tickets[index].uid,
-                                  title:
-                                      '${tickets[index].ticketType} TICKET AVAILABLE',
-                                  subTitle: 'VIP Seats + Exclusive braclets',
-                                  price: '${tickets[index].price}',
-                                  imagePath: '${tickets[index].imageUrl}',
-                                ),
-                              ),
-                            );
-                          },
-                        );
-                      } else {
-                        return const Center(
-                            child: Column(
-                          children: [
-                            Gap(30),
-                            Text('No Ticket Available'),
-                          ],
-                        ));
-                      }
-                    } else {
-                      return const Text('No Ticket Available');
-                    }
-                  },
-                ),
-                const Gap(10)
-              ],
-            ),
-          ),
-        ),
+              ),
+            );
+          } else {
+            return const Center(child: Text('No Event Yet'));
+          }
+        },
       ),
     );
   }

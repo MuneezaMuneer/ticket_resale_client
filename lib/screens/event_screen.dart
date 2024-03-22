@@ -292,23 +292,10 @@ class _EventScreenState extends State<EventScreen> {
                                             width: width,
                                             child: CustomButton(
                                               onPressed: () {
-                                                EventModalClient eventModal =
-                                                    EventModalClient(
-                                                        docId:
-                                                            data[index].docId,
-                                                        description: data[index]
-                                                            .description!,
-                                                        eventName: data[index]
-                                                            .eventName!,
-                                                        imageUrl: data[index]
-                                                            .imageUrl!,
-                                                        date: data[index].date!,
-                                                        time: data[index].time!,
-                                                        location: data[index]
-                                                            .location!);
+                                                
                                                 Navigator.pushNamed(context,
                                                     AppRoutes.detailFirstScreen,
-                                                    arguments: eventModal);
+                                                    arguments:  data[index].docId);
                                               },
                                               textColor: AppColors.white,
                                               textSize: AppSize.regular,

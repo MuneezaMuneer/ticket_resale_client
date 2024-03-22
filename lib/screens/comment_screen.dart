@@ -291,20 +291,21 @@ class _CommentScreenState extends State<CommentScreen> {
                                                                         .getCurrentUser
                                                                         .uid,
                                                               );
-                                                              NotificationModel
-                                                                  notificationModel =
-                                                                  NotificationModel(
-                                                                title:
-                                                                    'Offer Accepted',
-                                                                body:
-                                                                    "Your offered price'\$${commentData[index].offerPrice}' for '${widget.ticketModal.ticketType} TICKET' is confirmed for festival '${widget.eventModal.eventName}'",
-                                                                userId:userData.id,
-                                                                id: widget
-                                                                    .ticketModal
-                                                                    .docId,
-                                                                status:
-                                                                    'Unread',
-                                                              );
+                                                              NotificationModel notificationModel = NotificationModel(
+                                                                  title:
+                                                                      'Offer Accepted',
+                                                                  body:
+                                                                      "Your offered price'\$${commentData[index].offerPrice}' for '${widget.ticketModal.ticketType} TICKET' is confirmed for festival '${widget.eventModal.eventName}'",
+                                                                  userId:
+                                                                      userData
+                                                                          .id,
+                                                                  id: AuthServices
+                                                                      .getCurrentUser
+                                                                      .uid,
+                                                                  status:
+                                                                      'Unread',
+                                                                  notificationType:
+                                                                      'offer_confirm');
                                                               TicketsSoldModel
                                                                   soldModel =
                                                                   TicketsSoldModel(

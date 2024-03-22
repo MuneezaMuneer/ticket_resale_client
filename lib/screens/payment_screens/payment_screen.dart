@@ -4,9 +4,10 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ticket_resale/constants/constants.dart';
+import 'package:ticket_resale/db_services/auth_services.dart';
 import 'package:ticket_resale/db_services/firestore_services_client.dart';
+import 'package:ticket_resale/models/models.dart';
 import 'package:ticket_resale/screens/screens.dart';
-import 'package:ticket_resale/utils/app_utils.dart';
 import 'package:ticket_resale/utils/notification_services.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -16,6 +17,7 @@ class PaymentScreen extends StatefulWidget {
   final List<String> docIds;
   final String hashKey;
   final String token;
+  final String userId;
 
   // final Function(String?) onFinish;
   const PaymentScreen({
@@ -26,6 +28,7 @@ class PaymentScreen extends StatefulWidget {
     required this.docIds,
     required this.token,
     required this.hashKey,
+    required this.userId
   });
 
   @override
@@ -80,13 +83,26 @@ class _PaymentScreenState extends State<PaymentScreen> {
                             body:
                                 "The offered'\$${widget.totalPrice}' price is paid successfully");
                         FireStoreServicesClient
-                            .updateStatusInSoldTicketsCollection(
-                                hashKey: widget.hashKey,
-                                selectedDocIds: widget.docIds,
-                                newStatus: 'Paid');
-                        print('The token is ${widget.token}');
-
-                        AppUtils.toastMessage('Payment Done Successfully');
+                                .updateStatusInSoldTicketsCollection(
+                                    hashKey: widget.hashKey,
+                                    selectedDocIds: widget.docIds,
+                                    newStatus: 'Paid')
+                            .then((value) {
+                          NotificationModel notificationModel = NotificationModel(
+                              title: 'Payment Done Successfully',
+                              body:
+                                  "The offered'\$${widget.totalPrice}' price is paid successfully",
+                                  id: AuthServices.getCurrentUser.uid
+                                  ,
+                                  userId: widget.userId,
+                                  status:'Unread' ,
+                                  notificationType:'paid',
+                                  docId:AuthServices.getCurrentUser.uid ,
+                                  );
+                          FireStoreServicesClient.storeNotifications(
+                              notificationModel: notificationModel,
+                              name: 'client_notifications');
+                        });
 
                         //  widget.onFinish(id);
                         if (mounted) {

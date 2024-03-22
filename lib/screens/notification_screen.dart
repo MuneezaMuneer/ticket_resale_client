@@ -126,9 +126,42 @@ class _NotificationScreenState extends State<NotificationScreen> {
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
-                    FireStoreServicesClient.updateNotifications(
-                        docId: notifications[index].docId,
-                        name: 'client_notifications');
+                    if (notifications[index].status == 'Unread') {
+                      FireStoreServicesClient.updateNotifications(
+                          docId: notifications[index].docId,
+                          name: 'client_notifications');
+                    }
+                    if (notifications[index].notificationType ==
+                            'ticket_listing' &&
+                        notifications[index].status == 'Unread') {
+                      Navigator.popAndPushNamed(
+                          context, AppRoutes.detailFirstScreen,
+                          arguments: notifications[index].id);
+                    } else if (notifications[index].notificationType ==
+                            'offer_confirm' &&
+                        notifications[index].status == 'Unread') {
+                      Navigator.of(context).popAndPushNamed(
+                        AppRoutes.chatDetailScreen,
+                        arguments: {
+                          'receiverId': notifications[index].userId,
+                          'hashKey':
+                              FireStoreServicesClient.getMessagesHashCodeID(
+                                  userIDReceiver: notifications[index].id!),
+                          'isOpened': false,
+                        },
+                      );
+                    } else {
+                      Navigator.of(context).popAndPushNamed(
+                        AppRoutes.chatDetailScreen,
+                        arguments: {
+                          'receiverId': notifications[index].userId,
+                          'hashKey':
+                              FireStoreServicesClient.getMessagesHashCodeID(
+                                  userIDReceiver: notifications[index].id!),
+                          'isOpened': false,
+                        },
+                      );
+                    }
                   },
                   child: ListTile(
                       leading: Container(

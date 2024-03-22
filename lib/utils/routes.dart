@@ -42,8 +42,8 @@ Route onGenerateRoute(RouteSettings settings) {
   } else if (settings.name == AppRoutes.privacyScreen) {
     return animatePage(const PrivacyPolicy());
   } else if (settings.name == AppRoutes.detailFirstScreen) {
-    final eventModal = settings.arguments as EventModalClient;
-    return animatePage(HomeDetailFirstScreen(eventModal: eventModal));
+    final eventId = settings.arguments as String;
+    return animatePage(HomeDetailFirstScreen(eventId: eventId,));
   } else if (settings.name == AppRoutes.detailSecondScreen) {
     final Map<String, dynamic> arguments =
         settings.arguments as Map<String, dynamic>;
@@ -75,7 +75,7 @@ Route onGenerateRoute(RouteSettings settings) {
   } else if (settings.name == AppRoutes.chatDetailScreen) {
     final Map<String, dynamic> arguments =
         settings.arguments as Map<String, dynamic>;
-    final UserModelClient userModal = arguments['userModel'] as UserModelClient;
+   
     final String receiverId = arguments['receiverId'] as String;
     final String hashKey = arguments['hashKey'] as String;
 
@@ -83,7 +83,7 @@ Route onGenerateRoute(RouteSettings settings) {
     return animatePage(ChatDetailScreen(
       receiverId: receiverId,
       hashKey: hashKey,
-      userModel: userModal,
+    
       isOpened: isOpened,
     ));
   } else if (settings.name == AppRoutes.eventScreen) {

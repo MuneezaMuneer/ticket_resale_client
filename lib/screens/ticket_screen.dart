@@ -379,28 +379,34 @@ class _TicketScreenState extends State<TicketScreen> {
                                       ticketModel: ticketModel, docId: docId)
                                   .then((value) async {
                                 imagePickerProvider.setImageUrl = '';
-                                String? token =
-                                    await NotificationServices.getFCMToken();
-                                NotificationServices.sendNotification(
-                                      
-                                        token: '$token',
-                                        title: 'Ticket listing request!',
-                                        body:
-                                            '${ticketTypeController.text} TICKET is created for festival "$selectedFestivalName" by ${AuthServices.getCurrentUser.displayName}')
-                                    .then((value) {
-                                  NotificationModel notificationModel =
+                              NotificationModel notificationModel =
                                       NotificationModel(
                                           title: 'Ticket listing request!',
                                           body:
                                               '${ticketTypeController.text} TICKET is created for festival "$selectedFestivalName" by ${AuthServices.getCurrentUser.displayName}',
                                           id: docId,
+                                          notificationType:
+                                              'Ticket Listing Request!',
                                           userId:
                                               AuthServices.getCurrentUser.uid,
                                           status: 'Unread');
+                               List<String> tokens =
+                                    await NotificationServices
+                                        .getAdminFCMTokens();
+                                        for (var token in tokens) {
+                                        NotificationServices.sendNotification(
+                                        token: token,
+                                        title: 'Ticket listing request!',
+                                        body:
+                                            '${ticketTypeController.text} TICKET is created for festival "$selectedFestivalName" by ${AuthServices.getCurrentUser.displayName}')
+                                    .then((value) {
+                                  
                                   FireStoreServicesClient.storeNotifications(
                                       notificationModel: notificationModel,
                                       name: 'admin_notifications');
                                 });
+                                        }
+                             
                                 AppUtils.toastMessage(
                                     'Ticket Created Successfully');
                                 FocusScope.of(context).unfocus();

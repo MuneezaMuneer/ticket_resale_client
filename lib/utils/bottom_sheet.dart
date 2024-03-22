@@ -160,7 +160,9 @@ class CustomBottomSheet {
       {required BuildContext context,
       required String hashKey,
       required String token,
-      required var id}) {
+      required var id,
+      required String userId
+      }) {
     List<TicketsSoldModel> selectedTickets = [];
     ValueNotifier<double> totalPriceNotifier = ValueNotifier<double>(0);
 
@@ -376,6 +378,7 @@ class CustomBottomSheet {
                                                                   hashKey:
                                                                       hashKey,
                                                                   token: token,
+                                                                  userId: userId,
                                                                   // onFinish:
                                                                   //     (paymentId) async {
                                                                   //   PaypalPaymentServices

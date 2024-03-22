@@ -57,29 +57,18 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 10),
-                          child: CustomText(
-                            title: widget.eventModal.eventName,
-                            size: AppSize.large,
-                            weight: FontWeight.w600,
-                            softWrap: true,
-                            color: AppColors.jetBlack,
-                            textAlign: TextAlign.start,
-                          ),
-                        ),
-                      ),
-                      SvgPicture.asset(
-                        AppSvgs.share,
-                        alignment: Alignment.centerRight,
-                        fit: BoxFit.cover,
-                      )
-                    ],
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10, top: 30),
+                    child: CustomText(
+                      title: widget.eventModal.eventName,
+                      size: AppSize.large,
+                      weight: FontWeight.w600,
+                      softWrap: true,
+                      color: AppColors.jetBlack,
+                      textAlign: TextAlign.start,
+                    ),
                   ),
-                  const Gap(10),
+                  const Gap(40),
                   Container(
                     height: height * 0.06,
                     width: width * 0.9,

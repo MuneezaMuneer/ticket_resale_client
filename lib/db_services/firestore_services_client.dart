@@ -179,6 +179,17 @@ class FireStoreServicesClient {
     });
   }
 
+  static Stream<EventModalClient> fetchEventDataBasedOnId(
+      {required String eventId}) {
+    return FirebaseFirestore.instance
+        .collection('event')
+        .doc(eventId)
+        .snapshots()
+        .map((event) {
+        return EventModalClient.fromMap(event.data() ?? {});
+    });
+  }
+
   static Stream<List<TicketModelClient>> fetchTicketsData(
       {required String docID}) {
     return FirebaseFirestore.instance

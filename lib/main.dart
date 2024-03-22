@@ -6,10 +6,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ticket_resale/constants/constants.dart';
+import 'package:ticket_resale/db_services/auth_services.dart';
 import 'package:ticket_resale/firebase_options.dart';
 import 'package:ticket_resale/providers/providers.dart';
 import 'package:ticket_resale/screens/screens.dart';
 import 'package:ticket_resale/utils/utils.dart';
+import 'package:ticket_resale/widgets/widgets.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,13 +24,12 @@ void main() async {
 
   NotificationServices.initNotification();
 
-
   AppText.preference = await SharedPreferences.getInstance();
   runApp(
-   DevicePreview(
-    enabled: !kReleaseMode,
-    builder: (context) =>const TicketResale(), // Wrap your app
-  ),
+    DevicePreview(
+      enabled: !kReleaseMode,
+      builder: (context) => const TicketResale(), // Wrap your app
+    ),
   );
 }
 
@@ -75,7 +76,9 @@ class TicketResale extends StatelessWidget {
           fontFamily: GoogleFonts.openSans().fontFamily,
         ),
         debugShowCheckedModeBanner: false,
-        home: const SplashScreen(),
+        home: AuthServices.getCurrentUser.uid.isNotEmpty
+            ? const CustomNavigationClient()
+            : const SplashScreen(),
       ),
     );
   }
