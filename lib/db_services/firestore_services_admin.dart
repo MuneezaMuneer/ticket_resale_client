@@ -1,7 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ticket_resale/models/create_event.dart';
-
-import 'package:ticket_resale/models/user_models.dart';
 
 import '../models/models.dart';
 
