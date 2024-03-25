@@ -331,18 +331,10 @@ class _HomeDetailFirstScreenState extends State<HomeDetailFirstScreen> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(bottom: 5),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(100),
-                            child: CachedNetworkImage(
-                              height: 43,
-                              width: 43,
-                              imageUrl: "$imagePath",
-                              placeholder: (context, url) =>
-                                  const CupertinoActivityIndicator(
-                                color: AppColors.blueViolet,
-                              ),
-                              fit: BoxFit.cover,
-                            ),
+                          child: CustomDisplayStoryImage(
+                            imageUrl: '$imagePath',
+                            height: 43,
+                            width: 43,
                           ),
                         ),
                         Padding(
