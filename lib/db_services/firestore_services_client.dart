@@ -95,6 +95,7 @@ class FireStoreServicesClient {
     }
   }
 
+
   static Future<Map<String, String>> fetchBuyerAndSellerUIDs(
       String hashKey) async {
     DocumentSnapshot snapshot = await FirebaseFirestore.instance

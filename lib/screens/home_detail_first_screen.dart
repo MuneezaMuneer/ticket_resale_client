@@ -392,13 +392,17 @@ class _HomeDetailFirstScreenState extends State<HomeDetailFirstScreen> {
                           padding: const EdgeInsets.only(left: 8),
                           child: Row(
                             children: [
-                              CircleAvatar(
-                                backgroundImage: data.photoUrl != null &&
-                                        data.photoUrl != 'null'
-                                    ? NetworkImage(data.photoUrl!)
-                                    : const AssetImage(AppImages.profileImage)
-                                        as ImageProvider,
-                              ),
+                              SizedBox(
+                                  child: (data.photoUrl != null) &&
+                                          data.photoUrl != 'null'
+                                      ? CustomDisplayStoryImage(
+                                          imageUrl: '${data.photoUrl}',
+                                          height: 43,
+                                          width: 43,
+                                        )
+                                      : const CircleAvatar(
+                                          backgroundImage: AssetImage(
+                                              AppImages.profileImage))),
                               Padding(
                                 padding:
                                     const EdgeInsets.only(left: 8, top: 15),

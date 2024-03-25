@@ -68,10 +68,6 @@ class TicketResale extends StatelessWidget {
           create: (context) => SearchProvider(),
         ),
       ],
-//I changed your code as after installing app i got null error as current user was empty but your logic is implemented on uid. when user is empty then how can you put it on uid base?. Other way is that store value of login in local storage and perform action based on this value
-      // home: AuthServices.getCurrentUser.uid.isNotEmpty
-      //     ? const CustomNavigationClient()
-      //     : const SplashScreen(),
       child: MaterialApp(
         onGenerateRoute: onGenerateRoute,
         theme: ThemeData(

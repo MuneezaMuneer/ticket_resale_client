@@ -339,6 +339,18 @@ class AuthServices {
     await user.set({'fcm_token': fcmToken}, SetOptions(merge: true));
   }
 
+  static Future<void> storePaypalAuthorization(
+      {required bool paypalAuthorization}) async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    DocumentReference user =
+        firestore.collection('user_data').doc(AuthServices.getCurrentUser.uid);
+    await user.set({
+      'profile_levels': {
+        'isPaypalVerified': paypalAuthorization,
+      }
+    }, SetOptions(merge: true));
+  }
+
   static Future<void> storeUserData(
       {required UserModelClient userModel}) async {
     try {

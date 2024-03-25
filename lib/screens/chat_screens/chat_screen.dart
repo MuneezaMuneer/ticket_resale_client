@@ -7,6 +7,7 @@ import 'package:ticket_resale/db_services/firestore_services_client.dart';
 import 'package:ticket_resale/utils/app_utils.dart';
 import 'package:ticket_resale/widgets/custom_appbar.dart';
 import 'package:ticket_resale/widgets/custom_text.dart';
+import 'package:ticket_resale/widgets/widgets.dart';
 
 class ChatScreen extends StatelessWidget {
   const ChatScreen({super.key});
@@ -59,19 +60,17 @@ class ChatScreen extends StatelessWidget {
                             );
                           },
                           child: ListTile(
-                            leading: ClipRRect(
-                              borderRadius: BorderRadius.circular(100),
-                              child: CachedNetworkImage(
-                                height: 43,
-                                width: 43,
-                                imageUrl: "${userData!.photoUrl}",
-                                placeholder: (context, url) =>
-                                    const CupertinoActivityIndicator(
-                                  color: AppColors.blueViolet,
-                                ),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
+                            leading: SizedBox(
+                                child: (userData!.photoUrl != null) &&
+                                        userData.photoUrl != 'null'
+                                    ? CustomDisplayStoryImage(
+                                        imageUrl: '${userData.photoUrl}',
+                                        height: 43,
+                                        width: 43,
+                                      )
+                                    : const CircleAvatar(
+                                        backgroundImage: AssetImage(
+                                            AppImages.profileImage))),
                             title: Row(
                               children: [
                                 Expanded(

@@ -113,13 +113,16 @@ sellerRatingDialog(
               const Gap(20),
               Stack(
                 children: [
-                  CircleAvatar(
-                    backgroundImage: isNetworkImage
-                        ? NetworkImage(networkImage)
-                        : const AssetImage(AppImages.profileImage)
-                            as ImageProvider,
-                    radius: 70,
-                  ),
+                  SizedBox(
+                      height: 100,
+                      width: 100,
+                      child: isNetworkImage
+                          ? CustomDisplayStoryImage(
+                              imageUrl: networkImage,
+                            )
+                          : const CircleAvatar(
+                              backgroundImage:
+                                  AssetImage(AppImages.profileImage))),
                   Positioned(
                       left: 90,
                       top: 70,

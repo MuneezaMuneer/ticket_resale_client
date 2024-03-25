@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 import 'dart:math' as math;
 import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -44,7 +45,9 @@ class NotificationServices {
   static void forGroundNotifications(BuildContext context) async {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       log('.............notification  ==  ${message.notification?.body}');
-      handleMessage(context: context, message: message);
+      if (Platform.isAndroid) {
+        handleMessage(context: context, message: message);
+      }
     });
   }
 
@@ -57,15 +60,22 @@ class NotificationServices {
   }
 
   static Future<bool> requestPermission() async {
-    NotificationSettings settings = await messaging.requestPermission(
-      alert: true,
-      sound: true,
-    );
+    if (Platform.isIOS) {
+      messaging.setForegroundNotificationPresentationOptions(
+          alert: true, sound: true, badge: false);
 
-    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
       return true;
     } else {
-      return false;
+      NotificationSettings settings = await messaging.requestPermission(
+        alert: true,
+        sound: true,
+      );
+
+      if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+        return true;
+      } else {
+        return false;
+      }
     }
   }
 
@@ -139,6 +149,7 @@ class NotificationServices {
     AndroidNotificationChannel channel = AndroidNotificationChannel(
         math.Random.secure().nextInt(100000).toString(), "Rave Trade",
         importance: Importance.max);
+
     AndroidNotificationDetails androidNotificationDetail =
         AndroidNotificationDetails(
       channel.id.toString(),

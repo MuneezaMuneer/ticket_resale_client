@@ -64,16 +64,10 @@ class _HomeAppBarState extends State<HomeAppBar> {
                 height: 50,
                 width: 50,
                 child: photoUrl != null && photoUrl!.isNotEmpty
-                    ? ClipRRect(
-                        borderRadius: BorderRadius.circular(100),
-                        child: CachedNetworkImage(
-                          imageUrl: "$photoUrl",
-                          placeholder: (context, url) =>
-                              const CupertinoActivityIndicator(
-                            color: AppColors.blueViolet,
-                          ),
-                          fit: BoxFit.cover,
-                        ),
+                    ? CustomDisplayStoryImage(
+                        imageUrl: '$photoUrl',
+                        height: 45,
+                        width: 45,
                       )
                     : const CircleAvatar(
                         backgroundImage: AssetImage(AppImages.profileImage))),

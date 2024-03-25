@@ -6,7 +6,7 @@ class CustomDisplayStoryImage extends StatelessWidget {
   final String imageUrl;
   final double? width;
   final double? height;
-
+  
   const CustomDisplayStoryImage({
     super.key,
     required this.imageUrl,

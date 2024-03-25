@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:svg_flutter/svg_flutter.dart';
 import 'package:ticket_resale/widgets/custom_gradient.dart';
 import 'package:ticket_resale/widgets/custom_text.dart';
+import 'package:ticket_resale/widgets/widgets.dart';
 import '../components/components.dart';
 import '../constants/constants.dart';
 import '../providers/search_provider.dart';
@@ -75,19 +76,18 @@ class CustomAppBarClient extends StatelessWidget
                       child: isNetworkImage
                           ? Padding(
                               padding: const EdgeInsets.only(top: 8, left: 10),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(100),
-                                child: CachedNetworkImage(
-                                  height: 45,
-                                  width: 45,
-                                  imageUrl: "$networkImage",
-                                  placeholder: (context, url) =>
-                                      const CupertinoActivityIndicator(
-                                    color: AppColors.blueViolet,
-                                  ),
-                                  fit: BoxFit.cover,
-                                ),
-                              ))
+                              child: SizedBox(
+                                  child: (networkImage != null) &&
+                                          networkImage != 'null'
+                                      ? CustomDisplayStoryImage(
+                                          imageUrl: '$networkImage',
+                                          height: 43,
+                                          width: 43,
+                                        )
+                                      : const CircleAvatar(
+                                          backgroundImage: AssetImage(
+                                              AppImages.profileImage))),
+                            )
                           : const SizedBox.shrink()),
                   const Gap(15),
                   CustomText(
