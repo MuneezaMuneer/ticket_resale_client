@@ -1,6 +1,9 @@
 // ignore_for_file: use_build_context_synchronously
-import 'dart:developer';
+import 'dart:convert';
+import 'dart:developer' as logg;
 import 'dart:io';
+import 'package:crypto/crypto.dart';
+import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -9,6 +12,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:ticket_resale/db_services/firestore_services_admin.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/models/models.dart';
@@ -22,7 +26,61 @@ class AuthServices {
     return FirebaseAuth.instance.currentUser!;
   }
 
-  //Google Authentication
+  ///Below data is for apple login/////
+  /// Generates a cryptographically secure random nonce, to be included in a redential request.
+  static String generateNonce([int length = 32]) {
+    const charset =
+        '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
+    final random = Random.secure();
+    return List.generate(length, (_) => charset[random.nextInt(charset.length)])
+        .join();
+  }
+
+  /// Returns the sha256 hash of [input] in hex notation.
+  static String sha256ofString(String input) {
+    final bytes = utf8.encode(input);
+    final digest = sha256.convert(bytes);
+    return digest.toString();
+  }
+
+  static Future<UserCredential> signInWithApple(BuildContext context) async {
+    final rawNonce = generateNonce();
+    final nonce = sha256ofString(rawNonce);
+
+    final appleCredential = await SignInWithApple.getAppleIDCredential(
+      scopes: [
+        AppleIDAuthorizationScopes.email,
+        AppleIDAuthorizationScopes.fullName,
+      ],
+      nonce: nonce,
+    );
+
+    // Extract user information
+    final givenName = appleCredential.givenName ?? '';
+    final familyName = appleCredential.familyName ?? '';
+    final fullName = '$givenName $familyName';
+    logg.log(
+        'givenName: $givenName, familyName: $familyName, fullName: $fullName');
+
+    // Create an `OAuthCredential` from the credential returned by Apple.
+    final oauthCredential = OAuthProvider("apple.com").credential(
+      idToken: appleCredential.identityToken,
+      rawNonce: rawNonce,
+    );
+
+    // Sign in the user with Firebase.
+    UserCredential? userCredential =
+        await FirebaseAuth.instance.signInWithCredential(oauthCredential);
+
+    // Update user . Note this will not update usename on 2nd logg.login as apple provides userName for very first time ONLY.Apple also doesn't provide photoUrl.
+    fullName.trim();
+    if (fullName.length > 2) {
+      await userCredential.user!.updateDisplayName(fullName);
+      // await userCredential.user!.updatePhotoURL(photoURL)
+    }
+    logg.log('userName: ${FirebaseAuth.instance.currentUser!.displayName}');
+    return userCredential;
+  }
 
   static Future<UserCredential?> signInWithGoogle(BuildContext context,
       ValueNotifier<bool> googleNotifier, String fcmToken) async {
@@ -59,7 +117,7 @@ class AuthServices {
 
       return userCredential;
     } catch (e) {
-      log("Error signing in with Google: $e");
+      logg.log("Error signing in with Google: $e");
       googleNotifier.value = false;
     }
     return null;
@@ -109,7 +167,7 @@ class AuthServices {
         AppUtils.toastMessage('Email already in use');
       }
     } catch (e) {
-      log('Error: ${e.toString()}');
+      logg.log('Error: ${e.toString()}');
     }
     return null;
   }
@@ -146,7 +204,7 @@ class AuthServices {
         });
         return true;
       } else {
-        log('Not Login');
+        logg.log('Not Login');
         return false;
       }
     } on FirebaseAuthException catch (e) {
@@ -169,13 +227,13 @@ class AuthServices {
       await deleteUserTickets();
       await AuthServices.getCurrentUser.delete();
     } on FirebaseAuthException catch (e) {
-      log(e.toString());
+      logg.log(e.toString());
 
       if (e.code == "requires-recent-login") {
         await _reauthenticateAndDelete();
       } else {}
     } catch (e) {
-      log(e.toString());
+      logg.log(e.toString());
     }
   }
 
@@ -186,7 +244,7 @@ class AuthServices {
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .delete();
     } catch (e) {
-      log("Error deleting user data: $e");
+      logg.log("Error deleting user data: $e");
     }
   }
 
@@ -203,7 +261,7 @@ class AuthServices {
         await document.reference.delete();
       }
     } catch (e) {
-      log("Error deleting user data: $e");
+      logg.log("Error deleting user data: $e");
     }
   }
 
@@ -221,7 +279,7 @@ class AuthServices {
 
       await AuthServices.getCurrentUser.delete();
     } catch (e) {
-      log(e.toString());
+      logg.log(e.toString());
     }
   }
 
@@ -246,7 +304,7 @@ class AuthServices {
             merge: true,
           ));
     } catch (e) {
-      log('Error storing photo url: ${e.toString()}');
+      logg.log('Error storing photo url: ${e.toString()}');
     }
   }
 
@@ -266,17 +324,16 @@ class AuthServices {
     await GoogleSignIn().signOut();
   }
 
-  static Future<void> storeUserSignInFcmToken({
-    required String fcmToken
-  }) async {
+  static Future<void> storeUserSignInFcmToken(
+      {required String fcmToken}) async {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     DocumentReference user =
         firestore.collection('user_data').doc(getCurrentUser.uid);
     await user.set({'fcm_token': fcmToken}, SetOptions(merge: true));
   }
 
-  static Future<void> storeFCMToken({ required String fcmToken})async{
-            FirebaseFirestore firestore = FirebaseFirestore.instance;
+  static Future<void> storeFCMToken({required String fcmToken}) async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
     DocumentReference user =
         firestore.collection('user_data').doc(getCurrentUser.uid);
     await user.set({'fcm_token': fcmToken}, SetOptions(merge: true));
@@ -299,7 +356,7 @@ class AuthServices {
 
       await getCurrentUser.updateDisplayName(userModel.displayName);
     } catch (e) {
-      log('Error storing user data: ${e.toString()}');
+      logg.log('Error storing user data: ${e.toString()}');
     }
   }
 
@@ -316,7 +373,7 @@ class AuthServices {
       return await ref.getDownloadURL();
     } on FirebaseException catch (error) {
       SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-        log('Error: ${error.toString()}');
+        logg.log('Error: ${error.toString()}');
       });
     }
     return null;
@@ -336,7 +393,7 @@ class AuthServices {
       return await ref.getDownloadURL();
     } on FirebaseException catch (error) {
       SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-        log('Error: ${error.toString()}');
+        logg.log('Error: ${error.toString()}');
       });
     }
     return null;
@@ -357,7 +414,7 @@ class AuthServices {
         return null;
       }
     } catch (e) {
-      log('Error fetching user data: ${e.toString()}');
+      logg.log('Error fetching user data: ${e.toString()}');
       return null;
     }
   }
@@ -385,7 +442,7 @@ class AuthServices {
           image, SettableMetadata(contentType: "image/png"));
       return await profileImage.getDownloadURL();
     } on FirebaseException catch (error) {
-      log('Image Uploading Error:$error ');
+      logg.log('Image Uploading Error:$error ');
       return '';
     }
   }
