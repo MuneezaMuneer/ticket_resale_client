@@ -1,4 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
 import 'dart:convert';
 import 'dart:developer' as logg;
 import 'dart:io';
