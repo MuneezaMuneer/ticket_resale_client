@@ -1,4 +1,3 @@
-// ignore_for_file: must_be_immutable
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -9,7 +8,7 @@ import 'package:ticket_resale/utils/utils.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
 class NotificationScreen extends StatefulWidget {
-  NotificationScreen({super.key});
+  const NotificationScreen({super.key});
 
   @override
   State<NotificationScreen> createState() => _NotificationScreenState();

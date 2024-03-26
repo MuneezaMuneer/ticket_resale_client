@@ -20,6 +20,8 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  
+
   SwitchProvider provider = SwitchProvider();
   await provider.loadPreferences();
 
@@ -36,8 +38,6 @@ class TicketResale extends StatelessWidget {
   const TicketResale({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    NotificationServices.initNotification(context: context);
-    NotificationServices.forGroundNotifications(context);
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<ClearProvider>(
