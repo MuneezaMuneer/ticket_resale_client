@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:ticket_resale/models/models.dart';
+import 'package:ticket_resale/models/event_modals.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 import '../constants/constants.dart';
+import '../models/models.dart';
 import '../screens/screens.dart';
 
 Route onGenerateRoute(RouteSettings settings) {
@@ -41,7 +42,9 @@ Route onGenerateRoute(RouteSettings settings) {
     return animatePage(const PrivacyPolicy());
   } else if (settings.name == AppRoutes.detailFirstScreen) {
     final eventId = settings.arguments as String;
-    return animatePage(HomeDetailFirstScreen(eventId: eventId,));
+    return animatePage(HomeDetailFirstScreen(
+      eventId: eventId,
+    ));
   } else if (settings.name == AppRoutes.detailSecondScreen) {
     final Map<String, dynamic> arguments =
         settings.arguments as Map<String, dynamic>;
@@ -73,7 +76,7 @@ Route onGenerateRoute(RouteSettings settings) {
   } else if (settings.name == AppRoutes.chatDetailScreen) {
     final Map<String, dynamic> arguments =
         settings.arguments as Map<String, dynamic>;
-   
+
     final String receiverId = arguments['receiverId'] as String;
     final String hashKey = arguments['hashKey'] as String;
 
@@ -81,7 +84,6 @@ Route onGenerateRoute(RouteSettings settings) {
     return animatePage(ChatDetailScreen(
       receiverId: receiverId,
       hashKey: hashKey,
-    
       isOpened: isOpened,
     ));
   } else if (settings.name == AppRoutes.eventScreen) {

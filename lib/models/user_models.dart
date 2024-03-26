@@ -9,6 +9,7 @@ class UserModelClient {
   final String? id;
   final String? status;
   final String? fcmToken;
+  final String? paypalAuthorization;
 
   UserModelClient({
     this.fcmToken,
@@ -21,11 +22,13 @@ class UserModelClient {
     this.birthDate,
     this.photoUrl,
     this.profileLevels,
+    this.paypalAuthorization,
   });
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'instagram_username': instaUsername,
+      'email': email,
       'user_name': displayName,
       'phone_number': phoneNo,
       'birth_date': birthDate,
@@ -45,6 +48,7 @@ class UserModelClient {
       'status': status,
       'image_url': photoUrl,
       'fcm_token': fcmToken,
+      'email': email
     };
   }
 
@@ -61,7 +65,8 @@ class UserModelClient {
         profileLevels: map['profile_levels'] as Map<String, dynamic>,
         displayName:
             map['user_name'] != null ? map['user_name'] as String : null,
-        fcmToken: map['fcm_token'] ?? '');
+        fcmToken: map['fcm_token'] ?? '',
+        paypalAuthorization: map['paypal_authorization'] ?? '');
   }
 }
 

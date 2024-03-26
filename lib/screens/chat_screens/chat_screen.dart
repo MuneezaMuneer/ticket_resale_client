@@ -1,9 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:ticket_resale/constants/constants.dart';
-import 'package:ticket_resale/db_services/db_services.dart';
-import 'package:ticket_resale/utils/utils.dart';
+import 'package:ticket_resale/db_services/firestore_services_client.dart';
+import 'package:ticket_resale/utils/app_utils.dart';
+import 'package:ticket_resale/widgets/custom_appbar.dart';
+import 'package:ticket_resale/widgets/custom_text.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
 class ChatScreen extends StatelessWidget {
@@ -53,16 +56,21 @@ class ChatScreen extends StatelessWidget {
                                 'receiverId': firstUserId,
                                 'hashKey': hashKey,
                                 'isOpened': false,
-                               
                               },
                             );
                           },
                           child: ListTile(
-                            leading: CircleAvatar(
-                              radius: 20,
-                              backgroundImage:
-                                  NetworkImage(userData!.photoUrl!),
-                            ),
+                            leading: SizedBox(
+                                child: (userData!.photoUrl != null) &&
+                                        userData.photoUrl != 'null'
+                                    ? CustomDisplayStoryImage(
+                                        imageUrl: '${userData.photoUrl}',
+                                        height: 43,
+                                        width: 43,
+                                      )
+                                    : const CircleAvatar(
+                                        backgroundImage: AssetImage(
+                                            AppImages.profileImage))),
                             title: Row(
                               children: [
                                 Expanded(

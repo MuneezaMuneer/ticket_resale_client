@@ -1,7 +1,9 @@
-// ignore_for_file: must_be_immutable, use_build_context_synchronously
+// ignore_for_file: must_be_immutable, use_build_context_synchronously, prefer_const_constructors
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:gap/gap.dart';
 import 'package:svg_flutter/svg_flutter.dart';
 import 'package:ticket_resale/constants/constants.dart';
@@ -246,9 +248,9 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                           userId: widget.ticketModel.uid!),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
-                          final data = snapshot.data!;
-                          networkImage = data.photoUrl!;
-                          name = data.displayName!;
+                          final userData = snapshot.data!;
+                          networkImage = '${userData.photoUrl}';
+                          name = userData.displayName!;
                           return Container(
                               height: height * 0.1,
                               width: width,
@@ -259,13 +261,18 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                               child: Row(
                                 children: [
                                   const Gap(7),
-                                  CircleAvatar(
-                                      backgroundImage: data.photoUrl != null &&
-                                              data.photoUrl != 'null'
-                                          ? NetworkImage(data.photoUrl!)
-                                          : const AssetImage(
-                                                  AppImages.profileImage)
-                                              as ImageProvider),
+                                  SizedBox(
+                                    child: (userData.photoUrl != null) &&
+                                            userData.photoUrl != 'null'
+                                        ? CustomDisplayStoryImage(
+                                            imageUrl: '${userData.photoUrl}',
+                                            height: 45,
+                                            width: 45,
+                                          )
+                                        : CircleAvatar(
+                                            backgroundImage: const AssetImage(
+                                                AppImages.profileImage)),
+                                  ),
                                   const Gap(9),
                                   Column(
                                     crossAxisAlignment:
@@ -284,7 +291,7 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                                       Row(
                                         children: [
                                           CustomText(
-                                            title: '${data.displayName}',
+                                            title: '${userData.displayName}',
                                             size: AppSize.intermediate,
                                             weight: FontWeight.w600,
                                             color: AppColors.lightBlack
@@ -462,12 +469,16 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
             padding: const EdgeInsets.only(left: 8),
             child: Row(
               children: [
-                CircleAvatar(
-                    backgroundColor: avatarBg,
-                    radius: 15,
-                    backgroundImage: NetworkImage(
-                      '$imagePath',
-                    )),
+                SizedBox(
+                    child: (imagePath != null) && imagePath != 'null'
+                        ? CustomDisplayStoryImage(
+                            imageUrl: imagePath,
+                            height: 35,
+                            width: 35,
+                          )
+                        : CircleAvatar(
+                            backgroundImage:
+                                const AssetImage(AppImages.profileImage))),
                 Padding(
                   padding: const EdgeInsets.only(left: 13, top: 13),
                   child: Column(
@@ -491,8 +502,11 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
               ],
             ),
           ),
-          SizedBox(
-            child: child,
+          Padding(
+            padding: EdgeInsets.only(right: 10),
+            child: SizedBox(
+              child: child,
+            ),
           )
         ],
       ),

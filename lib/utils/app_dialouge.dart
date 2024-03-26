@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:provider/provider.dart';
 import 'package:svg_flutter/svg_flutter.dart';
 import 'package:ticket_resale/constants/app_routes.dart';
 import 'package:ticket_resale/constants/app_colors.dart';
@@ -7,6 +9,7 @@ import 'package:ticket_resale/constants/app_images.dart';
 import 'package:ticket_resale/constants/app_textsize.dart';
 import 'package:ticket_resale/db_services/db_services.dart';
 import 'package:ticket_resale/models/models.dart';
+import 'package:ticket_resale/providers/bottom_sheet_provider.dart';
 import 'package:ticket_resale/utils/notification_services.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
@@ -94,11 +97,11 @@ deleteDialog({required BuildContext context}) {
   );
 }
 
-sellerRatingDialog(
-    {required BuildContext context,
-    required String networkImage,
-    required String name,
-    bool isNetworkImage = true}) {
+sellerRatingDialog({
+  required BuildContext context,
+  required String networkImage,
+  required String name,
+}) {
   return showDialog(
     context: context,
     builder: (context) {
@@ -110,13 +113,16 @@ sellerRatingDialog(
               const Gap(20),
               Stack(
                 children: [
-                  CircleAvatar(
-                    backgroundImage: isNetworkImage
-                        ? NetworkImage(networkImage)
-                        : const AssetImage(AppImages.profileImage)
-                            as ImageProvider,
-                    radius: 70,
-                  ),
+                  SizedBox(
+                      height: 100,
+                      width: 100,
+                      child: networkImage.isNotEmpty && networkImage != 'null'
+                          ? CustomDisplayStoryImage(
+                              imageUrl: networkImage,
+                            )
+                          : const CircleAvatar(
+                              backgroundImage:
+                                  AssetImage(AppImages.profileImage))),
                   Positioned(
                       left: 90,
                       top: 70,
@@ -219,173 +225,181 @@ sellerRatingDialog(
   );
 }
 
-ticketSellDialog(
-    {required BuildContext context,
-    required String ticketImage,
-    required String offeredPrice,
-    required String buyerImage,
-    required String buyerId,
-    required String buyerName,
-    required String hashKey,
-    required String docId,
-    required String offerId,
-    required MessageModel messageModel,
-    required TicketsSoldModel soldModel,
-    required UserModelClient userModel,
-    required NotificationModel notificationModel,
-    required String token,
-    required String title,
-    required String body}) {
+ticketSellDialog({
+  required BuildContext context,
+  required String ticketImage,
+  required String offeredPrice,
+  required String buyerImage,
+  required String buyerId,
+  required String buyerName,
+  required String hashKey,
+  required String docId,
+  required String offerId,
+  required MessageModel messageModel,
+  required TicketsSoldModel soldModel,
+  required UserModelClient userModel,
+  required NotificationModel notificationModel,
+  required String token,
+  required String title,
+  required String body,
+}) {
   return showDialog(
     context: context,
     builder: (context) {
-      return AlertDialog(
-        backgroundColor: AppColors.white,
-        titlePadding:
-            const EdgeInsets.only(left: 25, right: 25, bottom: 10, top: 0),
-        title: Column(
-          children: [
-            const Gap(10),
-            CircleAvatar(
-              backgroundImage: NetworkImage(ticketImage),
-              radius: 90,
-            ),
-            const CustomText(
-              title: 'Are you sure?',
-              color: AppColors.jetBlack,
-              size: AppSize.verylarge,
-              weight: FontWeight.w700,
-            ),
-            CustomText(
-              title:
-                  'Are you sure you want to sell this ticket on below mentioned details.',
-              color: AppColors.jetBlack.withOpacity(0.8),
-              maxLines: 2,
-              size: AppSize.medium,
-              softWrap: true,
-              weight: FontWeight.w400,
-              textAlign: TextAlign.center,
-            ),
-            const Gap(20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      return Consumer<BottomSheetProvider>(
+        builder: (context, loadingProvider, child) {
+          return AlertDialog(
+            backgroundColor: AppColors.white,
+            titlePadding:
+                const EdgeInsets.only(left: 25, right: 25, bottom: 10, top: 0),
+            title: Column(
               children: [
+                const Gap(10),
+                CircleAvatar(
+                  backgroundImage: NetworkImage(ticketImage),
+                  radius: 90,
+                ),
                 const CustomText(
-                  title: 'Price offered',
-                  size: AppSize.regular,
-                  weight: FontWeight.w400,
+                  title: 'Are you sure?',
                   color: AppColors.jetBlack,
+                  size: AppSize.verylarge,
+                  weight: FontWeight.w700,
                 ),
                 CustomText(
-                  title: offeredPrice,
-                  size: AppSize.regular,
+                  title:
+                      'Are you sure you want to sell this ticket on below mentioned details.',
+                  color: AppColors.jetBlack.withOpacity(0.8),
+                  maxLines: 2,
+                  size: AppSize.medium,
+                  softWrap: true,
                   weight: FontWeight.w400,
-                  color: AppColors.blueViolet,
-                )
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const CustomText(
-                  title: 'Buyer',
-                  size: AppSize.regular,
-                  weight: FontWeight.w400,
-                  color: AppColors.jetBlack,
+                  textAlign: TextAlign.center,
                 ),
+                const Gap(20),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SizedBox(
-                      height: 30,
-                      width: 30,
-                      child: CircleAvatar(
-                        backgroundImage: NetworkImage(buyerImage),
-                      ),
-                    ),
-                    const Gap(10),
-                    CustomText(
-                      title: buyerName,
-                      size: AppSize.intermediate,
+                    const CustomText(
+                      title: 'Price offered',
+                      size: AppSize.regular,
                       weight: FontWeight.w400,
                       color: AppColors.jetBlack,
+                    ),
+                    CustomText(
+                      title: offeredPrice,
+                      size: AppSize.regular,
+                      weight: FontWeight.w400,
+                      color: AppColors.blueViolet,
                     )
                   ],
                 ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const CustomText(
+                      title: 'Buyer',
+                      size: AppSize.regular,
+                      weight: FontWeight.w400,
+                      color: AppColors.jetBlack,
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(
+                          height: 30,
+                          width: 30,
+                          child: CircleAvatar(
+                            backgroundImage: NetworkImage(buyerImage),
+                          ),
+                        ),
+                        const Gap(10),
+                        CustomText(
+                          title: buyerName,
+                          size: AppSize.intermediate,
+                          weight: FontWeight.w400,
+                          color: AppColors.jetBlack,
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+                const Gap(20)
               ],
             ),
-            const Gap(20)
-          ],
-        ),
-        actions: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                height: 50,
-                width: 110,
-                child: CustomButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  btnText: 'Cancel',
-                  backgroundColor: AppColors.white,
-                  borderColor: AppColors.jetBlack,
-                  textColor: AppColors.jetBlack,
-                  weight: FontWeight.w700,
-                  textSize: AppSize.regular,
-                ),
+            actions: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                    height: 50,
+                    width: 110,
+                    child: CustomButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      btnText: 'Cancel',
+                      backgroundColor: AppColors.white,
+                      borderColor: AppColors.jetBlack,
+                      textColor: AppColors.jetBlack,
+                      weight: FontWeight.w700,
+                      textSize: AppSize.regular,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 50,
+                    width: 110,
+                    child: CustomButton(
+                      onPressed: () async {
+                        loadingProvider.setLoading(true);
+                        await FireStoreServicesClient.createMessageChat(
+                                messageModel: messageModel, hashKey: hashKey)
+                            .then((value) async {
+                          await FireStoreServicesClient.makeConnection(
+                                  userIDReceiver: messageModel.userIDReceiver!)
+                              .then((value) async {
+                            await FireStoreServicesClient.updateCommentsData(
+                                docId: docId, offerId: offerId);
+                          }).then((value) async {
+                            await FireStoreServicesClient.saveSoldTicketsData(
+                                soldModel: soldModel,
+                                hashKey: hashKey,
+                                buyerUid: buyerId,
+                                sellerUid: AuthServices.getCurrentUser.uid);
+                          }).then((value) async {
+                            await NotificationServices.sendNotification(
+                                token: token, title: title, body: body);
+                          }).then((value) {
+                            FireStoreServicesClient.storeNotifications(
+                                notificationModel: notificationModel,
+                                name: 'client_notifications');
+                            loadingProvider.setLoading(false);
+                            Navigator.pushNamedAndRemoveUntil(
+                              context,
+                              AppRoutes.chatDetailScreen,
+                              (route) => false,
+                              arguments: {
+                                'receiverId': messageModel.userIDReceiver,
+                                'hashKey': hashKey,
+                                'userModel': userModel,
+                                'isOpened': true,
+                                'offeredPrice': offeredPrice
+                              },
+                            );
+                          });
+                        });
+                      },
+                      textColor: AppColors.white,
+                      textSize: AppSize.medium,
+                      btnText: 'Confirm',
+                      loading: loadingProvider.isLoading,
+                      gradient: customGradient,
+                      weight: FontWeight.w800,
+                    ),
+                  )
+                ],
               ),
-              SizedBox(
-                height: 50,
-                width: 110,
-                child: CustomButton(
-                  onPressed: () async {
-                    await FireStoreServicesClient.createMessageChat(
-                            messageModel: messageModel, hashKey: hashKey)
-                        .then((value) async {
-                      await FireStoreServicesClient.makeConnection(
-                              userIDReceiver: messageModel.userIDReceiver!)
-                          .then((value) async {
-                        await FireStoreServicesClient.updateCommentsData(
-                            docId: docId, offerId: offerId);
-                      }).then((value) async {
-                        await FireStoreServicesClient.saveSoldTicketsData(
-                            soldModel: soldModel,
-                            hashKey: hashKey,
-                            buyerUid: buyerId,
-                            sellerUid: AuthServices.getCurrentUser.uid);
-                      }).then((value) async {
-                        await NotificationServices.sendNotification(
-                            token: token, title: title, body: body);
-                      }).then((value) {
-                        FireStoreServicesClient.storeNotifications(
-                            notificationModel: notificationModel,
-                            name: 'client_notifications');
-                        Navigator.pushNamedAndRemoveUntil(
-                          context,
-                          AppRoutes.chatDetailScreen,
-                          (route) => false,
-                          arguments: {
-                            'receiverId': messageModel.userIDReceiver,
-                            'hashKey': hashKey,
-                            'userModel': userModel,
-                            'isOpened': true,
-                            'offeredPrice': offeredPrice
-                          },
-                        );
-                      });
-                    });
-                  },
-                  textColor: AppColors.white,
-                  textSize: AppSize.medium,
-                  btnText: 'Confirm',
-                  gradient: customGradient,
-                  weight: FontWeight.w800,
-                ),
-              )
             ],
-          ),
-        ],
+          );
+        },
       );
     },
   );

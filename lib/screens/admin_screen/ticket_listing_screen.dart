@@ -271,20 +271,21 @@ class _TicketListingState extends State<TicketListing> {
                     (status == 'Active') ? 'Disable' : 'Active';
                 FirestoreServicesAdmin.updateTicketStatus(
                     ticketID, currentStatus);
+                NotificationModel notificationModel = NotificationModel(
+                    title: 'Ticket listing',
+                    notificationType: 'ticket_listing',
+                    body:
+                        'Your $ticketType ticket is $currentStatus for "$eventName"',
+                    id: eventId,
+                    status: 'Unread',
+                    userId: userID);
                 NotificationServices.sendNotification(
                         token: fcmToken,
                         title: 'Ticket listing',
                         body:
-                            'Your $ticketType ticket is $currentStatus for "$eventName"')
+                            'Your $ticketType ticket is $currentStatus for "$eventName"',
+                        data: notificationModel.toMap())
                     .then((value) {
-                  NotificationModel notificationModel = NotificationModel(
-                      title: 'Ticket listing',
-                      notificationType: 'ticket_listing',
-                      body:
-                          'Your $ticketType ticket is $currentStatus for "$eventName"',
-                      id: eventId,
-                      status: 'Unread',
-                      userId: userID);
                   FireStoreServicesClient.storeNotifications(
                       notificationModel: notificationModel,
                       name: 'client_notifications');

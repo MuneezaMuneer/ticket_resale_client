@@ -4,11 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:svg_flutter/svg_flutter.dart';
-import 'package:ticket_resale/components/call_back_funs.dart';
+import 'package:ticket_resale/components/components.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/db_services/db_services.dart';
-import 'package:ticket_resale/db_services/firestore_services_client.dart';
-import 'package:ticket_resale/models/event_modals.dart';
+import 'package:ticket_resale/models/models.dart';
 import 'package:ticket_resale/utils/utils.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
@@ -65,16 +64,10 @@ class _HomeAppBarState extends State<HomeAppBar> {
                 height: 50,
                 width: 50,
                 child: photoUrl != null && photoUrl!.isNotEmpty
-                    ? ClipRRect(
-                        borderRadius: BorderRadius.circular(100),
-                        child: CachedNetworkImage(
-                          imageUrl: "$photoUrl",
-                          placeholder: (context, url) =>
-                              const CupertinoActivityIndicator(
-                            color: AppColors.blueViolet,
-                          ),
-                          fit: BoxFit.cover,
-                        ),
+                    ? CustomDisplayStoryImage(
+                        imageUrl: '$photoUrl',
+                        height: 45,
+                        width: 45,
                       )
                     : const CircleAvatar(
                         backgroundImage: AssetImage(AppImages.profileImage))),

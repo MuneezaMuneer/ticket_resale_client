@@ -35,6 +35,7 @@ class _CommentScreenState extends State<CommentScreen> {
   TextEditingController commentController = TextEditingController();
   TextEditingController priceController = TextEditingController();
   ValueNotifier<bool> isDataSend = ValueNotifier<bool>(true);
+  
   late Stream<List<CommentModel>> commentData;
   @override
   void initState() {

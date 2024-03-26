@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -329,10 +330,10 @@ class _HomeDetailFirstScreenState extends State<HomeDetailFirstScreen> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(bottom: 5),
-                          child: CircleAvatar(
-                            backgroundColor: AppColors.white,
-                            radius: 20,
-                            backgroundImage: NetworkImage('$imagePath'),
+                          child: CustomDisplayStoryImage(
+                            imageUrl: '$imagePath',
+                            height: 43,
+                            width: 43,
                           ),
                         ),
                         Padding(
@@ -390,13 +391,17 @@ class _HomeDetailFirstScreenState extends State<HomeDetailFirstScreen> {
                           padding: const EdgeInsets.only(left: 8),
                           child: Row(
                             children: [
-                              CircleAvatar(
-                                backgroundImage: data.photoUrl != null &&
-                                        data.photoUrl != 'null'
-                                    ? NetworkImage(data.photoUrl!)
-                                    : const AssetImage(AppImages.profileImage)
-                                        as ImageProvider,
-                              ),
+                              SizedBox(
+                                  child: (data.photoUrl != null) &&
+                                          data.photoUrl != 'null'
+                                      ? CustomDisplayStoryImage(
+                                          imageUrl: '${data.photoUrl}',
+                                          height: 43,
+                                          width: 43,
+                                        )
+                                      : const CircleAvatar(
+                                          backgroundImage: AssetImage(
+                                              AppImages.profileImage))),
                               Padding(
                                 padding:
                                     const EdgeInsets.only(left: 8, top: 15),

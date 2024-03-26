@@ -1,12 +1,16 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 import 'package:svg_flutter/svg_flutter.dart';
-import 'package:ticket_resale/providers/providers.dart';
+import 'package:ticket_resale/widgets/custom_gradient.dart';
+import 'package:ticket_resale/widgets/custom_text.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 import '../components/components.dart';
 import '../constants/constants.dart';
+import '../providers/providers.dart';
 
 class CustomAppBarClient extends StatelessWidget
     implements PreferredSizeWidget {
@@ -70,10 +74,18 @@ class CustomAppBarClient extends StatelessWidget
                   SizedBox(
                       child: isNetworkImage
                           ? Padding(
-                              padding: const EdgeInsets.only(top: 6, left: 10),
-                              child: CircleAvatar(
-                                backgroundImage: NetworkImage('$networkImage'),
-                              ),
+                              padding: const EdgeInsets.only(top: 8, left: 10),
+                              child: SizedBox(
+                                  child: (networkImage != null) &&
+                                          networkImage != 'null'
+                                      ? CustomDisplayStoryImage(
+                                          imageUrl: '$networkImage',
+                                          height: 43,
+                                          width: 43,
+                                        )
+                                      : const CircleAvatar(
+                                          backgroundImage: AssetImage(
+                                              AppImages.profileImage))),
                             )
                           : const SizedBox.shrink()),
                   const Gap(15),

@@ -1,4 +1,5 @@
 import 'package:device_preview/device_preview.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +7,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ticket_resale/constants/constants.dart';
-import 'package:ticket_resale/db_services/auth_services.dart';
 import 'package:ticket_resale/firebase_options.dart';
 import 'package:ticket_resale/providers/providers.dart';
 import 'package:ticket_resale/screens/screens.dart';
@@ -23,8 +23,6 @@ void main() async {
   SwitchProvider provider = SwitchProvider();
   await provider.loadPreferences();
 
-  NotificationServices.initNotification();
-
   AppText.preference = await SharedPreferences.getInstance();
   runApp(
     DevicePreview(
@@ -38,6 +36,7 @@ class TicketResale extends StatelessWidget {
   const TicketResale({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    NotificationServices.initNotification(context: context);
     NotificationServices.forGroundNotifications(context);
     return MultiProvider(
       providers: [
@@ -77,9 +76,30 @@ class TicketResale extends StatelessWidget {
           fontFamily: GoogleFonts.openSans().fontFamily,
         ),
         debugShowCheckedModeBanner: false,
-        home: AuthServices.getCurrentUser!.uid.isNotEmpty
-            ? const CustomNavigationClient()
-            : const SplashScreen(),
+        home: StreamBuilder(
+            stream: FirebaseAuth.instance.userChanges(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return const Center(
+                  child: Text(
+                    'Some Thing Has Went Wrong',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 25,
+                        backgroundColor: Colors.red),
+                  ),
+                );
+              } else if (snapshot.hasData) {
+                if (snapshot.data!.email! == 'test@gmail.com') {
+                  return const CustomNavigationAdmin();
+                } else {
+                  return const CustomNavigationClient();
+                }
+              }
+              return const SplashScreen();
+            }),
       ),
     );
   }
