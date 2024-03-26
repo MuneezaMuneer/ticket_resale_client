@@ -272,7 +272,6 @@ class _TicketListingState extends State<TicketListing> {
                 FirestoreServicesAdmin.updateTicketStatus(
                     ticketID, currentStatus);
                 NotificationServices.sendNotification(
-                        context: context,
                         token: fcmToken,
                         title: 'Ticket listing',
                         body:

@@ -23,6 +23,7 @@ class _CustomNavigationAdminState extends State<CustomNavigationAdmin> {
   @override
   void initState() {
     super.initState();
+    
     Future.delayed(Duration.zero, () {
       navigationProvider =
           Provider.of<NavigationProvider>(context, listen: false);

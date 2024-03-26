@@ -5,16 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:ticket_resale/constants/app_texts.dart';
+import 'package:ticket_resale/constants/constants.dart';
+import 'package:ticket_resale/db_services/auth_services.dart';
 import 'package:ticket_resale/firebase_options.dart';
-import 'package:ticket_resale/providers/clear_provider.dart';
-import 'package:ticket_resale/providers/event_image_provider.dart';
 import 'package:ticket_resale/providers/providers.dart';
 import 'package:ticket_resale/screens/screens.dart';
 import 'package:ticket_resale/utils/utils.dart';
+import 'package:ticket_resale/widgets/widgets.dart';
 import 'package:ticket_resale/screens/splash_screen.dart';
-import 'providers/drop_down_provider.dart';
-import 'providers/search_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,9 +25,6 @@ void main() async {
 
   NotificationServices.initNotification();
 
-  runApp(
-    const TicketResale(),
-  );
   AppText.preference = await SharedPreferences.getInstance();
   runApp(
     DevicePreview(
@@ -82,7 +77,9 @@ class TicketResale extends StatelessWidget {
           fontFamily: GoogleFonts.openSans().fontFamily,
         ),
         debugShowCheckedModeBanner: false,
-        home: const SplashScreen(),
+        home: AuthServices.getCurrentUser!.uid.isNotEmpty
+            ? const CustomNavigationClient()
+            : const SplashScreen(),
       ),
     );
   }

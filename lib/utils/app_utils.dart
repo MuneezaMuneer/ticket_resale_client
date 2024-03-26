@@ -99,7 +99,8 @@ class AppUtils {
     return formattedDate;
   }
 
-  static String formatTimeAgo(DateTime dateTime) {
+  static String formatTimeStamp(Timestamp timestamp) {
+    DateTime dateTime = timestamp.toDate();
     DateTime now = DateTime.now();
     Duration difference = now.difference(dateTime);
 
@@ -124,8 +125,7 @@ class AppUtils {
     }
   }
 
-  static String formatTimeStamp(Timestamp timestamp) {
-    DateTime dateTime = timestamp.toDate();
+  static String formatTimeAgo(DateTime dateTime) {
     DateTime now = DateTime.now();
     Duration difference = now.difference(dateTime);
 

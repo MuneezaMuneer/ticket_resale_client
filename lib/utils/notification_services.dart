@@ -83,8 +83,7 @@ class NotificationServices {
   }
 
   static Future<void> sendNotification(
-      {required BuildContext context,
-      required String token,
+      {required String token,
       required String title,
       required String body}) async {
     if (token.isEmpty) {
@@ -120,11 +119,19 @@ class NotificationServices {
     }
   }
 
-  static Future<String?> getFCMToken() async {
-    DocumentSnapshot<Map<String, dynamic>> fcmToken =
-        await FirebaseFirestore.instance.collection("admin_data").doc().get();
+  static Future<List<String>> getAdminFCMTokens() async {
+    List<String> tokens = [];
 
-    return fcmToken['fcm_token'];
+    final QuerySnapshot<Map<String, dynamic>> snapshot =
+        await FirebaseFirestore.instance.collection("admin_data").get();
+    for (var element in snapshot.docs) {
+      tokens.add(element.data()['token']);
+    }
+
+    print('The token is $tokens');
+
+    log('The token is $tokens');
+    return tokens;
   }
 
   static Future<void> showNotification(

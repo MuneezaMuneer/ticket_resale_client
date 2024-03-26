@@ -2,6 +2,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
@@ -37,10 +38,13 @@ class _CommentScreenState extends State<CommentScreen> {
   late Stream<List<CommentModel>> commentData;
   @override
   void initState() {
-    Provider.of<SwitchProvider>(context, listen: false).loadPreferences();
-    priceController.text = widget.price;
+    SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+      Provider.of<SwitchProvider>(context, listen: false).loadPreferences();
+    });
+    priceController.text = widget.price.trim();
     commentData = FireStoreServicesClient.fetchCommentsData(
         docId: widget.ticketModal.docId!);
+
     super.initState();
   }
 
@@ -279,7 +283,7 @@ class _CommentScreenState extends State<CommentScreen> {
                                                                   messageModel =
                                                                   MessageModel(
                                                                 message:
-                                                                    'Hey, I hope you are good.You have to pay the offered price to purchase the ticket',
+                                                                    "Hey, I hope you are good.You have to pay the '\$${commentData[index].offerPrice}' to purchase the '${widget.ticketModal.ticketType} TICKET' for festival '${widget.eventModal.eventName}'",
                                                                 userIDReceiver:
                                                                     '${userData.id}',
                                                                 userIDSender:
@@ -287,7 +291,21 @@ class _CommentScreenState extends State<CommentScreen> {
                                                                         .getCurrentUser
                                                                         .uid,
                                                               );
-
+                                                              NotificationModel notificationModel = NotificationModel(
+                                                                  title:
+                                                                      'Offer Accepted',
+                                                                  body:
+                                                                      "Your offered price'\$${commentData[index].offerPrice}' for '${widget.ticketModal.ticketType} TICKET' is confirmed for festival '${widget.eventModal.eventName}'",
+                                                                  userId:
+                                                                      userData
+                                                                          .id,
+                                                                  id: AuthServices
+                                                                      .getCurrentUser
+                                                                      .uid,
+                                                                  status:
+                                                                      'Unread',
+                                                                  notificationType:
+                                                                      'offer_confirm');
                                                               TicketsSoldModel
                                                                   soldModel =
                                                                   TicketsSoldModel(
@@ -331,7 +349,15 @@ class _CommentScreenState extends State<CommentScreen> {
                                                                       soldModel:
                                                                           soldModel,
                                                                       buyerId:
-                                                                          '${userData.id}')
+                                                                          '${userData.id}',
+                                                                      token:
+                                                                          '${userData.fcmToken}',
+                                                                      title:
+                                                                          'Offer Accepted',
+                                                                      body:
+                                                                          "Your offered price'\$${commentData[index].offerPrice}' for '${widget.ticketModal.ticketType} TICKET' is confirmed for festival '${widget.eventModal.eventName}'",
+                                                                      notificationModel:
+                                                                          notificationModel)
                                                                   : Navigator.pushNamedAndRemoveUntil(
                                                                       context,
                                                                       AppRoutes

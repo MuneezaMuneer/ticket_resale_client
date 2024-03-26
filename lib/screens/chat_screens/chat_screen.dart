@@ -52,9 +52,8 @@ class ChatScreen extends StatelessWidget {
                               arguments: {
                                 'receiverId': firstUserId,
                                 'hashKey': hashKey,
-                                'userModel': userData,
                                 'isOpened': false,
-                                'offeredPrice': '1'
+                               
                               },
                             );
                           },

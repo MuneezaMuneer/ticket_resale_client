@@ -2,20 +2,16 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:ticket_resale/db_services/db_services.dart';
-
 import 'package:ticket_resale/models/models.dart';
-
 import 'package:uuid/uuid.dart';
-
-import '../models/notification_model.dart';
 
 class FireStoreServicesClient {
   static Uuid uid = const Uuid();
   static Future<void> createTickets(
-      {required TicketModelClient ticketModel}) async {
+      {required TicketModelClient ticketModel, required String docId}) async {
     FirebaseFirestore.instance
         .collection('tickets')
-        .doc(uid.v4())
+        .doc(docId)
         .set(ticketModel.toMap());
   }
 
@@ -27,6 +23,43 @@ class FireStoreServicesClient {
         .collection('offers')
         .doc()
         .set(commentModel.toMap(), SetOptions(merge: true));
+  }
+
+  static Future<void> storeNotifications(
+      {required NotificationModel notificationModel,
+      required String name}) async {
+    FirebaseFirestore.instance
+        .collection('notifications')
+        .doc(name)
+        .collection(name)
+        .doc()
+        .set(notificationModel.toMap());
+  }
+
+  static Future<void> updateNotifications(
+      {required String? docId, required String name}) async {
+    FirebaseFirestore.instance
+        .collection('notifications')
+        .doc(name)
+        .collection(name)
+        .doc(docId)
+        .update({'status': 'read'});
+  }
+
+  static Future<void> deleteReadNotifications({required String name}) async {
+    QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore
+        .instance
+        .collection('notifications')
+        .doc(name)
+        .collection(name)
+        .where('user_id', isEqualTo: AuthServices.getCurrentUser.uid)
+        .where('status', isEqualTo: 'read')
+        .get();
+
+    for (QueryDocumentSnapshot<Map<String, dynamic>> documentSnapshot
+        in querySnapshot.docs) {
+      await documentSnapshot.reference.delete();
+    }
   }
 
   static Future<void> saveSoldTicketsData({
@@ -96,6 +129,22 @@ class FireStoreServicesClient {
     });
   }
 
+  static Stream<List<NotificationModel>> fetchNotifications(
+      {required String? status}) {
+    return FirebaseFirestore.instance
+        .collection('notifications')
+        .doc('client_notifications')
+        .collection('client_notifications')
+        .where('user_id', isEqualTo: AuthServices.getCurrentUser.uid)
+        .where('status', isEqualTo: status)
+        .snapshots()
+        .map((querySnapshot) {
+      return querySnapshot.docs.map((doc) {
+        return NotificationModel.fromMap(doc.data(), doc.id);
+      }).toList();
+    });
+  }
+
   static Future<void> verifyInstagram({required String instagram}) async {
     try {
       FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -127,6 +176,17 @@ class FireStoreServicesClient {
           doc.data(),
         );
       }).toList();
+    });
+  }
+
+  static Stream<EventModalClient> fetchEventDataBasedOnId(
+      {required String eventId}) {
+    return FirebaseFirestore.instance
+        .collection('event')
+        .doc(eventId)
+        .snapshots()
+        .map((event) {
+      return EventModalClient.fromMap(event.data() ?? {});
     });
   }
 
@@ -304,26 +364,5 @@ class FireStoreServicesClient {
     } catch (e) {
       log('Error making connection between users : ${e.toString()}');
     }
-  }
-
-  static Future<void> storeNotifications(
-      {required NotificationModel notificationModel,
-      required String name}) async {
-    FirebaseFirestore.instance
-        .collection('notifications')
-        .doc(name)
-        .collection(name)
-        .doc()
-        .set(notificationModel.toMap());
-  }
-
-  static Future<void> updateNotifications(
-      {required String? docId, required String name}) async {
-    FirebaseFirestore.instance
-        .collection('notifications')
-        .doc(name)
-        .collection(name)
-        .doc(docId)
-        .update({'status': 'read'});
   }
 }

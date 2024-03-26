@@ -6,10 +6,10 @@ import 'package:gap/gap.dart';
 import 'package:svg_flutter/svg_flutter.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/db_services/db_services.dart';
-import 'package:ticket_resale/models/models.dart';
 import 'package:ticket_resale/utils/utils.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 import '../components/components.dart';
+import '../models/models.dart';
 
 class HomeDetailSecondScreen extends StatefulWidget {
   EventModalClient eventModal;
@@ -56,29 +56,18 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 10),
-                          child: CustomText(
-                            title: widget.eventModal.eventName,
-                            size: AppSize.large,
-                            weight: FontWeight.w600,
-                            softWrap: true,
-                            color: AppColors.jetBlack,
-                            textAlign: TextAlign.start,
-                          ),
-                        ),
-                      ),
-                      SvgPicture.asset(
-                        AppSvgs.share,
-                        alignment: Alignment.centerRight,
-                        fit: BoxFit.cover,
-                      )
-                    ],
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10, top: 30),
+                    child: CustomText(
+                      title: widget.eventModal.eventName,
+                      size: AppSize.large,
+                      weight: FontWeight.w600,
+                      softWrap: true,
+                      color: AppColors.jetBlack,
+                      textAlign: TextAlign.start,
+                    ),
                   ),
-                  const Gap(10),
+                  const Gap(40),
                   Container(
                     height: height * 0.06,
                     width: width * 0.9,
@@ -422,7 +411,7 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                               arguments: {
                                 'eventModal': widget.eventModal,
                                 'ticketModal': widget.ticketModel,
-                                'price': priceController.text
+                                'price': priceController.text.trim()
                               },
                             );
                           }

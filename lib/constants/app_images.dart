@@ -19,7 +19,6 @@ class AppSvgs {
   static const sms = 'assets/svgs/sms.svg';
   static const fillStar = 'assets/svgs/star_fill.svg';
   static const star = 'assets/svgs/star.svg';
-  static const share = 'assets/svgs/share.svg';
   static const profile = 'assets/svgs/profile.svg';
   static const home = 'assets/svgs/home.svg';
   static const apple = 'assets/svgs/apple.svg';

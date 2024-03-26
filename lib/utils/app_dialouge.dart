@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:svg_flutter/svg_flutter.dart';
-import 'package:ticket_resale/constants/aapp_routes.dart';
+import 'package:ticket_resale/constants/app_routes.dart';
 import 'package:ticket_resale/constants/app_colors.dart';
 import 'package:ticket_resale/constants/app_images.dart';
 import 'package:ticket_resale/constants/app_textsize.dart';
 import 'package:ticket_resale/db_services/db_services.dart';
 import 'package:ticket_resale/models/models.dart';
+import 'package:ticket_resale/utils/notification_services.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
 deleteDialog({required BuildContext context}) {
@@ -218,20 +219,23 @@ sellerRatingDialog(
   );
 }
 
-ticketSellDialog({
-  required BuildContext context,
-  required String ticketImage,
-  required String offeredPrice,
-  required String buyerImage,
-  required String buyerId,
-  required String buyerName,
-  required String hashKey,
-  required String docId,
-  required String offerId,
-  required MessageModel messageModel,
-  required TicketsSoldModel soldModel,
-  required UserModelClient userModel,
-}) {
+ticketSellDialog(
+    {required BuildContext context,
+    required String ticketImage,
+    required String offeredPrice,
+    required String buyerImage,
+    required String buyerId,
+    required String buyerName,
+    required String hashKey,
+    required String docId,
+    required String offerId,
+    required MessageModel messageModel,
+    required TicketsSoldModel soldModel,
+    required UserModelClient userModel,
+    required NotificationModel notificationModel,
+    required String token,
+    required String title,
+    required String body}) {
   return showDialog(
     context: context,
     builder: (context) {
@@ -350,7 +354,13 @@ ticketSellDialog({
                             hashKey: hashKey,
                             buyerUid: buyerId,
                             sellerUid: AuthServices.getCurrentUser.uid);
+                      }).then((value) async {
+                        await NotificationServices.sendNotification(
+                            token: token, title: title, body: body);
                       }).then((value) {
+                        FireStoreServicesClient.storeNotifications(
+                            notificationModel: notificationModel,
+                            name: 'client_notifications');
                         Navigator.pushNamedAndRemoveUntil(
                           context,
                           AppRoutes.chatDetailScreen,

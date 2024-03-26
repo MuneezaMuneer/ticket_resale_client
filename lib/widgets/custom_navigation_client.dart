@@ -1,10 +1,14 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:svg_flutter/svg_flutter.dart';
 import 'package:ticket_resale/constants/constants.dart';
-import 'package:ticket_resale/providers/providers.dart';
+import 'package:ticket_resale/db_services/db_services.dart';
+import 'package:ticket_resale/providers/navigation_provider.dart';
 import 'package:ticket_resale/screens/screens.dart';
-import 'package:ticket_resale/widgets/widgets.dart';
+import 'package:ticket_resale/utils/utils.dart';
+import 'package:ticket_resale/widgets/custom_text.dart';
 
 class CustomNavigationClient extends StatefulWidget {
   const CustomNavigationClient({super.key});
@@ -20,6 +24,9 @@ class _CustomNavigationClientState extends State<CustomNavigationClient> {
   @override
   void initState() {
     super.initState();
+    NotificationServices.getFCMCurrentDeviceToken().then((token) {
+      AuthServices.storeFCMToken(fcmToken: '$token');
+    });
     Future.delayed(Duration.zero, () {
       navigationProvider =
           Provider.of<NavigationProvider>(context, listen: false);
