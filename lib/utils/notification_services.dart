@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'dart:math' as math;
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -11,17 +12,11 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:ticket_resale/constants/api_urls.dart';
 import 'package:ticket_resale/constants/app_routes.dart';
-import 'package:ticket_resale/db_services/auth_services.dart';
 
 class NotificationServices {
   static FirebaseMessaging messaging = FirebaseMessaging.instance;
   static final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
-
-  static Future<void> initNotification({required BuildContext context}) async {
-    requestPermission();
-    notificationSettings(context: context);
-  }
 
   static Future<String?> getFCMCurrentDeviceToken() async {
     return await messaging.getToken();
@@ -49,6 +44,7 @@ class NotificationServices {
   static void forGroundNotifications(BuildContext context) async {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       if (Platform.isAndroid) {
+        log('............... data ==  ${message.data}');
         handleMessage(context: context, message: message);
       }
     });
@@ -93,12 +89,12 @@ class NotificationServices {
     await flutterLocalNotificationsPlugin.initialize(
       initializationSetting,
       onDidReceiveNotificationResponse: (payload) {
-       
-        if (AuthServices.getCurrentUser.uid.isNotEmpty) {
-        
+        if (FirebaseAuth.instance.currentUser != null) {
           try {
-            Navigator.pushNamed(context, AppRoutes.notificationScreen,
-                arguments: false);
+            Navigator.pushNamed(
+              context,
+              AppRoutes.notificationScreen,
+            );
           } catch (e) {
             print('Navigation error: $e');
           }
@@ -110,7 +106,7 @@ class NotificationServices {
   static Future<void> sendNotification(
       {required String token,
       required String title,
-      required String body}) async {
+      required String body,  required Map<String, dynamic> data}) async {
     if (token.isEmpty) {
       log('Unable to send FCM message, no token exists.');
       return;
@@ -130,11 +126,7 @@ class NotificationServices {
                 "title": title,
                 "body": body,
               },
-              "data": {
-                "click_action": "FLUTTER_NOTIFICATION_CLICK",
-                "sound": "default",
-                "status": "done",
-              },
+              "data":data
             }),
           )
           .then((value) => log(value.body));

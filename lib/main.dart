@@ -19,6 +19,8 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  
+
   SwitchProvider provider = SwitchProvider();
   await provider.loadPreferences();
 
@@ -35,8 +37,6 @@ class TicketResale extends StatelessWidget {
   const TicketResale({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    NotificationServices.initNotification(context: context);
-    NotificationServices.forGroundNotifications(context);
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<ClearProvider>(
@@ -68,7 +68,6 @@ class TicketResale extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-      
         onGenerateRoute: onGenerateRoute,
         theme: ThemeData(
           splashColor: Colors.transparent,
@@ -92,7 +91,11 @@ class TicketResale extends StatelessWidget {
                   ),
                 );
               } else if (snapshot.hasData) {
-                return const CustomNavigationClient();
+                if (snapshot.data!.email! == 'test@gmail.com') {
+                  return const CustomNavigationAdmin();
+                } else {
+                  return const CustomNavigationClient();
+                }
               }
               return const SplashScreen();
             }),

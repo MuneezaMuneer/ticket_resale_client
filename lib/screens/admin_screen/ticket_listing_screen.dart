@@ -14,8 +14,6 @@ import 'package:ticket_resale/utils/app_utils.dart';
 import 'package:ticket_resale/utils/notification_services.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
-
-
 class TicketListing extends StatefulWidget {
   const TicketListing({super.key});
   @override
@@ -239,66 +237,64 @@ class _TicketListingState extends State<TicketListing> {
       ),
     );
   }
-  
 
-Widget createTableCell({
-  required String ticketID,
-  required String fcmToken,
-}) {
-  Color backgroundColor;
-  Color textColor = Colors.white;
-  return StreamBuilder(
-      stream: FirestoreServicesAdmin.fetchTicketStatus(ticketID: ticketID),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          String status = snapshot.data!;
+  Widget createTableCell({
+    required String ticketID,
+    required String fcmToken,
+  }) {
+    Color backgroundColor;
+    Color textColor = Colors.white;
+    return StreamBuilder(
+        stream: FirestoreServicesAdmin.fetchTicketStatus(ticketID: ticketID),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            String status = snapshot.data!;
 
-          if (status == 'Active') {
-            backgroundColor = AppColors.green;
-          } else if (status == 'Disable') {
-            backgroundColor = AppColors.red;
-          } else {
-            backgroundColor = AppColors.blue;
-          }
-          return GestureDetector(
-            onTap: () {
-              String currentStatus =
-                  (status == 'Active') ? 'Disable' : 'Active';
-              FirestoreServicesAdmin.updateTicketStatus(
-                  ticketID, currentStatus);
-              NotificationServices.sendNotification(
-                 
-                  token: fcmToken,
-                  title: currentStatus,
-                  body: 'Your ticket is $currentStatus');
-            },
-            child: Container(
-              height: 30,
-              width: 100,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(38),
-                color: backgroundColor,
-              ),
-              child: Center(
-                child: Text(
-                  status,
-                  style: TextStyle(
-                    color: textColor,
-                    fontSize: AppSize.small,
-                    fontWeight: FontWeight.w600,
+            if (status == 'Active') {
+              backgroundColor = AppColors.green;
+            } else if (status == 'Disable') {
+              backgroundColor = AppColors.red;
+            } else {
+              backgroundColor = AppColors.blue;
+            }
+            return GestureDetector(
+              onTap: () {
+                String currentStatus =
+                    (status == 'Active') ? 'Disable' : 'Active';
+                FirestoreServicesAdmin.updateTicketStatus(
+                    ticketID, currentStatus);
+                NotificationServices.sendNotification(
+                    token: fcmToken,
+                    title: currentStatus,
+                    body: 'Your ticket is $currentStatus',
+                    data: {});
+              },
+              child: Container(
+                height: 30,
+                width: 100,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(38),
+                  color: backgroundColor,
+                ),
+                child: Center(
+                  child: Text(
+                    status,
+                    style: TextStyle(
+                      color: textColor,
+                      fontSize: AppSize.small,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
               ),
-            ),
-          );
-        } else {
-          return const SizedBox(
-            width: 100,
-          );
-        }
-      });
-}
-
+            );
+          } else {
+            return const SizedBox(
+              width: 100,
+            );
+          }
+        });
+  }
 }
 
 DataCell _dataCellForNames({

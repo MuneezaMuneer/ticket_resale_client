@@ -25,6 +25,16 @@ class _CustomNavigationClientState extends State<CustomNavigationClient> {
     NotificationServices.getFCMCurrentDeviceToken().then((token) {
       AuthServices.storeFCMToken(fcmToken: '$token');
     });
+
+    NotificationServices.requestPermission().then((granted) {
+      if (granted) {
+      NotificationServices.notificationSettings(context: context);
+      NotificationServices.forGroundNotifications(context);
+      NotificationServices.appOpenInBackground(context: context);
+      }
+    });
+   
+
     Future.delayed(Duration.zero, () {
       navigationProvider =
           Provider.of<NavigationProvider>(context, listen: false);

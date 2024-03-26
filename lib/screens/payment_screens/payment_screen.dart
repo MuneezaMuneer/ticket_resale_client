@@ -71,24 +71,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     final uri = Uri.parse(request.url);
                     final payerID = uri.queryParameters['PayerID'];
                     log(".....................ID for Transaction........$executeUrl");
-
-                    if (payerID != null) {
-                      PaypalPaymentServices.executePayment(
-                              executeUrl, payerID, accessToken)
-                          .then((id) {
-                        log(".....................Payment Id : $id");
-                        NotificationServices.sendNotification(
-                            token: widget.token,
-                            title: 'Payment Done Successfully',
-                            body:
-                                "The offered'\$${widget.totalPrice}' price is paid successfully");
-                        FireStoreServicesClient
-                                .updateStatusInSoldTicketsCollection(
-                                    hashKey: widget.hashKey,
-                                    selectedDocIds: widget.docIds,
-                                    newStatus: 'Paid')
-                            .then((value) {
-                          NotificationModel notificationModel = NotificationModel(
+    NotificationModel notificationModel = NotificationModel(
                               title: 'Payment Done Successfully',
                               body:
                                   "The offered'\$${widget.totalPrice}' price is paid successfully",
@@ -99,6 +82,23 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                   notificationType:'paid',
                                   docId:AuthServices.getCurrentUser.uid ,
                                   );
+                    if (payerID != null) {
+                      PaypalPaymentServices.executePayment(
+                              executeUrl, payerID, accessToken)
+                          .then((id) {
+                        log(".....................Payment Id : $id");
+                        NotificationServices.sendNotification(
+                            token: widget.token,
+                            title: 'Payment Done Successfully',
+                            body:
+                                "The offered'\$${widget.totalPrice}' price is paid successfully", data: notificationModel.toMap());
+                        FireStoreServicesClient
+                                .updateStatusInSoldTicketsCollection(
+                                    hashKey: widget.hashKey,
+                                    selectedDocIds: widget.docIds,
+                                    newStatus: 'Paid')
+                            .then((value) {
+                      
                           FireStoreServicesClient.storeNotifications(
                               notificationModel: notificationModel,
                               name: 'client_notifications');
