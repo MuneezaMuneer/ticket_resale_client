@@ -250,7 +250,7 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           final userData = snapshot.data!;
-                          networkImage = userData.photoUrl!;
+                          networkImage = '${userData.photoUrl}';
                           name = userData.displayName!;
                           return Container(
                               height: height * 0.1,

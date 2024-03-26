@@ -22,8 +22,6 @@ void main() async {
   SwitchProvider provider = SwitchProvider();
   await provider.loadPreferences();
 
-  NotificationServices.initNotification();
-
   AppText.preference = await SharedPreferences.getInstance();
   runApp(
     DevicePreview(
@@ -37,6 +35,7 @@ class TicketResale extends StatelessWidget {
   const TicketResale({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    NotificationServices.initNotification(context: context);
     NotificationServices.forGroundNotifications(context);
     return MultiProvider(
       providers: [
@@ -69,6 +68,7 @@ class TicketResale extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+      
         onGenerateRoute: onGenerateRoute,
         theme: ThemeData(
           splashColor: Colors.transparent,
