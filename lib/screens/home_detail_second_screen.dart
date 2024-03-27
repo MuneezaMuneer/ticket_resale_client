@@ -200,11 +200,30 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                     color: AppColors.lightGrey,
                   ),
                   const Gap(20),
-                  const CustomText(
-                    title: 'Available Tickets',
-                    size: AppSize.regular,
-                    weight: FontWeight.w600,
-                    color: AppColors.jetBlack,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const CustomText(
+                        title: 'Available Tickets',
+                        size: AppSize.regular,
+                        weight: FontWeight.w600,
+                        color: AppColors.jetBlack,
+                      ),
+                      InkWell(
+                        onTap: () {
+                      
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.only(right: 10),
+                          child: CustomText(
+                            title: 'Feedback',
+                            size: AppSize.medium,
+                            weight: FontWeight.w400,
+                            color: AppColors.jetBlack,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                   const Gap(25),
                   _tileContainer(

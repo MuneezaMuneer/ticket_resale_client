@@ -284,7 +284,7 @@ class _TicketListingState extends State<TicketListing> {
                         title: 'Ticket listing',
                         body:
                             'Your $ticketType ticket is $currentStatus for "$eventName"',
-                        data: notificationModel.toMap())
+                        data: notificationModel.toMapForNotifications())
                     .then((value) {
                   FireStoreServicesClient.storeNotifications(
                       notificationModel: notificationModel,

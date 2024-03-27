@@ -358,7 +358,12 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                                       instaUsername: instaController.text,
                                       phoneNo: phoneNoController.text,
                                       birthDate: birthController.text,
-                                      photoUrl: imageUrl,
+                                      email: AuthServices.getCurrentUser.email,
+                                      photoUrl: imagePickerProvider
+                                              .getImageBytes.isNotEmpty
+                                          ? imageUrl
+                                          : AuthServices
+                                              .getCurrentUser.photoURL,
                                       status: 'Active');
 
                                   await AuthServices.storeUserImage(

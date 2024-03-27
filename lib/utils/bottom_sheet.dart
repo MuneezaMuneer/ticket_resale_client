@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:ticket_resale/components/components.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/db_services/db_services.dart';
+import 'package:ticket_resale/models/models.dart';
 import 'package:ticket_resale/models/tickets_sold_model.dart';
 import 'package:ticket_resale/providers/bottom_sheet_provider.dart';
 import 'package:ticket_resale/screens/screens.dart';
@@ -157,9 +158,8 @@ class CustomBottomSheet {
   static void showConfirmTicketsSheet(
       {required BuildContext context,
       required String hashKey,
-      required String token,
       required var id,
-      required String userId}) {
+      required UserModelClient userModel}) {
     List<TicketsSoldModel> selectedTickets = [];
     ValueNotifier<double> totalPriceNotifier = ValueNotifier<double>(0);
 
@@ -260,12 +260,12 @@ class CustomBottomSheet {
                                                                 }
                                                               },
                                                               secondary:
-                                                                  CircleAvatar(
-                                                                backgroundImage:
-                                                                    NetworkImage(
-                                                                        ticket
-                                                                            .ticketImage!),
-                                                              ),
+                                                                  CustomDisplayStoryImage(
+                                                                      height:
+                                                                          47,
+                                                                      width: 47,
+                                                                      imageUrl:
+                                                                          '${ticket.ticketImage}'),
                                                               title: Text(
                                                                   '${ticket.ticketName} TICKET AVAILABLE'),
                                                               subtitle: Text(
@@ -273,12 +273,12 @@ class CustomBottomSheet {
                                                             )
                                                           : ListTile(
                                                               leading:
-                                                                  CircleAvatar(
-                                                                backgroundImage:
-                                                                    NetworkImage(
-                                                                        ticket
-                                                                            .ticketImage!),
-                                                              ),
+                                                                  CustomDisplayStoryImage(
+                                                                      height:
+                                                                          47,
+                                                                      width: 47,
+                                                                      imageUrl:
+                                                                          '${ticket.ticketImage}'),
                                                               title: Text(
                                                                   '${ticket.ticketName} TICKET AVAILABLE'),
                                                               subtitle: Text(
@@ -374,9 +374,8 @@ class CustomBottomSheet {
                                                                   items: items,
                                                                   hashKey:
                                                                       hashKey,
-                                                                  token: token,
-                                                                  userId:
-                                                                      userId,
+                                                                  userModel:
+                                                                      userModel,
                                                                   // onFinish:
                                                                   //     (paymentId) async {
                                                                   //   PaypalPaymentServices
@@ -434,10 +433,11 @@ class CustomBottomSheet {
                                           return Column(
                                             children: [
                                               ListTile(
-                                                leading: CircleAvatar(
-                                                  backgroundImage: NetworkImage(
-                                                      ticket.ticketImage!),
-                                                ),
+                                                leading: CustomDisplayStoryImage(
+                                                    height: 47,
+                                                    width: 47,
+                                                    imageUrl:
+                                                        '${ticket.ticketImage}'),
                                                 title: Text(
                                                     '${ticket.ticketName} TICKET AVAILABLE'),
                                                 subtitle: Text(

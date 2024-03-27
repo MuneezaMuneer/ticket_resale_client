@@ -37,7 +37,12 @@ Route onGenerateRoute(RouteSettings settings) {
       price: price,
     ));
   } else if (settings.name == AppRoutes.feedbackScreen) {
-    return animatePage(const FeedBackScreen());
+       final Map<String, dynamic> arguments =
+        settings.arguments as Map<String, dynamic>;
+    final String sellerImageUrl = arguments['sellerImageUrl'] as String;
+    final String sellerName = arguments['sellerName'] as String;
+      final String sellerId = arguments['sellerId'] as String;
+    return animatePage( FeedBackScreen(sellerImageUrl: sellerImageUrl, sellerName:sellerName, sellerId: sellerId));
   } else if (settings.name == AppRoutes.privacyScreen) {
     return animatePage(const PrivacyPolicy());
   } else if (settings.name == AppRoutes.detailFirstScreen) {

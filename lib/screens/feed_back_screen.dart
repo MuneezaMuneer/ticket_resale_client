@@ -3,11 +3,20 @@ import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 import 'package:svg_flutter/svg_flutter.dart';
 import 'package:ticket_resale/constants/constants.dart';
+import 'package:ticket_resale/db_services/db_services.dart';
+import 'package:ticket_resale/models/feedback_model.dart';
 import 'package:ticket_resale/providers/providers.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
 class FeedBackScreen extends StatefulWidget {
-  const FeedBackScreen({super.key});
+  final String sellerImageUrl;
+  final String sellerName;
+  final String sellerId;
+  const FeedBackScreen(
+      {super.key,
+      required this.sellerImageUrl,
+      required this.sellerName,
+      required this.sellerId});
   @override
   State<FeedBackScreen> createState() => _FeedBackScreenState();
 }
@@ -15,6 +24,7 @@ class FeedBackScreen extends StatefulWidget {
 class _FeedBackScreenState extends State<FeedBackScreen> {
   late FeedbackProvider feedbackProvider;
   ValueNotifier<int> selectedStarsNotifier = ValueNotifier<int>(0);
+  TextEditingController commentController = TextEditingController();
   @override
   void initState() {
     feedbackProvider = Provider.of<FeedbackProvider>(context, listen: false);
@@ -48,16 +58,18 @@ class _FeedBackScreenState extends State<FeedBackScreen> {
                   ),
                 ),
                 const Gap(25),
-                const SizedBox(
+                SizedBox(
                   height: 80,
                   width: 80,
-                  child: CircleAvatar(
-                    backgroundImage: AssetImage(AppImages.profile),
-                  ),
+                  child: widget.sellerImageUrl.isNotEmpty
+                      ? CustomDisplayStoryImage(imageUrl: widget.sellerImageUrl)
+                      : const CircleAvatar(
+                          backgroundImage: AssetImage(AppImages.profile),
+                        ),
                 ),
                 const Gap(10),
-                const CustomText(
-                  title: 'Leslie Alexander',
+                CustomText(
+                  title: widget.sellerName,
                   size: 18,
                   weight: FontWeight.w600,
                   color: AppColors.jetBlack,
@@ -65,7 +77,72 @@ class _FeedBackScreenState extends State<FeedBackScreen> {
                 const Gap(30),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: _buildForm(width),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Consumer<FeedbackProvider>(
+                      builder: (context, feedbackProvider, child) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            buildHeaderText('How was your experience?'),
+                            const Gap(10),
+                            buildButtonRow(
+                              width: width,
+                              values: [0, 1, 2],
+                              buttonTexts: ['Negative', 'Neutral', 'Positive'],
+                              onPressed: feedbackProvider.setExperience,
+                              selectedValue: feedbackProvider.getExperience,
+                            ),
+                            const Gap(20),
+                            buildHeaderText(
+                                'Did your ticket arrive (or was it available digitally) in a timely manner?'),
+                            const Gap(10),
+                            buildButtonRow(
+                              width: width,
+                              values: [
+                                3,
+                                4,
+                              ],
+                              buttonTexts: [
+                                'Yes',
+                                'No',
+                              ],
+                              onPressed: feedbackProvider.setTime,
+                              selectedValue: feedbackProvider.getTime,
+                            ),
+                            const Gap(20),
+                            buildHeaderText(
+                                'Was the information about the festival accurate and helpful?'),
+                            const Gap(10),
+                            buildButtonRow(
+                              width: width,
+                              values: [
+                                5,
+                                6,
+                              ],
+                              buttonTexts: [
+                                'Yes',
+                                'No',
+                              ],
+                              onPressed: feedbackProvider.setAccuracy,
+                              selectedValue: feedbackProvider.getAccuracy,
+                            ),
+                            const Gap(20),
+                            buildHeaderText(
+                                'How well did the seller communicate? Consider response time and clarity of information'),
+                            const Gap(10),
+                            buildButtonRow(
+                              width: width,
+                              values: [7, 8, 9],
+                              buttonTexts: ['Negative', 'Neutral', 'Positive'],
+                              onPressed: feedbackProvider.setBehave,
+                              selectedValue: feedbackProvider.getBehave,
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
                 ),
                 SizedBox(
                   height: height * 0.4,
@@ -128,9 +205,10 @@ class _FeedBackScreenState extends State<FeedBackScreen> {
                         weight: FontWeight.w600,
                       ),
                       const Gap(10),
-                      const CustomTextField(
+                      CustomTextField(
+                        controller: commentController,
                         fillColor: AppColors.white,
-                        hintStyle: TextStyle(color: AppColors.silver),
+                        hintStyle: const TextStyle(color: AppColors.silver),
                         maxLines: 5,
                         isFilled: true,
                         hintText: 'Enter your comment here',
@@ -143,7 +221,24 @@ class _FeedBackScreenState extends State<FeedBackScreen> {
                         height: height * 0.07,
                         width: width * 0.9,
                         child: CustomButton(
-                          onPressed: () {},
+                          onPressed: () async {
+                            FeedbackModel feedbackModel = FeedbackModel(
+                              rating: selectedStarsNotifier.value,
+                              comment: commentController.text,
+                              experience:
+                                  feedbackProvider.getExperience.toString(),
+                              arrivalTime: feedbackProvider.getTime.toString(),
+                              accurateInfo:
+                                  feedbackProvider.getAccuracy.toString(),
+                              communicationResponse:
+                                  feedbackProvider.getBehave.toString(),
+                              buyerId: AuthServices.getCurrentUser.uid,
+                              sellerId: widget.sellerId,
+                            );
+                            await FireStoreServicesClient.storeFeedback(
+                                feedbackModel: feedbackModel,
+                                sellerId: widget.sellerId);
+                          },
                           textColor: AppColors.white,
                           textSize: AppSize.regular,
                           btnText: 'Submit',
@@ -178,75 +273,6 @@ class _FeedBackScreenState extends State<FeedBackScreen> {
       ),
     );
   }
-}
-
-Widget _buildForm(double width) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 10),
-    child: Consumer<FeedbackProvider>(
-      builder: (context, feedbackProvider, child) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            buildHeaderText('How was your experience?'),
-            const Gap(10),
-            buildButtonRow(
-              width: width,
-              values: [0, 1, 2],
-              buttonTexts: ['Negative', 'Neutral', 'Positive'],
-              onPressed: feedbackProvider.setExperience,
-              selectedValue: feedbackProvider.getExperience,
-            ),
-            const Gap(20),
-            buildHeaderText(
-                'Did your ticket arrive (or was it available digitally) in a timely manner?'),
-            const Gap(10),
-            buildButtonRow(
-              width: width,
-              values: [
-                3,
-                4,
-              ],
-              buttonTexts: [
-                'Yes',
-                'No',
-              ],
-              onPressed: feedbackProvider.setTime,
-              selectedValue: feedbackProvider.getTime,
-            ),
-            const Gap(20),
-            buildHeaderText(
-                'Was the information about the festival accurate and helpful?'),
-            const Gap(10),
-            buildButtonRow(
-              width: width,
-              values: [
-                5,
-                6,
-              ],
-              buttonTexts: [
-                'Yes',
-                'No',
-              ],
-              onPressed: feedbackProvider.setAccuracy,
-              selectedValue: feedbackProvider.getAccuracy,
-            ),
-            const Gap(20),
-            buildHeaderText(
-                'How well did the seller communicate? Consider response time and clarity of information'),
-            const Gap(10),
-            buildButtonRow(
-              width: width,
-              values: [7, 8, 9],
-              buttonTexts: ['Negative', 'Neutral', 'Positive'],
-              onPressed: feedbackProvider.setBehave,
-              selectedValue: feedbackProvider.getBehave,
-            ),
-          ],
-        );
-      },
-    ),
-  );
 }
 
 Text buildHeaderText(String text) {

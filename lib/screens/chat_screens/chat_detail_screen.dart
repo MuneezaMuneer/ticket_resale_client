@@ -229,9 +229,8 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                                       CustomBottomSheet.showConfirmTicketsSheet(
                                           context: context,
                                           id: id,
-                                          userId: userModel.id!,
                                           hashKey: widget.hashKey,
-                                          token: userModel.fcmToken!);
+                                          userModel: userModel);
                                     },
                                     textColor: AppColors.white,
                                     textSize: AppSize.regular,
@@ -243,7 +242,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                                     weight: FontWeight.w700,
                                   );
                                 } else {
-                                  return const Text('');
+                                  return const Text('No Data');
                                 }
                               },
                             ),
@@ -257,7 +256,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
               ),
             );
           } else {
-            return const Center(child: Text('No Data'));
+            return const Scaffold(body: Center(child: Text('No Data')));
           }
         },
       ),

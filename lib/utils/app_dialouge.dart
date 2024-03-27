@@ -366,7 +366,7 @@ ticketSellDialog({
                                 sellerUid: AuthServices.getCurrentUser.uid);
                           }).then((value) async {
                             await NotificationServices.sendNotification(
-                                token: token, title: title, body: body,data: notificationModel.toMap());
+                                token: token, title: title, body: body,data: notificationModel.toMapForNotifications());
                           }).then((value) {
                             FireStoreServicesClient.storeNotifications(
                                 notificationModel: notificationModel,

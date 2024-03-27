@@ -1,12 +1,13 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:svg_flutter/svg_flutter.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/db_services/db_services.dart';
-import 'package:ticket_resale/providers/navigation_provider.dart';
+import 'package:ticket_resale/providers/providers.dart';
 import 'package:ticket_resale/screens/screens.dart';
 import 'package:ticket_resale/utils/utils.dart';
-import 'package:ticket_resale/widgets/custom_text.dart';
+import 'package:ticket_resale/widgets/widgets.dart';
 
 class CustomNavigationClient extends StatefulWidget {
   const CustomNavigationClient({super.key});
@@ -28,13 +29,17 @@ class _CustomNavigationClientState extends State<CustomNavigationClient> {
 
     NotificationServices.requestPermission().then((granted) {
       if (granted) {
-      NotificationServices.notificationSettings(context: context);
-      NotificationServices.forGroundNotifications(context);
-      NotificationServices.appOpenInBackground(context: context);
+        NotificationServices.forGroundNotifications(context);
+        NotificationServices.appOpenInBackground(context: context);
       }
     });
-   
-
+    FirebaseMessaging.instance
+        .getInitialMessage()
+        .then((RemoteMessage? message) {
+      if (message != null) {
+        NotificationServices.handleNotificationResponse(context, message);
+      }
+    });
     Future.delayed(Duration.zero, () {
       navigationProvider =
           Provider.of<NavigationProvider>(context, listen: false);
@@ -118,30 +123,6 @@ class _CustomNavigationClientState extends State<CustomNavigationClient> {
                               )
                             ],
                           )),
-                // Stack(
-                //   children: [
-                //     GestureDetector(
-                //       onTap: () {
-                //         navigationProvider.setSelectedIndex(2);
-                //       },
-                //       child: SvgPicture.asset(
-                //         AppSvgs.plus,
-                //         colorFilter: const ColorFilter.mode(
-                //             AppColors.blueViolet, BlendMode.srcIn),
-                //       ),
-                //     ),
-                //     const Positioned(
-                //       left: 0,
-                //       top: 0,
-                //       right: 0,
-                //       bottom: 0,
-                //       child: Icon(
-                //         Icons.add,
-                //         color: AppColors.white,
-                //       ),
-                //     ),
-                //   ],
-                // ),
                 IconButton(
                     enableFeedback: false,
                     onPressed: () {
