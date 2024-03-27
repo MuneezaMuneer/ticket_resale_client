@@ -17,13 +17,12 @@ import 'package:ticket_resale/screens/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  FirebaseMessaging.instance.requestPermission();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   SwitchProvider provider = SwitchProvider();
   await provider.loadPreferences();
-
+  FirebaseMessaging.instance.requestPermission();
   AppText.preference = await SharedPreferences.getInstance();
   runApp(
     DevicePreview(
@@ -87,7 +86,7 @@ class TicketResale extends StatelessWidget {
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 25,
-                        backgroundColor: Colors.red),
+                        backgroundColor: AppColors.blue),
                   ),
                 );
               } else if (snapshot.hasData) {
