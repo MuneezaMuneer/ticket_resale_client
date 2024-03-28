@@ -8,11 +8,10 @@ import 'package:gap/gap.dart';
 import 'package:svg_flutter/svg_flutter.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/db_services/db_services.dart';
-import 'package:ticket_resale/models/event_modals.dart';
 import 'package:ticket_resale/utils/utils.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 import '../components/components.dart';
-import '../models/ticket_models.dart';
+import '../models/models.dart';
 
 class HomeDetailSecondScreen extends StatefulWidget {
   EventModalClient eventModal;
@@ -201,11 +200,30 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                     color: AppColors.lightGrey,
                   ),
                   const Gap(20),
-                  const CustomText(
-                    title: 'Available Tickets',
-                    size: AppSize.regular,
-                    weight: FontWeight.w600,
-                    color: AppColors.jetBlack,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const CustomText(
+                        title: 'Available Tickets',
+                        size: AppSize.regular,
+                        weight: FontWeight.w600,
+                        color: AppColors.jetBlack,
+                      ),
+                      InkWell(
+                        onTap: () {
+                      
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.only(right: 10),
+                          child: CustomText(
+                            title: 'Feedback',
+                            size: AppSize.medium,
+                            weight: FontWeight.w400,
+                            color: AppColors.jetBlack,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                   const Gap(25),
                   _tileContainer(
@@ -250,7 +268,7 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           final userData = snapshot.data!;
-                          networkImage = userData.photoUrl!;
+                          networkImage = '${userData.photoUrl}';
                           name = userData.displayName!;
                           return Container(
                               height: height * 0.1,

@@ -6,8 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:ticket_resale/constants/app_colors.dart';
-import 'package:ticket_resale/constants/app_textsize.dart';
+import 'package:ticket_resale/constants/constants.dart';
 
 class AppUtils {
   static Future<String> getImageFromGallery() async {
@@ -101,7 +100,7 @@ class AppUtils {
   }
 
   static String formatTimeStamp(Timestamp timestamp) {
-    DateTime dateTime = timestamp.toDate(); 
+    DateTime dateTime = timestamp.toDate();
     DateTime now = DateTime.now();
     Duration difference = now.difference(dateTime);
 

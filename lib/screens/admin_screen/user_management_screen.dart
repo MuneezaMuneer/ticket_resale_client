@@ -2,11 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
-import 'package:ticket_resale/db_services/firestore_services_admin.dart';
+import 'package:ticket_resale/db_services/db_services.dart';
+import 'package:ticket_resale/models/models.dart';
+import 'package:ticket_resale/providers/providers.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 import '../../constants/constants.dart';
-import '../../models/user_models.dart';
-import '../../providers/search_provider.dart';
 import '../../utils/utils.dart';
 
 class UserManagement extends StatefulWidget {
@@ -14,8 +14,6 @@ class UserManagement extends StatefulWidget {
   @override
   State<UserManagement> createState() => _UserManagementState();
 }
-
-
 
 class _UserManagementState extends State<UserManagement> {
   late Stream<List<UserModelAdmin?>> fetchUserData;
@@ -59,7 +57,7 @@ class _UserManagementState extends State<UserManagement> {
             const Gap(25),
             Expanded(
                 child: Padding(
-              padding: const EdgeInsets.only(left: 20),
+              padding: const EdgeInsets.only(left: 10),
               child: Container(
                 decoration: BoxDecoration(
                     color: AppColors.white,
@@ -119,7 +117,6 @@ class _UserManagementState extends State<UserManagement> {
                                         _buildTableCell('Email'),
                                         _buildTableCell('Instagram'),
                                         _buildTableCell('Phone No.'),
-                                        //  _buildTableCell('Status')
                                       ],
                                       rows: eventData.asMap().entries.map(
                                           (MapEntry<int, UserModelAdmin?>
@@ -142,12 +139,17 @@ class _UserManagementState extends State<UserManagement> {
                                             ),
                                             _createDataCell('Huma Safdar'),
                                             _createDataCell(
-                                                userData.instaUsername!),
-                                            _createDataCell(userData.phoneNo!),
-                                            // DataCell(createTableCell(
-                                            //     userData.status!,
-                                            //     userData.id!,
-                                            //     userData.status!)),
+                                                userData.instaUsername !=
+                                                            null &&
+                                                        userData.instaUsername!
+                                                            .isNotEmpty
+                                                    ? userData.instaUsername!
+                                                    : 'xyz'),
+                                            _createDataCell(userData.phoneNo !=
+                                                        null &&
+                                                    userData.phoneNo!.isNotEmpty
+                                                ? userData.phoneNo!
+                                                : 'No Number provider here'),
                                           ],
                                         );
                                       }).toList());

@@ -1,14 +1,15 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:svg_flutter/svg_flutter.dart';
 import 'package:ticket_resale/constants/constants.dart';
-import 'package:ticket_resale/providers/navigation_provider.dart';
-import 'package:ticket_resale/screens/admin_screen/notification_screen.dart';
-import 'package:ticket_resale/screens/admin_screen/ticket_listing_screen.dart';
-import 'package:ticket_resale/screens/admin_screen/user_management_screen.dart';
-import 'package:ticket_resale/widgets/custom_text.dart';
+import 'package:ticket_resale/providers/providers.dart';
+import 'package:ticket_resale/screens/admin_screen/admin_screen.dart';
+import 'package:ticket_resale/utils/utils.dart';
+import 'package:ticket_resale/widgets/widgets.dart';
 
-import '../screens/admin_screen/event_listing_screen.dart';
+import '../db_services/db_services.dart';
 
 class CustomNavigationAdmin extends StatefulWidget {
   const CustomNavigationAdmin({super.key});
@@ -27,6 +28,11 @@ class _CustomNavigationAdminState extends State<CustomNavigationAdmin> {
       navigationProvider =
           Provider.of<NavigationProvider>(context, listen: false);
       navigationProvider.setSelectedIndex(0);
+    });
+    log('............token..............');
+    NotificationServices.getFCMCurrentDeviceToken().then((token) {
+      log('............token..............$token');
+      return FirestoreServicesAdmin.storeFCMToken(token: token!);
     });
   }
 
@@ -55,14 +61,14 @@ class _CustomNavigationAdminState extends State<CustomNavigationAdmin> {
                           ? Column(
                               children: [
                                 SvgPicture.asset(
-                                  AppSvgs.ticketListing,
+                                  AppSvgs.events,
                                   height: 20,
                                   width: 20,
                                   colorFilter: const ColorFilter.mode(
                                       AppColors.blueViolet, BlendMode.srcIn),
                                 ),
                                 const CustomText(
-                                  title: 'Event Management',
+                                  title: 'Events',
                                   size: AppSize.xxsmall,
                                   color: AppColors.blueViolet,
                                 )
@@ -70,14 +76,14 @@ class _CustomNavigationAdminState extends State<CustomNavigationAdmin> {
                             )
                           : Column(
                               children: [
-                                SvgPicture.asset(AppSvgs.ticketListing,
+                                SvgPicture.asset(AppSvgs.events,
                                     height: 20,
                                     width: 20,
                                     colorFilter: ColorFilter.mode(
                                         AppColors.blueViolet.withOpacity(0.4),
                                         BlendMode.srcIn)),
                                 CustomText(
-                                  title: 'Event Management',
+                                  title: 'Events',
                                   size: AppSize.xxsmall,
                                   color: AppColors.blueViolet.withOpacity(0.4),
                                 )
@@ -99,7 +105,7 @@ class _CustomNavigationAdminState extends State<CustomNavigationAdmin> {
                                       AppColors.blueViolet, BlendMode.srcIn),
                                 ),
                                 const CustomText(
-                                  title: 'Ticket Listing',
+                                  title: 'Tickets',
                                   size: AppSize.xxsmall,
                                   color: AppColors.blueViolet,
                                 )
@@ -114,7 +120,7 @@ class _CustomNavigationAdminState extends State<CustomNavigationAdmin> {
                                         AppColors.blueViolet.withOpacity(0.4),
                                         BlendMode.srcIn)),
                                 CustomText(
-                                  title: 'Ticket Listing',
+                                  title: 'Tickets',
                                   size: AppSize.xxsmall,
                                   color: AppColors.blueViolet.withOpacity(0.4),
                                 )
@@ -136,7 +142,7 @@ class _CustomNavigationAdminState extends State<CustomNavigationAdmin> {
                                       AppColors.blueViolet, BlendMode.srcIn),
                                 ),
                                 const CustomText(
-                                  title: 'User Management',
+                                  title: 'Users',
                                   color: AppColors.blueViolet,
                                   size: AppSize.xxsmall,
                                 )
@@ -151,7 +157,7 @@ class _CustomNavigationAdminState extends State<CustomNavigationAdmin> {
                                         AppColors.blueViolet.withOpacity(0.4),
                                         BlendMode.srcIn)),
                                 CustomText(
-                                  title: 'User Management',
+                                  title: 'Users',
                                   size: AppSize.xxsmall,
                                   color: AppColors.blueViolet.withOpacity(0.4),
                                 )

@@ -31,6 +31,17 @@ class NotificationModel {
     };
   }
 
+  Map<String, dynamic> toMapForNotifications() {
+    return <String, dynamic>{
+      'title': title,
+      'body': body,
+      'id': id,
+      'user_id': userId,
+      'status': status,
+      'notification_type': notificationType
+    };
+  }
+
   factory NotificationModel.fromMap(Map<String, dynamic> map, String docId) {
     return NotificationModel(
         title: map['title'] ?? '',

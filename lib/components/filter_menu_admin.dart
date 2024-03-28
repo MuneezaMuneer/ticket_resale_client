@@ -11,7 +11,6 @@ import '../widgets/widgets.dart';
 
 class FilterMenuAdmin extends StatelessWidget {
   final Function(String) onSelectedStatus;
-
   final Function(double, double) onSelectedPrice;
 
   const FilterMenuAdmin(
@@ -120,120 +119,6 @@ class FilterMenuAdmin extends StatelessWidget {
     );
   }
 
-  void _showBottomSheetDate(
-      {required BuildContext context,
-      required Function(DateTime, DateTime) onSelected}) {
-    TextEditingController startDateController = TextEditingController();
-    TextEditingController endDateController = TextEditingController();
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          height: 300,
-          decoration: BoxDecoration(
-            gradient: customGradient,
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(27),
-              topRight: Radius.circular(27),
-            ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Center(
-              child: Column(
-                children: [
-                  const Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'Start Date:',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                  const Gap(15),
-                  CustomTextField(
-                    readOnly: true,
-                    controller: startDateController,
-                    hintText: 'Selected start date',
-                    suffixIcon: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: GestureDetector(
-                        onTap: () {
-                          AppUtils.openDatePicker(context,
-                              dateController: startDateController);
-                        },
-                        child: const Padding(
-                          padding: EdgeInsets.only(right: 15),
-                          child:
-                              Icon(Icons.calendar_today, color: Colors.white),
-                        ),
-                      ),
-                    ),
-                    hintStyle: _buildTextFieldstyle(),
-                  ),
-                  const SizedBox(height: 20),
-                  const Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'End Date:',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                  const Gap(15),
-                  CustomTextField(
-                    readOnly: true,
-                    controller: endDateController,
-                    hintText: 'Selected End date',
-                    suffixIcon: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: GestureDetector(
-                        onTap: () {
-                          AppUtils.openDatePicker(context,
-                              dateController: endDateController);
-                        },
-                        child: const Padding(
-                          padding: EdgeInsets.only(right: 15),
-                          child:
-                              Icon(Icons.calendar_today, color: Colors.white),
-                        ),
-                      ),
-                    ),
-                    hintStyle: _buildTextFieldstyle(),
-                  ),
-                  const Gap(20),
-                  SizedBox(
-                    width: 160,
-                    height: 40,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        DateTime startDate =
-                            DateTime.parse(startDateController.text);
-                        DateTime endDate =
-                            DateTime.parse(endDateController.text);
-
-                        if (!startDate.isAfter(endDate)) {
-                          onSelected(startDate, endDate);
-                          Navigator.pop(context);
-                        } else {
-                          Navigator.pop(context);
-                          SnackBarHelper.showSnackBar(
-                              context, 'Start date must less then end date');
-                        }
-                      },
-                      child: const Text(
-                        'Filter',
-                        style: TextStyle(fontWeight: FontWeight.w600),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
   Widget _buildBottomSheetButton(
       {required BuildContext context,
       required String status,
@@ -241,7 +126,6 @@ class FilterMenuAdmin extends StatelessWidget {
     return ElevatedButton(
       onPressed: () {
         onSelected(status);
-        print('.............................. $status');
         Navigator.of(context).pop();
       },
       child: Text(status),

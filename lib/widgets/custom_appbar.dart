@@ -10,8 +10,7 @@ import 'package:ticket_resale/widgets/custom_text.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 import '../components/components.dart';
 import '../constants/constants.dart';
-import '../providers/search_provider.dart';
-import 'custom_text_field.dart';
+import '../providers/providers.dart';
 
 class CustomAppBarClient extends StatelessWidget
     implements PreferredSizeWidget {
@@ -261,6 +260,7 @@ class CustomAppBarField extends StatefulWidget implements PreferredSizeWidget {
 class _CustomAppBarFieldState extends State<CustomAppBarField> {
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     final searchProvider = Provider.of<SearchProvider>(context);
 
     return AppBar(
@@ -271,30 +271,33 @@ class _CustomAppBarFieldState extends State<CustomAppBarField> {
             child: const Icon(Icons.arrow_back)),
         title: ValueListenableBuilder(
           valueListenable: widget.searchController!,
-          builder: (context, value, child) => CustomTextField(
-            controller: widget.searchController,
-            onChanged: (query) {
-              widget.setSearchValue!(widget.searchController!.text);
-            },
-            fillColor: AppColors.white,
-            hintText: widget.text,
-            hintStyle: const TextStyle(
-              fontWeight: FontWeight.w400,
-              fontSize: AppSize.medium,
-              color: AppColors.grey,
-            ),
-            suffixIcon: widget.searchController!.text.isEmpty
-                ? const Icon(Icons.search)
-                : GestureDetector(
-                    onTap: () {
-                      widget.searchController!.clear();
-                      widget.setSearchValue!(widget.searchController!.text);
-                    },
-                    child: const Icon(
-                      Icons.close,
-                      color: AppColors.grey,
+          builder: (context, value, child) => SizedBox(
+            width: size.width * 0.99,
+            child: CustomTextField(
+              controller: widget.searchController,
+              onChanged: (query) {
+                widget.setSearchValue!(widget.searchController!.text);
+              },
+              fillColor: AppColors.white,
+              hintText: widget.text,
+              hintStyle: const TextStyle(
+                fontWeight: FontWeight.w400,
+                fontSize: AppSize.medium,
+                color: AppColors.grey,
+              ),
+              suffixIcon: widget.searchController!.text.isEmpty
+                  ? const Icon(Icons.search)
+                  : GestureDetector(
+                      onTap: () {
+                        widget.searchController!.clear();
+                        widget.setSearchValue!(widget.searchController!.text);
+                      },
+                      child: const Icon(
+                        Icons.close,
+                        color: AppColors.grey,
+                      ),
                     ),
-                  ),
+            ),
           ),
         ));
   }

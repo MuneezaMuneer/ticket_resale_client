@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:ticket_resale/db_services/db_services.dart';
+import 'package:ticket_resale/models/feedback_model.dart';
 import 'package:ticket_resale/models/models.dart';
 import 'package:uuid/uuid.dart';
 
@@ -95,7 +96,6 @@ class FireStoreServicesClient {
     }
   }
 
-
   static Future<Map<String, String>> fetchBuyerAndSellerUIDs(
       String hashKey) async {
     DocumentSnapshot snapshot = await FirebaseFirestore.instance
@@ -187,7 +187,7 @@ class FireStoreServicesClient {
         .doc(eventId)
         .snapshots()
         .map((event) {
-        return EventModalClient.fromMap(event.data() ?? {});
+      return EventModalClient.fromMap(event.data() ?? {});
     });
   }
 
@@ -249,6 +249,16 @@ class FireStoreServicesClient {
     });
   }
 
+  static Future<void> storeFeedback(
+      {required FeedbackModel feedbackModel, required String sellerId}) async {
+    await FirebaseFirestore.instance
+        .collection('feedback')
+        .doc('feedback')
+        .collection(sellerId)
+        .doc(uid.v4())
+        .set(feedbackModel.toMap());
+  }
+
   static Stream<UserModelClient> fetchUserData({required String userId}) {
     return FirebaseFirestore.instance
         .collection('user_data')
@@ -257,6 +267,16 @@ class FireStoreServicesClient {
         .map((event) {
       return UserModelClient.fromMap(event.data() ?? {}, event.id);
     });
+  }
+
+  static Future<UserModelClient> fetchDataOfUser(
+      {required String userId}) async {
+    final snapshot = await FirebaseFirestore.instance
+        .collection('user_data')
+        .doc(userId)
+        .get();
+
+    return UserModelClient.fromMap(snapshot.data() ?? {}, snapshot.id);
   }
 
   static Future<bool> checkUserEmail({required String email}) async {

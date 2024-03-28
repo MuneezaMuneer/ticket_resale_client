@@ -9,7 +9,7 @@ import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:provider/provider.dart';
 import 'package:svg_flutter/svg_flutter.dart';
 import 'package:ticket_resale/db_services/db_services.dart';
-import 'package:ticket_resale/models/user_models.dart';
+import 'package:ticket_resale/models/models.dart';
 import 'package:ticket_resale/providers/providers.dart';
 import 'package:ticket_resale/utils/utils.dart';
 import '../../constants/constants.dart';
@@ -358,7 +358,12 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                                       instaUsername: instaController.text,
                                       phoneNo: phoneNoController.text,
                                       birthDate: birthController.text,
-                                      photoUrl: imageUrl,
+                                      email: AuthServices.getCurrentUser.email,
+                                      photoUrl: imagePickerProvider
+                                              .getImageBytes.isNotEmpty
+                                          ? imageUrl
+                                          : AuthServices
+                                              .getCurrentUser.photoURL,
                                       status: 'Active');
 
                                   await AuthServices.storeUserImage(

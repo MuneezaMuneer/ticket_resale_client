@@ -16,20 +16,16 @@ class PaymentScreen extends StatefulWidget {
   final List<Map<String, dynamic>> items;
   final List<String> docIds;
   final String hashKey;
-  final String token;
-  final String userId;
-
+  final UserModelClient userModel;
   // final Function(String?) onFinish;
-  const PaymentScreen({
-    super.key,
-    // required this.onFinish,
-    required this.items,
-    required this.totalPrice,
-    required this.docIds,
-    required this.token,
-    required this.hashKey,
-    required this.userId
-  });
+  const PaymentScreen(
+      {super.key,
+      // required this.onFinish,
+      required this.items,
+      required this.totalPrice,
+      required this.docIds,
+      required this.hashKey,
+      required this.userModel});
 
   @override
   State<PaymentScreen> createState() => _PaymentScreenState();
@@ -64,55 +60,63 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 onPageStarted: (String url) {},
                 onPageFinished: (String url) {},
                 onWebResourceError: (WebResourceError error) {},
-                onNavigationRequest: (NavigationRequest request) {
+                onNavigationRequest: (NavigationRequest request) async {
                   log('...................login urls ==  ${request.url}');
 
                   if (request.url.contains(ApiURLS.returnURL)) {
                     final uri = Uri.parse(request.url);
                     final payerID = uri.queryParameters['PayerID'];
                     log(".....................ID for Transaction........$executeUrl");
-
+                    NotificationModel notificationModel = NotificationModel(
+                      title: 'Payment Done Successfully',
+                      body:
+                          "The offered'\$${widget.totalPrice}' price is paid successfully",
+                      id: AuthServices.getCurrentUser.uid,
+                      userId: widget.userModel.id,
+                      status: 'Unread',
+                      notificationType: 'paid',
+                      docId: AuthServices.getCurrentUser.uid,
+                    );
                     if (payerID != null) {
-                      PaypalPaymentServices.executePayment(
+                      await PaypalPaymentServices.executePayment(
                               executeUrl, payerID, accessToken)
-                          .then((id) {
+                          .then((id) async {
                         log(".....................Payment Id : $id");
-                        NotificationServices.sendNotification(
-                            token: widget.token,
+                        print(
+                            'The notification of paid ticket is ${widget.userModel.fcmToken}');
+                        await NotificationServices.sendNotification(
+                            token: widget.userModel.fcmToken!,
                             title: 'Payment Done Successfully',
                             body:
-                                "The offered'\$${widget.totalPrice}' price is paid successfully");
-                        FireStoreServicesClient
+                                "The offered'\$${widget.totalPrice}' price is paid successfully",
+                            data: notificationModel.toMapForNotifications());
+                        await FireStoreServicesClient
                                 .updateStatusInSoldTicketsCollection(
                                     hashKey: widget.hashKey,
                                     selectedDocIds: widget.docIds,
-                                    newStatus: 'Paid')
-                            .then((value) {
-                          NotificationModel notificationModel = NotificationModel(
-                              title: 'Payment Done Successfully',
-                              body:
-                                  "The offered'\$${widget.totalPrice}' price is paid successfully",
-                                  id: AuthServices.getCurrentUser.uid
-                                  ,
-                                  userId: widget.userId,
-                                  status:'Unread' ,
-                                  notificationType:'paid',
-                                  docId:AuthServices.getCurrentUser.uid ,
-                                  );
-                          FireStoreServicesClient.storeNotifications(
+                                    newStatus: 'Unpaid')
+                            .then((value) async {
+                          await FireStoreServicesClient.storeNotifications(
                               notificationModel: notificationModel,
                               name: 'client_notifications');
                         });
 
                         //  widget.onFinish(id);
                         if (mounted) {
-                          Navigator.of(context).pop();
+                          Navigator.pushReplacementNamed(
+                              context, AppRoutes.feedbackScreen,
+                              arguments: {
+                                'sellerImageUrl': widget.userModel.photoUrl,
+                                'sellerName': widget.userModel.displayName,
+                                'sellerId': widget.userModel.id
+                              });
                         }
                       });
                     } else {
                       Navigator.of(context).pop();
                     }
-                    Navigator.of(context).pop();
+
+                    // Navigator.of(context).pop();
                   }
                   if (request.url.contains(ApiURLS.cancelURL)) {
                     Navigator.of(context).pop();

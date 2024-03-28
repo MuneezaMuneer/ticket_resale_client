@@ -97,11 +97,11 @@ deleteDialog({required BuildContext context}) {
   );
 }
 
-sellerRatingDialog(
-    {required BuildContext context,
-    required String networkImage,
-    required String name,
-    bool isNetworkImage = true}) {
+sellerRatingDialog({
+  required BuildContext context,
+  required String networkImage,
+  required String name,
+}) {
   return showDialog(
     context: context,
     builder: (context) {
@@ -116,7 +116,7 @@ sellerRatingDialog(
                   SizedBox(
                       height: 100,
                       width: 100,
-                      child: isNetworkImage
+                      child: networkImage.isNotEmpty && networkImage != 'null'
                           ? CustomDisplayStoryImage(
                               imageUrl: networkImage,
                             )
@@ -366,7 +366,7 @@ ticketSellDialog({
                                 sellerUid: AuthServices.getCurrentUser.uid);
                           }).then((value) async {
                             await NotificationServices.sendNotification(
-                                token: token, title: title, body: body);
+                                token: token, title: title, body: body,data: notificationModel.toMapForNotifications());
                           }).then((value) {
                             FireStoreServicesClient.storeNotifications(
                                 notificationModel: notificationModel,

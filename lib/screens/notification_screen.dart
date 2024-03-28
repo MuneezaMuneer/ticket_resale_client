@@ -1,4 +1,5 @@
-// ignore_for_file: must_be_immutable
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -9,7 +10,7 @@ import 'package:ticket_resale/utils/utils.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
 class NotificationScreen extends StatefulWidget {
-  NotificationScreen({super.key});
+  const NotificationScreen({super.key});
 
   @override
   State<NotificationScreen> createState() => _NotificationScreenState();
@@ -125,7 +126,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
               shrinkWrap: true,
               itemBuilder: (context, index) {
                 return GestureDetector(
-                  onTap: () {
+                  onTap: () async {
                     if (notifications[index].status == 'Unread') {
                       FireStoreServicesClient.updateNotifications(
                           docId: notifications[index].docId,
@@ -150,17 +151,21 @@ class _NotificationScreenState extends State<NotificationScreen> {
                           'isOpened': false,
                         },
                       );
-                    } else {
-                      Navigator.of(context).popAndPushNamed(
-                        AppRoutes.chatDetailScreen,
-                        arguments: {
-                          'receiverId': notifications[index].userId,
-                          'hashKey':
+                    } else if (notifications[index].notificationType ==
+                            'paid' &&
+                        notifications[index].status == 'Unread') {
+                      log('---id - ${notifications[index].id} --  userid ${notifications[index].userId} --  current id ${AuthServices.getCurrentUser.uid}');
+                      UserModelClient userModel =
+                          await FireStoreServicesClient.fetchDataOfUser(
+                              userId: notifications[index].userId!);
+                      CustomBottomSheet.showConfirmTicketsSheet(
+                          // ignore: use_build_context_synchronously
+                          context: context,
+                          hashKey:
                               FireStoreServicesClient.getMessagesHashCodeID(
                                   userIDReceiver: notifications[index].id!),
-                          'isOpened': false,
-                        },
-                      );
+                          id: {'seller_uid': notifications[index].userId},
+                          userModel: userModel);
                     }
                   },
                   child: ListTile(

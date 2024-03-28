@@ -2,15 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
-import 'package:ticket_resale/db_services/firestore_services_admin.dart';
-import 'package:ticket_resale/providers/event_image_provider.dart';
-import 'package:ticket_resale/utils/custom_snackbar.dart';
+import 'package:ticket_resale/models/models.dart';
+import 'package:ticket_resale/providers/providers.dart';
+import 'package:ticket_resale/utils/utils.dart';
+import 'package:ticket_resale/widgets/widgets.dart';
 import 'package:uuid/uuid.dart';
 import '../../constants/constants.dart';
 import '../../db_services/db_services.dart';
-import '../../models/create_event.dart';
-import '../../utils/utils.dart';
-import '../../widgets/widgets.dart';
 
 class CreateEvent extends StatefulWidget {
   const CreateEvent({super.key});
@@ -28,6 +26,7 @@ class _CreateEventState extends State<CreateEvent> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   late String startTime;
   late String endTime;
+
   late EventImagePickerProvider imagePickerProvider;
   ValueNotifier<bool> isLoading = ValueNotifier<bool>(false);
 
@@ -418,10 +417,11 @@ class _CreateEventState extends State<CreateEvent> {
                                             .uploadEventData(
                                           createEvent: createEvents,
                                           docId: uv4,
-                                        );
-
-                                        SnackBarHelper.showSnackBar(context,
-                                            'Event created successfully');
+                                        ).then((value) {
+                                          SnackBarHelper.showSnackBar(context,
+                                              'Event created successfully');
+                                          Navigator.pop(context);
+                                        });
                                       } catch (error) {
                                         print('Error: $error');
                                         AppUtils.toastMessage(
