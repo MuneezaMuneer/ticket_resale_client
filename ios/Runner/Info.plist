@@ -59,7 +59,7 @@
     <key>GIDClientID</key>
     <string>831456807199-uuivtrqimk2453j0i6dshmf75a9luhn7.apps.googleusercontent.com</string>
     <key>NSPhotoLibraryUsageDescription</key>
-    <string>App needs access to update user image</string>
+    <string>App needs access to photo library to update user image</string>
     <key>NSCameraUsageDescription</key>
     <string>App requires access to camera to update user image</string>
 </dict>
