@@ -187,15 +187,19 @@ class NotificationServices {
   static Future<List<String>> getAdminFCMTokens() async {
     List<String> tokens = [];
 
-    final QuerySnapshot<Map<String, dynamic>> snapshot =
-        await FirebaseFirestore.instance.collection("admin_data").get();
+    final QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+        .instance
+        .collection("admin_data")
+        .where(FieldPath.documentId,
+            whereIn: ['admin_token_for_mob', 'admin_token_for_web']).get();
+
     for (var element in snapshot.docs) {
-      tokens.add(element.data()['token']);
+      if (element.exists) {
+        tokens.add(element.data()['token']);
+      } else {
+        print('Document ${element.id} does not exist.');
+      }
     }
-
-    print('The token is $tokens');
-
-    log('The token is $tokens');
     return tokens;
   }
 }

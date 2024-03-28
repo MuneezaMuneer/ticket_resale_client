@@ -259,6 +259,45 @@ class FireStoreServicesClient {
         .set(feedbackModel.toMap());
   }
 
+  static Stream<List<FeedbackModel>> fetchFeedback(
+      {required String currentUser}) {
+    return FirebaseFirestore.instance
+        .collection('feedback')
+        .doc('feedback')
+        .collection(currentUser)
+        .snapshots()
+        .map((event) {
+      return event.docs.map((doc) {
+        return FeedbackModel.fromMap(doc.data());
+      }).toList();
+    });
+  }
+
+ static Future<List<int>> fetchRatings({required String currentUser}) async {
+    var collectionReference = FirebaseFirestore.instance
+        .collection('feedback')
+        .doc('feedback')
+        .collection(currentUser);
+    var querySnapshot = await collectionReference.get();
+    var ratings =
+        querySnapshot.docs.map((doc) => doc['rating'] as int).toList();
+    return ratings;
+  }
+
+  Future<double> calculateAverageRating({required String currentUser}) async {
+    // Fetch ratings
+    List<int> ratings = await fetchRatings(currentUser: currentUser);
+
+    // Calculate sum of ratings
+    int sum =
+        ratings.fold(0, (previousValue, rating) => previousValue + rating);
+
+    // Calculate average
+    double average = sum / ratings.length;
+
+    return average;
+  }
+
   static Stream<UserModelClient> fetchUserData({required String userId}) {
     return FirebaseFirestore.instance
         .collection('user_data')

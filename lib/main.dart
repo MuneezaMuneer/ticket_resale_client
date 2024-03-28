@@ -17,10 +17,11 @@ import 'package:ticket_resale/screens/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  FirebaseMessaging.instance.requestPermission();
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  FirebaseMessaging.instance.requestPermission();
   SwitchProvider provider = SwitchProvider();
   await provider.loadPreferences();
 

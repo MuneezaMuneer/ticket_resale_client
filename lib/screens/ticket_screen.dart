@@ -397,7 +397,8 @@ class _TicketScreenState extends State<TicketScreen> {
                                           title: 'Ticket listing request!',
                                           body:
                                               '${ticketTypeController.text} TICKET is created for festival "$selectedFestivalName" by ${AuthServices.getCurrentUser.displayName}',
-                                          data: notificationModel.toMapForNotifications())
+                                          data: notificationModel
+                                              .toMapForNotifications())
                                       .then((value) {
                                     FireStoreServicesClient.storeNotifications(
                                         notificationModel: notificationModel,

@@ -9,7 +9,6 @@ import 'package:ticket_resale/components/components.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/db_services/db_services.dart';
 import 'package:ticket_resale/models/models.dart';
-import 'package:ticket_resale/models/tickets_sold_model.dart';
 import 'package:ticket_resale/providers/bottom_sheet_provider.dart';
 import 'package:ticket_resale/screens/screens.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
@@ -35,52 +34,54 @@ class CustomBottomSheet {
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(30),
                     topRight: Radius.circular(30))),
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 20,
-                ),
-                const Text(
-                  "Verification Code",
-                  style: TextStyle(color: Colors.black, fontSize: 20),
-                ),
-                const Gap(10),
-                Text(
-                  "Verification code has been sent on\n $email. ",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: Colors.black.withOpacity(0.5), fontSize: 15),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                OtpTextField(
-                  numberOfFields: 4,
-                  borderColor: AppColors.jetBlack,
-                  focusedBorderColor: AppColors.jetBlack,
-                  showFieldAsBox: true,
-                  borderWidth: 4.0,
-                  onSubmit: onChanged,
-                ),
-                const Gap(50),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: Consumer<BottomSheetProvider>(
-                    builder: (context, loadingProvider, child) => SizedBox(
-                      height: 60,
-                      child: CustomButton(
-                        loading: loadingProvider.getLoadingProgress,
-                        gradient: customGradient,
-                        btnText: btnText,
-                        textColor: AppColors.white,
-                        textSize: AppSize.regular,
-                        weight: FontWeight.w500,
-                        onPressed: onTape,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  const Text(
+                    "Verification Code",
+                    style: TextStyle(color: Colors.black, fontSize: 20),
+                  ),
+                  const Gap(10),
+                  Text(
+                    "Verification code has been sent on\n $email. ",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Colors.black.withOpacity(0.5), fontSize: 15),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  OtpTextField(
+                    numberOfFields: 4,
+                    borderColor: AppColors.jetBlack,
+                    focusedBorderColor: AppColors.jetBlack,
+                    showFieldAsBox: true,
+                    borderWidth: 4.0,
+                    onSubmit: onChanged,
+                  ),
+                  const Gap(50),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30),
+                    child: Consumer<BottomSheetProvider>(
+                      builder: (context, loadingProvider, child) => SizedBox(
+                        height: 60,
+                        child: CustomButton(
+                          loading: loadingProvider.getLoadingProgress,
+                          gradient: customGradient,
+                          btnText: btnText,
+                          textColor: AppColors.white,
+                          textSize: AppSize.regular,
+                          weight: FontWeight.w500,
+                          onPressed: onTape,
+                        ),
                       ),
                     ),
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
             ),
           ),
         );

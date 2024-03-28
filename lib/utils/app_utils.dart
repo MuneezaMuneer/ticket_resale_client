@@ -212,4 +212,32 @@ class AppUtils {
       return inputText;
     }
   }
+
+  
+ static String mapIndexToFeedbackValue(int index) {
+    switch (index) {
+      case 0:
+        return 'Negative';
+      case 1:
+        return 'Neutral';
+      case 2:
+        return 'Positive';
+      case 3:
+        return 'Yes';
+      case 4:
+        return 'No';
+      case 5:
+        return 'Yes';
+      case 6:
+        return 'No';
+      case 7:
+        return 'Negative';
+      case 8:
+        return 'Neutral';
+      case 9:
+        return 'Positive';
+      default:
+        return '';
+    }
+  }
 }
