@@ -2,7 +2,6 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:ticket_resale/db_services/db_services.dart';
-import 'package:ticket_resale/models/feedback_model.dart';
 import 'package:ticket_resale/models/models.dart';
 import 'package:uuid/uuid.dart';
 
@@ -238,14 +237,13 @@ class FireStoreServicesClient {
         .map((event) => event.docs.length);
   }
 
-  static Stream<List<UserModelClient>> fetchUserLevels() {
+  static Stream<UserModelClient> fetchUserLevels() {
     return FirebaseFirestore.instance
         .collection('user_data')
+        .doc(AuthServices.getCurrentUser.uid)
         .snapshots()
         .map((event) {
-      return event.docs.map((doc) {
-        return UserModelClient.fromMap(doc.data(), doc.id);
-      }).toList();
+      return UserModelClient.fromMap(event.data()!, event.id);
     });
   }
 
@@ -259,12 +257,11 @@ class FireStoreServicesClient {
         .set(feedbackModel.toMap());
   }
 
-  static Stream<List<FeedbackModel>> fetchFeedback(
-      {required String currentUser}) {
+  static Stream<List<FeedbackModel>> fetchFeedback() {
     return FirebaseFirestore.instance
         .collection('feedback')
         .doc('feedback')
-        .collection(currentUser)
+        .collection('fFacXp2HByTVd7jdQU78mF75JHY2')
         .snapshots()
         .map((event) {
       return event.docs.map((doc) {
@@ -273,29 +270,76 @@ class FireStoreServicesClient {
     });
   }
 
- static Future<List<int>> fetchRatings({required String currentUser}) async {
-    var collectionReference = FirebaseFirestore.instance
-        .collection('feedback')
-        .doc('feedback')
-        .collection(currentUser);
-    var querySnapshot = await collectionReference.get();
-    var ratings =
-        querySnapshot.docs.map((doc) => doc['rating'] as int).toList();
-    return ratings;
-  }
+  static Future<Map<String, dynamic>> calculateAverages(
+      List<FeedbackModel>? feedbackList) async {
+    if (feedbackList == null || feedbackList.isEmpty) {
+      return {
+        'rating': 0.0,
+        'experience': '',
+        'arrival_time': '',
+        'communication_response': '',
+      };
+    }
 
-  Future<double> calculateAverageRating({required String currentUser}) async {
-    // Fetch ratings
-    List<int> ratings = await fetchRatings(currentUser: currentUser);
+    int totalRating = 0;
+    int totalCount = 0;
+    Map<String, int> experienceCount = {};
+    Map<String, int> arrivalTimeCount = {};
+    Map<String, int> communicationResponseCount = {};
 
-    // Calculate sum of ratings
-    int sum =
-        ratings.fold(0, (previousValue, rating) => previousValue + rating);
+    for (FeedbackModel feedback in feedbackList) {
+      if (feedback.rating != null) {
+        totalRating += feedback.rating!;
+        totalCount++;
+      }
+      // Count occurrences of experience
+      if (feedback.experience != null && feedback.experience!.isNotEmpty) {
+        experienceCount.update(feedback.experience!, (value) => value + 1,
+            ifAbsent: () => 1);
+      }
+      // Count occurrences of arrivalTime
+      if (feedback.arrivalTime != null && feedback.arrivalTime!.isNotEmpty) {
+        arrivalTimeCount.update(feedback.arrivalTime!, (value) => value + 1,
+            ifAbsent: () => 1);
+      }
+      // Count occurrences of communicationResponse
+      if (feedback.communicationResponse != null &&
+          feedback.communicationResponse!.isNotEmpty) {
+        communicationResponseCount.update(
+            feedback.communicationResponse!, (value) => value + 1,
+            ifAbsent: () => 1);
+      }
+    }
 
-    // Calculate average
-    double average = sum / ratings.length;
+    double averageRating = totalCount > 0 ? totalRating / totalCount : 0.0;
 
-    return average;
+    // Get most repeated experience
+    String mostRepeatedExperience = experienceCount.entries.fold(
+        '',
+        (prev, entry) =>
+            entry.value > (experienceCount[prev] ?? 0) ? entry.key : prev);
+
+    // Get most repeated arrivalTime
+    String mostRepeatedArrivalTime = arrivalTimeCount.entries.fold(
+        '',
+        (prev, entry) =>
+            entry.value > (arrivalTimeCount[prev] ?? 0) ? entry.key : prev);
+
+    // Get most repeated communicationResponse
+    String mostRepeatedCommunicationResponse =
+        communicationResponseCount.entries.fold(
+            '',
+            (prev, entry) =>
+                entry.value > (communicationResponseCount[prev] ?? 0)
+                    ? entry.key
+                    : prev);
+
+    return {
+      'rating': averageRating,
+      'experience': mostRepeatedExperience,
+      'arrival_time': mostRepeatedArrivalTime,
+      'communication_response': mostRepeatedCommunicationResponse,
+    };
   }
 
   static Stream<UserModelClient> fetchUserData({required String userId}) {

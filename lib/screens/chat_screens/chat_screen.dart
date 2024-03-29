@@ -58,8 +58,9 @@ class ChatScreen extends StatelessWidget {
                           },
                           child: ListTile(
                             leading: SizedBox(
-                                child: (userData!.photoUrl != null) &&
-                                        userData.photoUrl != 'null'
+                                child: userData!.photoUrl != 'null' &&
+                                        userData.photoUrl != null &&
+                                        userData.photoUrl!.isNotEmpty
                                     ? CustomDisplayStoryImage(
                                         imageUrl: '${userData.photoUrl}',
                                         height: 43,

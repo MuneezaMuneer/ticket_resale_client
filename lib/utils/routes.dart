@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ticket_resale/models/event_modals.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 import '../constants/constants.dart';
 import '../models/models.dart';

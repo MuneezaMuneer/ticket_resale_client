@@ -178,7 +178,7 @@ class _AdminNotificationState extends State<AdminNotification> {
                                       children: [
                                         RichText(
                                           text: TextSpan(
-                                            text: notification![index].title,
+                                            text: notification[index].title,
                                             style: const TextStyle(
                                               color: Colors.black,
                                               fontSize: AppSize.medium,

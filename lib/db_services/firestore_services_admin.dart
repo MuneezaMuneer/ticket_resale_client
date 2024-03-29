@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ticket_resale/models/models.dart';
-import 'package:ticket_resale/models/notification_model.dart';
 
 class FirestoreServicesAdmin {
   static final fireStore = FirebaseFirestore.instance;

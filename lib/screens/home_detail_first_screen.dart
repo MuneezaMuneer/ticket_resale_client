@@ -392,6 +392,7 @@ class _HomeDetailFirstScreenState extends State<HomeDetailFirstScreen> {
                             children: [
                               SizedBox(
                                   child: (data.photoUrl != null) &&
+                                          data.photoUrl!.isNotEmpty &&
                                           data.photoUrl != 'null'
                                       ? CustomDisplayStoryImage(
                                           imageUrl: '${data.photoUrl}',

@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:svg_flutter/svg.dart';
 import 'package:ticket_resale/constants/constants.dart';
@@ -45,31 +46,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
             const SizedBox(
               height: 15,
             ),
-            Stack(
-              children: [
-                SizedBox(
-                    height: 140,
-                    width: 140,
-                    child: photoUrl != null
-                        ? ClipRRect(
-                            borderRadius: BorderRadius.circular(100),
-                            child: CachedNetworkImage(
-                              imageUrl: "$photoUrl",
-                              placeholder: (context, url) =>
-                                  const CupertinoActivityIndicator(
-                                color: AppColors.blueViolet,
+            GestureDetector(
+              onTap: () {
+                sellerRatingDialog(
+                    context: context,
+                    networkImage: '${AuthServices.getCurrentUser.photoURL}',
+                    name: '${AuthServices.getCurrentUser.displayName}');
+              },
+              child: Stack(
+                children: [
+                  SizedBox(
+                      height: 140,
+                      width: 140,
+                      child: photoUrl != null
+                          ? ClipRRect(
+                              borderRadius: BorderRadius.circular(100),
+                              child: CachedNetworkImage(
+                                imageUrl: "$photoUrl",
+                                placeholder: (context, url) =>
+                                    const CupertinoActivityIndicator(
+                                  color: AppColors.blueViolet,
+                                ),
+                                fit: BoxFit.cover,
                               ),
-                              fit: BoxFit.cover,
-                            ),
-                          )
-                        : const CircleAvatar(
-                            backgroundImage:
-                                AssetImage(AppImages.profileImage))),
-                Positioned(
-                    left: 90,
-                    top: 70,
-                    child: SvgPicture.asset(AppSvgs.levelOne))
-              ],
+                            )
+                          : const CircleAvatar(
+                              backgroundImage:
+                                  AssetImage(AppImages.profileImage))),
+                  Positioned(
+                      left: 90,
+                      top: 70,
+                      child: SvgPicture.asset(AppSvgs.levelOne))
+                ],
+              ),
             ),
             const SizedBox(
               height: 13,

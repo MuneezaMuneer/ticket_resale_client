@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 import 'package:svg_flutter/svg_flutter.dart';
@@ -25,7 +26,7 @@ class ProfileLevelScreen extends StatefulWidget {
 
 class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
   String? photoUrl;
-  late Stream<List<UserModelClient>> fetchUserLevel;
+  late Stream<UserModelClient> fetchUserLevel;
   TextEditingController instagramController = TextEditingController();
   GlobalKey<FormState> defaultFormKey = GlobalKey<FormState>();
   late BottomSheetProvider bottomSheetProvider;
@@ -58,28 +59,39 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
           const SizedBox(
             height: 15,
           ),
-          Stack(
-            children: [
-              SizedBox(
-                  height: 140,
-                  width: 140,
-                  child: photoUrl != null
-                      ? ClipRRect(
-                          borderRadius: BorderRadius.circular(100),
-                          child: CachedNetworkImage(
-                            imageUrl: "$photoUrl",
-                            placeholder: (context, url) =>
-                                const CupertinoActivityIndicator(
-                              color: AppColors.blueViolet,
+          GestureDetector(
+            onTap: () {
+              sellerRatingDialog(
+                  context: context,
+                  networkImage: '${AuthServices.getCurrentUser.photoURL}',
+                  name: '${AuthServices.getCurrentUser.displayName}');
+            },
+            child: Stack(
+              children: [
+                SizedBox(
+                    height: 140,
+                    width: 140,
+                    child: photoUrl != null
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(100),
+                            child: CachedNetworkImage(
+                              imageUrl: "$photoUrl",
+                              placeholder: (context, url) =>
+                                  const CupertinoActivityIndicator(
+                                color: AppColors.blueViolet,
+                              ),
+                              fit: BoxFit.cover,
                             ),
-                            fit: BoxFit.cover,
-                          ),
-                        )
-                      : const CircleAvatar(
-                          backgroundImage: AssetImage(AppImages.profileImage))),
-              Positioned(
-                  left: 90, top: 70, child: SvgPicture.asset(AppSvgs.levelOne))
-            ],
+                          )
+                        : const CircleAvatar(
+                            backgroundImage:
+                                AssetImage(AppImages.profileImage))),
+                Positioned(
+                    left: 90,
+                    top: 70,
+                    child: SvgPicture.asset(AppSvgs.levelOne))
+              ],
+            ),
           ),
           const SizedBox(
             height: 13,
@@ -139,17 +151,8 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
                         child: StreamBuilder(
                           stream: fetchUserLevel,
                           builder: (context, snapshot) {
-                            UserModelClient? currentUser;
                             if (snapshot.hasData) {
-                              final data = snapshot.data!;
-
-                              for (UserModelClient user in data) {
-                                if (user.id ==
-                                    FirebaseAuth.instance.currentUser?.uid) {
-                                  currentUser = user;
-                                  break;
-                                }
-                              }
+                              UserModelClient? currentUser = snapshot.data!;
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -160,34 +163,10 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
                                     'Level 1 Verified',
                                     'Verify for Level 1',
                                     width,
-                                    currentUser!.profileLevels![
+                                    currentUser.profileLevels![
                                             'isEmailVerified'] ??
                                         false,
                                   ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      Navigator.pushNamed(
-                                          context, AppRoutes.profileSettings);
-                                    },
-                                    child: _buildContainer(
-                                        AppSvgs.levelTwo,
-                                        'Verify your Phone No',
-                                        'Level 2 Verified',
-                                        'Verify for Level 2',
-                                        width,
-                                        currentUser.profileLevels![
-                                                'isPhoneNoVerified'] ??
-                                            false),
-                                  ),
-                                  _buildContainer(
-                                      AppSvgs.levelThree,
-                                      'Connect Your PayPal',
-                                      'Level 3 Verified',
-                                      'Verify for Level 3',
-                                      width,
-                                      currentUser.profileLevels![
-                                              'isPaypalVerified'] ??
-                                          false),
                                   GestureDetector(
                                     onTap: () {
                                       CustomBottomSheet.showInstaBottomSheet(
@@ -215,15 +194,39 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
                                       );
                                     },
                                     child: _buildContainer(
-                                      AppSvgs.levelFour,
+                                      AppSvgs.levelTwo,
                                       'Add Instagram Profile',
-                                      'Level 4 Verified',
-                                      'Verify for Level 4',
+                                      'Level 2 Verified',
+                                      'Verify for Level 2',
                                       width,
                                       currentUser.profileLevels![
                                               'isInstaVerified'] ??
                                           false,
                                     ),
+                                  ),
+                                  _buildContainer(
+                                      AppSvgs.levelThree,
+                                      'Connect Your PayPal',
+                                      'Level 3 Verified',
+                                      'Verify for Level 3',
+                                      width,
+                                      currentUser.profileLevels![
+                                              'isPaypalVerified'] ??
+                                          false),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.pushNamed(
+                                          context, AppRoutes.profileSettings);
+                                    },
+                                    child: _buildContainer(
+                                        AppSvgs.levelFour,
+                                        'Verify your Phone No',
+                                        'Level 4 Verified',
+                                        'Verify for Level 4',
+                                        width,
+                                        currentUser.profileLevels![
+                                                'isPhoneNoVerified'] ??
+                                            false),
                                   ),
                                   _buildContainer(
                                     AppSvgs.levelFive,
@@ -248,7 +251,7 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
                                 ],
                               );
                             } else {
-                              return const SizedBox();
+                              return SizedBox();
                             }
                           },
                         ),

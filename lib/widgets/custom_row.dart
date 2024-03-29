@@ -1,8 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ticket_resale/constants/constants.dart';
-import 'package:ticket_resale/db_services/auth_services.dart';
-import 'package:ticket_resale/db_services/firestore_services_client.dart';
-import 'package:ticket_resale/widgets/custom_text.dart';
+import 'package:ticket_resale/db_services/db_services.dart';
+import 'package:ticket_resale/models/models.dart';
+import 'package:ticket_resale/widgets/widgets.dart';
 
 class CustomRow extends StatefulWidget {
   const CustomRow({super.key});
@@ -12,40 +13,54 @@ class CustomRow extends StatefulWidget {
 }
 
 class _CustomRowState extends State<CustomRow> {
-  late Future<List<int>> fetchRatings;
+  late Stream<List<FeedbackModel>> fetchRatings;
   @override
   void initState() {
-    fetchRatings = FireStoreServicesClient.fetchRatings(
-        currentUser: AuthServices.getCurrentUser.uid);
+    fetchRatings = FireStoreServicesClient.fetchFeedback();
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return  SizedBox(
+    return SizedBox(
       width: 160,
       child: Row(
         children: [
-         const Icon(
+          const Icon(
             Icons.star,
             color: AppColors.amber,
             size: 20,
           ),
-          FutureBuilder(
-            future:fetchRatings ,
+          StreamBuilder<List<FeedbackModel>>(
+            stream: fetchRatings,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                
+                return FutureBuilder<Map<String, dynamic>>(
+                  future:
+                      FireStoreServicesClient.calculateAverages(snapshot.data),
+                  builder: (context, averageRatingSnapshot) {
+                    if (averageRatingSnapshot.hasData) {
+                      final Map<String, dynamic> averages =
+                          averageRatingSnapshot.data!;
+                      final double averageRating = averages['rating'] ?? 0.0;
+                      return CustomText(
+                        title: averageRating.toStringAsFixed(1),
+                        weight: FontWeight.w600,
+                        size: AppSize.large,
+                        color: AppColors.charcoal,
+                      );
+                    } else {
+                      return CupertinoActivityIndicator();
+                    }
+                  },
+                );
+              } else {
+                return CupertinoActivityIndicator();
               }
-              return const CustomText(
-              title: '4.7 ',
-              weight: FontWeight.w600,
-              size: AppSize.large,
-              color: AppColors.charcoal,
-            );
             },
           ),
-        const   Padding(
+          const Padding(
             padding: EdgeInsets.only(top: 8),
             child: CustomText(
               title: '(23 Transactions) ',

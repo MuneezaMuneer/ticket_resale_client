@@ -116,7 +116,10 @@ sellerRatingDialog({
                   SizedBox(
                       height: 100,
                       width: 100,
-                      child: networkImage.isNotEmpty && networkImage != 'null'
+                      child: AuthServices.getCurrentUser.photoURL != null &&
+                              AuthServices
+                                  .getCurrentUser.photoURL!.isNotEmpty &&
+                              networkImage != 'null'
                           ? CustomDisplayStoryImage(
                               imageUrl: networkImage,
                             )
@@ -158,65 +161,95 @@ sellerRatingDialog({
               const Gap(20),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const CustomText(
-                          title: 'Avg. ratings?',
-                          color: AppColors.lightGrey,
-                          size: 11,
-                          weight: FontWeight.w600,
-                        ),
-                        Row(
-                          children: [
-                            SvgPicture.asset(
-                              AppSvgs.fillStar,
-                              height: 12,
-                            ),
-                            const Gap(5),
-                            const CustomText(
-                              title: '4.7',
-                              weight: FontWeight.w500,
-                              color: AppColors.jetBlack,
-                              size: AppSize.small,
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                    const Gap(10),
-                    buildTile(
-                        leadingTitle: 'Avg. experience with buyers?',
-                        trailingTitle: 'Positive'),
-                    const Gap(10),
-                    buildTile(
-                        leadingTitle: 'Avg. ticket arrival time?',
-                        trailingTitle: 'On Time'),
-                    const Gap(10),
-                    buildTile(
-                        leadingTitle: 'Avg. communication & response time',
-                        trailingTitle: 'Neutral'),
-                    const Gap(10),
-                    buildTile(
-                        leadingTitle: 'Total Transactions',
-                        trailingTitle: '23 transactions'),
-                    const Gap(40),
-                    CustomButton(
-                      onPressed: () {
-                        Navigator.pop(context);
+                child: StreamBuilder(
+                  stream: FireStoreServicesClient.fetchFeedback(),
+                  builder: (context, snapshot) {
+                    return FutureBuilder<Map<String, dynamic>>(
+                      future: FireStoreServicesClient.calculateAverages(
+                          snapshot.data),
+                      builder: (context, ratingSsnapshot) {
+                        if (ratingSsnapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return CupertinoActivityIndicator();
+                        } else if (ratingSsnapshot.hasData) {
+                          final Map<String, dynamic> averages =
+                              ratingSsnapshot.data!;
+                          final double averageRating =
+                              averages['rating'] ?? 0.0;
+                          final String averageExperience =
+                              averages['experience'] ?? '';
+                          final String averageArrivalTime =
+                              averages['arrival_time'] ?? '';
+                          final String averageCommunicationResponse =
+                              averages['communication_response'] ?? '';
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const CustomText(
+                                    title: 'Avg. ratings?',
+                                    color: AppColors.lightGrey,
+                                    size: 11,
+                                    weight: FontWeight.w600,
+                                  ),
+                                  Row(
+                                    children: [
+                                      SvgPicture.asset(
+                                        AppSvgs.fillStar,
+                                        height: 12,
+                                      ),
+                                      const Gap(5),
+                                      CustomText(
+                                        title: averageRating.toStringAsFixed(1),
+                                        weight: FontWeight.w500,
+                                        color: AppColors.jetBlack,
+                                        size: AppSize.small,
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                              const Gap(10),
+                              buildTile(
+                                  leadingTitle: 'Avg. experience with buyers?',
+                                  trailingTitle: averageExperience),
+                              const Gap(10),
+                              buildTile(
+                                  leadingTitle: 'Avg. ticket arrival time?',
+                                  trailingTitle: averageArrivalTime),
+                              const Gap(10),
+                              buildTile(
+                                  leadingTitle:
+                                      'Avg. communication & response time',
+                                  trailingTitle: averageCommunicationResponse),
+                              const Gap(10),
+                              buildTile(
+                                  leadingTitle: 'Total Transactions',
+                                  trailingTitle: '23 transactions'),
+                              const Gap(40),
+                              CustomButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                btnText: 'Cancel',
+                                backgroundColor: AppColors.white,
+                                borderColor: AppColors.jetBlack,
+                                textColor: AppColors.jetBlack,
+                                weight: FontWeight.w800,
+                                textSize: AppSize.regular,
+                              ),
+                              const Gap(20),
+                            ],
+                          );
+                        } else {
+                          return Text('No data');
+                        }
                       },
-                      btnText: 'Cancel',
-                      backgroundColor: AppColors.white,
-                      borderColor: AppColors.jetBlack,
-                      textColor: AppColors.jetBlack,
-                      weight: FontWeight.w800,
-                      textSize: AppSize.regular,
-                    ),
-                    const Gap(20),
-                  ],
+                    );
+                  },
                 ),
               ),
             ],
@@ -366,7 +399,11 @@ ticketSellDialog({
                                 sellerUid: AuthServices.getCurrentUser.uid);
                           }).then((value) async {
                             await NotificationServices.sendNotification(
-                                token: token, title: title, body: body,data: notificationModel.toMapForNotifications());
+                                token: token,
+                                title: title,
+                                body: body,
+                                data:
+                                    notificationModel.toMapForNotifications());
                           }).then((value) {
                             FireStoreServicesClient.storeNotifications(
                                 notificationModel: notificationModel,
