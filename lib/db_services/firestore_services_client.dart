@@ -362,6 +362,24 @@ class FireStoreServicesClient {
     return UserModelClient.fromMap(snapshot.data() ?? {}, snapshot.id);
   }
 
+  static Future<Map<String, dynamic>?> fetchProfileLevels({required String userId}) async {
+    DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
+        .collection('user_data')
+        .doc(userId)
+        .get();
+    Map<String, dynamic>? userData =
+        userSnapshot.data() as Map<String, dynamic>?;
+
+    if (userData != null && userData.isNotEmpty) {
+      dynamic profileLevelsData = userData['profile_levels'];
+
+      if (profileLevelsData is Map<String, dynamic>) {
+        return profileLevelsData;
+      }
+    }
+    return null;
+  }
+
   static Future<bool> checkUserEmail({required String email}) async {
     log("....................Email.............$email");
     var user = await FirebaseFirestore.instance

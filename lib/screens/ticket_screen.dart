@@ -332,13 +332,6 @@ class _TicketScreenState extends State<TicketScreen> {
                     isCommentField: true,
                     hintText: 'Enter your description here.',
                     hintStyle: _buildHintStyle(),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter description';
-                      }
-
-                      return null;
-                    },
                   ),
                   SizedBox(
                     height: height * 0.07,

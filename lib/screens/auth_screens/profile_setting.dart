@@ -364,6 +364,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                                           ? imageUrl
                                           : AuthServices
                                               .getCurrentUser.photoURL,
+                                            
                                       status: 'Active');
 
                                   await AuthServices.storeUserImage(

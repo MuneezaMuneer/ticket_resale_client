@@ -430,7 +430,15 @@ class _HomeDetailFirstScreenState extends State<HomeDetailFirstScreen> {
                         ),
                         Padding(
                             padding: const EdgeInsets.only(right: 12),
-                            child: SvgPicture.asset(AppSvgs.levelFour))
+                            child: SizedBox(
+                              height: 40,
+                              width: 40,
+                              child: ProfileLevelImage(
+                                profileLevelsFuture:
+                                    FireStoreServicesClient.fetchProfileLevels(
+                                        userId: data.id!),
+                              ),
+                            ))
                       ],
                     ),
                   );

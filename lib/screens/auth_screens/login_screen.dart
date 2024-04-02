@@ -4,6 +4,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:ticket_resale/db_services/db_services.dart';
+import 'package:ticket_resale/models/models.dart';
 import 'package:ticket_resale/utils/utils.dart';
 import '../../components/components.dart';
 import '../../constants/constants.dart';
@@ -75,8 +76,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         googleNotifier.value = true;
                         String? fcmToken = await NotificationServices
                             .getFCMCurrentDeviceToken();
+                        UserModelClient userModel = UserModelClient();
                         await AuthServices.signInWithGoogle(
-                                context, googleNotifier, '$fcmToken')
+                                context: context,
+                                googleNotifier: googleNotifier,
+                                fcmToken: '$fcmToken',
+                                userModel: userModel)
                             .then((credential) {
                           if (credential != null) {
                             googleNotifier.value = false;

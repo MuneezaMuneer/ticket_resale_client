@@ -1,8 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 import 'package:svg_flutter/svg_flutter.dart';
+import 'package:ticket_resale/components/components.dart';
 import 'package:ticket_resale/constants/app_routes.dart';
 import 'package:ticket_resale/constants/app_colors.dart';
 import 'package:ticket_resale/constants/app_images.dart';
@@ -101,159 +103,170 @@ sellerRatingDialog({
   required BuildContext context,
   required String networkImage,
   required String name,
+  required String userId
 }) {
   return showDialog(
     context: context,
     builder: (context) {
       return AlertDialog(
-          titlePadding: EdgeInsets.zero,
-          backgroundColor: AppColors.white,
-          title: Column(
-            children: [
-              const Gap(20),
-              Stack(
-                children: [
-                  SizedBox(
-                      height: 100,
-                      width: 100,
-                      child: AuthServices.getCurrentUser.photoURL != null &&
-                              AuthServices
-                                  .getCurrentUser.photoURL!.isNotEmpty &&
-                              networkImage != 'null'
-                          ? CustomDisplayStoryImage(
+        titlePadding: EdgeInsets.zero,
+        backgroundColor: AppColors.white,
+        title: Column(
+          children: [
+            const Gap(20),
+            Stack(
+              children: [
+                SizedBox(
+                    height: 140,
+                    width: 140,
+                    child: AuthServices.getCurrentUser.photoURL != null &&
+                            AuthServices.getCurrentUser.photoURL!.isNotEmpty &&
+                            networkImage != 'null'
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(100),
+                            child: CachedNetworkImage(
                               imageUrl: networkImage,
-                            )
-                          : const CircleAvatar(
-                              backgroundImage:
-                                  AssetImage(AppImages.profileImage))),
-                  Positioned(
-                      left: 90,
-                      top: 70,
-                      child: SvgPicture.asset(AppSvgs.levelOne))
-                ],
-              ),
-              const SizedBox(
-                height: 13,
-              ),
-              CustomText(
-                title: name,
-                weight: FontWeight.w600,
-                size: AppSize.large,
-                color: AppColors.jetBlack,
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              const CustomRow(),
-              const SizedBox(
-                height: 10,
-              ),
-              Divider(
-                color: AppColors.lightGrey.withOpacity(0.6),
-              ),
-              const Gap(20),
-              const CustomText(
-                title: 'Detailed Seller Ratings',
-                color: AppColors.jetBlack,
-                size: AppSize.regular,
-                weight: FontWeight.w700,
-              ),
-              const Gap(20),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: StreamBuilder(
-                  stream: FireStoreServicesClient.fetchFeedback(),
-                  builder: (context, snapshot) {
-                    return FutureBuilder<Map<String, dynamic>>(
-                      future: FireStoreServicesClient.calculateAverages(
-                          snapshot.data),
-                      builder: (context, ratingSsnapshot) {
-                        if (ratingSsnapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return CupertinoActivityIndicator();
-                        } else if (ratingSsnapshot.hasData) {
-                          final Map<String, dynamic> averages =
-                              ratingSsnapshot.data!;
-                          final double averageRating =
-                              averages['rating'] ?? 0.0;
-                          final String averageExperience =
-                              averages['experience'] ?? '';
-                          final String averageArrivalTime =
-                              averages['arrival_time'] ?? '';
-                          final String averageCommunicationResponse =
-                              averages['communication_response'] ?? '';
-                          return Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const CustomText(
-                                    title: 'Avg. ratings?',
-                                    color: AppColors.lightGrey,
-                                    size: 11,
-                                    weight: FontWeight.w600,
-                                  ),
-                                  Row(
-                                    children: [
-                                      SvgPicture.asset(
-                                        AppSvgs.fillStar,
-                                        height: 12,
-                                      ),
-                                      const Gap(5),
-                                      CustomText(
-                                        title: averageRating.toStringAsFixed(1),
-                                        weight: FontWeight.w500,
-                                        color: AppColors.jetBlack,
-                                        size: AppSize.small,
-                                      ),
-                                    ],
-                                  )
-                                ],
+                              placeholder: (context, url) =>
+                                  const CupertinoActivityIndicator(
+                                color: AppColors.blueViolet,
                               ),
-                              const Gap(10),
-                              buildTile(
-                                  leadingTitle: 'Avg. experience with buyers?',
-                                  trailingTitle: averageExperience),
-                              const Gap(10),
-                              buildTile(
-                                  leadingTitle: 'Avg. ticket arrival time?',
-                                  trailingTitle: averageArrivalTime),
-                              const Gap(10),
-                              buildTile(
-                                  leadingTitle:
-                                      'Avg. communication & response time',
-                                  trailingTitle: averageCommunicationResponse),
-                              const Gap(10),
-                              buildTile(
-                                  leadingTitle: 'Total Transactions',
-                                  trailingTitle: '23 transactions'),
-                              const Gap(40),
-                              CustomButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                btnText: 'Cancel',
-                                backgroundColor: AppColors.white,
-                                borderColor: AppColors.jetBlack,
-                                textColor: AppColors.jetBlack,
-                                weight: FontWeight.w800,
-                                textSize: AppSize.regular,
-                              ),
-                              const Gap(20),
-                            ],
-                          );
-                        } else {
-                          return Text('No data');
-                        }
-                      },
-                    );
-                  },
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                        : const CircleAvatar(
+                            backgroundImage:
+                                AssetImage(AppImages.profileImage))),
+                Positioned(
+                  left: 90,
+                  top: 70,
+                  child: ProfileLevelImage(
+                      profileLevelsFuture:
+                          FireStoreServicesClient.fetchProfileLevels(
+                              userId: userId)),
                 ),
+              ],
+            ),
+            const SizedBox(
+              height: 13,
+            ),
+            CustomText(
+              title: name,
+              weight: FontWeight.w600,
+              size: AppSize.large,
+              color: AppColors.jetBlack,
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            const CustomRow(),
+            const SizedBox(
+              height: 10,
+            ),
+            Divider(
+              color: AppColors.lightGrey.withOpacity(0.6),
+            ),
+            const Gap(20),
+            const CustomText(
+              title: 'Detailed Seller Ratings',
+              color: AppColors.jetBlack,
+              size: AppSize.regular,
+              weight: FontWeight.w700,
+            ),
+            const Gap(20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: StreamBuilder(
+                stream: FireStoreServicesClient.fetchFeedback(),
+                builder: (context, snapshot) {
+                  return FutureBuilder<Map<String, dynamic>>(
+                    future: FireStoreServicesClient.calculateAverages(
+                        snapshot.data),
+                    builder: (context, ratingSsnapshot) {
+                      if (ratingSsnapshot.connectionState ==
+                          ConnectionState.waiting) {
+                        return CupertinoActivityIndicator();
+                      } else if (ratingSsnapshot.hasData) {
+                        final Map<String, dynamic> averages =
+                            ratingSsnapshot.data!;
+                        final double averageRating = averages['rating'] ?? 0.0;
+                        final String averageExperience =
+                            averages['experience'] ?? '';
+                        final String averageArrivalTime =
+                            averages['arrival_time'] ?? '';
+                        final String averageCommunicationResponse =
+                            averages['communication_response'] ?? '';
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const CustomText(
+                                  title: 'Avg. ratings?',
+                                  color: AppColors.lightGrey,
+                                  size: 11,
+                                  weight: FontWeight.w600,
+                                ),
+                                Row(
+                                  children: [
+                                    SvgPicture.asset(
+                                      AppSvgs.fillStar,
+                                      height: 12,
+                                    ),
+                                    const Gap(5),
+                                    CustomText(
+                                      title: averageRating.toStringAsFixed(1),
+                                      weight: FontWeight.w500,
+                                      color: AppColors.jetBlack,
+                                      size: AppSize.small,
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                            const Gap(10),
+                            buildTile(
+                                leadingTitle: 'Avg. experience with buyers?',
+                                trailingTitle: averageExperience),
+                            const Gap(10),
+                            buildTile(
+                                leadingTitle: 'Avg. ticket arrival time?',
+                                trailingTitle: averageArrivalTime),
+                            const Gap(10),
+                            buildTile(
+                                leadingTitle:
+                                    'Avg. communication & response time',
+                                trailingTitle: averageCommunicationResponse),
+                            const Gap(10),
+                            buildTile(
+                                leadingTitle: 'Total Transactions',
+                                trailingTitle: '23 transactions'),
+                            const Gap(40),
+                            CustomButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              btnText: 'Cancel',
+                              backgroundColor: AppColors.white,
+                              borderColor: AppColors.jetBlack,
+                              textColor: AppColors.jetBlack,
+                              weight: FontWeight.w800,
+                              textSize: AppSize.regular,
+                            ),
+                            const Gap(20),
+                          ],
+                        );
+                      } else {
+                        return Text('No data');
+                      }
+                    },
+                  );
+                },
               ),
-            ],
-          ));
+            ),
+          ],
+        ),
+      );
     },
   );
 }

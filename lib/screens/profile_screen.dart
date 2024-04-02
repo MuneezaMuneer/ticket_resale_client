@@ -3,9 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:svg_flutter/svg.dart';
+import 'package:ticket_resale/components/components.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/db_services/db_services.dart';
 import 'package:ticket_resale/providers/providers.dart';
@@ -21,6 +20,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   late SwitchProvider switchProvider;
   String? photoUrl;
+  late Future<Map<String, dynamic>?> profileLevelsFuture;
   @override
   void initState() {
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
@@ -28,6 +28,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       switchProvider = Provider.of<SwitchProvider>(context, listen: false);
     });
     photoUrl = AuthServices.getCurrentUser.photoURL;
+    profileLevelsFuture = FireStoreServicesClient.fetchProfileLevels(userId: AuthServices.getCurrentUser.uid);
 
     super.initState();
   }
@@ -51,7 +52,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 sellerRatingDialog(
                     context: context,
                     networkImage: '${AuthServices.getCurrentUser.photoURL}',
-                    name: '${AuthServices.getCurrentUser.displayName}');
+                    name: '${AuthServices.getCurrentUser.displayName}', userId: '${AuthServices.getCurrentUser.uid}');
               },
               child: Stack(
                 children: [
@@ -74,9 +75,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               backgroundImage:
                                   AssetImage(AppImages.profileImage))),
                   Positioned(
-                      left: 90,
-                      top: 70,
-                      child: SvgPicture.asset(AppSvgs.levelOne))
+                    left: 90,
+                    top: 70,
+                    child: ProfileLevelImage(
+                        profileLevelsFuture: profileLevelsFuture),
+                  ),
                 ],
               ),
             ),

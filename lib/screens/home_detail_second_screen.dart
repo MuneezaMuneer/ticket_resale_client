@@ -30,6 +30,7 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
   TextEditingController priceController = TextEditingController();
   late Stream<List<FeedbackModel>> fetchRatings;
   late String networkImage;
+  late String userId;
   late String name;
   late Map<String, dynamic> averages;
   late double averageRating;
@@ -248,10 +249,10 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                       FocusScope.of(context).unfocus();
                       Future.delayed(const Duration(milliseconds: 300), () {
                         sellerRatingDialog(
-                            context: context,
-                            networkImage: networkImage,
-                            name: name,
-                           );
+                          context: context,
+                          networkImage: networkImage,
+                          name: name, userId:userId ,
+                        );
                       });
                     },
                     child: StreamBuilder(
@@ -262,7 +263,7 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                           final userData = snapshot.data!;
                           networkImage = userData.photoUrl ?? '';
                           name = userData.displayName ?? '';
-
+                          userId = userData.id ?? '';
                           return StreamBuilder(
                             stream: fetchRatings,
                             builder: (context, ratingSnapshot) {
@@ -382,13 +383,18 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                                             const SizedBox(
                                               width: 10,
                                             ),
-                                            Align(
-                                              alignment: Alignment.topRight,
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 8),
-                                                child: SvgPicture.asset(
-                                                    AppSvgs.levelThree),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 60),
+                                              child: SizedBox(
+                                                height: 45,
+                                                width: 45,
+                                                child: ProfileLevelImage(
+                                                    profileLevelsFuture:
+                                                        FireStoreServicesClient
+                                                            .fetchProfileLevels(
+                                                                userId: userData
+                                                                    .id!)),
                                               ),
                                             )
                                           ],

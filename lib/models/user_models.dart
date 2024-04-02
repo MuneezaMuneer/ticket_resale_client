@@ -46,7 +46,7 @@ class UserModelClient {
       'status': status,
       'image_url': photoUrl,
       'fcm_token': fcmToken,
-      'email': email
+      'email': email,
     };
   }
 
@@ -61,8 +61,10 @@ class UserModelClient {
       profileLevels: map['profile_levels'] ?? Map,
       displayName: map['user_name'] ?? '',
       fcmToken: map['fcm_token'] ?? '',
-      // paypalAuthorization: map['paypal_authorization'] ?? '',
     );
+  }
+  int getProfileLevelsLength(Map<String, dynamic>? profileLevels) {
+    return profileLevels?.length ?? 0;
   }
 }
 

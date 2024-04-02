@@ -82,8 +82,10 @@ class AuthServices {
     return userCredential;
   }
 
-  static Future<UserCredential?> signInWithGoogle(BuildContext context,
-      ValueNotifier<bool> googleNotifier, String fcmToken) async {
+  static Future<UserCredential?> signInWithGoogle({
+  required  BuildContext context,
+    required  ValueNotifier<bool> googleNotifier,required String fcmToken,required UserModelClient userModel
+  }) async {
     try {
       googleNotifier.value = true;
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
@@ -113,7 +115,7 @@ class AuthServices {
 
       //store user google credentials to firestore
 
-      await storeGoogleData(userCredential, fcmToken: fcmToken);
+      await storeGoogleData(userCredential:userCredential,userModel: userModel ,fcmToken: fcmToken, );
 
       return userCredential;
     } catch (e) {
@@ -123,8 +125,8 @@ class AuthServices {
     return null;
   }
 
-  static Future<void> storeGoogleData(UserCredential userCredential,
-      {required String fcmToken}) async {
+  static Future<void> storeGoogleData(
+      {required UserCredential userCredential,required UserModelClient userModel,required String fcmToken}) async {
     final user = userCredential.user;
     final userData = {
       'user_name': user!.displayName,
@@ -134,7 +136,8 @@ class AuthServices {
       'image_url': user.photoURL,
       'profile_levels': {
         'isEmailVerified': true,
-      }
+      },
+      
     };
 
     final userDocumentReference =

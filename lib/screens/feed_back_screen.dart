@@ -66,7 +66,7 @@ class _FeedBackScreenState extends State<FeedBackScreen> {
                   child: widget.sellerImageUrl.isNotEmpty
                       ? CustomDisplayStoryImage(imageUrl: widget.sellerImageUrl)
                       : const CircleAvatar(
-                          backgroundImage: AssetImage(AppImages.profile),
+                          backgroundImage: AssetImage(AppImages.profileImage),
                         ),
                 ),
                 const Gap(10),

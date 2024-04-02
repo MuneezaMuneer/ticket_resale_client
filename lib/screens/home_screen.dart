@@ -211,7 +211,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     padding: const EdgeInsets.only(
                                         top: 10, left: 20, right: 20),
                                     child:
-                                        circleAvatar(50, 50, AppImages.profile),
+                                        circleAvatar(50, 50, AppImages.profileImage),
                                   ),
                                   const Gap(10),
                                   CustomText(
