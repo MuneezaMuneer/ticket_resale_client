@@ -18,7 +18,6 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   ValueNotifier<bool> googleNotifier = ValueNotifier<bool>(false);
-  ValueNotifier<bool> fbNotifier = ValueNotifier<bool>(false);
   ValueNotifier<bool> appleNotifier = ValueNotifier<bool>(false);
   @override
   Widget build(BuildContext context) {
@@ -93,25 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     );
                   },
                 ),
-                SizedBox(
-                  height: height * 0.02,
-                ),
-                ValueListenableBuilder(
-                  valueListenable: fbNotifier,
-                  builder: (context, value, child) {
-                    return CustomButton(
-                      loading: fbNotifier.value,
-                      backgroundColor: AppColors.white,
-                      socialText: 'Sign in with Facebook',
-                      imagePath: AppSvgs.facebook,
-                      socialTextWeight: FontWeight.w400,
-                      isSocial: true,
-                      onPressed: () async {
-                        fbNotifier.value = true;
-                      },
-                    );
-                  },
-                ),
+                
                 SizedBox(
                   height: height * 0.02,
                 ),

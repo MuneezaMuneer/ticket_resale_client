@@ -1,5 +1,7 @@
 // ignore_for_file: must_be_immutable, use_build_context_synchronously, prefer_const_constructors
 
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -26,9 +28,8 @@ class HomeDetailSecondScreen extends StatefulWidget {
 
 class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
   final formKey = GlobalKey<FormState>();
-
   TextEditingController priceController = TextEditingController();
-  late Stream<List<FeedbackModel>> fetchRatings;
+
   late String networkImage;
   late String userId;
   late String name;
@@ -37,11 +38,6 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
   late String averageExperience;
   late String averageArrivalTime;
   late String averageCommunicationResponse;
-  @override
-  void initState() {
-    fetchRatings = FireStoreServicesClient.fetchFeedback();
-    super.initState();
-  }
 
   @override
   void dispose() {
@@ -247,11 +243,13 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                   GestureDetector(
                     onTap: () async {
                       FocusScope.of(context).unfocus();
+
                       Future.delayed(const Duration(milliseconds: 300), () {
                         sellerRatingDialog(
                           context: context,
                           networkImage: networkImage,
-                          name: name, userId:userId ,
+                          name: name,
+                          userId: userId,
                         );
                       });
                     },
@@ -265,7 +263,8 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                           name = userData.displayName ?? '';
                           userId = userData.id ?? '';
                           return StreamBuilder(
-                            stream: fetchRatings,
+                            stream: FireStoreServicesClient.fetchFeedback(
+                                userId: userId),
                             builder: (context, ratingSnapshot) {
                               if (ratingSnapshot.hasData) {
                                 return FutureBuilder<Map<String, dynamic>>(
@@ -385,7 +384,7 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                                             ),
                                             Padding(
                                               padding: const EdgeInsets.only(
-                                                  left: 60),
+                                                  left: 45),
                                               child: SizedBox(
                                                 height: 45,
                                                 width: 45,

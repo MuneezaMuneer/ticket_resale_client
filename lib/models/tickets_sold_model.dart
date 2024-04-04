@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TicketsSoldModel {
@@ -6,14 +7,16 @@ class TicketsSoldModel {
   DateTime? dateTime;
   String? ticketImage;
   String? status;
-  String?  docId;
+  String? docId;
+  String? buyerUid;
   TicketsSoldModel({
-    this.status,
     this.ticketPrice,
     this.ticketName,
     this.dateTime,
     this.ticketImage,
-    this.docId
+    this.status,
+    this.docId,
+    this.buyerUid,
   });
 
   Map<String, dynamic> toMap() {
@@ -23,11 +26,11 @@ class TicketsSoldModel {
       'date_time': FieldValue.serverTimestamp(),
       'ticket_image': ticketImage,
       'status': status,
-     
+      'buyer_uid': buyerUid
     };
   }
 
-  factory TicketsSoldModel.fromMap(Map<String, dynamic> map,String docId) {
+  factory TicketsSoldModel.fromMap(Map<String, dynamic> map, String docId) {
     Timestamp? time = map['date_time'];
     final dateTime = time!.toDate();
     return TicketsSoldModel(
@@ -39,7 +42,7 @@ class TicketsSoldModel {
         ticketImage:
             map['ticket_image'] != null ? map['ticket_image'] as String : null,
         status: map['status'] ?? '',
-        docId: docId
-        );
+        buyerUid: map['buyer_uid'] ?? '',
+        docId: docId);
   }
 }

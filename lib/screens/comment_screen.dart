@@ -157,7 +157,7 @@ class _CommentScreenState extends State<CommentScreen> {
                                                   backgroundImage: NetworkImage(
                                                       '${userData.photoUrl}'),
                                                 ),
-                                                const Gap(10),
+                                                const Gap(7),
                                                 Expanded(
                                                   flex: 9,
                                                   child: Column(
@@ -177,7 +177,7 @@ class _CommentScreenState extends State<CommentScreen> {
                                                             color: AppColors
                                                                 .jetBlack,
                                                           ),
-                                                          const Gap(15),
+                                                          const Gap(5),
                                                           Container(
                                                             height: 5,
                                                             width: 5,
@@ -191,7 +191,6 @@ class _CommentScreenState extends State<CommentScreen> {
                                                                   .circle,
                                                             ),
                                                           ),
-                                                          const Gap(5),
                                                           CustomText(
                                                             title: AppUtils
                                                                 .formatTimeAgo(
@@ -322,6 +321,8 @@ class _CommentScreenState extends State<CommentScreen> {
                                                                 ticketName: widget
                                                                     .ticketModal
                                                                     .ticketType,
+                                                                buyerUid:
+                                                                    '${userData.id}',
                                                               );
                                                               commentData[index]
                                                                           .status ==

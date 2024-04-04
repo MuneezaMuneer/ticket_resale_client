@@ -348,67 +348,84 @@ class _TicketScreenState extends State<TicketScreen> {
                         gradient: customGradient,
                         textSize: AppSize.regular,
                         onPressed: () async {
-                          if (formKey.currentState!.validate() &&
-                              validateImage()) {
-                            notifier.value = true;
-                            String? imageUrl =
-                                await AuthServices.uploadEventImage(
-                                    imagePath: imagePickerProvider.getImageUrl);
-                            TicketModelClient ticketModel = TicketModelClient(
-                                imageUrl: imageUrl,
-                                ticketType: ticketTypeController.text,
-                                price: priceController.text,
-                                description: descriptionController.text,
-                                uid: AuthServices.getCurrentUser.uid,
-                                eventId: selectedFestivalDocId,
-                                status: 'Pending');
+                          if (formKey.currentState!.validate()) {
+                            FocusScope.of(context).unfocus();
+                            if (imagePickerProvider.getImageUrl.isEmpty) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  backgroundColor:
+                                      const Color.fromARGB(255, 129, 97, 247),
+                                  content: Text(
+                                      'Please add proof of email or ticket'),
+                                ),
+                              );
+                            } else {
+                              notifier.value = true;
+                              String? imageUrl =
+                                  await AuthServices.uploadEventImage(
+                                      imagePath:
+                                          imagePickerProvider.getImageUrl);
+                              TicketModelClient ticketModel = TicketModelClient(
+                                  imageUrl: imageUrl,
+                                  ticketType: ticketTypeController.text,
+                                  price: priceController.text,
+                                  description: descriptionController.text,
+                                  uid: AuthServices.getCurrentUser.uid,
+                                  eventId: selectedFestivalDocId,
+                                  status: 'Pending');
 
-                            if (imageUrl != null && imageUrl != '') {
-                              String selectedFestivalDocId = festivalDocId[
-                                  festivalNames.indexOf(selectedFestivalName)];
-                              log(' the selected id : $selectedFestivalDocId');
-                              String docId = FireStoreServicesClient.uid.v4();
-                              await FireStoreServicesClient.createTickets(
-                                      ticketModel: ticketModel, docId: docId)
-                                  .then((value) async {
-                                imagePickerProvider.setImageUrl = '';
-                                NotificationModel notificationModel =
-                                    NotificationModel(
-                                        title: 'Ticket listing request!',
-                                        body:
-                                            '${ticketTypeController.text} TICKET is created for festival "$selectedFestivalName" by ${AuthServices.getCurrentUser.displayName}',
-                                        id: docId,
-                                        notificationType:
-                                            'Ticket Listing Request!',
-                                        userId: AuthServices.getCurrentUser.uid,
-                                        status: 'Unread');
-                                List<String> tokens = await NotificationServices
-                                    .getAdminFCMTokens();
-                                for (var token in tokens) {
-                                  NotificationServices.sendNotification(
-                                          token: token,
+                              if (imageUrl != null && imageUrl != '') {
+                                String selectedFestivalDocId = festivalDocId[
+                                    festivalNames
+                                        .indexOf(selectedFestivalName)];
+                                log(' the selected id : $selectedFestivalDocId');
+                                String docId = FireStoreServicesClient.uid.v4();
+                                await FireStoreServicesClient.createTickets(
+                                        ticketModel: ticketModel, docId: docId)
+                                    .then((value) async {
+                                  imagePickerProvider.setImageUrl = '';
+                                  NotificationModel notificationModel =
+                                      NotificationModel(
                                           title: 'Ticket listing request!',
                                           body:
                                               '${ticketTypeController.text} TICKET is created for festival "$selectedFestivalName" by ${AuthServices.getCurrentUser.displayName}',
-                                          data: notificationModel
-                                              .toMapForNotifications())
-                                      .then((value) {
-                                    FireStoreServicesClient.storeNotifications(
-                                        notificationModel: notificationModel,
-                                        name: 'admin_notifications');
-                                  });
-                                }
+                                          id: docId,
+                                          notificationType:
+                                              'Ticket Listing Request!',
+                                          userId:
+                                              AuthServices.getCurrentUser.uid,
+                                          status: 'Unread');
+                                  List<String> tokens =
+                                      await NotificationServices
+                                          .getAdminFCMTokens();
+                                  for (var token in tokens) {
+                                    NotificationServices.sendNotification(
+                                            token: token,
+                                            title: 'Ticket listing request!',
+                                            body:
+                                                '${ticketTypeController.text} TICKET is created for festival "$selectedFestivalName" by ${AuthServices.getCurrentUser.displayName}',
+                                            data: notificationModel
+                                                .toMapForNotifications())
+                                        .then((value) {
+                                      FireStoreServicesClient
+                                          .storeNotifications(
+                                              notificationModel:
+                                                  notificationModel,
+                                              name: 'admin_notifications');
+                                    });
+                                  }
 
-                                AppUtils.toastMessage(
-                                    'Ticket Created Successfully');
-                                FocusScope.of(context).unfocus();
-                                notifier.value = false;
+                                  AppUtils.toastMessage(
+                                      'Ticket Created Successfully');
+                                  FocusScope.of(context).unfocus();
+                                  notifier.value = false;
 
-                                Navigator.pushNamed(
-                                  context,
-                                  AppRoutes.navigationScreen,
-                                );
-                              });
+                                  Navigator.pushNamed(
+                                    context,
+                                    AppRoutes.navigationScreen,
+                                  );
+                                });
+                              }
                             }
                           }
                         },

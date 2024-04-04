@@ -101,43 +101,6 @@ class CustomTileContainer extends StatelessWidget {
                       size: AppSize.regular,
                       weight: FontWeight.w600,
                     ),
-                    // SizedBox(
-                    //   height: constraints.maxHeight * 0.02,
-                    // ),
-                    // Row(
-                    //   children: [
-                    //     SizedBox(
-                    //       height: 30,
-                    //       width: 30,
-                    //       child: CircleAvatar(
-                    //         backgroundImage: AssetImage('$imagePath'),
-                    //       ),
-                    //     ),
-                    //     const Gap(10),
-                    //     RichText(
-                    //       text: TextSpan(
-                    //         children: [
-                    //           const TextSpan(
-                    //             text: 'Posted by ',
-                    //             style: TextStyle(
-                    //               color: AppColors.lightGrey,
-                    //               fontSize: AppSize.xxsmall,
-                    //               fontWeight: FontWeight.w300,
-                    //             ),
-                    //           ),
-                    //           TextSpan(
-                    //             text: postBy,
-                    //             style: const TextStyle(
-                    //               color: AppColors.lightGrey,
-                    //               fontSize: AppSize.xxsmall,
-                    //               fontWeight: FontWeight.w600,
-                    //             ),
-                    //           ),
-                    //         ],
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
                   ],
                 ),
               ),
@@ -152,6 +115,7 @@ class CustomTileContainer extends StatelessWidget {
                     height: 40,
                     child: CustomButton(
                       onPressed: () {
+                        FocusManager.instance.primaryFocus?.unfocus();
                         Navigator.pushNamed(
                           context,
                           AppRoutes.eventScreen,

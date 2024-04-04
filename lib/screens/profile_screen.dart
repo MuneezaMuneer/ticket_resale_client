@@ -28,7 +28,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       switchProvider = Provider.of<SwitchProvider>(context, listen: false);
     });
     photoUrl = AuthServices.getCurrentUser.photoURL;
-    profileLevelsFuture = FireStoreServicesClient.fetchProfileLevels(userId: AuthServices.getCurrentUser.uid);
+    profileLevelsFuture = FireStoreServicesClient.fetchProfileLevels(
+        userId: AuthServices.getCurrentUser.uid);
 
     super.initState();
   }
@@ -52,7 +53,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 sellerRatingDialog(
                     context: context,
                     networkImage: '${AuthServices.getCurrentUser.photoURL}',
-                    name: '${AuthServices.getCurrentUser.displayName}', userId: '${AuthServices.getCurrentUser.uid}');
+                    name: '${AuthServices.getCurrentUser.displayName}',
+                    userId: '${AuthServices.getCurrentUser.uid}');
               },
               child: Stack(
                 children: [
@@ -95,7 +97,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             const SizedBox(
               height: 5,
             ),
-            const CustomRow(),
+           CustomRow(userId: AuthServices.getCurrentUser.uid,),
             const SizedBox(
               height: 3,
             ),
@@ -157,6 +159,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   InkWell(
                     onTap: () {
+                      Navigator.pushNamed(
+                          context, AppRoutes.ticketsHistoryScreen);
+                    },
+                    child: const CustomProfileRow(
+                      leadingIcon: Icons.history_toggle_off_outlined,
+                      title: 'Tickets History',
+                      color: AppColors.jetBlack,
+                      iconColor: AppColors.lightGrey,
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
                       Navigator.pushNamed(context, AppRoutes.privacyScreen);
                     },
                     child: const CustomProfileRow(
@@ -182,7 +196,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     onTap: () {
                       AuthServices.signOut().then((value) {
                         AppText.preference!.remove(AppText.isAdminPrefKey);
-                        Navigator.pushNamed(context, AppRoutes.logIn);
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, AppRoutes.logIn, (route) => false);
                       });
                     },
                     child: const CustomProfileRow(

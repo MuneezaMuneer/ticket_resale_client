@@ -81,6 +81,37 @@ class FireStoreServicesClient {
     });
   }
 
+  static Future<void> storeSoldTickets({
+    required TicketsSoldModel soldModel,
+    required String userId,
+  }) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('tickets_sold_history')
+          .doc(userId)
+          .collection(userId)
+          .doc(uid.v4())
+          .set(soldModel.toMap(), SetOptions(merge: true));
+    } catch (e) {
+      print('Error storing sold tickets: $e');
+    }
+  }
+
+  static Stream<List<TicketsSoldModel>> fetchSoldTicketsHistory({
+    required String userId,
+  }) {
+    return FirebaseFirestore.instance
+        .collection('tickets_sold_history')
+        .doc(userId)
+        .collection(userId)
+        .snapshots()
+        .map((querySnapshot) {
+      return querySnapshot.docs.map((doc) {
+        return TicketsSoldModel.fromMap(doc.data(), doc.id);
+      }).toList();
+    });
+  }
+
   static Future<void> updateStatusInSoldTicketsCollection({
     required String hashKey,
     required List<String> selectedDocIds,
@@ -190,6 +221,19 @@ class FireStoreServicesClient {
     });
   }
 
+  static Stream<List<TicketModelClient>> fetchCurrentUserTickets() {
+    return FirebaseFirestore.instance
+        .collection('tickets')
+        .where('user_uid', isEqualTo: AuthServices.getCurrentUser.uid)
+        .where('status', isEqualTo: 'Active')
+        .snapshots()
+        .map((event) {
+      return event.docs.map((doc) {
+        return TicketModelClient.fromMap(doc.data(), doc.id);
+      }).toList();
+    });
+  }
+
   static Stream<List<TicketModelClient>> fetchTicketsData(
       {required String docID}) {
     return FirebaseFirestore.instance
@@ -257,11 +301,11 @@ class FireStoreServicesClient {
         .set(feedbackModel.toMap());
   }
 
-  static Stream<List<FeedbackModel>> fetchFeedback() {
+  static Stream<List<FeedbackModel>> fetchFeedback({required String userId}) {
     return FirebaseFirestore.instance
         .collection('feedback')
         .doc('feedback')
-        .collection('fFacXp2HByTVd7jdQU78mF75JHY2')
+        .collection(userId)
         .snapshots()
         .map((event) {
       return event.docs.map((doc) {
@@ -362,7 +406,8 @@ class FireStoreServicesClient {
     return UserModelClient.fromMap(snapshot.data() ?? {}, snapshot.id);
   }
 
-  static Future<Map<String, dynamic>?> fetchProfileLevels({required String userId}) async {
+  static Future<Map<String, dynamic>?> fetchProfileLevels(
+      {required String userId}) async {
     DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
         .collection('user_data')
         .doc(userId)
@@ -381,7 +426,6 @@ class FireStoreServicesClient {
   }
 
   static Future<bool> checkUserEmail({required String email}) async {
-    log("....................Email.............$email");
     var user = await FirebaseFirestore.instance
         .collection('user_data')
         .where("email", isEqualTo: email)

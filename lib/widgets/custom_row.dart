@@ -6,7 +6,8 @@ import 'package:ticket_resale/models/models.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
 class CustomRow extends StatefulWidget {
-  const CustomRow({super.key});
+  final String userId;
+   CustomRow({super.key, required this.userId});
 
   @override
   State<CustomRow> createState() => _CustomRowState();
@@ -16,7 +17,8 @@ class _CustomRowState extends State<CustomRow> {
   late Stream<List<FeedbackModel>> fetchRatings;
   @override
   void initState() {
-    fetchRatings = FireStoreServicesClient.fetchFeedback();
+    fetchRatings = FireStoreServicesClient.fetchFeedback(
+        userId: widget.userId);
 
     super.initState();
   }

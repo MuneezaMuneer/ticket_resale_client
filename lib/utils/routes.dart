@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ticket_resale/screens/tickets_history_screen.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 import '../constants/constants.dart';
 import '../models/models.dart';
@@ -108,6 +109,8 @@ Route onGenerateRoute(RouteSettings settings) {
     return animatePage(const ProfileSettings());
   } else if (settings.name == AppRoutes.notificationScreen) {
     return animatePage(NotificationScreen());
+  } else if (settings.name == AppRoutes.ticketsHistoryScreen) {
+    return animatePage(TicketsHistoryScreen());
   } else if (settings.name == AppRoutes.profileLevelScreen) {
     final isBackButton = settings.arguments as bool;
     return animatePage(ProfileLevelScreen(isBackButton: isBackButton));

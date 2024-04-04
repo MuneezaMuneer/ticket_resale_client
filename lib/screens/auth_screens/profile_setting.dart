@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:provider/provider.dart';
 import 'package:svg_flutter/svg_flutter.dart';
@@ -128,7 +129,9 @@ class _ProfileSettingsState extends State<ProfileSettings> {
             const SizedBox(
               height: 5,
             ),
-            const CustomRow(),
+            CustomRow(
+              userId: AuthServices.getCurrentUser.uid,
+            ),
             const SizedBox(height: 30),
             Padding(
                 padding:
@@ -263,6 +266,11 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                               onChanged: (phone) {
                                 countryCode = phone.countryCode;
                               },
+                              keyboardType: TextInputType.number,
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.allow(
+                                    RegExp(r'[0-9]')),
+                              ],
                             ),
                           ),
                           Positioned(
@@ -364,7 +372,6 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                                           ? imageUrl
                                           : AuthServices
                                               .getCurrentUser.photoURL,
-                                            
                                       status: 'Active');
 
                                   await AuthServices.storeUserImage(

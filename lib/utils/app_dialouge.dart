@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +21,7 @@ deleteDialog({required BuildContext context}) {
   return showDialog(
     context: context,
     builder: (context) {
-      return AlertDialog(
+      return AlertDialog.adaptive(
         backgroundColor: AppColors.white,
         titlePadding: const EdgeInsets.only(left: 25, right: 25, bottom: 30),
         title: Column(
@@ -99,16 +101,15 @@ deleteDialog({required BuildContext context}) {
   );
 }
 
-sellerRatingDialog({
-  required BuildContext context,
-  required String networkImage,
-  required String name,
-  required String userId
-}) {
+sellerRatingDialog(
+    {required BuildContext context,
+    required String networkImage,
+    required String name,
+    required String userId}) {
   return showDialog(
     context: context,
     builder: (context) {
-      return AlertDialog(
+      return AlertDialog.adaptive(
         titlePadding: EdgeInsets.zero,
         backgroundColor: AppColors.white,
         title: Column(
@@ -158,7 +159,7 @@ sellerRatingDialog({
             const SizedBox(
               height: 5,
             ),
-            const CustomRow(),
+             CustomRow(userId: userId,),
             const SizedBox(
               height: 10,
             ),
@@ -176,7 +177,7 @@ sellerRatingDialog({
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: StreamBuilder(
-                stream: FireStoreServicesClient.fetchFeedback(),
+                stream: FireStoreServicesClient.fetchFeedback(userId: userId),
                 builder: (context, snapshot) {
                   return FutureBuilder<Map<String, dynamic>>(
                     future: FireStoreServicesClient.calculateAverages(
@@ -294,7 +295,7 @@ ticketSellDialog({
     builder: (context) {
       return Consumer<BottomSheetProvider>(
         builder: (context, loadingProvider, child) {
-          return AlertDialog(
+          return AlertDialog.adaptive(
             backgroundColor: AppColors.white,
             titlePadding:
                 const EdgeInsets.only(left: 25, right: 25, bottom: 10, top: 0),

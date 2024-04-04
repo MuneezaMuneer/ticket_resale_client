@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:http/http.dart' as http;
 
-class VerifyUserEmail {
+class EmailServices {
   static Future<bool> sendEmail({
     required String toEmail,
     required String fromEmail,
@@ -64,5 +64,4 @@ class VerifyUserEmail {
     Random random = Random();
     return random.nextInt(9000) + 1000;
   }
-
 }

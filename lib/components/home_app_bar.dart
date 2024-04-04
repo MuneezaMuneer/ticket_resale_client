@@ -156,7 +156,7 @@ class _HomeAppBarState extends State<HomeAppBar> {
                     alignment: Alignment.center,
                     child: SizedBox(
                       height: height * 0.08,
-                      width: width * 0.85,
+                      width: width * 0.9,
                       child: ValueListenableBuilder(
                         valueListenable: widget.controller!,
                         builder: (context, value, child) {
@@ -184,7 +184,7 @@ class _HomeAppBarState extends State<HomeAppBar> {
                                           Icons.search,
                                           color: AppColors.white,
                                         )
-                                      : GestureDetector(
+                                      : InkWell(
                                           onTap: () {
                                             widget.controller!.clear();
                                             widget.setSearchQuery!(

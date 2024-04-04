@@ -377,6 +377,24 @@ class CustomBottomSheet {
                                                                       hashKey,
                                                                   userModel:
                                                                       userModel,
+                                                                  ticketImage: selectedTickets
+                                                                          .isNotEmpty
+                                                                      ? selectedTickets[0]
+                                                                              .ticketImage ??
+                                                                          ''
+                                                                      : '',
+                                                                  ticketPrice: selectedTickets
+                                                                          .isNotEmpty
+                                                                      ? selectedTickets[0]
+                                                                              .ticketPrice ??
+                                                                          ''
+                                                                      : '',
+                                                                  ticketName: selectedTickets
+                                                                          .isNotEmpty
+                                                                      ? selectedTickets[0]
+                                                                              .ticketName ??
+                                                                          ''
+                                                                      : '',
                                                                   // onFinish:
                                                                   //     (paymentId) async {
                                                                   //   PaypalPaymentServices

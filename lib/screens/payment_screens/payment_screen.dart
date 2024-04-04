@@ -17,6 +17,9 @@ class PaymentScreen extends StatefulWidget {
   final List<String> docIds;
   final String hashKey;
   final UserModelClient userModel;
+  final String ticketImage;
+  final String ticketPrice;
+  final String ticketName;
   // final Function(String?) onFinish;
   const PaymentScreen(
       {super.key,
@@ -25,7 +28,10 @@ class PaymentScreen extends StatefulWidget {
       required this.totalPrice,
       required this.docIds,
       required this.hashKey,
-      required this.userModel});
+      required this.userModel,
+      required this.ticketImage,
+      required this.ticketPrice,
+      required this.ticketName});
 
   @override
   State<PaymentScreen> createState() => _PaymentScreenState();
@@ -90,15 +96,26 @@ class _PaymentScreenState extends State<PaymentScreen> {
                             body:
                                 "The offered'\$${widget.totalPrice}' price is paid successfully",
                             data: notificationModel.toMapForNotifications());
-                        await FireStoreServicesClient
-                                .updateStatusInSoldTicketsCollection(
-                                    hashKey: widget.hashKey,
-                                    selectedDocIds: widget.docIds,
-                                    newStatus: 'Unpaid')
-                            .then((value) async {
-                          await FireStoreServicesClient.storeNotifications(
-                              notificationModel: notificationModel,
-                              name: 'client_notifications');
+                        TicketsSoldModel soldModel = TicketsSoldModel(
+                          ticketPrice: widget.ticketPrice,
+                          ticketImage: widget.ticketImage,
+                          ticketName: widget.ticketName,
+                          buyerUid: AuthServices.getCurrentUser.uid,
+                        );
+                        await FireStoreServicesClient.storeSoldTickets(
+                          soldModel: soldModel,
+                          userId: widget.userModel.id!,
+                        ).then((value) async {
+                          await FireStoreServicesClient
+                                  .updateStatusInSoldTicketsCollection(
+                                      hashKey: widget.hashKey,
+                                      selectedDocIds: widget.docIds,
+                                      newStatus: 'Unpaid')
+                              .then((value) async {
+                            await FireStoreServicesClient.storeNotifications(
+                                notificationModel: notificationModel,
+                                name: 'client_notifications');
+                          });
                         });
 
                         //  widget.onFinish(id);

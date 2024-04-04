@@ -67,7 +67,8 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
               sellerRatingDialog(
                   context: context,
                   networkImage: '${AuthServices.getCurrentUser.photoURL}',
-                  name: '${AuthServices.getCurrentUser.displayName}', userId: '${AuthServices.getCurrentUser.uid}');
+                  name: '${AuthServices.getCurrentUser.displayName}',
+                  userId: '${AuthServices.getCurrentUser.uid}');
             },
             child: Stack(
               children: [
@@ -110,7 +111,7 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
           const SizedBox(
             height: 5,
           ),
-          const CustomRow(),
+           CustomRow(userId: AuthServices.getCurrentUser.uid,),
           const SizedBox(
             height: 3,
           ),
@@ -213,25 +214,15 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
                                           false,
                                     ),
                                   ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      if (currentUser.profileLevels![
-                                              'isInstaVerified'] ??
-                                          false) {
-                                        Navigator.pushNamed(
-                                            context, AppRoutes.profileScreen);
-                                      }
-                                    },
-                                    child: _buildContainer(
-                                      AppSvgs.levelThree,
-                                      'Connect Your PayPal',
-                                      'Level 3 Verified',
-                                      'Verify for Level 3',
-                                      width,
-                                      currentUser.profileLevels![
-                                              'isPaypalVerified'] ??
-                                          false,
-                                    ),
+                                  _buildContainer(
+                                    AppSvgs.levelThree,
+                                    'Connect Your PayPal',
+                                    'Level 3 Verified',
+                                    'Verify for Level 3',
+                                    width,
+                                    currentUser.profileLevels![
+                                            'isPaypalVerified'] ??
+                                        false,
                                   ),
                                   GestureDetector(
                                     onTap: () {
