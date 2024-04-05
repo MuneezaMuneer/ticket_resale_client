@@ -159,7 +159,6 @@ class CustomBottomSheet {
   static void showConfirmTicketsSheet(
       {required BuildContext context,
       required String hashKey,
-      required var id,
       required UserModelClient userModel}) {
     List<TicketsSoldModel> selectedTickets = [];
     ValueNotifier<double> totalPriceNotifier = ValueNotifier<double>(0);
@@ -188,6 +187,7 @@ class CustomBottomSheet {
                 return const Center(child: CupertinoActivityIndicator());
               } else if (snapshot.hasData && snapshot.data != null) {
                 final data = snapshot.data!;
+
                 return ValueListenableBuilder(
                   valueListenable: totalPriceNotifier,
                   builder: (context, totalPrice, child) {
@@ -198,10 +198,10 @@ class CustomBottomSheet {
                         children: [
                           const TabBar(tabs: [
                             Tab(
-                              text: 'UnPaid',
+                              text: 'UnPaid Tickets',
                             ),
                             Tab(
-                              text: 'Paid',
+                              text: 'Paid Tickets',
                             )
                           ]),
                           SizedBox(
@@ -231,6 +231,7 @@ class CustomBottomSheet {
                                                               ticket.status ==
                                                               'Unpaid')
                                                           .toList();
+
                                                   final ticket =
                                                       paidTickets[index];
 
@@ -239,52 +240,33 @@ class CustomBottomSheet {
                                                           .contains(ticket);
                                                   return Column(
                                                     children: [
-                                                      AuthServices.getCurrentUser
-                                                                  .uid !=
-                                                              id['seller_uid']
-                                                          ? CheckboxListTile(
-                                                              value: isSelected,
-                                                              onChanged:
-                                                                  (value) {
-                                                                if (!selectedTickets
-                                                                    .contains(
-                                                                        ticket)) {
-                                                                  selectedTickets
-                                                                      .add(
-                                                                          ticket);
-                                                                  updateTotalPrice();
-                                                                } else {
-                                                                  selectedTickets
-                                                                      .remove(
-                                                                          ticket);
-                                                                  updateTotalPrice();
-                                                                }
-                                                              },
-                                                              secondary:
-                                                                  CustomDisplayStoryImage(
-                                                                      height:
-                                                                          47,
-                                                                      width: 47,
-                                                                      imageUrl:
-                                                                          '${ticket.ticketImage}'),
-                                                              title: Text(
-                                                                  '${ticket.ticketName} TICKET AVAILABLE'),
-                                                              subtitle: Text(
-                                                                  '\$${ticket.ticketPrice}'),
-                                                            )
-                                                          : ListTile(
-                                                              leading:
-                                                                  CustomDisplayStoryImage(
-                                                                      height:
-                                                                          47,
-                                                                      width: 47,
-                                                                      imageUrl:
-                                                                          '${ticket.ticketImage}'),
-                                                              title: Text(
-                                                                  '${ticket.ticketName} TICKET AVAILABLE'),
-                                                              subtitle: Text(
-                                                                  '\$${ticket.ticketPrice}'),
-                                                            ),
+                                                      CheckboxListTile(
+                                                        value: isSelected,
+                                                        onChanged: (value) {
+                                                          if (!selectedTickets
+                                                              .contains(
+                                                                  ticket)) {
+                                                            selectedTickets
+                                                                .add(ticket);
+                                                            updateTotalPrice();
+                                                          } else {
+                                                            selectedTickets
+                                                                .remove(ticket);
+                                                            updateTotalPrice();
+                                                          }
+                                                        },
+                                                        secondary:
+                                                            CustomDisplayStoryImage(
+                                                                height: 47,
+                                                                width: 47,
+                                                                imageUrl:
+                                                                    '${ticket.ticketImage}'),
+                                                        title: Text(
+                                                            '${ticket.ticketName} TICKET AVAILABLE'),
+                                                        subtitle: Text(
+                                                            '\$${ticket.ticketPrice}'),
+                                                      ),
+                                                      
                                                       Divider(
                                                         color: AppColors
                                                             .lightBlack
@@ -299,136 +281,128 @@ class CustomBottomSheet {
                                                   title: 'No Ticket Unpaid',
                                                 ),
                                               )),
-                                    AuthServices.getCurrentUser.uid !=
-                                            id['seller_uid']
-                                        ? Padding(
-                                            padding: const EdgeInsets.all(12.0),
-                                            child: data
-                                                        .where((ticket) =>
-                                                            ticket.status ==
-                                                            'Unpaid')
-                                                        .length >
-                                                    0
-                                                ? Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      CustomText(
-                                                        title:
-                                                            'Total Price: $totalPrice',
-                                                        color:
-                                                            AppColors.jetBlack,
-                                                        size: AppSize.regular,
-                                                      ),
-                                                      CustomButton(
-                                                        fixedWidth: 70,
-                                                        gradient:
-                                                            customGradient,
-                                                        textColor:
-                                                            AppColors.white,
-                                                        textSize:
-                                                            AppSize.regular,
-                                                        weight: FontWeight.w700,
-                                                        btnText: 'Pay',
-                                                        onPressed: () {
-                                                          if (totalPrice > 0) {
-                                                            List<
-                                                                    Map<String,
-                                                                        dynamic>>
-                                                                items = [];
+                                    Padding(
+                                        padding: const EdgeInsets.all(12.0),
+                                        child: data
+                                                    .where((ticket) =>
+                                                        ticket.status ==
+                                                        'Unpaid')
+                                                    .length >
+                                                0
+                                            ? Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  CustomText(
+                                                    title:
+                                                        'Total Price: $totalPrice',
+                                                    color: AppColors.jetBlack,
+                                                    size: AppSize.regular,
+                                                  ),
+                                                  CustomButton(
+                                                    fixedWidth: 70,
+                                                    gradient: customGradient,
+                                                    textColor: AppColors.white,
+                                                    textSize: AppSize.regular,
+                                                    weight: FontWeight.w700,
+                                                    btnText: 'Pay',
+                                                    onPressed: () {
+                                                      if (totalPrice > 0) {
+                                                        List<
+                                                                Map<String,
+                                                                    dynamic>>
+                                                            items = [];
 
-                                                            for (var ticket
-                                                                in selectedTickets) {
-                                                              items.add({
-                                                                "name":
-                                                                    '${ticket.ticketName} Ticket',
-                                                                "quantity": '1',
-                                                                "price": ticket
-                                                                    .ticketPrice,
-                                                                "currency":
-                                                                    'USD'
-                                                              });
-                                                            }
-                                                            Navigator.pop(
-                                                                context);
-                                                            Navigator.of(
-                                                                    context)
-                                                                .push(
-                                                              MaterialPageRoute(
-                                                                builder: (BuildContext
-                                                                        context) =>
-                                                                    PaymentScreen(
-                                                                  docIds: selectedTickets
-                                                                      .where((ticket) =>
-                                                                          ticket
-                                                                              .docId !=
-                                                                          null)
-                                                                      .map((ticket) =>
-                                                                          ticket
-                                                                              .docId!)
-                                                                      .toList(),
+                                                        for (var ticket
+                                                            in selectedTickets) {
+                                                          items.add({
+                                                            "name":
+                                                                '${ticket.ticketName} Ticket',
+                                                            "quantity": '1',
+                                                            "price": ticket
+                                                                .ticketPrice,
+                                                            "currency": 'USD'
+                                                          });
+                                                        }
+                                                        Navigator.pop(context);
+                                                        Navigator.of(context)
+                                                            .push(
+                                                          MaterialPageRoute(
+                                                            builder: (BuildContext
+                                                                    context) =>
+                                                                PaymentScreen(
+                                                              docIds: selectedTickets
+                                                                  .where((ticket) =>
+                                                                      ticket
+                                                                          .docId !=
+                                                                      null)
+                                                                  .map((ticket) =>
+                                                                      ticket
+                                                                          .docId!)
+                                                                  .toList(),
 
-                                                                  totalPrice:
-                                                                      totalPrice
-                                                                          .toString(),
-                                                                  items: items,
-                                                                  hashKey:
-                                                                      hashKey,
-                                                                  userModel:
-                                                                      userModel,
-                                                                  ticketImage: selectedTickets
-                                                                          .isNotEmpty
-                                                                      ? selectedTickets[0]
-                                                                              .ticketImage ??
-                                                                          ''
-                                                                      : '',
-                                                                  ticketPrice: selectedTickets
-                                                                          .isNotEmpty
-                                                                      ? selectedTickets[0]
-                                                                              .ticketPrice ??
-                                                                          ''
-                                                                      : '',
-                                                                  ticketName: selectedTickets
-                                                                          .isNotEmpty
-                                                                      ? selectedTickets[0]
-                                                                              .ticketName ??
-                                                                          ''
-                                                                      : '',
-                                                                  // onFinish:
-                                                                  //     (paymentId) async {
-                                                                  //   PaypalPaymentServices
-                                                                  //       .fetchPaymentDetails(
-                                                                  //           "$paymentId");
-                                                                  //   final snackBar = SnackBar(
-                                                                  //     content: const Text(
-                                                                  //         "Payment done Successfully"),
-                                                                  //     duration:
-                                                                  //         const Duration(
-                                                                  //             seconds: 5),
-                                                                  //     action: SnackBarAction(
-                                                                  //       label: 'Close',
-                                                                  //       onPressed: () {
-                                                                  //         Navigator.pop(
-                                                                  //             context);
-                                                                  //       },
-                                                                  //     ),
-                                                                  //   );
-                                                                  //   ScaffoldMessenger.of(
-                                                                  //           context)
-                                                                  //       .showSnackBar(
-                                                                  //           snackBar);
-                                                                  // },
-                                                                ),
-                                                              ),
-                                                            );
-                                                          }
-                                                        },
-                                                      ),
-                                                    ],
-                                                  )
-                                                : const SizedBox.shrink())
-                                        : const SizedBox()
+                                                              totalPrice:
+                                                                  totalPrice
+                                                                      .toString(),
+                                                              items: items,
+                                                              hashKey: hashKey,
+                                                              userModel:
+                                                                  userModel,
+                                                              ticketImage: selectedTickets
+                                                                      .isNotEmpty
+                                                                  ? selectedTickets[
+                                                                              0]
+                                                                          .ticketImage ??
+                                                                      ''
+                                                                  : '',
+                                                              ticketPrice: selectedTickets
+                                                                      .isNotEmpty
+                                                                  ? selectedTickets[
+                                                                              0]
+                                                                          .ticketPrice ??
+                                                                      ''
+                                                                  : '',
+                                                              ticketName: selectedTickets
+                                                                      .isNotEmpty
+                                                                  ? selectedTickets[
+                                                                              0]
+                                                                          .ticketName ??
+                                                                      ''
+                                                                  : '',
+                                                              // onFinish:
+                                                              //     (paymentId) async {
+                                                              //   PaypalPaymentServices
+                                                              //       .fetchPaymentDetails(
+                                                              //           "$paymentId");
+                                                              //   final snackBar = SnackBar(
+                                                              //     content: const Text(
+                                                              //         "Payment done Successfully"),
+                                                              //     duration:
+                                                              //         const Duration(
+                                                              //             seconds: 5),
+                                                              //     action: SnackBarAction(
+                                                              //       label: 'Close',
+                                                              //       onPressed: () {
+                                                              //         Navigator.pop(
+                                                              //             context);
+                                                              //       },
+                                                              //     ),
+                                                              //   );
+                                                              //   ScaffoldMessenger.of(
+                                                              //           context)
+                                                              //       .showSnackBar(
+                                                              //           snackBar);
+                                                              // },
+                                                            ),
+                                                          ),
+                                                        );
+                                                      }
+                                                    },
+                                                  ),
+                                                ],
+                                              )
+                                            : const SizedBox.shrink())
                                   ],
                                 ),
                                 data

@@ -107,19 +107,19 @@ class _TicketsHistoryScreenState extends State<TicketsHistoryScreen> {
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemCount: tickets.length,
-                                itemExtent: 80,
+                                itemExtent: 140,
                                 itemBuilder: (context, index) {
                                   return Padding(
                                     padding: const EdgeInsets.only(top: 15),
-                                    child: _tileContainer(
-                                      title:
-                                          '${tickets[index].ticketName} TICKET AVAILABLE',
-                                      subTitle:
-                                          'VIP Seats + Exclusive braclets',
-                                      price: '${tickets[index].ticketPrice}',
-                                      imagePath:
-                                          '${tickets[index].ticketImage}',
-                                    ),
+                                    child: CustomTile(
+                                        title:
+                                            '${tickets[index].ticketName} TICKET AVAILABLE',
+                                        subTitle:
+                                            'VIP Seats + Exclusive braclets',
+                                        price: '${tickets[index].ticketPrice}',
+                                        imagePath:
+                                            '${tickets[index].ticketImage}',
+                                        userId: '${tickets[index].buyerUid}', text: 'Buy by',),
                                   );
                                 },
                               );

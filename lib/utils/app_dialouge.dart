@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -159,7 +157,9 @@ sellerRatingDialog(
             const SizedBox(
               height: 5,
             ),
-             CustomRow(userId: userId,),
+            CustomRow(
+              userId: userId,
+            ),
             const SizedBox(
               height: 10,
             ),
@@ -302,9 +302,10 @@ ticketSellDialog({
             title: Column(
               children: [
                 const Gap(10),
-                CircleAvatar(
-                  backgroundImage: NetworkImage(ticketImage),
-                  radius: 90,
+                CustomDisplayStoryImage(
+                  imageUrl: ticketImage,
+                  height: 150,
+                  width: 150,
                 ),
                 const CustomText(
                   title: 'Are you sure?',
@@ -352,12 +353,14 @@ ticketSellDialog({
                     Row(
                       children: [
                         SizedBox(
-                          height: 30,
-                          width: 30,
-                          child: CircleAvatar(
-                            backgroundImage: NetworkImage(buyerImage),
-                          ),
-                        ),
+                            height: 30,
+                            width: 30,
+                            child: CircleAvatar(
+                              backgroundImage: buyerImage.isNotEmpty
+                                  ? NetworkImage(buyerImage)
+                                  : AssetImage(AppImages.profileImage)
+                                      as ImageProvider,
+                            )),
                         const Gap(10),
                         CustomText(
                           title: buyerName,
@@ -407,10 +410,9 @@ ticketSellDialog({
                                 docId: docId, offerId: offerId);
                           }).then((value) async {
                             await FireStoreServicesClient.saveSoldTicketsData(
-                                soldModel: soldModel,
-                                hashKey: hashKey,
-                                buyerUid: buyerId,
-                                sellerUid: AuthServices.getCurrentUser.uid);
+                              soldModel: soldModel,
+                              hashKey: hashKey,
+                            );
                           }).then((value) async {
                             await NotificationServices.sendNotification(
                                 token: token,

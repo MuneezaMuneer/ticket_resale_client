@@ -1,18 +1,12 @@
-import 'dart:developer';
-
-import 'package:device_preview/device_preview.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ticket_resale/constants/constants.dart';
-import 'package:ticket_resale/db_services/firestore_services_client.dart';
 import 'package:ticket_resale/firebase_options.dart';
-import 'package:ticket_resale/models/models.dart';
 import 'package:ticket_resale/providers/providers.dart';
 import 'package:ticket_resale/screens/screens.dart';
 import 'package:ticket_resale/utils/utils.dart';

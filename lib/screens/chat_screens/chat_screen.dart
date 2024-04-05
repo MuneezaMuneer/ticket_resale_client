@@ -26,7 +26,7 @@ class ChatScreen extends StatelessWidget {
               );
             } else if (!snapshot.hasData || (snapshot.data as List).isEmpty) {
               return const Center(
-                child: Text('No Active Connections'),
+                child: Text('No Active User'),
               );
             } else {
               final currentUserId = snapshot.data as List<String>;

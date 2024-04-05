@@ -65,20 +65,13 @@ class FireStoreServicesClient {
   static Future<void> saveSoldTicketsData({
     required TicketsSoldModel soldModel,
     required String hashKey,
-    required String sellerUid,
-    required String buyerUid,
   }) async {
-    FirebaseFirestore.instance.collection('tickets_sold').doc(hashKey).set({
-      'buyer_uid': buyerUid,
-      'seller_uid': sellerUid,
-    }).then((_) {
-      return FirebaseFirestore.instance
-          .collection('tickets_sold')
-          .doc(hashKey)
-          .collection('tickets_sold')
-          .doc(uid.v4())
-          .set(soldModel.toMap(), SetOptions(merge: true));
-    });
+    FirebaseFirestore.instance
+        .collection('tickets_sold')
+        .doc(hashKey)
+        .collection('tickets_sold')
+        .doc(uid.v4())
+        .set(soldModel.toMap(), SetOptions(merge: true));
   }
 
   static Future<void> storeSoldTickets({
@@ -126,25 +119,6 @@ class FireStoreServicesClient {
     }
   }
 
-  static Future<Map<String, String>> fetchBuyerAndSellerUIDs(
-      String hashKey) async {
-    DocumentSnapshot snapshot = await FirebaseFirestore.instance
-        .collection('tickets_sold')
-        .doc(hashKey)
-        .get();
-
-    if (snapshot.exists) {
-      Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
-
-      String buyerUid = data['buyer_uid'];
-      String sellerUid = data['seller_uid'];
-
-      return {'buyer_uid': buyerUid, 'seller_uid': sellerUid};
-    } else {
-      throw Exception('Snapshot does not exist');
-    }
-  }
-
   static Stream<List<TicketsSoldModel>> fetchSoldTicketsData({
     required String hashKey,
   }) {
@@ -152,6 +126,7 @@ class FireStoreServicesClient {
         .collection('tickets_sold')
         .doc(hashKey)
         .collection('tickets_sold')
+        .where('buyer_uid', isEqualTo: AuthServices.getCurrentUser.uid)
         .snapshots()
         .map((querySnapshot) {
       return querySnapshot.docs.map((doc) {

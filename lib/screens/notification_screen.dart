@@ -164,7 +164,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                           hashKey:
                               FireStoreServicesClient.getMessagesHashCodeID(
                                   userIDReceiver: notifications[index].id!),
-                          id: {'seller_uid': notifications[index].userId},
+                          //  id: {'seller_uid': notifications[index].userId},
                           userModel: userModel);
                     }
                   },
@@ -206,10 +206,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
               },
             );
           } else {
-            return const Center(child: Text('No Notifications'));
+            return const Center(child: Text('No Notification'));
           }
         } else {
-          return const Center(child: Text('No Notifications'));
+          return const Center(child: Text('No Notification'));
         }
       },
     );

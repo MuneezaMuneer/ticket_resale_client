@@ -154,8 +154,19 @@ class _CommentScreenState extends State<CommentScreen> {
                                                   MainAxisAlignment.start,
                                               children: [
                                                 CircleAvatar(
-                                                  backgroundImage: NetworkImage(
-                                                      '${userData.photoUrl}'),
+                                                  backgroundImage: userData
+                                                                  .photoUrl !=
+                                                              null &&
+                                                          userData.photoUrl !=
+                                                              "null" &&
+                                                          Uri.parse(userData
+                                                                  .photoUrl!)
+                                                              .isAbsolute
+                                                      ? NetworkImage(
+                                                          '${userData.photoUrl}')
+                                                      : AssetImage(AppImages
+                                                              .profileImage)
+                                                          as ImageProvider,
                                                 ),
                                                 const Gap(7),
                                                 Expanded(
@@ -191,6 +202,7 @@ class _CommentScreenState extends State<CommentScreen> {
                                                                   .circle,
                                                             ),
                                                           ),
+                                                          Gap(3),
                                                           CustomText(
                                                             title: AppUtils
                                                                 .formatTimeAgo(

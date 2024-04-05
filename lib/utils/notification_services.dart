@@ -113,7 +113,7 @@ class NotificationServices {
             CustomBottomSheet.showConfirmTicketsSheet(
                 context: context,
                 hashKey: hashKey,
-                id: {'seller_uid': userId},
+              //  id: {'seller_uid': userId},
                 userModel: userModel);
           }
         }

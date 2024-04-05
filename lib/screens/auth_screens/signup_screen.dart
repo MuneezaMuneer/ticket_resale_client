@@ -374,10 +374,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                     userModel: userModel,
                                                   );
                                                   loading.value = false;
-                                                  Navigator.pushNamed(
-                                                    context,
-                                                    AppRoutes.navigationScreen,
-                                                  );
+                                                  Navigator
+                                                      .pushNamedAndRemoveUntil(
+                                                          context,
+                                                          AppRoutes
+                                                              .navigationScreen,
+                                                          (route) => false);
                                                 }
                                               });
                                             } catch (e) {
@@ -390,6 +392,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                             }
                                           } else {
                                             // Show toast indicating code expiration
+                                            bottomSheetProvider
+                                                .setLoadingProgress = false;
                                             AppUtils.toastMessage(
                                                 'Verification code has expired. Please resend.');
                                           }

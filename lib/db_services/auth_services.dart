@@ -82,10 +82,11 @@ class AuthServices {
     return userCredential;
   }
 
-  static Future<UserCredential?> signInWithGoogle({
-  required  BuildContext context,
-    required  ValueNotifier<bool> googleNotifier,required String fcmToken,required UserModelClient userModel
-  }) async {
+  static Future<UserCredential?> signInWithGoogle(
+      {required BuildContext context,
+      required ValueNotifier<bool> googleNotifier,
+      required String fcmToken,
+      required UserModelClient userModel}) async {
     try {
       googleNotifier.value = true;
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
@@ -115,7 +116,11 @@ class AuthServices {
 
       //store user google credentials to firestore
 
-      await storeGoogleData(userCredential:userCredential,userModel: userModel ,fcmToken: fcmToken, );
+      await storeGoogleData(
+        userCredential: userCredential,
+        userModel: userModel,
+        fcmToken: fcmToken,
+      );
 
       return userCredential;
     } catch (e) {
@@ -126,7 +131,9 @@ class AuthServices {
   }
 
   static Future<void> storeGoogleData(
-      {required UserCredential userCredential,required UserModelClient userModel,required String fcmToken}) async {
+      {required UserCredential userCredential,
+      required UserModelClient userModel,
+      required String fcmToken}) async {
     final user = userCredential.user;
     final userData = {
       'user_name': user!.displayName,
@@ -137,7 +144,6 @@ class AuthServices {
       'profile_levels': {
         'isEmailVerified': true,
       },
-      
     };
 
     final userDocumentReference =
@@ -225,19 +231,11 @@ class AuthServices {
   }
 
   static Future<void> deleteUserAccount() async {
-    try {
-      await deleteUserData();
-      await deleteUserTickets();
-      await AuthServices.getCurrentUser.delete();
-    } on FirebaseAuthException catch (e) {
-      logg.log(e.toString());
-
-      if (e.code == "requires-recent-login") {
-        await _reauthenticateAndDelete();
-      } else {}
-    } catch (e) {
-      logg.log(e.toString());
-    }
+    await deleteUserData();
+    await deleteUserTickets();
+    await AuthServices.getCurrentUser.delete().then((value) {
+      logg.log('The user deleted successfully');
+    });
   }
 
   static Future<void> deleteUserData() async {
@@ -265,24 +263,6 @@ class AuthServices {
       }
     } catch (e) {
       logg.log("Error deleting user data: $e");
-    }
-  }
-
-  static Future<void> _reauthenticateAndDelete() async {
-    try {
-      final providerData = AuthServices.getCurrentUser.providerData.first;
-
-      if (AppleAuthProvider().providerId == providerData.providerId) {
-        await AuthServices.getCurrentUser
-            .reauthenticateWithProvider(AppleAuthProvider());
-      } else if (GoogleAuthProvider().providerId == providerData.providerId) {
-        await AuthServices.getCurrentUser
-            .reauthenticateWithProvider(GoogleAuthProvider());
-      }
-
-      await AuthServices.getCurrentUser.delete();
-    } catch (e) {
-      logg.log(e.toString());
     }
   }
 
