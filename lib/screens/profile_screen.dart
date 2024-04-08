@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
-import 'package:svg_flutter/svg.dart';
+import 'package:ticket_resale/components/components.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/db_services/db_services.dart';
 import 'package:ticket_resale/providers/providers.dart';
@@ -20,6 +20,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   late SwitchProvider switchProvider;
   String? photoUrl;
+  late Future<Map<String, dynamic>?> profileLevelsFuture;
   @override
   void initState() {
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
@@ -27,6 +28,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       switchProvider = Provider.of<SwitchProvider>(context, listen: false);
     });
     photoUrl = AuthServices.getCurrentUser.photoURL;
+    profileLevelsFuture = FireStoreServicesClient.fetchProfileLevels(
+        userId: AuthServices.getCurrentUser.uid);
 
     super.initState();
   }
@@ -45,31 +48,42 @@ class _ProfileScreenState extends State<ProfileScreen> {
             const SizedBox(
               height: 15,
             ),
-            Stack(
-              children: [
-                SizedBox(
-                    height: 140,
-                    width: 140,
-                    child: photoUrl != null
-                        ? ClipRRect(
-                            borderRadius: BorderRadius.circular(100),
-                            child: CachedNetworkImage(
-                              imageUrl: "$photoUrl",
-                              placeholder: (context, url) =>
-                                  const CupertinoActivityIndicator(
-                                color: AppColors.blueViolet,
+            GestureDetector(
+              onTap: () {
+                sellerRatingDialog(
+                    context: context,
+                    networkImage: '${AuthServices.getCurrentUser.photoURL}',
+                    name: '${AuthServices.getCurrentUser.displayName}',
+                    userId: '${AuthServices.getCurrentUser.uid}');
+              },
+              child: Stack(
+                children: [
+                  SizedBox(
+                      height: 140,
+                      width: 140,
+                      child: photoUrl != null
+                          ? ClipRRect(
+                              borderRadius: BorderRadius.circular(100),
+                              child: CachedNetworkImage(
+                                imageUrl: "$photoUrl",
+                                placeholder: (context, url) =>
+                                    const CupertinoActivityIndicator(
+                                  color: AppColors.blueViolet,
+                                ),
+                                fit: BoxFit.cover,
                               ),
-                              fit: BoxFit.cover,
-                            ),
-                          )
-                        : const CircleAvatar(
-                            backgroundImage:
-                                AssetImage(AppImages.profileImage))),
-                Positioned(
+                            )
+                          : const CircleAvatar(
+                              backgroundImage:
+                                  AssetImage(AppImages.profileImage))),
+                  Positioned(
                     left: 90,
                     top: 70,
-                    child: SvgPicture.asset(AppSvgs.levelOne))
-              ],
+                    child: ProfileLevelImage(
+                        profileLevelsFuture: profileLevelsFuture),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(
               height: 13,
@@ -77,13 +91,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
             CustomText(
               title: '${FirebaseAuth.instance.currentUser!.displayName}',
               weight: FontWeight.w600,
-              size: AppSize.large,
+              size: AppFontSize.large,
               color: AppColors.jetBlack,
             ),
             const SizedBox(
               height: 5,
             ),
-            const CustomRow(),
+            CustomRow(
+              userId: AuthServices.getCurrentUser.uid,
+            ),
             const SizedBox(
               height: 3,
             ),
@@ -145,6 +161,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   InkWell(
                     onTap: () {
+                      Navigator.pushNamed(
+                          context, AppRoutes.ticketsHistoryScreen);
+                    },
+                    child: const CustomProfileRow(
+                      leadingIcon: Icons.history_toggle_off_outlined,
+                      title: 'Tickets History',
+                      color: AppColors.jetBlack,
+                      iconColor: AppColors.lightGrey,
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
                       Navigator.pushNamed(context, AppRoutes.privacyScreen);
                     },
                     child: const CustomProfileRow(
@@ -170,7 +198,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     onTap: () {
                       AuthServices.signOut().then((value) {
                         AppText.preference!.remove(AppText.isAdminPrefKey);
-                        Navigator.pushNamed(context, AppRoutes.logIn);
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, AppRoutes.logIn, (route) => false);
                       });
                     },
                     child: const CustomProfileRow(

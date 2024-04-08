@@ -184,12 +184,12 @@ class AppUtils {
       minDateTime: DateTime(1900),
       pickerTextStyle: const TextStyle(
         color: AppColors.purple,
-        fontSize: AppSize.medium,
+        fontSize: AppFontSize.medium,
         fontWeight: FontWeight.w700,
         letterSpacing: 1,
       ),
       titleStyle: const TextStyle(
-        fontSize: AppSize.regular,
+        fontSize: AppFontSize.regular,
         fontWeight: FontWeight.w600,
         color: AppColors.jetBlack,
       ),
@@ -210,6 +210,33 @@ class AppUtils {
       return '${inputText.substring(0, 15)}...';
     } else {
       return inputText;
+    }
+  }
+
+  static String mapIndexToFeedbackValue(int index) {
+    switch (index) {
+      case 0:
+        return 'Negative';
+      case 1:
+        return 'Neutral';
+      case 2:
+        return 'Positive';
+      case 3:
+        return 'Yes';
+      case 4:
+        return 'No';
+      case 5:
+        return 'Yes';
+      case 6:
+        return 'No';
+      case 7:
+        return 'Negative';
+      case 8:
+        return 'Neutral';
+      case 9:
+        return 'Positive';
+      default:
+        return '';
     }
   }
 }

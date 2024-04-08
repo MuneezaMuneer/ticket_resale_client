@@ -1,6 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:svg_flutter/svg_flutter.dart';
@@ -80,13 +78,13 @@ class _HomeAppBarState extends State<HomeAppBar> {
                     title: AppUtils.getGreeting(),
                     color: AppColors.white,
                     weight: FontWeight.w400,
-                    size: AppSize.small,
+                    size: AppFontSize.small,
                   ),
                   CustomText(
                     title: displayName != null ? displayName ?? '' : '',
                     color: AppColors.white,
                     weight: FontWeight.w700,
-                    size: AppSize.regular,
+                    size: AppFontSize.regular,
                   )
                 ],
               ),
@@ -144,13 +142,13 @@ class _HomeAppBarState extends State<HomeAppBar> {
                   const CustomText(
                     title: 'Discover Amazing',
                     color: AppColors.white,
-                    size: AppSize.regular,
+                    size: AppFontSize.regular,
                     weight: FontWeight.w400,
                   ),
                   const CustomText(
                     title: 'Events Tickets Now',
                     color: AppColors.white,
-                    size: AppSize.verylarge,
+                    size: AppFontSize.verylarge,
                     weight: FontWeight.w700,
                   ),
                   const Gap(12),
@@ -158,7 +156,7 @@ class _HomeAppBarState extends State<HomeAppBar> {
                     alignment: Alignment.center,
                     child: SizedBox(
                       height: height * 0.08,
-                      width: width * 0.85,
+                      width: width * 0.9,
                       child: ValueListenableBuilder(
                         valueListenable: widget.controller!,
                         builder: (context, value, child) {
@@ -186,7 +184,7 @@ class _HomeAppBarState extends State<HomeAppBar> {
                                           Icons.search,
                                           color: AppColors.white,
                                         )
-                                      : GestureDetector(
+                                      : InkWell(
                                           onTap: () {
                                             widget.controller!.clear();
                                             widget.setSearchQuery!(

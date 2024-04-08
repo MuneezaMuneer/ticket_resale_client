@@ -1,9 +1,7 @@
 // ignore_for_file: must_be_immutable, use_build_context_synchronously, prefer_const_constructors
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:gap/gap.dart';
 import 'package:svg_flutter/svg_flutter.dart';
 import 'package:ticket_resale/constants/constants.dart';
@@ -27,10 +25,16 @@ class HomeDetailSecondScreen extends StatefulWidget {
 
 class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
   final formKey = GlobalKey<FormState>();
-
   TextEditingController priceController = TextEditingController();
+
   late String networkImage;
+  late String userId;
   late String name;
+  late Map<String, dynamic> averages;
+  late double averageRating;
+  late String averageExperience;
+  late String averageArrivalTime;
+  late String averageCommunicationResponse;
 
   @override
   void dispose() {
@@ -62,7 +66,7 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                     padding: const EdgeInsets.only(left: 10, top: 30),
                     child: CustomText(
                       title: widget.eventModal.eventName,
-                      size: AppSize.large,
+                      size: AppFontSize.large,
                       weight: FontWeight.w600,
                       softWrap: true,
                       color: AppColors.jetBlack,
@@ -101,13 +105,13 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                                       style: TextStyle(
                                           color: AppColors.lightGrey
                                               .withOpacity(0.6),
-                                          fontSize: AppSize.xsmall,
+                                          fontSize: AppFontSize.xsmall,
                                           fontWeight: FontWeight.w400)),
                                   const TextSpan(
                                       text: 'Martin Garrix',
                                       style: TextStyle(
                                           color: AppColors.blueViolet,
-                                          fontSize: AppSize.medium,
+                                          fontSize: AppFontSize.medium,
                                           fontWeight: FontWeight.w600)),
                                 ])),
                               ),
@@ -149,7 +153,7 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                                           '${AppUtils.formatDatee(widget.eventModal.date!)}, ${widget.eventModal.time}',
                                       color:
                                           AppColors.lightGrey.withOpacity(0.6),
-                                      size: AppSize.xsmall,
+                                      size: AppFontSize.xsmall,
                                       weight: FontWeight.w400,
                                     ),
                                     SizedBox(
@@ -163,7 +167,7 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                                                 color: AppColors.lightGrey
                                                     .withOpacity(0.6),
                                                 letterSpacing: 0.8,
-                                                fontSize: AppSize.xsmall,
+                                                fontSize: AppFontSize.xsmall,
                                                 fontWeight: FontWeight.w400)),
                                         TextSpan(
                                             text:
@@ -172,7 +176,7 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                                                 color: AppColors.jetBlack,
                                                 overflow: TextOverflow.ellipsis,
                                                 letterSpacing: 0.8,
-                                                fontSize: AppSize.small,
+                                                fontSize: AppFontSize.small,
                                                 fontWeight: FontWeight.w600)),
                                       ])),
                                     ),
@@ -188,42 +192,23 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                   const Gap(10),
                   const CustomText(
                     title: 'About Event',
-                    size: AppSize.regular,
+                    size: AppFontSize.regular,
                     weight: FontWeight.w600,
                     color: AppColors.jetBlack,
                   ),
                   CustomText(
                     title: widget.eventModal.description,
-                    size: AppSize.medium,
+                    size: AppFontSize.medium,
                     softWrap: true,
                     weight: FontWeight.w400,
                     color: AppColors.lightGrey,
                   ),
                   const Gap(20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const CustomText(
-                        title: 'Available Tickets',
-                        size: AppSize.regular,
-                        weight: FontWeight.w600,
-                        color: AppColors.jetBlack,
-                      ),
-                      InkWell(
-                        onTap: () {
-                      
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.only(right: 10),
-                          child: CustomText(
-                            title: 'Feedback',
-                            size: AppSize.medium,
-                            weight: FontWeight.w400,
-                            color: AppColors.jetBlack,
-                          ),
-                        ),
-                      ),
-                    ],
+                  const CustomText(
+                    title: 'Available Tickets',
+                    size: AppFontSize.regular,
+                    weight: FontWeight.w600,
+                    color: AppColors.jetBlack,
                   ),
                   const Gap(25),
                   _tileContainer(
@@ -235,11 +220,11 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                     avatarBg: AppColors.white,
                     title: '${widget.ticketModel.ticketType} TICKET AVAILABLE',
                     titleColor: AppColors.jetBlack,
-                    titleSize: AppSize.small,
+                    titleSize: AppFontSize.small,
                     titleWeight: FontWeight.w600,
                     subTitle: 'VIP Seats + Exclusive braclets',
                     subTitleColor: AppColors.lightGrey.withOpacity(0.6),
-                    subTitleSize: AppSize.xsmall,
+                    subTitleSize: AppFontSize.xsmall,
                     subTitleWeight: FontWeight.w400,
                     child: Padding(
                       padding: const EdgeInsets.only(right: 7),
@@ -255,11 +240,14 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                   GestureDetector(
                     onTap: () async {
                       FocusScope.of(context).unfocus();
+
                       Future.delayed(const Duration(milliseconds: 300), () {
                         sellerRatingDialog(
-                            context: context,
-                            networkImage: networkImage,
-                            name: name);
+                          context: context,
+                          networkImage: networkImage,
+                          name: name,
+                          userId: userId,
+                        );
                       });
                     },
                     child: StreamBuilder(
@@ -268,103 +256,161 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
                           final userData = snapshot.data!;
-                          networkImage = '${userData.photoUrl}';
-                          name = userData.displayName!;
-                          return Container(
-                              height: height * 0.1,
-                              width: width,
-                              decoration: BoxDecoration(
-                                color: AppColors.white,
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Row(
-                                children: [
-                                  const Gap(7),
-                                  SizedBox(
-                                    child: (userData.photoUrl != null) &&
-                                            userData.photoUrl != 'null'
-                                        ? CustomDisplayStoryImage(
-                                            imageUrl: '${userData.photoUrl}',
-                                            height: 45,
-                                            width: 45,
-                                          )
-                                        : CircleAvatar(
-                                            backgroundImage: const AssetImage(
-                                                AppImages.profileImage)),
-                                  ),
-                                  const Gap(9),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      SizedBox(
-                                        height: width > 370 ? 14 : 5,
-                                      ),
-                                      CustomText(
-                                        title: 'Sell by',
-                                        size: AppSize.verySmall,
-                                        weight: FontWeight.w300,
-                                        color: AppColors.lightBlack
-                                            .withOpacity(0.7),
-                                      ),
-                                      Row(
-                                        children: [
-                                          CustomText(
-                                            title: '${userData.displayName}',
-                                            size: AppSize.intermediate,
-                                            weight: FontWeight.w600,
-                                            color: AppColors.lightBlack
-                                                .withOpacity(0.5),
-                                          ),
-                                          CustomText(
-                                            title: '(',
-                                            color: AppColors.lightBlack
-                                                .withOpacity(0.7),
-                                          ),
-                                          SvgPicture.asset(
-                                            AppSvgs.fillStar,
-                                            height: 13,
-                                          ),
-                                          CustomText(
-                                            title: '4.7 )',
-                                            color: AppColors.lightBlack
-                                                .withOpacity(0.7),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: width > 370 ? 4 : 0,
-                                      ),
-                                      const Row(
-                                        children: [
-                                          CustomText(
-                                              title: '23',
-                                              size: AppSize.intermediate,
-                                              weight: FontWeight.w500),
-                                          Gap(2),
-                                          CustomText(
-                                            title: 'Ticket Sold',
-                                            size: AppSize.xxsmall,
-                                            weight: FontWeight.w400,
-                                          )
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    width: width > 370
-                                        ? width * 0.15
-                                        : width * 0.11,
-                                  ),
-                                  Align(
-                                      alignment: Alignment.topRight,
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(top: 8),
-                                        child: SvgPicture.asset(
-                                            AppSvgs.levelThree),
-                                      ))
-                                ],
-                              ));
+                          networkImage = userData.photoUrl ?? '';
+                          name = userData.displayName ?? '';
+                          userId = userData.id ?? '';
+                          return StreamBuilder(
+                            stream: FireStoreServicesClient.fetchFeedback(
+                                userId: userId),
+                            builder: (context, ratingSnapshot) {
+                              if (ratingSnapshot.hasData) {
+                                return FutureBuilder<Map<String, dynamic>>(
+                                  future:
+                                      FireStoreServicesClient.calculateAverages(
+                                          ratingSnapshot.data),
+                                  builder: (context, averageRatingSnapshot) {
+                                    if (averageRatingSnapshot.hasData) {
+                                      averages = averageRatingSnapshot.data!;
+                                      averageRating = averages['rating'] ?? 0.0;
+                                      averageExperience =
+                                          averages['experience'] ?? '';
+                                      averageArrivalTime =
+                                          averages['arrival_time'] ?? '';
+                                      averageCommunicationResponse =
+                                          averages['communication_response'] ??
+                                              '';
+
+                                      return Container(
+                                        height: height * 0.1,
+                                        width: width,
+                                        decoration: BoxDecoration(
+                                          color: AppColors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            const Gap(10),
+                                            SizedBox(
+                                              child: userData.photoUrl !=
+                                                          null &&
+                                                      userData
+                                                          .photoUrl!.isNotEmpty
+                                                  ? CustomDisplayStoryImage(
+                                                      imageUrl:
+                                                          userData.photoUrl!,
+                                                      height: 45,
+                                                      width: 45,
+                                                    )
+                                                  : CircleAvatar(
+                                                      backgroundImage:
+                                                          const AssetImage(
+                                                              AppImages
+                                                                  .profileImage),
+                                                    ),
+                                            ),
+                                            const Gap(15),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                SizedBox(
+                                                  height: width > 370 ? 14 : 5,
+                                                ),
+                                                CustomText(
+                                                  title: 'Sell by',
+                                                  size: AppFontSize.verySmall,
+                                                  weight: FontWeight.w300,
+                                                  color: AppColors.lightBlack
+                                                      .withOpacity(0.7),
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    CustomText(
+                                                      title:
+                                                          userData.displayName!,
+                                                      size: AppFontSize
+                                                          .intermediate,
+                                                      weight: FontWeight.w600,
+                                                      color: AppColors
+                                                          .lightBlack
+                                                          .withOpacity(0.5),
+                                                    ),
+                                                    CustomText(
+                                                      title: '(',
+                                                      color: AppColors
+                                                          .lightBlack
+                                                          .withOpacity(0.7),
+                                                    ),
+                                                    SvgPicture.asset(
+                                                      AppSvgs.fillStar,
+                                                      height: 13,
+                                                    ),
+                                                    CustomText(
+                                                      title: averageRating
+                                                          .toStringAsFixed(1),
+                                                      color: AppColors
+                                                          .lightBlack
+                                                          .withOpacity(0.7),
+                                                    ),
+                                                  ],
+                                                ),
+                                                SizedBox(
+                                                  height: width > 370 ? 4 : 0,
+                                                ),
+                                                Row(
+                                                  children: [
+                                                    CustomText(
+                                                      title: '23',
+                                                      size: AppFontSize
+                                                          .intermediate,
+                                                      weight: FontWeight.w500,
+                                                    ),
+                                                    const Gap(2),
+                                                    CustomText(
+                                                      title: 'Ticket Sold',
+                                                      size: AppFontSize.xxsmall,
+                                                      weight: FontWeight.w400,
+                                                    )
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(
+                                              width: 10,
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 45),
+                                              child: SizedBox(
+                                                height: 45,
+                                                width: 45,
+                                                child: ProfileLevelImage(
+                                                    profileLevelsFuture:
+                                                        FireStoreServicesClient
+                                                            .fetchProfileLevels(
+                                                                userId: userData
+                                                                    .id!)),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      );
+                                    } else if (averageRatingSnapshot.hasError) {
+                                      return Text(
+                                          'Error: ${averageRatingSnapshot.error}');
+                                    } else {
+                                      return Text('');
+                                    }
+                                  },
+                                );
+                              } else {
+                                return CupertinoActivityIndicator();
+                              }
+                            },
+                          );
+                        } else if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
                         } else {
                           return const Text('');
                         }
@@ -443,7 +489,7 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                           }
                         },
                         textColor: AppColors.white,
-                        textSize: AppSize.regular,
+                        textSize: AppFontSize.regular,
                         btnText: 'Start Conversation',
                         gradient: customGradient,
                         weight: FontWeight.w700,

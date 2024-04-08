@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:provider/provider.dart';
 import 'package:ticket_resale/db_services/db_services.dart';
@@ -22,6 +23,7 @@ class SignUpScreen extends StatefulWidget {
 GlobalKey<FormState> formKey = GlobalKey<FormState>();
 String emailVerificationCode = '';
 late BottomSheetProvider bottomSheetProvider;
+late DateTime codeSentTime;
 
 class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController firstNameController = TextEditingController();
@@ -34,11 +36,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController phoneController = TextEditingController();
   ValueNotifier<bool> passwordVisibility = ValueNotifier<bool>(true);
   ValueNotifier<bool> confirmpasswordVisibility = ValueNotifier<bool>(true);
+
   @override
   void initState() {
     bottomSheetProvider =
         Provider.of<BottomSheetProvider>(context, listen: false);
-
+    instaController.text = '@';
     super.initState();
   }
 
@@ -76,14 +79,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         text: 'Register to ',
                         style: const TextStyle(
                             color: AppColors.jetBlack,
-                            fontSize: AppSize.verylarge,
+                            fontSize: AppFontSize.verylarge,
                             fontWeight: FontWeight.w700),
                         children: <TextSpan>[
                           TextSpan(
                               text: 'Rave Trade',
                               style: const TextStyle(
                                   color: AppColors.darkpurple,
-                                  fontSize: AppSize.verylarge,
+                                  fontSize: AppFontSize.verylarge,
                                   fontWeight: FontWeight.w700),
                               recognizer: TapGestureRecognizer()..onTap = () {})
                         ]),
@@ -206,18 +209,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     height: 12,
                   ),
                   CustomTextField(
-                    controller: instaController,
-                    hintStyle: const TextStyle(color: AppColors.silver),
-                    hintText: 'Instagram @',
-                    keyBoardType: TextInputType.emailAddress,
-                    validator: (url) {
-                      if (url!.isEmpty) {
-                        return 'Please enter valid instagram';
-                      } else {
-                        return null;
-                      }
-                    },
-                  ),
+                      controller: instaController,
+                      hintStyle: const TextStyle(color: AppColors.silver),
+                      hintText: '@username',
+                      keyBoardType: TextInputType.emailAddress,
+                      validator: InstagramValidator.validator()),
                   const SizedBox(
                     height: 12,
                   ),
@@ -268,6 +264,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         }
                       },
                       onChanged: (phone) {},
+                      keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                      ],
                     ),
                   ),
                   SizedBox(
@@ -285,36 +285,39 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           textColor: AppColors.white,
                           gradient: customGradient,
                           loading: loading.value,
-                          textSize: AppSize.regular,
+                          textSize: AppFontSize.regular,
                           onPressed: () async {
                             if (formKey.currentState!.validate()) {
+                              FocusScope.of(context).unfocus();
                               bool isEmailExist =
                                   await FireStoreServicesClient.checkUserEmail(
-                                      email: gmailController.text);
+                                email: gmailController.text,
+                              );
                               loading.value = true;
 
                               if (isEmailExist) {
-                                AppUtils.toastMessage('Email already exists');
+                                AppUtils.toastMessage('Email already in use');
                                 loading.value = false;
                               } else {
                                 loading.value = true;
                                 String? fcmToken = await NotificationServices
                                     .getFCMCurrentDeviceToken();
                                 UserModelClient userModel = UserModelClient(
-                                    displayName:
-                                        '${firstNameController.text} ${lastNameController.text}',
-                                    email: gmailController.text,
-                                    instaUsername: instaController.text,
-                                    phoneNo: phoneController.text,
-                                    status: 'Active',
-                                    fcmToken: fcmToken);
-
-                                int otp =
-                                    VerifyUserEmail.generateRandomNumber();
+                                  displayName:
+                                      '${firstNameController.text} ${lastNameController.text}',
+                                  email: gmailController.text,
+                                  instaUsername: instaController.text,
+                                  phoneNo: phoneController.text,
+                                  status: 'Active',
+                                  fcmToken: fcmToken,
+                                );
+                                DateTime codeSentTime = DateTime
+                                    .now(); // Record the current time when sending the code
+                                int otp = EmailServices.generateRandomNumber();
                                 log('Email of user ==  ${gmailController.text}');
 
                                 try {
-                                  bool isSend = await VerifyUserEmail.sendEmail(
+                                  bool isSend = await EmailServices.sendEmail(
                                     toEmail: gmailController.text,
                                     fromEmail: 'info@flutterstudio.dev',
                                     subject: 'Here is your verification code',
@@ -347,32 +350,45 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                             isValidEmail) {
                                           bottomSheetProvider
                                               .setLoadingProgress = true;
-
-                                          try {
-                                            await AuthServices.signUp(
-                                              email: gmailController.text,
-                                              password: passwordController.text,
-                                              context: context,
-                                            ).then((userCredentials) async {
-                                              if (userCredentials != null) {
-                                                await AuthServices
-                                                    .storeUserData(
-                                                  userModel: userModel,
-                                                );
-                                                loading.value = false;
-                                                Navigator.pushNamed(
-                                                  context,
-                                                  AppRoutes.navigationScreen,
-                                                );
-                                              }
-                                            });
-                                          } catch (e) {
-                                            log('Error: $e');
-                                            AppUtils.toastMessage(
-                                                'An error occurred. Please try again.');
-                                          } finally {
+                                          DateTime currentTime = DateTime.now();
+                                          Duration difference = currentTime
+                                              .difference(codeSentTime);
+                                          if (difference.inMinutes < 1) {
+                                            try {
+                                              await AuthServices.signUp(
+                                                email: gmailController.text,
+                                                password:
+                                                    passwordController.text,
+                                                context: context,
+                                              ).then((userCredentials) async {
+                                                if (userCredentials != null) {
+                                                  await AuthServices
+                                                      .storeUserData(
+                                                    userModel: userModel,
+                                                  );
+                                                  loading.value = false;
+                                                  Navigator
+                                                      .pushNamedAndRemoveUntil(
+                                                          context,
+                                                          AppRoutes
+                                                              .navigationScreen,
+                                                          (route) => false);
+                                                }
+                                              });
+                                            } catch (e) {
+                                              log('Error: $e');
+                                              AppUtils.toastMessage(
+                                                  'An error occurred. Please try again.');
+                                            } finally {
+                                              bottomSheetProvider
+                                                  .setLoadingProgress = false;
+                                            }
+                                          } else {
+                                            // Show toast indicating code expiration
                                             bottomSheetProvider
                                                 .setLoadingProgress = false;
+                                            AppUtils.toastMessage(
+                                                'Verification code has expired. Please resend.');
                                           }
                                         } else {
                                           AppUtils.toastMessage(
@@ -406,14 +422,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       text: 'Don\'t have an account?  ',
                       style: const TextStyle(
                           color: AppColors.lightBlack,
-                          fontSize: AppSize.medium,
+                          fontSize: AppFontSize.medium,
                           fontWeight: FontWeight.w400),
                       children: <TextSpan>[
                         TextSpan(
                           text: 'Sign in ',
                           style: const TextStyle(
                               color: AppColors.electricBlue,
-                              fontSize: AppSize.medium,
+                              fontSize: AppFontSize.medium,
                               fontWeight: FontWeight.w400),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {

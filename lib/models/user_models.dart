@@ -9,7 +9,6 @@ class UserModelClient {
   final String? id;
   final String? status;
   final String? fcmToken;
-  final String? paypalAuthorization;
 
   UserModelClient({
     this.fcmToken,
@@ -22,7 +21,6 @@ class UserModelClient {
     this.birthDate,
     this.photoUrl,
     this.profileLevels,
-    this.paypalAuthorization,
   });
 
   Map<String, dynamic> toMap() {
@@ -48,25 +46,25 @@ class UserModelClient {
       'status': status,
       'image_url': photoUrl,
       'fcm_token': fcmToken,
-      'email': email
+      'email': email,
     };
   }
 
   factory UserModelClient.fromMap(Map<String, dynamic> map, String id) {
     return UserModelClient(
-        id: id,
-        status: map['status'] ?? '',
-        instaUsername: map['instagram_username'] ?? "",
-        phoneNo:
-            map['phone_number'] != null ? map['phone_number'] as String : null,
-        birthDate:
-            map['birth_date'] != null ? map['birth_date'] as String : null,
-        photoUrl: map['image_url'] != null ? map['image_url'] as String : null,
-        profileLevels: map['profile_levels'] as Map<String, dynamic>,
-        displayName:
-            map['user_name'] != null ? map['user_name'] as String : null,
-        fcmToken: map['fcm_token'] ?? '',
-        paypalAuthorization: map['paypal_authorization'] ?? '');
+      id: id,
+      status: map['status'] ?? '',
+      instaUsername: map['instagram_username'] ?? "",
+      phoneNo: map['phone_number'] ?? '',
+      birthDate: map['birth_date'] ?? '',
+      photoUrl: map['image_url'] ?? '',
+      profileLevels: map['profile_levels'] ?? Map,
+      displayName: map['user_name'] ?? '',
+      fcmToken: map['fcm_token'] ?? '',
+    );
+  }
+  int getProfileLevelsLength(Map<String, dynamic>? profileLevels) {
+    return profileLevels?.length ?? 0;
   }
 }
 

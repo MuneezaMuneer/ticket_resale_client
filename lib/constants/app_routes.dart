@@ -26,4 +26,5 @@ class AppRoutes {
   static const chatScreen = '/chatScreen';
   static const chatDetailScreen = 'chatDetailScreen';
   static const payPalAuthorization = '/payPalAuthorization';
+  static const ticketsHistoryScreen = '/ticketsHistoryScreen';
 }

@@ -26,7 +26,7 @@ class ChatScreen extends StatelessWidget {
               );
             } else if (!snapshot.hasData || (snapshot.data as List).isEmpty) {
               return const Center(
-                child: Text('No Active Connections'),
+                child: Text('No Active User'),
               );
             } else {
               final currentUserId = snapshot.data as List<String>;
@@ -58,8 +58,9 @@ class ChatScreen extends StatelessWidget {
                           },
                           child: ListTile(
                             leading: SizedBox(
-                                child: (userData!.photoUrl != null) &&
-                                        userData.photoUrl != 'null'
+                                child: userData!.photoUrl != 'null' &&
+                                        userData.photoUrl != null &&
+                                        userData.photoUrl!.isNotEmpty
                                     ? CustomDisplayStoryImage(
                                         imageUrl: '${userData.photoUrl}',
                                         height: 43,
@@ -74,7 +75,7 @@ class ChatScreen extends StatelessWidget {
                                   flex: 8,
                                   child: CustomText(
                                     title: userData.displayName,
-                                    size: AppSize.regular,
+                                    size: AppFontSize.regular,
                                     weight: FontWeight.w600,
                                     color: AppColors.jetBlack,
                                   ),
@@ -85,7 +86,7 @@ class ChatScreen extends StatelessWidget {
                                   child: CustomText(
                                     title: AppUtils.convertDateTimeToMMMMDY(
                                         dateTime: DateTime.now()),
-                                    size: AppSize.xsmall,
+                                    size: AppFontSize.xsmall,
                                   ),
                                 ),
                               ],

@@ -62,7 +62,7 @@ class _HomeDetailFirstScreenState extends State<HomeDetailFirstScreen> {
                         padding: const EdgeInsets.only(left: 10, top: 30),
                         child: CustomText(
                           title: '${eventData.eventName}',
-                          size: AppSize.large,
+                          size: AppFontSize.large,
                           weight: FontWeight.w600,
                           softWrap: true,
                           color: AppColors.jetBlack,
@@ -101,13 +101,13 @@ class _HomeDetailFirstScreenState extends State<HomeDetailFirstScreen> {
                                           style: TextStyle(
                                               color: AppColors.lightGrey
                                                   .withOpacity(0.6),
-                                              fontSize: AppSize.xsmall,
+                                              fontSize: AppFontSize.xsmall,
                                               fontWeight: FontWeight.w400)),
                                       const TextSpan(
                                           text: 'Martin Garrix',
                                           style: TextStyle(
                                               color: AppColors.blueViolet,
-                                              fontSize: AppSize.medium,
+                                              fontSize: AppFontSize.medium,
                                               fontWeight: FontWeight.w600)),
                                     ])),
                                   ),
@@ -150,7 +150,7 @@ class _HomeDetailFirstScreenState extends State<HomeDetailFirstScreen> {
                                               '${AppUtils.formatDate('${eventData.date}')}, ${eventData.time}',
                                           color: AppColors.lightGrey
                                               .withOpacity(0.6),
-                                          size: AppSize.xsmall,
+                                          size: AppFontSize.xsmall,
                                           weight: FontWeight.w400,
                                         ),
                                         SizedBox(
@@ -166,7 +166,8 @@ class _HomeDetailFirstScreenState extends State<HomeDetailFirstScreen> {
                                                     color: AppColors.lightGrey
                                                         .withOpacity(0.6),
                                                     letterSpacing: 0.8,
-                                                    fontSize: AppSize.xsmall,
+                                                    fontSize:
+                                                        AppFontSize.xsmall,
                                                     fontWeight:
                                                         FontWeight.w400)),
                                             TextSpan(
@@ -176,7 +177,7 @@ class _HomeDetailFirstScreenState extends State<HomeDetailFirstScreen> {
                                                     overflow:
                                                         TextOverflow.ellipsis,
                                                     letterSpacing: 0.8,
-                                                    fontSize: AppSize.small,
+                                                    fontSize: AppFontSize.small,
                                                     fontWeight:
                                                         FontWeight.w600)),
                                           ])),
@@ -193,13 +194,13 @@ class _HomeDetailFirstScreenState extends State<HomeDetailFirstScreen> {
                       const Gap(10),
                       const CustomText(
                         title: 'About Event',
-                        size: AppSize.regular,
+                        size: AppFontSize.regular,
                         weight: FontWeight.w600,
                         color: AppColors.jetBlack,
                       ),
                       CustomText(
                         title: '${eventData.description}',
-                        size: AppSize.medium,
+                        size: AppFontSize.medium,
                         softWrap: true,
                         weight: FontWeight.w400,
                         color: AppColors.lightGrey,
@@ -207,7 +208,7 @@ class _HomeDetailFirstScreenState extends State<HomeDetailFirstScreen> {
                       const Gap(20),
                       const CustomText(
                         title: 'Tickets Available by Sellers',
-                        size: AppSize.regular,
+                        size: AppFontSize.regular,
                         weight: FontWeight.w600,
                         color: AppColors.jetBlack,
                       ),
@@ -257,7 +258,7 @@ class _HomeDetailFirstScreenState extends State<HomeDetailFirstScreen> {
                                           },
                                         );
                                       },
-                                      child: _tileContainer(
+                                      child: CustomTile(
                                         userId: tickets[index].uid,
                                         title:
                                             '${tickets[index].ticketType} TICKET AVAILABLE',
@@ -265,6 +266,7 @@ class _HomeDetailFirstScreenState extends State<HomeDetailFirstScreen> {
                                             'VIP Seats + Exclusive braclets',
                                         price: '${tickets[index].price}',
                                         imagePath: '${tickets[index].imageUrl}',
+                                        text: 'Sell by',
                                       ),
                                     ),
                                   );
@@ -294,152 +296,6 @@ class _HomeDetailFirstScreenState extends State<HomeDetailFirstScreen> {
             return const Center(child: Text('No Event Yet'));
           }
         },
-      ),
-    );
-  }
-
-  Widget _tileContainer({
-    String? title,
-    String? subTitle,
-    String? price,
-    String? imagePath,
-    String? userId,
-  }) {
-    return Container(
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: AppColors.blueViolet)),
-      child: Column(
-        children: [
-          Expanded(
-            child: Container(
-              decoration: const BoxDecoration(
-                  color: Color(0XffF7F5FF),
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20))),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      left: 8,
-                    ),
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 5),
-                          child: CustomDisplayStoryImage(
-                            imageUrl: '$imagePath',
-                            height: 43,
-                            width: 43,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 8, top: 15),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              CustomText(
-                                title: '$title',
-                                color: AppColors.jetBlack,
-                                size: AppSize.small,
-                                weight: FontWeight.w600,
-                              ),
-                              CustomText(
-                                title: '$subTitle',
-                                color: AppColors.lightGrey.withOpacity(0.6),
-                                size: AppSize.xsmall,
-                                weight: FontWeight.w400,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 12),
-                    child: CustomText(
-                      title: '$price',
-                      color: const Color(0XffAC8AF7),
-                      size: 18,
-                      weight: FontWeight.w900,
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-          Expanded(
-            child: StreamBuilder(
-              stream: FireStoreServicesClient.fetchUserData(userId: userId!),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  final data = snapshot.data!;
-                  return Container(
-                    decoration: const BoxDecoration(
-                        color: AppColors.white,
-                        borderRadius: BorderRadius.only(
-                            bottomRight: Radius.circular(20),
-                            bottomLeft: Radius.circular(20))),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 8),
-                          child: Row(
-                            children: [
-                              SizedBox(
-                                  child: (data.photoUrl != null) &&
-                                          data.photoUrl != 'null'
-                                      ? CustomDisplayStoryImage(
-                                          imageUrl: '${data.photoUrl}',
-                                          height: 43,
-                                          width: 43,
-                                        )
-                                      : const CircleAvatar(
-                                          backgroundImage: AssetImage(
-                                              AppImages.profileImage))),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 8, top: 15),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    CustomText(
-                                      title: 'Sell by',
-                                      color:
-                                          AppColors.lightBlack.withOpacity(0.7),
-                                      size: AppSize.verySmall,
-                                      weight: FontWeight.w300,
-                                    ),
-                                    CustomText(
-                                      title: '${data.displayName}',
-                                      color:
-                                          AppColors.lightBlack.withOpacity(0.6),
-                                      size: AppSize.intermediate,
-                                      weight: FontWeight.w600,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                            padding: const EdgeInsets.only(right: 12),
-                            child: SvgPicture.asset(AppSvgs.levelFour))
-                      ],
-                    ),
-                  );
-                } else {
-                  return const Text('');
-                }
-              },
-            ),
-          ),
-        ],
       ),
     );
   }

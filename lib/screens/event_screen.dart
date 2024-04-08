@@ -38,299 +38,271 @@ class _EventScreenState extends State<EventScreen> {
     final double height = size.height;
     final double width = size.width;
 
-    return Scaffold(
-      appBar: CustomAppBarClient(
-        title: 'Event Video Player',
-        isBackButton: widget.isBackButton,
-      ),
-      backgroundColor: AppColors.paleGrey,
-      body: Column(
-        children: [
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Center(
-                    child: SizedBox(
-                      width: width * 0.9,
-                      child: ValueListenableBuilder(
-                        valueListenable: searchNotifier,
-                        builder: (context, value, child) {
-                          return CustomTextField(
-                            hintStyle: const TextStyle(color: AppColors.silver),
-                            hintText: 'Search Events, Tickets, or City',
-                            controller: searchController,
-                            fillColor: AppColors.white,
-                            isFilled: true,
-                            onChanged: (query) {
-                              searchNotifier.value = query;
-                            },
-                            suffixIcon: Padding(
-                              padding: const EdgeInsets.only(right: 8),
-                              child: Container(
-                                height: 35,
-                                width: 35,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  gradient: customGradient,
-                                ),
-                                child: Center(
-                                  child: searchController.text.isEmpty
-                                      ? const Icon(
-                                          Icons.search,
-                                          color: AppColors.white,
-                                        )
-                                      : GestureDetector(
-                                          onTap: () {
-                                            searchController.clear();
-                                            searchNotifier.value = '';
-                                          },
-                                          child: const Icon(
-                                            Icons.close,
+    return GestureDetector(
+      onTap: () {
+        FocusManager.instance.primaryFocus?.unfocus();
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: CustomAppBarClient(
+          title: 'Event Video Player',
+          isBackButton: widget.isBackButton,
+        ),
+        backgroundColor: AppColors.paleGrey,
+        body: Column(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(
+                      child: SizedBox(
+                        width: width * 0.9,
+                        child: ValueListenableBuilder(
+                          valueListenable: searchNotifier,
+                          builder: (context, value, child) {
+                            return CustomTextField(
+                              hintStyle:
+                                  const TextStyle(color: AppColors.silver),
+                              hintText: 'Search Events, Tickets, or City',
+                              controller: searchController,
+                              fillColor: AppColors.white,
+                              isFilled: true,
+                              onChanged: (query) {
+                                searchNotifier.value = query;
+                              },
+                              suffixIcon: Padding(
+                                padding: const EdgeInsets.only(right: 8),
+                                child: Container(
+                                  height: 35,
+                                  width: 35,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    gradient: customGradient,
+                                  ),
+                                  child: Center(
+                                    child: searchController.text.isEmpty
+                                        ? const Icon(
+                                            Icons.search,
                                             color: AppColors.white,
+                                          )
+                                        : GestureDetector(
+                                            onTap: () {
+                                              searchController.clear();
+                                              searchNotifier.value = '';
+                                            },
+                                            child: const Icon(
+                                              Icons.close,
+                                              color: AppColors.white,
+                                            ),
                                           ),
-                                        ),
+                                  ),
                                 ),
                               ),
-                            ),
-                          );
-                        },
+                            );
+                          },
+                        ),
                       ),
                     ),
-                  ),
-                  const Gap(10),
-                  const CustomText(
-                    title: 'All Events',
-                    color: AppColors.jetBlack,
-                    size: AppSize.regular,
-                    weight: FontWeight.w600,
-                  ),
-                  const Gap(5),
-                  Expanded(
-                    child: ValueListenableBuilder(
-                      valueListenable: searchNotifier,
-                      builder: (context, query, child) => StreamBuilder(
-                        stream: displayEventData,
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const Center(
-                                child: CupertinoActivityIndicator());
-                          } else if (snapshot.hasData) {
-                            final data = query.isEmpty
-                                ? snapshot.data!
-                                : snapshot.data!
-                                    .where((data) =>
-                                        data.eventName!
-                                            .toLowerCase()
-                                            .contains(query.toLowerCase()) ||
-                                        data.location!
-                                            .toLowerCase()
-                                            .contains(query.toLowerCase()))
-                                    .toList();
-                            if (data.isNotEmpty) {
-                              return GridView.builder(
-                                padding: EdgeInsets.zero,
-                                gridDelegate:
-                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                        mainAxisSpacing: 10,
-                                        crossAxisSpacing: 10,
-                                        crossAxisCount: 2,
-                                        mainAxisExtent: 230),
-                                itemCount: data.length,
-                                itemBuilder: (context, index) {
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      border: Border.all(
-                                        color: const Color(0XffEAE6F4),
+                    const Gap(10),
+                    const CustomText(
+                      title: 'All Events',
+                      color: AppColors.jetBlack,
+                      size: AppFontSize.regular,
+                      weight: FontWeight.w600,
+                    ),
+                    const Gap(5),
+                    Expanded(
+                      child: ValueListenableBuilder(
+                        valueListenable: searchNotifier,
+                        builder: (context, query, child) => StreamBuilder(
+                          stream: displayEventData,
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                  child: CupertinoActivityIndicator());
+                            } else if (snapshot.hasData) {
+                              final data = query.isEmpty
+                                  ? snapshot.data!
+                                  : snapshot.data!
+                                      .where((data) =>
+                                          data.eventName!
+                                              .toLowerCase()
+                                              .contains(query.toLowerCase()) ||
+                                          data.location!
+                                              .toLowerCase()
+                                              .contains(query.toLowerCase()))
+                                      .toList();
+                              if (data.isNotEmpty) {
+                                return GridView.builder(
+                                  padding: EdgeInsets.zero,
+                                  gridDelegate:
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
+                                          mainAxisSpacing: 10,
+                                          crossAxisSpacing: 10,
+                                          crossAxisCount: 2,
+                                          mainAxisExtent: 230),
+                                  itemCount: data.length,
+                                  itemBuilder: (context, index) {
+                                    return Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        border: Border.all(
+                                          color: const Color(0XffEAE6F4),
+                                        ),
+                                        color: AppColors.white,
                                       ),
-                                      color: AppColors.white,
-                                    ),
-                                    child: Stack(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 5, right: 5, top: 5),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                child: SizedBox(
-                                                    height: width < 380
-                                                        ? height * 0.165
-                                                        : height * 0.12,
-                                                    width: width,
-                                                    child: Image.network(
-                                                      '${data[index].imageUrl}',
-                                                      fit: BoxFit.cover,
-                                                    )),
-                                              ),
-                                              const Gap(10),
-                                              Container(
-                                                height: 25,
-                                                width: width,
-                                                decoration: BoxDecoration(
+                                      child: Stack(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 5, right: 5, top: 5),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                ClipRRect(
                                                   borderRadius:
-                                                      BorderRadius.circular(56),
-                                                  color: AppColors.lightGrey
-                                                      .withOpacity(0.1),
+                                                      BorderRadius.circular(10),
+                                                  child: SizedBox(
+                                                      height: width < 380
+                                                          ? height * 0.165
+                                                          : height * 0.12,
+                                                      width: width,
+                                                      child: Image.network(
+                                                        '${data[index].imageUrl}',
+                                                        fit: BoxFit.cover,
+                                                      )),
                                                 ),
-                                                child: Center(
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceEvenly,
-                                                    children: [
-                                                      SvgPicture.asset(
-                                                          AppSvgs.clock),
-                                                      Row(
-                                                        children: [
-                                                          CustomText(
-                                                            title: AppUtils
-                                                                .dateFormat(
-                                                              '${data[index].date}',
-                                                            ),
-                                                            color: const Color(
-                                                                0Xff6E4CEE),
-                                                            size:
-                                                                AppSize.xxsmall,
-                                                            weight:
-                                                                FontWeight.w600,
-                                                          ),
-                                                          SizedBox(
-                                                            child: CustomText(
-                                                              title:
-                                                                  ',${data[index].time}',
+                                                const Gap(10),
+                                                Container(
+                                                  height: 25,
+                                                  width: width,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            56),
+                                                    color: AppColors.lightGrey
+                                                        .withOpacity(0.1),
+                                                  ),
+                                                  child: Center(
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceEvenly,
+                                                      children: [
+                                                        SvgPicture.asset(
+                                                            AppSvgs.clock),
+                                                        Row(
+                                                          children: [
+                                                            CustomText(
+                                                              title: AppUtils
+                                                                  .dateFormat(
+                                                                '${data[index].date}',
+                                                              ),
                                                               color: const Color(
                                                                   0Xff6E4CEE),
-                                                              size: AppSize
+                                                              size: AppFontSize
                                                                   .xxsmall,
                                                               weight: FontWeight
                                                                   .w600,
                                                             ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ],
+                                                            SizedBox(
+                                                              child: CustomText(
+                                                                title:
+                                                                    ',${data[index].time}',
+                                                                color: const Color(
+                                                                    0Xff6E4CEE),
+                                                                size: AppFontSize
+                                                                    .xxsmall,
+                                                                weight:
+                                                                    FontWeight
+                                                                        .w600,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                              const Gap(5),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 3),
-                                                child: CustomText(
-                                                  softWrap: true,
-                                                  title: AppUtils.limitTo42Char(
-                                                      '${data[index].eventName}'),
-                                                  color: AppColors.jetBlack,
-                                                  size: AppSize.xsmall,
-                                                  weight: FontWeight.w600,
+                                                const Gap(5),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 3),
+                                                  child: CustomText(
+                                                    softWrap: true,
+                                                    title: AppUtils.limitTo42Char(
+                                                        '${data[index].eventName}'),
+                                                    color: AppColors.jetBlack,
+                                                    size: AppFontSize.xsmall,
+                                                    weight: FontWeight.w600,
+                                                  ),
                                                 ),
-                                              ),
-                                              // Padding(
-                                              //   padding: const EdgeInsets.only(
-                                              //       left: 3, top: 5),
-                                              //   child: Row(
-                                              //     children: [
-                                              //       const SizedBox(
-                                              //         height: 15,
-                                              //         width: 15,
-                                              //         child: CircleAvatar(
-                                              //           backgroundImage:
-                                              //               AssetImage(AppImages.profile),
-                                              //         ),
-                                              //       ),
-                                              //       Padding(
-                                              //         padding:
-                                              //             const EdgeInsets.only(left: 3),
-                                              //         child: RichText(
-                                              //           text: const TextSpan(
-                                              //             children: [
-                                              //               TextSpan(
-                                              //                 text: 'Posted by ',
-                                              //                 style: TextStyle(
-                                              //                   color:
-                                              //                       AppColors.lightGrey,
-                                              //                   fontSize: AppSize.xxsmall,
-                                              //                   fontWeight:
-                                              //                       FontWeight.w600,
-                                              //                 ),
-                                              //               ),
-                                              //               TextSpan(
-                                              //                 text: 'Jacob Jones',
-                                              //                 style: TextStyle(
-                                              //                   color:
-                                              //                       AppColors.lightGrey,
-                                              //                   fontSize: AppSize.xxsmall,
-                                              //                   fontWeight:
-                                              //                       FontWeight.w300,
-                                              //                 ),
-                                              //               ),
-                                              //             ],
-                                              //           ),
-                                              //         ),
-                                              //       ),
-                                              //     ],
-                                              //   ),
-                                              // ),
-                                            ],
-                                          ),
-                                        ),
-                                        Positioned(
-                                          bottom: 0,
-                                          left: 0,
-                                          right: 0,
-                                          child: SizedBox(
-                                            height: 30,
-                                            width: width,
-                                            child: CustomButton(
-                                              onPressed: () {
-                                                
-                                                Navigator.pushNamed(context,
-                                                    AppRoutes.detailFirstScreen,
-                                                    arguments:  data[index].docId);
-                                              },
-                                              textColor: AppColors.white,
-                                              textSize: AppSize.regular,
-                                              isSocial: true,
-                                              gradient: customGradient,
-                                              isRounded: false,
-                                              isSvgImage: true,
-                                              imagePath: AppSvgs.paypalIcon,
-                                              socialText: 'Explore More',
-                                              socialTextColor: AppColors.white,
-                                              socialTextWeight: FontWeight.w600,
-                                              socialTextSize: AppSize.xsmall,
+                                              ],
                                             ),
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                              );
+                                          Positioned(
+                                            bottom: 0,
+                                            left: 0,
+                                            right: 0,
+                                            child: SizedBox(
+                                              height: 30,
+                                              width: width,
+                                              child: CustomButton(
+                                                onPressed: () {
+                                                  FocusManager
+                                                      .instance.primaryFocus
+                                                      ?.unfocus();
+                                                  Navigator.pushNamed(
+                                                      context,
+                                                      AppRoutes
+                                                          .detailFirstScreen,
+                                                      arguments:
+                                                          data[index].docId);
+                                                },
+                                                textColor: AppColors.white,
+                                                textSize: AppFontSize.regular,
+                                                isSocial: true,
+                                                gradient: customGradient,
+                                                isRounded: false,
+                                                isSvgImage: true,
+                                                imagePath: AppSvgs.paypalIcon,
+                                                socialText: 'Explore More',
+                                                socialTextColor:
+                                                    AppColors.white,
+                                                socialTextWeight:
+                                                    FontWeight.w600,
+                                                socialTextSize:
+                                                    AppFontSize.xsmall,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                );
+                              } else {
+                                return _buildText();
+                              }
                             } else {
                               return _buildText();
                             }
-                          } else {
-                            return _buildText();
-                          }
-                        },
+                          },
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }
@@ -341,7 +313,7 @@ class _EventScreenState extends State<EventScreen> {
       'No Record Found',
       style: TextStyle(
           color: AppColors.jetBlack,
-          fontSize: AppSize.medium,
+          fontSize: AppFontSize.medium,
           fontWeight: FontWeight.w400),
     ));
   }

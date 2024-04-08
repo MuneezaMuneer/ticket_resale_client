@@ -20,7 +20,7 @@ class PrivacyPolicy extends StatelessWidget {
               CustomText(
                 title: PrivacyPolicyText.privacyPolicy,
                 color: AppColors.brown,
-                size: AppSize.regular,
+                size: AppFontSize.regular,
                 softWrap: true,
                 textAlign: TextAlign.start,
                 weight: FontWeight.w400,

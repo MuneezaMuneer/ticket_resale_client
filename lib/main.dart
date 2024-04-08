@@ -20,6 +20,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  FirebaseMessaging.instance.requestPermission();
   SwitchProvider provider = SwitchProvider();
   await provider.loadPreferences();
   FirebaseMessaging.instance.requestPermission();

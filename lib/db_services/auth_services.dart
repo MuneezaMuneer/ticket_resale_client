@@ -15,7 +15,6 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:ticket_resale/db_services/firestore_services_admin.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/models/models.dart';
-import 'package:ticket_resale/models/user_models.dart';
 import 'package:ticket_resale/utils/utils.dart';
 
 import '../widgets/custom_navigation_admin.dart';
@@ -42,7 +41,7 @@ class AuthServices {
     return digest.toString();
   }
 
-  static Future<UserCredential> signInWithApple(BuildContext context) async {
+  static Future<UserCredential?> signInWithApple(BuildContext context) async {
     final rawNonce = generateNonce();
     final nonce = sha256ofString(rawNonce);
 
@@ -71,7 +70,7 @@ class AuthServices {
     UserCredential? userCredential =
         await FirebaseAuth.instance.signInWithCredential(oauthCredential);
 
-    // Update user . Note this will not update usename on 2nd logg.login as apple provides userName for very first time ONLY.Apple also doesn't provide photoUrl.
+    // Update user . Note this will not update usename on 2nd login as apple provides userName for very first time ONLY.Apple also doesn't provide photoUrl.
     fullName.trim();
     if (fullName.length > 2) {
       await userCredential.user!.updateDisplayName(fullName);
@@ -81,8 +80,11 @@ class AuthServices {
     return userCredential;
   }
 
-  static Future<UserCredential?> signInWithGoogle(BuildContext context,
-      ValueNotifier<bool> googleNotifier, String fcmToken) async {
+  static Future<UserCredential?> signInWithGoogle(
+      {required BuildContext context,
+      required ValueNotifier<bool> googleNotifier,
+      required String fcmToken,
+      required UserModelClient userModel}) async {
     try {
       googleNotifier.value = true;
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
@@ -112,7 +114,11 @@ class AuthServices {
 
       //store user google credentials to firestore
 
-      await storeGoogleData(userCredential, fcmToken: fcmToken);
+      await storeGoogleData(
+        userCredential: userCredential,
+        userModel: userModel,
+        fcmToken: fcmToken,
+      );
 
       return userCredential;
     } catch (e) {
@@ -122,8 +128,10 @@ class AuthServices {
     return null;
   }
 
-  static Future<void> storeGoogleData(UserCredential userCredential,
-      {required String fcmToken}) async {
+  static Future<void> storeGoogleData(
+      {required UserCredential userCredential,
+      required UserModelClient userModel,
+      required String fcmToken}) async {
     final user = userCredential.user;
     final userData = {
       'user_name': user!.displayName,
@@ -133,7 +141,7 @@ class AuthServices {
       'image_url': user.photoURL,
       'profile_levels': {
         'isEmailVerified': true,
-      }
+      },
     };
 
     final userDocumentReference =
@@ -221,19 +229,11 @@ class AuthServices {
   }
 
   static Future<void> deleteUserAccount() async {
-    try {
-      await deleteUserData();
-      await deleteUserTickets();
-      await AuthServices.getCurrentUser.delete();
-    } on FirebaseAuthException catch (e) {
-      logg.log(e.toString());
-
-      if (e.code == "requires-recent-login") {
-        await _reauthenticateAndDelete();
-      } else {}
-    } catch (e) {
-      logg.log(e.toString());
-    }
+    await deleteUserData();
+    await deleteUserTickets();
+    await AuthServices.getCurrentUser.delete().then((value) {
+      logg.log('The user deleted successfully');
+    });
   }
 
   static Future<void> deleteUserData() async {
@@ -261,24 +261,6 @@ class AuthServices {
       }
     } catch (e) {
       logg.log("Error deleting user data: $e");
-    }
-  }
-
-  static Future<void> _reauthenticateAndDelete() async {
-    try {
-      final providerData = AuthServices.getCurrentUser.providerData.first;
-
-      if (AppleAuthProvider().providerId == providerData.providerId) {
-        await AuthServices.getCurrentUser
-            .reauthenticateWithProvider(AppleAuthProvider());
-      } else if (GoogleAuthProvider().providerId == providerData.providerId) {
-        await AuthServices.getCurrentUser
-            .reauthenticateWithProvider(GoogleAuthProvider());
-      }
-
-      await AuthServices.getCurrentUser.delete();
-    } catch (e) {
-      logg.log(e.toString());
     }
   }
 

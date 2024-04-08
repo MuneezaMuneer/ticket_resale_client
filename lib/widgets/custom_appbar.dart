@@ -1,12 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 import 'package:svg_flutter/svg_flutter.dart';
-import 'package:ticket_resale/widgets/custom_gradient.dart';
-import 'package:ticket_resale/widgets/custom_text.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 import '../components/components.dart';
 import '../constants/constants.dart';
@@ -77,6 +73,7 @@ class CustomAppBarClient extends StatelessWidget
                               padding: const EdgeInsets.only(top: 8, left: 10),
                               child: SizedBox(
                                   child: (networkImage != null) &&
+                                          networkImage!.isNotEmpty &&
                                           networkImage != 'null'
                                       ? CustomDisplayStoryImage(
                                           imageUrl: '$networkImage',
@@ -92,7 +89,7 @@ class CustomAppBarClient extends StatelessWidget
                   CustomText(
                     title: '$title',
                     weight: FontWeight.w600,
-                    size: AppSize.regular,
+                    size: AppFontSize.regular,
                     color: AppColors.white,
                   )
                 ],
@@ -173,7 +170,7 @@ class CustomAppBarAdmin extends StatelessWidget implements PreferredSizeWidget {
                   CustomText(
                     title: 'Admin Panel',
                     weight: FontWeight.w600,
-                    size: AppSize.regular,
+                    size: AppFontSize.regular,
                     color: AppColors.white,
                   )
                 ],
@@ -282,7 +279,7 @@ class _CustomAppBarFieldState extends State<CustomAppBarField> {
               hintText: widget.text,
               hintStyle: const TextStyle(
                 fontWeight: FontWeight.w400,
-                fontSize: AppSize.medium,
+                fontSize: AppFontSize.medium,
                 color: AppColors.grey,
               ),
               suffixIcon: widget.searchController!.text.isEmpty

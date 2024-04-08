@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:svg_flutter/svg.dart';
 import '../constants/constants.dart';
 import '../widgets/widgets.dart';
 
@@ -40,7 +39,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // checkLoginState(context);
     return Scaffold(
       body: Container(
         height: double.infinity,
@@ -59,11 +57,7 @@ class _SplashScreenState extends State<SplashScreen> {
         child: SizedBox(
           height: 106,
           width: 170,
-          child: Center(
-            child: SvgPicture.asset(
-              AppImages.appLogo,
-            ),
-          ),
+          child: Center(child: Image.asset(AppImages.appLogo)),
         ),
       ),
     );

@@ -137,7 +137,7 @@ TextStyle _buildTextFieldstyle() {
   return const TextStyle(
       color: AppColors.jetBlack,
       fontWeight: FontWeight.w400,
-      fontSize: AppSize.medium);
+      fontSize: AppFontSize.medium);
 }
 
 void _showBottomSheetPrice(

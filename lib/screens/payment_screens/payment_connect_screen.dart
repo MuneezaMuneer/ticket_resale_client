@@ -43,25 +43,25 @@ class _PaymentConnectScreenState extends State<PaymentConnectScreen> {
                       style: TextStyle(
                           color: AppColors.jetBlack,
                           fontWeight: FontWeight.w400,
-                          fontSize: AppSize.large)),
+                          fontSize: AppFontSize.large)),
                   TextSpan(
                       text: '\nPaypal Account',
                       style: TextStyle(
                           color: AppColors.jetBlack,
                           fontWeight: FontWeight.w700,
-                          fontSize: AppSize.verylarge)),
+                          fontSize: AppFontSize.verylarge)),
                   TextSpan(
                       text: '\nLorem ipsum dolor sit amet consectetur',
                       style: TextStyle(
                           color: AppColors.lightGrey,
                           fontWeight: FontWeight.w400,
-                          fontSize: AppSize.regular)),
+                          fontSize: AppFontSize.regular)),
                   TextSpan(
                       text: '\nadipiscing elit, sed do eiusmod.',
                       style: TextStyle(
                           color: AppColors.lightGrey,
                           fontWeight: FontWeight.w400,
-                          fontSize: AppSize.regular)),
+                          fontSize: AppFontSize.regular)),
                 ],
               ),
               textAlign: TextAlign.center,
@@ -98,7 +98,7 @@ class _PaymentConnectScreenState extends State<PaymentConnectScreen> {
                   Navigator.pushNamed(context, AppRoutes.payPalAuthorization);
                 },
                 textColor: AppColors.white,
-                textSize: AppSize.regular,
+                textSize: AppFontSize.regular,
                 isSocial: true,
                 gradient: customGradient,
                 isSvgImage: true,
@@ -106,7 +106,7 @@ class _PaymentConnectScreenState extends State<PaymentConnectScreen> {
                 socialText: 'Connect your account',
                 socialTextColor: AppColors.white,
                 socialTextWeight: FontWeight.w700,
-                socialTextSize: AppSize.regular,
+                socialTextSize: AppFontSize.regular,
                 weight: FontWeight.w700,
               ),
             )

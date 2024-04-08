@@ -84,7 +84,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     'Clear All',
                     style: TextStyle(
                         color: AppColors.red,
-                        fontSize: AppSize.medium,
+                        fontSize: AppFontSize.medium,
                         fontWeight: FontWeight.w600),
                   ),
                 ),
@@ -164,7 +164,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                           hashKey:
                               FireStoreServicesClient.getMessagesHashCodeID(
                                   userIDReceiver: notifications[index].id!),
-                          id: {'seller_uid': notifications[index].userId},
+                          //  id: {'seller_uid': notifications[index].userId},
                           userModel: userModel);
                     }
                   },
@@ -183,13 +183,13 @@ class _NotificationScreenState extends State<NotificationScreen> {
                           children: [
                             CustomText(
                               title: notifications[index].title,
-                              size: AppSize.medium,
+                              size: AppFontSize.medium,
                               weight: weight,
                               color: AppColors.jetBlack,
                             ),
                             CustomText(
                               title: notifications[index].body,
-                              size: AppSize.medium,
+                              size: AppFontSize.medium,
                               weight: FontWeight.w300,
                               softWrap: true,
                               color: AppColors.jetBlack.withOpacity(0.7),
@@ -198,7 +198,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                       subtitle: CustomText(
                         title: AppUtils.formatTimeStamp(
                             notifications[index].time!),
-                        size: AppSize.small,
+                        size: AppFontSize.small,
                         weight: FontWeight.w400,
                         color: AppColors.jetBlack.withOpacity(0.4),
                       )),
@@ -206,10 +206,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
               },
             );
           } else {
-            return const Center(child: Text('No Notifications'));
+            return const Center(child: Text('No Notification'));
           }
         } else {
-          return const Center(child: Text('No Notifications'));
+          return const Center(child: Text('No Notification'));
         }
       },
     );
@@ -218,7 +218,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   TextStyle _textStyle() {
     return const TextStyle(
         color: AppColors.jetBlack,
-        fontSize: AppSize.medium,
+        fontSize: AppFontSize.medium,
         fontWeight: FontWeight.w600);
   }
 }

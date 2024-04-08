@@ -23,7 +23,7 @@ class _CustomNavigationAdminState extends State<CustomNavigationAdmin> {
   @override
   void initState() {
     super.initState();
-    
+
     Future.delayed(Duration.zero, () {
       navigationProvider =
           Provider.of<NavigationProvider>(context, listen: false);
@@ -69,7 +69,7 @@ class _CustomNavigationAdminState extends State<CustomNavigationAdmin> {
                                 ),
                                 const CustomText(
                                   title: 'Events',
-                                  size: AppSize.xxsmall,
+                                  size: AppFontSize.xxsmall,
                                   color: AppColors.blueViolet,
                                 )
                               ],
@@ -84,7 +84,7 @@ class _CustomNavigationAdminState extends State<CustomNavigationAdmin> {
                                         BlendMode.srcIn)),
                                 CustomText(
                                   title: 'Events',
-                                  size: AppSize.xxsmall,
+                                  size: AppFontSize.xxsmall,
                                   color: AppColors.blueViolet.withOpacity(0.4),
                                 )
                               ],
@@ -106,7 +106,7 @@ class _CustomNavigationAdminState extends State<CustomNavigationAdmin> {
                                 ),
                                 const CustomText(
                                   title: 'Tickets',
-                                  size: AppSize.xxsmall,
+                                  size: AppFontSize.xxsmall,
                                   color: AppColors.blueViolet,
                                 )
                               ],
@@ -121,7 +121,7 @@ class _CustomNavigationAdminState extends State<CustomNavigationAdmin> {
                                         BlendMode.srcIn)),
                                 CustomText(
                                   title: 'Tickets',
-                                  size: AppSize.xxsmall,
+                                  size: AppFontSize.xxsmall,
                                   color: AppColors.blueViolet.withOpacity(0.4),
                                 )
                               ],
@@ -144,7 +144,7 @@ class _CustomNavigationAdminState extends State<CustomNavigationAdmin> {
                                 const CustomText(
                                   title: 'Users',
                                   color: AppColors.blueViolet,
-                                  size: AppSize.xxsmall,
+                                  size: AppFontSize.xxsmall,
                                 )
                               ],
                             )
@@ -158,7 +158,7 @@ class _CustomNavigationAdminState extends State<CustomNavigationAdmin> {
                                         BlendMode.srcIn)),
                                 CustomText(
                                   title: 'Users',
-                                  size: AppSize.xxsmall,
+                                  size: AppFontSize.xxsmall,
                                   color: AppColors.blueViolet.withOpacity(0.4),
                                 )
                               ],
@@ -180,7 +180,7 @@ class _CustomNavigationAdminState extends State<CustomNavigationAdmin> {
                               ),
                               const CustomText(
                                 title: 'Notification',
-                                size: AppSize.xxsmall,
+                                size: AppFontSize.xxsmall,
                                 color: AppColors.blueViolet,
                               )
                             ],
@@ -195,7 +195,7 @@ class _CustomNavigationAdminState extends State<CustomNavigationAdmin> {
                                       BlendMode.srcIn)),
                               CustomText(
                                 title: 'Notification',
-                                size: AppSize.xxsmall,
+                                size: AppFontSize.xxsmall,
                                 color: AppColors.blueViolet.withOpacity(0.4),
                               )
                             ],

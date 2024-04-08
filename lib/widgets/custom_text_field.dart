@@ -84,7 +84,7 @@ class CustomTextField extends StatelessWidget {
                   title: '$trailingText',
                   color: AppColors.springGreen,
                   weight: FontWeight.w600,
-                  size: AppSize.medium,
+                  size: AppFontSize.medium,
                 ),
               )
             : isSuffixIcon

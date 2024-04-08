@@ -47,7 +47,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
                         'Forgot Password?',
                         style: TextStyle(
                             color: AppColors.jetBlack,
-                            fontSize: AppSize.verylarge,
+                            fontSize: AppFontSize.verylarge,
                             fontWeight: FontWeight.w700),
                       ),
                     ),
@@ -59,7 +59,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
                       color: AppColors.jetBlack,
                       textAlign: TextAlign.start,
                       softWrap: true,
-                      size: AppSize.medium,
+                      size: AppFontSize.medium,
                       weight: FontWeight.w500,
                     ),
                     const SizedBox(height: 20),
@@ -92,12 +92,12 @@ class _PasswordScreenState extends State<PasswordScreen> {
                               children: [
                                 CustomText(
                                   title: 'Registered Email',
-                                  size: AppSize.xsmall,
+                                  size: AppFontSize.xsmall,
                                   color: AppColors.lightBlack.withOpacity(0.4),
                                 ),
                                 const CustomText(
                                   title: 'xyz@gmail.com',
-                                  size: AppSize.xsmall,
+                                  size: AppFontSize.xsmall,
                                   weight: FontWeight.w600,
                                 )
                               ],
@@ -132,7 +132,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
                         weight: FontWeight.w700,
                         textColor: AppColors.white,
                         gradient: customGradient,
-                        textSize: AppSize.regular,
+                        textSize: AppFontSize.regular,
                         onPressed: () async {
                           if (key.currentState!.validate()) {
                             loadingNotifier.value = true;

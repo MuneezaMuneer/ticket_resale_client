@@ -73,14 +73,14 @@ class CustomTileContainer extends StatelessWidget {
                                   CustomText(
                                     title: '$date,',
                                     color: const Color(0Xff6E4CEE),
-                                    size: AppSize.xxsmall,
+                                    size: AppFontSize.xxsmall,
                                     weight: FontWeight.w600,
                                   ),
                                   const Gap(6),
                                   CustomText(
                                     title: '$time',
                                     color: const Color(0Xff6E4CEE),
-                                    size: AppSize.xxsmall,
+                                    size: AppFontSize.xxsmall,
                                     weight: FontWeight.w600,
                                   ),
                                 ],
@@ -98,46 +98,9 @@ class CustomTileContainer extends StatelessWidget {
                       softWrap: true,
                       textAlign: TextAlign.start,
                       color: AppColors.jetBlack,
-                      size: AppSize.regular,
+                      size: AppFontSize.regular,
                       weight: FontWeight.w600,
                     ),
-                    // SizedBox(
-                    //   height: constraints.maxHeight * 0.02,
-                    // ),
-                    // Row(
-                    //   children: [
-                    //     SizedBox(
-                    //       height: 30,
-                    //       width: 30,
-                    //       child: CircleAvatar(
-                    //         backgroundImage: AssetImage('$imagePath'),
-                    //       ),
-                    //     ),
-                    //     const Gap(10),
-                    //     RichText(
-                    //       text: TextSpan(
-                    //         children: [
-                    //           const TextSpan(
-                    //             text: 'Posted by ',
-                    //             style: TextStyle(
-                    //               color: AppColors.lightGrey,
-                    //               fontSize: AppSize.xxsmall,
-                    //               fontWeight: FontWeight.w300,
-                    //             ),
-                    //           ),
-                    //           TextSpan(
-                    //             text: postBy,
-                    //             style: const TextStyle(
-                    //               color: AppColors.lightGrey,
-                    //               fontSize: AppSize.xxsmall,
-                    //               fontWeight: FontWeight.w600,
-                    //             ),
-                    //           ),
-                    //         ],
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
                   ],
                 ),
               ),
@@ -152,6 +115,7 @@ class CustomTileContainer extends StatelessWidget {
                     height: 40,
                     child: CustomButton(
                       onPressed: () {
+                        FocusManager.instance.primaryFocus?.unfocus();
                         Navigator.pushNamed(
                           context,
                           AppRoutes.eventScreen,
@@ -159,14 +123,14 @@ class CustomTileContainer extends StatelessWidget {
                         );
                       },
                       textColor: AppColors.white,
-                      textSize: AppSize.medium,
+                      textSize: AppFontSize.medium,
                       gradient: customGradient,
                       isRounded: false,
                       isSvgImage: true,
                       btnText: 'Explore More',
                       socialTextColor: AppColors.white,
                       socialTextWeight: FontWeight.w700,
-                      socialTextSize: AppSize.verySmall,
+                      socialTextSize: AppFontSize.verySmall,
                       weight: FontWeight.w700,
                     ),
                   ),

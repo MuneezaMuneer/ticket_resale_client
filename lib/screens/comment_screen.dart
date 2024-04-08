@@ -89,7 +89,7 @@ class _CommentScreenState extends State<CommentScreen> {
                               children: [
                                 const CustomText(
                                   title: 'Comments',
-                                  size: AppSize.regular,
+                                  size: AppFontSize.regular,
                                   color: AppColors.jetBlack,
                                   weight: FontWeight.w600,
                                 ),
@@ -97,7 +97,7 @@ class _CommentScreenState extends State<CommentScreen> {
                                   children: [
                                     const CustomText(
                                       title: 'Subscribe to comments',
-                                      size: AppSize.medium,
+                                      size: AppFontSize.medium,
                                       weight: FontWeight.w400,
                                       color: AppColors.lightGrey,
                                     ),
@@ -154,10 +154,21 @@ class _CommentScreenState extends State<CommentScreen> {
                                                   MainAxisAlignment.start,
                                               children: [
                                                 CircleAvatar(
-                                                  backgroundImage: NetworkImage(
-                                                      '${userData.photoUrl}'),
+                                                  backgroundImage: userData
+                                                                  .photoUrl !=
+                                                              null &&
+                                                          userData.photoUrl !=
+                                                              "null" &&
+                                                          Uri.parse(userData
+                                                                  .photoUrl!)
+                                                              .isAbsolute
+                                                      ? NetworkImage(
+                                                          '${userData.photoUrl}')
+                                                      : AssetImage(AppImages
+                                                              .profileImage)
+                                                          as ImageProvider,
                                                 ),
-                                                const Gap(10),
+                                                const Gap(7),
                                                 Expanded(
                                                   flex: 9,
                                                   child: Column(
@@ -170,14 +181,14 @@ class _CommentScreenState extends State<CommentScreen> {
                                                           CustomText(
                                                             title:
                                                                 '${userData.displayName}',
-                                                            size: AppSize
+                                                            size: AppFontSize
                                                                 .intermediate,
                                                             weight:
                                                                 FontWeight.w600,
                                                             color: AppColors
                                                                 .jetBlack,
                                                           ),
-                                                          const Gap(15),
+                                                          const Gap(5),
                                                           Container(
                                                             height: 5,
                                                             width: 5,
@@ -191,15 +202,15 @@ class _CommentScreenState extends State<CommentScreen> {
                                                                   .circle,
                                                             ),
                                                           ),
-                                                          const Gap(5),
+                                                          Gap(3),
                                                           CustomText(
                                                             title: AppUtils
                                                                 .formatTimeAgo(
                                                                     (commentData[
                                                                             index]
                                                                         .time!)),
-                                                            size:
-                                                                AppSize.xsmall,
+                                                            size: AppFontSize
+                                                                .xsmall,
                                                             weight:
                                                                 FontWeight.w400,
                                                             color: AppColors
@@ -221,7 +232,7 @@ class _CommentScreenState extends State<CommentScreen> {
                                                                 color: AppColors
                                                                     .lightGrey,
                                                                 fontSize:
-                                                                    AppSize
+                                                                    AppFontSize
                                                                         .small,
                                                                 fontWeight:
                                                                     FontWeight
@@ -243,7 +254,7 @@ class _CommentScreenState extends State<CommentScreen> {
                                                                 color: AppColors
                                                                     .lightBlack,
                                                                 fontSize:
-                                                                    AppSize
+                                                                    AppFontSize
                                                                         .small,
                                                                 fontWeight:
                                                                     FontWeight
@@ -257,7 +268,7 @@ class _CommentScreenState extends State<CommentScreen> {
                                                         title:
                                                             commentData[index]
                                                                 .comment,
-                                                        size: AppSize
+                                                        size: AppFontSize
                                                             .intermediate,
                                                         weight: FontWeight.w400,
                                                         color:
@@ -322,6 +333,8 @@ class _CommentScreenState extends State<CommentScreen> {
                                                                 ticketName: widget
                                                                     .ticketModal
                                                                     .ticketType,
+                                                                buyerUid:
+                                                                    '${userData.id}',
                                                               );
                                                               commentData[index]
                                                                           .status ==
@@ -381,7 +394,8 @@ class _CommentScreenState extends State<CommentScreen> {
                                                             textColor:
                                                                 AppColors.white,
                                                             textSize:
-                                                                AppSize.medium,
+                                                                AppFontSize
+                                                                    .medium,
                                                             btnText:
                                                                 commentData[
                                                                         index]
@@ -523,7 +537,7 @@ class _CommentScreenState extends State<CommentScreen> {
                                                 child: CustomText(
                                                   title:
                                                       'Your offer is submitted',
-                                                  size: AppSize.regular,
+                                                  size: AppFontSize.regular,
                                                   color: AppColors.jetBlack,
                                                 ),
                                               ),
@@ -548,7 +562,7 @@ class _CommentScreenState extends State<CommentScreen> {
                             title: 'I need help (Alert Rave Trade Staff)',
                             color: AppColors.lightGrey,
                             weight: FontWeight.w400,
-                            size: AppSize.medium,
+                            size: AppFontSize.medium,
                           )
                         ],
                       )

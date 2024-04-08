@@ -6,6 +6,7 @@ import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/db_services/db_services.dart';
 import 'package:ticket_resale/models/feedback_model.dart';
 import 'package:ticket_resale/providers/providers.dart';
+import 'package:ticket_resale/utils/app_utils.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
 class FeedBackScreen extends StatefulWidget {
@@ -24,6 +25,7 @@ class FeedBackScreen extends StatefulWidget {
 class _FeedBackScreenState extends State<FeedBackScreen> {
   late FeedbackProvider feedbackProvider;
   ValueNotifier<int> selectedStarsNotifier = ValueNotifier<int>(0);
+  ValueNotifier<bool> loadingNotifier = ValueNotifier<bool>(false);
   TextEditingController commentController = TextEditingController();
   @override
   void initState() {
@@ -51,7 +53,7 @@ class _FeedBackScreenState extends State<FeedBackScreen> {
                   child: const CustomText(
                     softWrap: true,
                     title: 'Give Feedback on your recent purchase with',
-                    size: AppSize.large,
+                    size: AppFontSize.large,
                     weight: FontWeight.w700,
                     textAlign: TextAlign.center,
                     color: AppColors.jetBlack,
@@ -64,7 +66,7 @@ class _FeedBackScreenState extends State<FeedBackScreen> {
                   child: widget.sellerImageUrl.isNotEmpty
                       ? CustomDisplayStoryImage(imageUrl: widget.sellerImageUrl)
                       : const CircleAvatar(
-                          backgroundImage: AssetImage(AppImages.profile),
+                          backgroundImage: AssetImage(AppImages.profileImage),
                         ),
                 ),
                 const Gap(10),
@@ -169,7 +171,7 @@ class _FeedBackScreenState extends State<FeedBackScreen> {
                       const Center(
                         child: CustomText(
                           title: 'Rate your overall experience',
-                          size: AppSize.medium,
+                          size: AppFontSize.medium,
                           color: AppColors.jetBlack,
                           weight: FontWeight.w900,
                         ),
@@ -177,7 +179,7 @@ class _FeedBackScreenState extends State<FeedBackScreen> {
                       Center(
                         child: CustomText(
                           title: 'What do you think of this purchase',
-                          size: AppSize.medium,
+                          size: AppFontSize.medium,
                           color: AppColors.jetBlack.withOpacity(0.5),
                           weight: FontWeight.w400,
                         ),
@@ -201,7 +203,7 @@ class _FeedBackScreenState extends State<FeedBackScreen> {
                       const Gap(20),
                       const CustomText(
                         title: 'Comment',
-                        size: AppSize.medium,
+                        size: AppFontSize.medium,
                         weight: FontWeight.w600,
                       ),
                       const Gap(10),
@@ -220,30 +222,51 @@ class _FeedBackScreenState extends State<FeedBackScreen> {
                       SizedBox(
                         height: height * 0.07,
                         width: width * 0.9,
-                        child: CustomButton(
-                          onPressed: () async {
-                            FeedbackModel feedbackModel = FeedbackModel(
-                              rating: selectedStarsNotifier.value,
-                              comment: commentController.text,
-                              experience:
-                                  feedbackProvider.getExperience.toString(),
-                              arrivalTime: feedbackProvider.getTime.toString(),
-                              accurateInfo:
-                                  feedbackProvider.getAccuracy.toString(),
-                              communicationResponse:
-                                  feedbackProvider.getBehave.toString(),
-                              buyerId: AuthServices.getCurrentUser.uid,
-                              sellerId: widget.sellerId,
+                        child: ValueListenableBuilder(
+                          valueListenable: loadingNotifier,
+                          builder: (context, value, child) {
+                            return CustomButton(
+                              onPressed: () async {
+                                loadingNotifier.value = true;
+                                FeedbackModel feedbackModel = FeedbackModel(
+                                  rating: selectedStarsNotifier.value,
+                                  comment: commentController.text,
+                                  experience: AppUtils.mapIndexToFeedbackValue(
+                                      feedbackProvider.getExperience),
+                                  arrivalTime: AppUtils.mapIndexToFeedbackValue(
+                                      feedbackProvider.getTime),
+                                  accurateInfo:
+                                      AppUtils.mapIndexToFeedbackValue(
+                                          feedbackProvider.getAccuracy),
+                                  communicationResponse:
+                                      AppUtils.mapIndexToFeedbackValue(
+                                          feedbackProvider.getBehave),
+                                  buyerId: AuthServices.getCurrentUser.uid,
+                                  sellerId: widget.sellerId,
+                                );
+                                FireStoreServicesClient.storeFeedback(
+                                        feedbackModel: feedbackModel,
+                                        sellerId: widget.sellerId)
+                                    .then((value) {
+                                  loadingNotifier.value = false;
+                                  feedbackProvider.setExperience(0);
+                                  feedbackProvider.setTime(3);
+                                  feedbackProvider.setAccuracy(5);
+                                  feedbackProvider.setBehave(7);
+                                  Navigator.pushNamedAndRemoveUntil(
+                                      context,
+                                      AppRoutes.navigationScreen,
+                                      (route) => false);
+                                });
+                              },
+                              textColor: AppColors.white,
+                              loading: loadingNotifier.value,
+                              textSize: AppFontSize.regular,
+                              btnText: 'Submit',
+                              gradient: customGradient,
+                              weight: FontWeight.w700,
                             );
-                            await FireStoreServicesClient.storeFeedback(
-                                feedbackModel: feedbackModel,
-                                sellerId: widget.sellerId);
                           },
-                          textColor: AppColors.white,
-                          textSize: AppSize.regular,
-                          btnText: 'Submit',
-                          gradient: customGradient,
-                          weight: FontWeight.w700,
                         ),
                       ),
                       const Gap(20),
@@ -279,7 +302,7 @@ Text buildHeaderText(String text) {
   return Text(
     text,
     style: TextStyle(
-        fontSize: AppSize.medium,
+        fontSize: AppFontSize.medium,
         fontWeight: FontWeight.w600,
         color: AppColors.jetBlack.withOpacity(0.7)),
   );
@@ -309,7 +332,7 @@ Row buildButtonRow({
           gradient:
               selectedValue == values[index] ? customGradient : whiteGradient,
           weight: FontWeight.w500,
-          textSize: AppSize.regular,
+          textSize: AppFontSize.regular,
         ),
       ),
     ),

@@ -23,11 +23,11 @@ class FeedbackModel {
       'rating': rating,
       'comment': comment,
       'experience': experience,
-      'arrivalTime': arrivalTime,
-      'accurateInfo': accurateInfo,
-      'communicationResponse': communicationResponse,
-      'buyerId': buyerId,
-      'sellerId': sellerId,
+      'arrival_time': arrivalTime,
+      'accurate_info': accurateInfo,
+      'communication_response': communicationResponse,
+      'buyer_id': buyerId,
+      'seller_id': sellerId,
     };
   }
 

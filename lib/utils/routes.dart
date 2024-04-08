@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ticket_resale/models/event_modals.dart';
+import 'package:ticket_resale/screens/tickets_history_screen.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 import '../constants/constants.dart';
 import '../models/models.dart';
@@ -37,12 +37,15 @@ Route onGenerateRoute(RouteSettings settings) {
       price: price,
     ));
   } else if (settings.name == AppRoutes.feedbackScreen) {
-       final Map<String, dynamic> arguments =
+    final Map<String, dynamic> arguments =
         settings.arguments as Map<String, dynamic>;
     final String sellerImageUrl = arguments['sellerImageUrl'] as String;
     final String sellerName = arguments['sellerName'] as String;
-      final String sellerId = arguments['sellerId'] as String;
-    return animatePage( FeedBackScreen(sellerImageUrl: sellerImageUrl, sellerName:sellerName, sellerId: sellerId));
+    final String sellerId = arguments['sellerId'] as String;
+    return animatePage(FeedBackScreen(
+        sellerImageUrl: sellerImageUrl,
+        sellerName: sellerName,
+        sellerId: sellerId));
   } else if (settings.name == AppRoutes.privacyScreen) {
     return animatePage(const PrivacyPolicy());
   } else if (settings.name == AppRoutes.detailFirstScreen) {
@@ -106,6 +109,8 @@ Route onGenerateRoute(RouteSettings settings) {
     return animatePage(const ProfileSettings());
   } else if (settings.name == AppRoutes.notificationScreen) {
     return animatePage(NotificationScreen());
+  } else if (settings.name == AppRoutes.ticketsHistoryScreen) {
+    return animatePage(TicketsHistoryScreen());
   } else if (settings.name == AppRoutes.profileLevelScreen) {
     final isBackButton = settings.arguments as bool;
     return animatePage(ProfileLevelScreen(isBackButton: isBackButton));

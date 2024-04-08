@@ -34,25 +34,25 @@ class PaymentDisconnectScreen extends StatelessWidget {
                       style: TextStyle(
                           color: AppColors.jetBlack,
                           fontWeight: FontWeight.w400,
-                          fontSize: AppSize.large)),
+                          fontSize: AppFontSize.large)),
                   TextSpan(
                       text: '\nis connected',
                       style: TextStyle(
                           color: AppColors.jetBlack,
                           fontWeight: FontWeight.w700,
-                          fontSize: AppSize.verylarge)),
+                          fontSize: AppFontSize.verylarge)),
                   TextSpan(
                       text: '\njohnDoe@gmail.com',
                       style: TextStyle(
                           color: AppColors.lightGrey,
                           fontWeight: FontWeight.w400,
-                          fontSize: AppSize.regular)),
+                          fontSize: AppFontSize.regular)),
                   TextSpan(
                       text: '\nConnected: 29th Feb 2032',
                       style: TextStyle(
                           color: AppColors.lightGrey,
                           fontWeight: FontWeight.w400,
-                          fontSize: AppSize.regular)),
+                          fontSize: AppFontSize.regular)),
                 ],
               ),
               textAlign: TextAlign.center,
@@ -65,7 +65,7 @@ class PaymentDisconnectScreen extends StatelessWidget {
               child: CustomButton(
                 onPressed: () {},
                 textColor: AppColors.white,
-                textSize: AppSize.regular,
+                textSize: AppFontSize.regular,
                 isSocial: true,
                 gradient: customGradient,
                 isSvgImage: true,
@@ -73,7 +73,7 @@ class PaymentDisconnectScreen extends StatelessWidget {
                 socialText: 'Disconnected your account',
                 socialTextColor: AppColors.white,
                 socialTextWeight: FontWeight.w700,
-                socialTextSize: AppSize.regular,
+                socialTextSize: AppFontSize.regular,
                 weight: FontWeight.w700,
               ),
             )

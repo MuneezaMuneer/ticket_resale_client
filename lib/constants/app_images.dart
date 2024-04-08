@@ -1,6 +1,5 @@
 class AppImages {
   static const appLogo = 'assets/images/logo.png';
-  static const profile = 'assets/images/profile.png';
   static const music = 'assets/images/music.jpeg';
   static const homeConcert = 'assets/images/home_concert.jpeg';
   static const creditCard = 'assets/images/credit_card.png';
@@ -24,7 +23,6 @@ class AppSvgs {
   static const home = 'assets/svgs/home.svg';
   static const apple = 'assets/svgs/apple.svg';
   static const facebook = 'assets/svgs/facebook.svg';
-  // static const logo = 'assets/svgs/logo.svg';
   static const level = 'assets/svgs/level.svg';
   static const termOfUse = 'assets/svgs/termOfUse.svg';
   static const levelOne = 'assets/svgs/level_one.svg';

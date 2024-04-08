@@ -66,7 +66,7 @@ class CustomProfileRow extends StatelessWidget {
                 child: Text(
                   '$title',
                   style: TextStyle(
-                    fontSize: AppSize.regular,
+                    fontSize: AppFontSize.regular,
                     fontWeight: FontWeight.w400,
                     color: color,
                   ),
