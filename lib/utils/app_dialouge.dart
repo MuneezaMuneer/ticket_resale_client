@@ -5,10 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 import 'package:svg_flutter/svg_flutter.dart';
 import 'package:ticket_resale/components/components.dart';
-import 'package:ticket_resale/constants/app_routes.dart';
-import 'package:ticket_resale/constants/app_colors.dart';
-import 'package:ticket_resale/constants/app_images.dart';
-import 'package:ticket_resale/constants/app_textsize.dart';
+import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/db_services/db_services.dart';
 import 'package:ticket_resale/models/models.dart';
 import 'package:ticket_resale/providers/bottom_sheet_provider.dart';
@@ -16,82 +13,45 @@ import 'package:ticket_resale/utils/notification_services.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
 deleteDialog({required BuildContext context}) {
-  return showDialog(
+  return showAdaptiveDialog(
     context: context,
     builder: (context) {
       return AlertDialog.adaptive(
-        backgroundColor: AppColors.white,
-        titlePadding: const EdgeInsets.only(left: 25, right: 25, bottom: 30),
-        title: Column(
-          children: [
-            SizedBox(
-                height: 200,
-                width: 200,
-                child: Image.asset(
-                  AppImages.personBold,
-                  fit: BoxFit.cover,
-                )),
-            const CustomText(
-              title: 'Delete Account',
-              color: AppColors.jetBlack,
-              size: AppSize.large,
-              weight: FontWeight.w900,
-            ),
-            const Gap(20),
-            CustomText(
-              title: 'Are you sure to delete your account.',
-              color: AppColors.jetBlack.withOpacity(0.8),
-              size: AppSize.medium,
-              weight: FontWeight.w400,
-              textAlign: TextAlign.center,
-            ),
-            CustomText(
-              title: 'Account will be permanently deleted.',
-              color: AppColors.jetBlack.withOpacity(0.8),
-              size: AppSize.medium,
-              weight: FontWeight.w400,
-              textAlign: TextAlign.center,
-            )
-          ],
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: 5,
+        ),
+        title: Image.asset(
+          AppImages.personBold,
+          fit: BoxFit.cover,
+          height: 130,
+          width: 250,
+        ),
+        content: CustomText(
+          title: 'Your account will be deleted\n permanently.',
+          color: AppColors.jetBlack.withOpacity(0.8),
+          weight: FontWeight.w400,
+          textAlign: TextAlign.center,
         ),
         actions: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                height: 50,
-                width: 110,
-                child: CustomButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  btnText: 'Cancel',
-                  backgroundColor: AppColors.white,
-                  borderColor: AppColors.jetBlack,
-                  textColor: AppColors.jetBlack,
-                  weight: FontWeight.w700,
-                  textSize: AppSize.regular,
-                ),
-              ),
-              SizedBox(
-                height: 50,
-                width: 110,
-                child: CustomButton(
-                  onPressed: () {
-                    AuthServices.deleteUserAccount().then((user) {
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, AppRoutes.logIn, (route) => false);
-                    });
-                  },
-                  btnText: 'Delete',
-                  backgroundColor: AppColors.raddishPink,
-                  borderColor: AppColors.raddishPink,
-                  textColor: AppColors.white,
-                  weight: FontWeight.w900,
-                  textSize: AppSize.regular,
-                ),
-              ),
-            ],
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: CustomText(
+              title: 'Cancel',
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              AuthServices.deleteUserAccount().then((user) {
+                Navigator.pushNamedAndRemoveUntil(
+                    context, AppRoutes.logIn, (route) => false);
+              });
+            },
+            child: CustomText(
+              title: 'Delete',
+              color: AppColors.red,
+            ),
           ),
         ],
       );
@@ -151,7 +111,7 @@ sellerRatingDialog(
             CustomText(
               title: name,
               weight: FontWeight.w600,
-              size: AppSize.large,
+              size: AppFontSize.large,
               color: AppColors.jetBlack,
             ),
             const SizedBox(
@@ -170,7 +130,7 @@ sellerRatingDialog(
             const CustomText(
               title: 'Detailed Seller Ratings',
               color: AppColors.jetBlack,
-              size: AppSize.regular,
+              size: AppFontSize.regular,
               weight: FontWeight.w700,
             ),
             const Gap(20),
@@ -219,7 +179,7 @@ sellerRatingDialog(
                                       title: averageRating.toStringAsFixed(1),
                                       weight: FontWeight.w500,
                                       color: AppColors.jetBlack,
-                                      size: AppSize.small,
+                                      size: AppFontSize.small,
                                     ),
                                   ],
                                 )
@@ -252,7 +212,7 @@ sellerRatingDialog(
                               borderColor: AppColors.jetBlack,
                               textColor: AppColors.jetBlack,
                               weight: FontWeight.w800,
-                              textSize: AppSize.regular,
+                              textSize: AppFontSize.regular,
                             ),
                             const Gap(20),
                           ],
@@ -310,7 +270,7 @@ ticketSellDialog({
                 const CustomText(
                   title: 'Are you sure?',
                   color: AppColors.jetBlack,
-                  size: AppSize.verylarge,
+                  size: AppFontSize.verylarge,
                   weight: FontWeight.w700,
                 ),
                 CustomText(
@@ -318,7 +278,7 @@ ticketSellDialog({
                       'Are you sure you want to sell this ticket on below mentioned details.',
                   color: AppColors.jetBlack.withOpacity(0.8),
                   maxLines: 2,
-                  size: AppSize.medium,
+                  size: AppFontSize.medium,
                   softWrap: true,
                   weight: FontWeight.w400,
                   textAlign: TextAlign.center,
@@ -329,13 +289,13 @@ ticketSellDialog({
                   children: [
                     const CustomText(
                       title: 'Price offered',
-                      size: AppSize.regular,
+                      size: AppFontSize.regular,
                       weight: FontWeight.w400,
                       color: AppColors.jetBlack,
                     ),
                     CustomText(
                       title: offeredPrice,
-                      size: AppSize.regular,
+                      size: AppFontSize.regular,
                       weight: FontWeight.w400,
                       color: AppColors.blueViolet,
                     )
@@ -346,7 +306,7 @@ ticketSellDialog({
                   children: [
                     const CustomText(
                       title: 'Buyer',
-                      size: AppSize.regular,
+                      size: AppFontSize.regular,
                       weight: FontWeight.w400,
                       color: AppColors.jetBlack,
                     ),
@@ -364,7 +324,7 @@ ticketSellDialog({
                         const Gap(10),
                         CustomText(
                           title: buyerName,
-                          size: AppSize.intermediate,
+                          size: AppFontSize.intermediate,
                           weight: FontWeight.w400,
                           color: AppColors.jetBlack,
                         )
@@ -391,7 +351,7 @@ ticketSellDialog({
                       borderColor: AppColors.jetBlack,
                       textColor: AppColors.jetBlack,
                       weight: FontWeight.w700,
-                      textSize: AppSize.regular,
+                      textSize: AppFontSize.regular,
                     ),
                   ),
                   SizedBox(
@@ -441,7 +401,7 @@ ticketSellDialog({
                         });
                       },
                       textColor: AppColors.white,
-                      textSize: AppSize.medium,
+                      textSize: AppFontSize.medium,
                       btnText: 'Confirm',
                       loading: loadingProvider.isLoading,
                       gradient: customGradient,
@@ -473,7 +433,7 @@ Widget buildTile(
         title: trailingTitle,
         weight: FontWeight.w500,
         color: AppColors.jetBlack,
-        size: AppSize.small,
+        size: AppFontSize.small,
       )
     ],
   );

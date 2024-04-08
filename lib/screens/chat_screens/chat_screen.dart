@@ -75,7 +75,7 @@ class ChatScreen extends StatelessWidget {
                                   flex: 8,
                                   child: CustomText(
                                     title: userData.displayName,
-                                    size: AppSize.regular,
+                                    size: AppFontSize.regular,
                                     weight: FontWeight.w600,
                                     color: AppColors.jetBlack,
                                   ),
@@ -86,7 +86,7 @@ class ChatScreen extends StatelessWidget {
                                   child: CustomText(
                                     title: AppUtils.convertDateTimeToMMMMDY(
                                         dateTime: DateTime.now()),
-                                    size: AppSize.xsmall,
+                                    size: AppFontSize.xsmall,
                                   ),
                                 ),
                               ],

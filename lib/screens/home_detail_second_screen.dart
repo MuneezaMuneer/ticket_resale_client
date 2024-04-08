@@ -66,7 +66,7 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                     padding: const EdgeInsets.only(left: 10, top: 30),
                     child: CustomText(
                       title: widget.eventModal.eventName,
-                      size: AppSize.large,
+                      size: AppFontSize.large,
                       weight: FontWeight.w600,
                       softWrap: true,
                       color: AppColors.jetBlack,
@@ -105,13 +105,13 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                                       style: TextStyle(
                                           color: AppColors.lightGrey
                                               .withOpacity(0.6),
-                                          fontSize: AppSize.xsmall,
+                                          fontSize: AppFontSize.xsmall,
                                           fontWeight: FontWeight.w400)),
                                   const TextSpan(
                                       text: 'Martin Garrix',
                                       style: TextStyle(
                                           color: AppColors.blueViolet,
-                                          fontSize: AppSize.medium,
+                                          fontSize: AppFontSize.medium,
                                           fontWeight: FontWeight.w600)),
                                 ])),
                               ),
@@ -153,7 +153,7 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                                           '${AppUtils.formatDatee(widget.eventModal.date!)}, ${widget.eventModal.time}',
                                       color:
                                           AppColors.lightGrey.withOpacity(0.6),
-                                      size: AppSize.xsmall,
+                                      size: AppFontSize.xsmall,
                                       weight: FontWeight.w400,
                                     ),
                                     SizedBox(
@@ -167,7 +167,7 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                                                 color: AppColors.lightGrey
                                                     .withOpacity(0.6),
                                                 letterSpacing: 0.8,
-                                                fontSize: AppSize.xsmall,
+                                                fontSize: AppFontSize.xsmall,
                                                 fontWeight: FontWeight.w400)),
                                         TextSpan(
                                             text:
@@ -176,7 +176,7 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                                                 color: AppColors.jetBlack,
                                                 overflow: TextOverflow.ellipsis,
                                                 letterSpacing: 0.8,
-                                                fontSize: AppSize.small,
+                                                fontSize: AppFontSize.small,
                                                 fontWeight: FontWeight.w600)),
                                       ])),
                                     ),
@@ -192,13 +192,13 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                   const Gap(10),
                   const CustomText(
                     title: 'About Event',
-                    size: AppSize.regular,
+                    size: AppFontSize.regular,
                     weight: FontWeight.w600,
                     color: AppColors.jetBlack,
                   ),
                   CustomText(
                     title: widget.eventModal.description,
-                    size: AppSize.medium,
+                    size: AppFontSize.medium,
                     softWrap: true,
                     weight: FontWeight.w400,
                     color: AppColors.lightGrey,
@@ -206,7 +206,7 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                   const Gap(20),
                   const CustomText(
                     title: 'Available Tickets',
-                    size: AppSize.regular,
+                    size: AppFontSize.regular,
                     weight: FontWeight.w600,
                     color: AppColors.jetBlack,
                   ),
@@ -220,11 +220,11 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                     avatarBg: AppColors.white,
                     title: '${widget.ticketModel.ticketType} TICKET AVAILABLE',
                     titleColor: AppColors.jetBlack,
-                    titleSize: AppSize.small,
+                    titleSize: AppFontSize.small,
                     titleWeight: FontWeight.w600,
                     subTitle: 'VIP Seats + Exclusive braclets',
                     subTitleColor: AppColors.lightGrey.withOpacity(0.6),
-                    subTitleSize: AppSize.xsmall,
+                    subTitleSize: AppFontSize.xsmall,
                     subTitleWeight: FontWeight.w400,
                     child: Padding(
                       padding: const EdgeInsets.only(right: 7),
@@ -319,7 +319,7 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                                                 ),
                                                 CustomText(
                                                   title: 'Sell by',
-                                                  size: AppSize.verySmall,
+                                                  size: AppFontSize.verySmall,
                                                   weight: FontWeight.w300,
                                                   color: AppColors.lightBlack
                                                       .withOpacity(0.7),
@@ -329,8 +329,8 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                                                     CustomText(
                                                       title:
                                                           userData.displayName!,
-                                                      size:
-                                                          AppSize.intermediate,
+                                                      size: AppFontSize
+                                                          .intermediate,
                                                       weight: FontWeight.w600,
                                                       color: AppColors
                                                           .lightBlack
@@ -362,14 +362,14 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                                                   children: [
                                                     CustomText(
                                                       title: '23',
-                                                      size:
-                                                          AppSize.intermediate,
+                                                      size: AppFontSize
+                                                          .intermediate,
                                                       weight: FontWeight.w500,
                                                     ),
                                                     const Gap(2),
                                                     CustomText(
                                                       title: 'Ticket Sold',
-                                                      size: AppSize.xxsmall,
+                                                      size: AppFontSize.xxsmall,
                                                       weight: FontWeight.w400,
                                                     )
                                                   ],
@@ -489,7 +489,7 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                           }
                         },
                         textColor: AppColors.white,
-                        textSize: AppSize.regular,
+                        textSize: AppFontSize.regular,
                         btnText: 'Start Conversation',
                         gradient: customGradient,
                         weight: FontWeight.w700,

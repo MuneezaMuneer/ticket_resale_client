@@ -79,7 +79,7 @@ class _CreateEventState extends State<CreateEvent> {
                           const CustomText(
                             title: 'Add Event',
                             weight: FontWeight.w600,
-                            size: AppSize.regular,
+                            size: AppFontSize.regular,
                           ),
                           const Gap(15),
                           Align(
@@ -151,7 +151,7 @@ class _CreateEventState extends State<CreateEvent> {
                                           const CustomText(
                                             title: 'Add Event Image Thumbnail',
                                             color: AppColors.jetBlack,
-                                            size: AppSize.medium,
+                                            size: AppFontSize.medium,
                                             weight: FontWeight.w500,
                                           )
                                         ],
@@ -164,7 +164,7 @@ class _CreateEventState extends State<CreateEvent> {
                             title: 'Event Name',
                             color: AppColors.jetBlack,
                             weight: FontWeight.w600,
-                            size: AppSize.medium,
+                            size: AppFontSize.medium,
                           ),
                           const Gap(10),
                           CustomTextField(
@@ -185,7 +185,7 @@ class _CreateEventState extends State<CreateEvent> {
                             title: 'Date',
                             color: AppColors.jetBlack,
                             weight: FontWeight.w600,
-                            size: AppSize.medium,
+                            size: AppFontSize.medium,
                           ),
                           const SizedBox(
                             height: 5,
@@ -224,7 +224,7 @@ class _CreateEventState extends State<CreateEvent> {
                                   title: 'Start Time',
                                   color: AppColors.jetBlack,
                                   weight: FontWeight.w600,
-                                  size: AppSize.medium,
+                                  size: AppFontSize.medium,
                                 ),
                               ),
                               Expanded(
@@ -232,7 +232,7 @@ class _CreateEventState extends State<CreateEvent> {
                                   title: 'End Time',
                                   color: AppColors.jetBlack,
                                   weight: FontWeight.w600,
-                                  size: AppSize.medium,
+                                  size: AppFontSize.medium,
                                 ),
                               ),
                             ],
@@ -321,7 +321,7 @@ class _CreateEventState extends State<CreateEvent> {
                             title: 'Location',
                             color: AppColors.jetBlack,
                             weight: FontWeight.w600,
-                            size: AppSize.medium,
+                            size: AppFontSize.medium,
                           ),
                           const Gap(10),
                           CustomTextField(
@@ -342,7 +342,7 @@ class _CreateEventState extends State<CreateEvent> {
                             title: 'Description',
                             color: AppColors.jetBlack,
                             weight: FontWeight.w600,
-                            size: AppSize.medium,
+                            size: AppFontSize.medium,
                           ),
                           const SizedBox(
                             height: 5,
@@ -375,7 +375,7 @@ class _CreateEventState extends State<CreateEvent> {
                                   weight: FontWeight.w700,
                                   textColor: AppColors.white,
                                   gradient: customGradient,
-                                  textSize: AppSize.regular,
+                                  textSize: AppFontSize.regular,
                                   onPressed: () async {
                                     Uuid uuid = const Uuid();
                                     String uv4 = uuid.v4();
@@ -447,6 +447,6 @@ class _CreateEventState extends State<CreateEvent> {
     return const TextStyle(
         color: AppColors.grey,
         fontWeight: FontWeight.w400,
-        fontSize: AppSize.medium);
+        fontSize: AppFontSize.medium);
   }
 }

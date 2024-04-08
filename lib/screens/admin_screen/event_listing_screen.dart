@@ -59,7 +59,7 @@ class _EventListingState extends State<EventListing> {
                         const CustomText(
                           title: 'Event listing',
                           weight: FontWeight.w600,
-                          size: AppSize.regular,
+                          size: AppFontSize.regular,
                         ),
                         InkWell(
                           onTap: () {
@@ -229,7 +229,7 @@ class _EventListingState extends State<EventListing> {
                                                   child: CustomText(
                                                     title:
                                                         'No record found here',
-                                                    size: AppSize.regular,
+                                                    size: AppFontSize.regular,
                                                     color: AppColors.jetBlack,
                                                   ),
                                                 ),
@@ -288,7 +288,7 @@ class _EventListingState extends State<EventListing> {
                     status,
                     style: TextStyle(
                       color: textColor,
-                      fontSize: AppSize.small,
+                      fontSize: AppFontSize.small,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -307,7 +307,7 @@ DataCell _dataCellForNames({required String title}) {
     Text(
       AppUtils.textTo32Characters(title),
       style: const TextStyle(
-        fontSize: AppSize.small,
+        fontSize: AppFontSize.small,
         fontWeight: FontWeight.w400,
         color: AppColors.grey,
       ),
@@ -322,7 +322,7 @@ DataCell _createDataCell(String text) {
     Text(
       AppUtils.textTo32Characters(text),
       style: const TextStyle(
-        fontSize: AppSize.small,
+        fontSize: AppFontSize.small,
         fontWeight: FontWeight.w400,
         color: AppColors.grey,
       ),
@@ -337,7 +337,7 @@ DataColumn _buildTableCell(String text) {
     label: Center(
       child: Text(AppUtils.textTo32Characters(text),
           style: const TextStyle(
-              fontSize: AppSize.regular,
+              fontSize: AppFontSize.regular,
               fontWeight: FontWeight.w600,
               color: Colors.black)),
     ),

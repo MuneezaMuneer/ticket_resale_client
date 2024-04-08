@@ -16,7 +16,6 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:ticket_resale/db_services/firestore_services_admin.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/models/models.dart';
-import 'package:ticket_resale/models/user_models.dart';
 import 'package:ticket_resale/utils/utils.dart';
 
 import '../widgets/custom_navigation_admin.dart';
@@ -43,7 +42,7 @@ class AuthServices {
     return digest.toString();
   }
 
-  static Future<UserCredential> signInWithApple(BuildContext context) async {
+  static Future<UserCredential?> signInWithApple(BuildContext context) async {
     final rawNonce = generateNonce();
     final nonce = sha256ofString(rawNonce);
 
@@ -72,7 +71,7 @@ class AuthServices {
     UserCredential? userCredential =
         await FirebaseAuth.instance.signInWithCredential(oauthCredential);
 
-    // Update user . Note this will not update usename on 2nd logg.login as apple provides userName for very first time ONLY.Apple also doesn't provide photoUrl.
+    // Update user . Note this will not update usename on 2nd login as apple provides userName for very first time ONLY.Apple also doesn't provide photoUrl.
     fullName.trim();
     if (fullName.length > 2) {
       await userCredential.user!.updateDisplayName(fullName);

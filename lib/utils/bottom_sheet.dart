@@ -73,7 +73,7 @@ class CustomBottomSheet {
                           gradient: customGradient,
                           btnText: btnText,
                           textColor: AppColors.white,
-                          textSize: AppSize.regular,
+                          textSize: AppFontSize.regular,
                           weight: FontWeight.w500,
                           onPressed: onTape,
                         ),
@@ -141,7 +141,7 @@ class CustomBottomSheet {
                           fixedWidth: 200,
                           gradient: customGradient,
                           textColor: AppColors.white,
-                          textSize: AppSize.regular,
+                          textSize: AppFontSize.regular,
                           weight: FontWeight.w500,
                           btnText: 'Save',
                           onPressed: onTape,
@@ -266,7 +266,6 @@ class CustomBottomSheet {
                                                         subtitle: Text(
                                                             '\$${ticket.ticketPrice}'),
                                                       ),
-                                                      
                                                       Divider(
                                                         color: AppColors
                                                             .lightBlack
@@ -298,13 +297,14 @@ class CustomBottomSheet {
                                                     title:
                                                         'Total Price: $totalPrice',
                                                     color: AppColors.jetBlack,
-                                                    size: AppSize.regular,
+                                                    size: AppFontSize.regular,
                                                   ),
                                                   CustomButton(
                                                     fixedWidth: 70,
                                                     gradient: customGradient,
                                                     textColor: AppColors.white,
-                                                    textSize: AppSize.regular,
+                                                    textSize:
+                                                        AppFontSize.regular,
                                                     weight: FontWeight.w700,
                                                     btnText: 'Pay',
                                                     onPressed: () {

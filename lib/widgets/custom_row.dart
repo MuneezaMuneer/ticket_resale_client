@@ -7,7 +7,7 @@ import 'package:ticket_resale/widgets/widgets.dart';
 
 class CustomRow extends StatefulWidget {
   final String userId;
-   CustomRow({super.key, required this.userId});
+  CustomRow({super.key, required this.userId});
 
   @override
   State<CustomRow> createState() => _CustomRowState();
@@ -17,8 +17,7 @@ class _CustomRowState extends State<CustomRow> {
   late Stream<List<FeedbackModel>> fetchRatings;
   @override
   void initState() {
-    fetchRatings = FireStoreServicesClient.fetchFeedback(
-        userId: widget.userId);
+    fetchRatings = FireStoreServicesClient.fetchFeedback(userId: widget.userId);
 
     super.initState();
   }
@@ -49,7 +48,7 @@ class _CustomRowState extends State<CustomRow> {
                       return CustomText(
                         title: averageRating.toStringAsFixed(1),
                         weight: FontWeight.w600,
-                        size: AppSize.large,
+                        size: AppFontSize.large,
                         color: AppColors.charcoal,
                       );
                     } else {
@@ -67,7 +66,7 @@ class _CustomRowState extends State<CustomRow> {
             child: CustomText(
               title: '(23 Transactions) ',
               weight: FontWeight.w400,
-              size: AppSize.small,
+              size: AppFontSize.small,
               color: AppColors.charcoal,
             ),
           ),

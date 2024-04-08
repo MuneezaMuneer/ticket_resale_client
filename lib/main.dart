@@ -1,6 +1,8 @@
+import 'package:device_preview/device_preview.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -24,14 +26,11 @@ void main() async {
   FirebaseMessaging.instance.requestPermission();
   AppText.preference = await SharedPreferences.getInstance();
   runApp(
-    const TicketResale(),
+    DevicePreview(
+      enabled: !kReleaseMode,
+      builder: (context) => const TicketResale(),
+    ),
   );
-  // runApp(
-  //   DevicePreview(
-  //     enabled: !kReleaseMode,
-  //     builder: (context) => const TicketResale(),
-  //   ),
-  // );
 }
 
 class TicketResale extends StatelessWidget {

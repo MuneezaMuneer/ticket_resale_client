@@ -21,7 +21,7 @@ class TermsOfUseScreen extends StatelessWidget {
               CustomText(
                 title: TermOfUseText.termOfUse,
                 color: AppColors.brown,
-                size: AppSize.regular,
+                size: AppFontSize.regular,
                 softWrap: true,
                 textAlign: TextAlign.start,
                 weight: FontWeight.w400,

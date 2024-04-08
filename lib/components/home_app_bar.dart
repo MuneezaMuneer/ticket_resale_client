@@ -78,13 +78,13 @@ class _HomeAppBarState extends State<HomeAppBar> {
                     title: AppUtils.getGreeting(),
                     color: AppColors.white,
                     weight: FontWeight.w400,
-                    size: AppSize.small,
+                    size: AppFontSize.small,
                   ),
                   CustomText(
                     title: displayName != null ? displayName ?? '' : '',
                     color: AppColors.white,
                     weight: FontWeight.w700,
-                    size: AppSize.regular,
+                    size: AppFontSize.regular,
                   )
                 ],
               ),
@@ -142,13 +142,13 @@ class _HomeAppBarState extends State<HomeAppBar> {
                   const CustomText(
                     title: 'Discover Amazing',
                     color: AppColors.white,
-                    size: AppSize.regular,
+                    size: AppFontSize.regular,
                     weight: FontWeight.w400,
                   ),
                   const CustomText(
                     title: 'Events Tickets Now',
                     color: AppColors.white,
-                    size: AppSize.verylarge,
+                    size: AppFontSize.verylarge,
                     weight: FontWeight.w700,
                   ),
                   const Gap(12),

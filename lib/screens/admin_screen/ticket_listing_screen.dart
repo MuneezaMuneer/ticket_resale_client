@@ -81,7 +81,7 @@ class _TicketListingState extends State<TicketListing> {
                     const CustomText(
                       title: 'Ticket listing',
                       weight: FontWeight.w600,
-                      size: AppSize.regular,
+                      size: AppFontSize.regular,
                     ),
                     FilterMenuAdmin(
                       onSelectedPrice: (min, max) {
@@ -219,7 +219,7 @@ class _TicketListingState extends State<TicketListing> {
                                 return const Center(
                                   child: CustomText(
                                     title: 'No record found here',
-                                    size: AppSize.regular,
+                                    size: AppFontSize.regular,
                                     color: AppColors.jetBlack,
                                   ),
                                 );
@@ -302,7 +302,7 @@ class _TicketListingState extends State<TicketListing> {
                     status,
                     style: TextStyle(
                       color: textColor,
-                      fontSize: AppSize.small,
+                      fontSize: AppFontSize.small,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -324,7 +324,7 @@ DataCell _dataCellForNames({
   return DataCell(Text(
     AppUtils.textTo32Characters(name),
     style: const TextStyle(
-      fontSize: AppSize.small,
+      fontSize: AppFontSize.small,
       fontWeight: FontWeight.w400,
       color: AppColors.grey,
     ),
@@ -338,7 +338,7 @@ DataCell _createDataCell(String text) {
     Text(
       AppUtils.textTo32Characters(text),
       style: const TextStyle(
-        fontSize: AppSize.small,
+        fontSize: AppFontSize.small,
         fontWeight: FontWeight.w400,
         color: AppColors.grey,
       ),
@@ -353,7 +353,7 @@ DataColumn _buildTableCell(String text) {
     label: Center(
       child: Text(AppUtils.textTo32Characters(text),
           style: const TextStyle(
-              fontSize: AppSize.regular,
+              fontSize: AppFontSize.regular,
               fontWeight: FontWeight.w600,
               color: Colors.black)),
     ),

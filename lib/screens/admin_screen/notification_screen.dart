@@ -108,7 +108,7 @@ class _AdminNotificationState extends State<AdminNotification> {
                         title: 'Clear All',
                         color: Colors.red,
                         weight: FontWeight.w700,
-                        size: AppSize.medium,
+                        size: AppFontSize.medium,
                       ),
                     ),
                   ),
@@ -181,7 +181,7 @@ class _AdminNotificationState extends State<AdminNotification> {
                                             text: notification[index].title,
                                             style: const TextStyle(
                                               color: Colors.black,
-                                              fontSize: AppSize.medium,
+                                              fontSize: AppFontSize.medium,
                                               fontWeight: FontWeight.w600,
                                             ),
                                             children: <TextSpan>[
@@ -190,7 +190,7 @@ class _AdminNotificationState extends State<AdminNotification> {
                                                 text: notification[index].body,
                                                 style: const TextStyle(
                                                   color: AppColors.grey,
-                                                  fontSize: AppSize.medium,
+                                                  fontSize: AppFontSize.medium,
                                                   fontWeight: FontWeight.w300,
                                                 ),
                                               ),
@@ -202,7 +202,7 @@ class _AdminNotificationState extends State<AdminNotification> {
                                           title: AppUtils.formatTimeStamp(
                                               notification[index].time!),
                                           weight: FontWeight.w400,
-                                          size: AppSize.small,
+                                          size: AppFontSize.small,
                                         ),
                                       ],
                                     ),

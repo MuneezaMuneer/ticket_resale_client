@@ -107,13 +107,15 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
           CustomText(
             title: '${FirebaseAuth.instance.currentUser!.displayName}',
             weight: FontWeight.w600,
-            size: AppSize.large,
+            size: AppFontSize.large,
             color: AppColors.jetBlack,
           ),
           const SizedBox(
             height: 5,
           ),
-           CustomRow(userId: AuthServices.getCurrentUser.uid,),
+          CustomRow(
+            userId: AuthServices.getCurrentUser.uid,
+          ),
           const SizedBox(
             height: 3,
           ),
@@ -138,14 +140,14 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
                           children: [
                             const CustomText(
                               title: 'Your Profile Level',
-                              size: AppSize.large,
+                              size: AppFontSize.large,
                               weight: FontWeight.w600,
                               color: AppColors.jetBlack,
                             ),
                             CustomText(
                               title:
                                   'Complete below mentioned steps to get higher trust level badge for you profile.',
-                              size: AppSize.medium,
+                              size: AppFontSize.medium,
                               weight: FontWeight.w400,
                               softWrap: true,
                               color: AppColors.jetBlack.withOpacity(0.7),
@@ -335,7 +337,7 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
                   Expanded(
                     child: CustomText(
                       title: title,
-                      size: AppSize.intermediate,
+                      size: AppFontSize.intermediate,
                       weight: FontWeight.w400,
                     ),
                   ),
@@ -360,7 +362,7 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
                   ),
                   CustomText(
                     title: isVerified ? levelText : leveltext,
-                    size: AppSize.verySmall,
+                    size: AppFontSize.verySmall,
                     weight: FontWeight.w400,
                     color: isVerified ? AppColors.yellow : AppColors.purple,
                   ),

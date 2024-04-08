@@ -91,13 +91,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
             CustomText(
               title: '${FirebaseAuth.instance.currentUser!.displayName}',
               weight: FontWeight.w600,
-              size: AppSize.large,
+              size: AppFontSize.large,
               color: AppColors.jetBlack,
             ),
             const SizedBox(
               height: 5,
             ),
-           CustomRow(userId: AuthServices.getCurrentUser.uid,),
+            CustomRow(
+              userId: AuthServices.getCurrentUser.uid,
+            ),
             const SizedBox(
               height: 3,
             ),

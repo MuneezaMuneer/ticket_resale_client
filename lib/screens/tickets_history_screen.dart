@@ -112,14 +112,16 @@ class _TicketsHistoryScreenState extends State<TicketsHistoryScreen> {
                                   return Padding(
                                     padding: const EdgeInsets.only(top: 15),
                                     child: CustomTile(
-                                        title:
-                                            '${tickets[index].ticketName} TICKET AVAILABLE',
-                                        subTitle:
-                                            'VIP Seats + Exclusive braclets',
-                                        price: '${tickets[index].ticketPrice}',
-                                        imagePath:
-                                            '${tickets[index].ticketImage}',
-                                        userId: '${tickets[index].buyerUid}', text: 'Buy by',),
+                                      title:
+                                          '${tickets[index].ticketName} TICKET AVAILABLE',
+                                      subTitle:
+                                          'VIP Seats + Exclusive braclets',
+                                      price: '${tickets[index].ticketPrice}',
+                                      imagePath:
+                                          '${tickets[index].ticketImage}',
+                                      userId: '${tickets[index].buyerUid}',
+                                      text: 'Buy by',
+                                    ),
                                   );
                                 },
                               );
@@ -181,13 +183,13 @@ class _TicketsHistoryScreenState extends State<TicketsHistoryScreen> {
                         CustomText(
                           title: '$title',
                           color: AppColors.jetBlack,
-                          size: AppSize.small,
+                          size: AppFontSize.small,
                           weight: FontWeight.w600,
                         ),
                         CustomText(
                           title: '$subTitle',
                           color: AppColors.lightGrey.withOpacity(0.6),
-                          size: AppSize.xsmall,
+                          size: AppFontSize.xsmall,
                           weight: FontWeight.w400,
                         ),
                       ],

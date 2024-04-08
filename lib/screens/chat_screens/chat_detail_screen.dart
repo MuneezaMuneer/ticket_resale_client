@@ -148,7 +148,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                                                                 DateTime.now()),
                                                     color: AppColors.lightBlack
                                                         .withOpacity(0.6),
-                                                    size: AppSize.xxsmall,
+                                                    size: AppFontSize.xxsmall,
                                                     textAlign: TextAlign.start,
                                                   ),
                                                 ],
@@ -236,7 +236,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                                         userModel: userModel);
                                   },
                                   textColor: AppColors.white,
-                                  textSize: AppSize.regular,
+                                  textSize: AppFontSize.regular,
                                   gradient: customGradient,
                                   btnText: 'Buy',
                                   weight: FontWeight.w700,

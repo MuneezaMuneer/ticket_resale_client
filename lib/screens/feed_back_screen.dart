@@ -53,7 +53,7 @@ class _FeedBackScreenState extends State<FeedBackScreen> {
                   child: const CustomText(
                     softWrap: true,
                     title: 'Give Feedback on your recent purchase with',
-                    size: AppSize.large,
+                    size: AppFontSize.large,
                     weight: FontWeight.w700,
                     textAlign: TextAlign.center,
                     color: AppColors.jetBlack,
@@ -171,7 +171,7 @@ class _FeedBackScreenState extends State<FeedBackScreen> {
                       const Center(
                         child: CustomText(
                           title: 'Rate your overall experience',
-                          size: AppSize.medium,
+                          size: AppFontSize.medium,
                           color: AppColors.jetBlack,
                           weight: FontWeight.w900,
                         ),
@@ -179,7 +179,7 @@ class _FeedBackScreenState extends State<FeedBackScreen> {
                       Center(
                         child: CustomText(
                           title: 'What do you think of this purchase',
-                          size: AppSize.medium,
+                          size: AppFontSize.medium,
                           color: AppColors.jetBlack.withOpacity(0.5),
                           weight: FontWeight.w400,
                         ),
@@ -203,7 +203,7 @@ class _FeedBackScreenState extends State<FeedBackScreen> {
                       const Gap(20),
                       const CustomText(
                         title: 'Comment',
-                        size: AppSize.medium,
+                        size: AppFontSize.medium,
                         weight: FontWeight.w600,
                       ),
                       const Gap(10),
@@ -261,7 +261,7 @@ class _FeedBackScreenState extends State<FeedBackScreen> {
                               },
                               textColor: AppColors.white,
                               loading: loadingNotifier.value,
-                              textSize: AppSize.regular,
+                              textSize: AppFontSize.regular,
                               btnText: 'Submit',
                               gradient: customGradient,
                               weight: FontWeight.w700,
@@ -302,7 +302,7 @@ Text buildHeaderText(String text) {
   return Text(
     text,
     style: TextStyle(
-        fontSize: AppSize.medium,
+        fontSize: AppFontSize.medium,
         fontWeight: FontWeight.w600,
         color: AppColors.jetBlack.withOpacity(0.7)),
   );
@@ -332,7 +332,7 @@ Row buildButtonRow({
           gradient:
               selectedValue == values[index] ? customGradient : whiteGradient,
           weight: FontWeight.w500,
-          textSize: AppSize.regular,
+          textSize: AppFontSize.regular,
         ),
       ),
     ),

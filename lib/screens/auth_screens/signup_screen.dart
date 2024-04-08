@@ -79,14 +79,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         text: 'Register to ',
                         style: const TextStyle(
                             color: AppColors.jetBlack,
-                            fontSize: AppSize.verylarge,
+                            fontSize: AppFontSize.verylarge,
                             fontWeight: FontWeight.w700),
                         children: <TextSpan>[
                           TextSpan(
                               text: 'Rave Trade',
                               style: const TextStyle(
                                   color: AppColors.darkpurple,
-                                  fontSize: AppSize.verylarge,
+                                  fontSize: AppFontSize.verylarge,
                                   fontWeight: FontWeight.w700),
                               recognizer: TapGestureRecognizer()..onTap = () {})
                         ]),
@@ -209,18 +209,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     height: 12,
                   ),
                   CustomTextField(
-                    controller: instaController,
-                    hintStyle: const TextStyle(color: AppColors.silver),
-                    hintText: 'Instagram @',
-                    keyBoardType: TextInputType.emailAddress,
-                    validator: (url) {
-                      if (url!.isEmpty) {
-                        return 'Please enter valid instagram';
-                      } else {
-                        return null;
-                      }
-                    },
-                  ),
+                      controller: instaController,
+                      hintStyle: const TextStyle(color: AppColors.silver),
+                      hintText: '@username',
+                      keyBoardType: TextInputType.emailAddress,
+                      validator: InstagramValidator.validator()),
                   const SizedBox(
                     height: 12,
                   ),
@@ -292,7 +285,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           textColor: AppColors.white,
                           gradient: customGradient,
                           loading: loading.value,
-                          textSize: AppSize.regular,
+                          textSize: AppFontSize.regular,
                           onPressed: () async {
                             if (formKey.currentState!.validate()) {
                               FocusScope.of(context).unfocus();
@@ -429,14 +422,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       text: 'Don\'t have an account?  ',
                       style: const TextStyle(
                           color: AppColors.lightBlack,
-                          fontSize: AppSize.medium,
+                          fontSize: AppFontSize.medium,
                           fontWeight: FontWeight.w400),
                       children: <TextSpan>[
                         TextSpan(
                           text: 'Sign in ',
                           style: const TextStyle(
                               color: AppColors.electricBlue,
-                              fontSize: AppSize.medium,
+                              fontSize: AppFontSize.medium,
                               fontWeight: FontWeight.w400),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {

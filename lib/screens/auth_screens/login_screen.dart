@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -37,14 +38,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     text: 'Sign in to ',
                     style: const TextStyle(
                         color: Colors.black,
-                        fontSize: AppSize.xxlarge,
+                        fontSize: AppFontSize.xxlarge,
                         fontWeight: FontWeight.w700),
                     children: <TextSpan>[
                       TextSpan(
                         text: 'Rave Trade',
                         style: const TextStyle(
                             color: AppColors.darkpurple,
-                            fontSize: AppSize.xxlarge,
+                            fontSize: AppFontSize.xxlarge,
                             fontWeight: FontWeight.w700),
                         recognizer: TapGestureRecognizer()..onTap = () {},
                       )
@@ -54,7 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 const CustomText(
                   title: 'to get started',
                   weight: FontWeight.w700,
-                  size: AppSize.xxlarge,
+                  size: AppFontSize.xxlarge,
                   color: AppColors.jetBlack,
                 ),
                 SizedBox(
@@ -92,7 +93,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     );
                   },
                 ),
-                
                 SizedBox(
                   height: height * 0.02,
                 ),
@@ -108,6 +108,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       isSocial: true,
                       onPressed: () async {
                         appleNotifier.value = true;
+                        AuthServices.signInWithApple(context)
+                            .then((credential) {
+                          if (credential != null) {
+                            appleNotifier.value = false;
+                            Navigator.pushNamedAndRemoveUntil(context,
+                                AppRoutes.navigationScreen, (route) => false);
+                          }
+                        });
                       },
                     );
                   },
@@ -120,7 +128,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   weight: FontWeight.w700,
                   textColor: AppColors.white,
                   gradient: customGradient,
-                  textSize: AppSize.medium,
+                  textSize: AppFontSize.medium,
                   onPressed: () {
                     Navigator.pushNamed(context, AppRoutes.signIn);
                   },
@@ -131,14 +139,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     text: 'Not a member? ',
                     style: const TextStyle(
                         color: AppColors.lightBlack,
-                        fontSize: AppSize.medium,
+                        fontSize: AppFontSize.medium,
                         fontWeight: FontWeight.w400),
                     children: <TextSpan>[
                       TextSpan(
                         text: 'Register Now ',
                         style: const TextStyle(
                             color: AppColors.electricBlue,
-                            fontSize: AppSize.medium,
+                            fontSize: AppFontSize.medium,
                             fontWeight: FontWeight.w400),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {

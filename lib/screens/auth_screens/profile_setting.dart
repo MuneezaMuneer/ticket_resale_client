@@ -123,7 +123,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
             CustomText(
               title: '${FirebaseAuth.instance.currentUser!.displayName}',
               weight: FontWeight.w600,
-              size: AppSize.large,
+              size: AppFontSize.large,
               color: AppColors.jetBlack,
             ),
             const SizedBox(
@@ -170,19 +170,13 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                         height: 5,
                       ),
                       CustomTextField(
-                        controller: instaController,
-                        hintStyle: const TextStyle(
-                            color: AppColors.lightBlack,
-                            fontWeight: FontWeight.w400,
-                            fontSize: AppSize.small),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter instagram username';
-                          }
-
-                          return null;
-                        },
-                      ),
+                          controller: instaController,
+                          hintText: '@username',
+                          hintStyle: const TextStyle(
+                              color: AppColors.lightBlack,
+                              fontWeight: FontWeight.w400,
+                              fontSize: AppFontSize.small),
+                          validator: InstagramValidator.validator()),
                       const SizedBox(height: 15),
                       Text(
                         'Email ID',
@@ -291,7 +285,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                                 title: 'Verify',
                                 color: AppColors.springGreen,
                                 weight: FontWeight.w600,
-                                size: AppSize.medium,
+                                size: AppFontSize.medium,
                               ),
                             ),
                           ),
@@ -345,7 +339,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                             weight: FontWeight.w700,
                             textColor: AppColors.white,
                             gradient: customGradient,
-                            textSize: AppSize.regular,
+                            textSize: AppFontSize.regular,
                             onPressed: () async {
                               if (formKey.currentState!.validate()) {
                                 loading.value = true;
@@ -400,7 +394,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
     return const TextStyle(
       color: AppColors.lightBlack,
       fontWeight: FontWeight.w600,
-      fontSize: AppSize.medium,
+      fontSize: AppFontSize.medium,
     );
   }
 
@@ -408,6 +402,6 @@ class _ProfileSettingsState extends State<ProfileSettings> {
     return TextStyle(
         color: AppColors.lightBlack.withOpacity(0.8),
         fontWeight: FontWeight.w400,
-        fontSize: AppSize.medium);
+        fontSize: AppFontSize.medium);
   }
 }

@@ -140,7 +140,7 @@ class _TicketScreenState extends State<TicketScreen> {
                                         const CustomText(
                                           title: 'Add Ticket Image Thumbnail',
                                           color: AppColors.silver,
-                                          size: AppSize.medium,
+                                          size: AppFontSize.medium,
                                           weight: FontWeight.w500,
                                         )
                                       ],
@@ -152,7 +152,7 @@ class _TicketScreenState extends State<TicketScreen> {
                     const CustomText(
                       title:
                           '* Proof of ticket ownership, can be screenshot or email.',
-                      size: AppSize.small,
+                      size: AppFontSize.small,
                       weight: FontWeight.w500,
                       softWrap: true,
                       color: AppColors.lightGrey,
@@ -164,7 +164,7 @@ class _TicketScreenState extends State<TicketScreen> {
                       title: 'Festival Name',
                       color: AppColors.gryishBlue,
                       weight: FontWeight.w600,
-                      size: AppSize.medium,
+                      size: AppFontSize.medium,
                     ),
                     const SizedBox(
                       height: 5,
@@ -266,7 +266,7 @@ class _TicketScreenState extends State<TicketScreen> {
                       title: 'Ticket Type',
                       color: AppColors.gryishBlue,
                       weight: FontWeight.w600,
-                      size: AppSize.medium,
+                      size: AppFontSize.medium,
                     ),
                     const SizedBox(
                       height: 5,
@@ -299,7 +299,7 @@ class _TicketScreenState extends State<TicketScreen> {
                       title: 'Set Price',
                       color: AppColors.gryishBlue,
                       weight: FontWeight.w600,
-                      size: AppSize.medium,
+                      size: AppFontSize.medium,
                     ),
                     const SizedBox(
                       height: 5,
@@ -327,7 +327,7 @@ class _TicketScreenState extends State<TicketScreen> {
                       title: 'Description',
                       color: AppColors.gryishBlue,
                       weight: FontWeight.w600,
-                      size: AppSize.medium,
+                      size: AppFontSize.medium,
                     ),
                     const SizedBox(
                       height: 5,
@@ -352,7 +352,7 @@ class _TicketScreenState extends State<TicketScreen> {
                           loading: notifier.value,
                           textColor: AppColors.white,
                           gradient: customGradient,
-                          textSize: AppSize.regular,
+                          textSize: AppFontSize.regular,
                           onPressed: () async {
                             if (formKey.currentState!.validate()) {
                               FocusScope.of(context).unfocus();
@@ -454,6 +454,6 @@ class _TicketScreenState extends State<TicketScreen> {
     return const TextStyle(
         color: AppColors.silver,
         fontWeight: FontWeight.w400,
-        fontSize: AppSize.medium);
+        fontSize: AppFontSize.medium);
   }
 }

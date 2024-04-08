@@ -184,12 +184,12 @@ class AppUtils {
       minDateTime: DateTime(1900),
       pickerTextStyle: const TextStyle(
         color: AppColors.purple,
-        fontSize: AppSize.medium,
+        fontSize: AppFontSize.medium,
         fontWeight: FontWeight.w700,
         letterSpacing: 1,
       ),
       titleStyle: const TextStyle(
-        fontSize: AppSize.regular,
+        fontSize: AppFontSize.regular,
         fontWeight: FontWeight.w600,
         color: AppColors.jetBlack,
       ),
@@ -213,8 +213,7 @@ class AppUtils {
     }
   }
 
-  
- static String mapIndexToFeedbackValue(int index) {
+  static String mapIndexToFeedbackValue(int index) {
     switch (index) {
       case 0:
         return 'Negative';

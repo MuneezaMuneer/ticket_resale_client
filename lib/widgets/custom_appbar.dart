@@ -89,7 +89,7 @@ class CustomAppBarClient extends StatelessWidget
                   CustomText(
                     title: '$title',
                     weight: FontWeight.w600,
-                    size: AppSize.regular,
+                    size: AppFontSize.regular,
                     color: AppColors.white,
                   )
                 ],
@@ -170,7 +170,7 @@ class CustomAppBarAdmin extends StatelessWidget implements PreferredSizeWidget {
                   CustomText(
                     title: 'Admin Panel',
                     weight: FontWeight.w600,
-                    size: AppSize.regular,
+                    size: AppFontSize.regular,
                     color: AppColors.white,
                   )
                 ],
@@ -279,7 +279,7 @@ class _CustomAppBarFieldState extends State<CustomAppBarField> {
               hintText: widget.text,
               hintStyle: const TextStyle(
                 fontWeight: FontWeight.w400,
-                fontSize: AppSize.medium,
+                fontSize: AppFontSize.medium,
                 color: AppColors.grey,
               ),
               suffixIcon: widget.searchController!.text.isEmpty

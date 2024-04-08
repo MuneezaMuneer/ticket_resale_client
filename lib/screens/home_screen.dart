@@ -71,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     const CustomText(
                       title: 'Upcoming Event Tickets',
                       color: AppColors.jetBlack,
-                      size: AppSize.regular,
+                      size: AppFontSize.regular,
                       weight: FontWeight.w600,
                     ),
                     const Gap(15),
@@ -92,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             snapshot.data!.isNotEmpty) {
                           final data = snapshot.data;
                           data!.sort((a, b) => a.date!.compareTo(b.date!));
-    
+
                           final nearestEvent = data.first;
                           return Stack(
                             clipBehavior: Clip.none,
@@ -132,8 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       border: Border.all(
                                           color: AppColors.pastelBlue),
                                       color: AppColors.white,
-                                      borderRadius:
-                                          BorderRadius.circular(10)),
+                                      borderRadius: BorderRadius.circular(10)),
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -190,7 +189,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     const CustomText(
                       title: 'Popular DJS',
                       color: AppColors.jetBlack,
-                      size: AppSize.regular,
+                      size: AppFontSize.regular,
                       weight: FontWeight.w600,
                     ),
                     const Gap(15),
@@ -226,7 +225,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       title: namesDJS[index],
                                       color:
                                           AppColors.jetBlack.withOpacity(0.7),
-                                      size: AppSize.verySmall,
+                                      size: AppFontSize.verySmall,
                                       weight: FontWeight.w600,
                                     )
                                   ],
@@ -244,7 +243,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         const CustomText(
                           title: 'Events',
                           color: AppColors.jetBlack,
-                          size: AppSize.regular,
+                          size: AppFontSize.regular,
                           weight: FontWeight.w600,
                         ),
                         GestureDetector(
@@ -260,7 +259,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: CustomText(
                               title: 'View All',
                               color: AppColors.blueViolet,
-                              size: AppSize.small,
+                              size: AppFontSize.small,
                               weight: FontWeight.w400,
                             ),
                           ),
@@ -290,13 +289,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                       .where((element) =>
                                           element.eventName!
                                               .toLowerCase()
-                                              .contains(
-                                                  query.toLowerCase()) ||
+                                              .contains(query.toLowerCase()) ||
                                           element.location!
                                               .toLowerCase()
                                               .contains(query.toLowerCase()))
                                       .toList();
-    
+
                               if (data!.isNotEmpty) {
                                 return SizedBox(
                                   height: width < 370
@@ -328,8 +326,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 );
                               } else {
                                 return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 40),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 40),
                                   child: _buildText(),
                                 );
                               }
@@ -357,7 +355,7 @@ class _HomeScreenState extends State<HomeScreen> {
       'No Record Found',
       style: TextStyle(
           color: AppColors.jetBlack,
-          fontSize: AppSize.medium,
+          fontSize: AppFontSize.medium,
           fontWeight: FontWeight.w400),
     ));
   }
@@ -386,7 +384,7 @@ Widget rowText(String title, String svgIcon) {
         child: CustomText(
           title: title,
           color: AppColors.lightGrey,
-          size: AppSize.xsmall,
+          size: AppFontSize.xsmall,
           weight: FontWeight.w400,
         ),
       )

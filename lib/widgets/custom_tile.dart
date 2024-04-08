@@ -68,13 +68,13 @@ class _CustomTileState extends State<CustomTile> {
                               CustomText(
                                 title: '${widget.title}',
                                 color: AppColors.jetBlack,
-                                size: AppSize.small,
+                                size: AppFontSize.small,
                                 weight: FontWeight.w600,
                               ),
                               CustomText(
                                 title: '${widget.subTitle}',
                                 color: AppColors.lightGrey.withOpacity(0.6),
-                                size: AppSize.xsmall,
+                                size: AppFontSize.xsmall,
                                 weight: FontWeight.w400,
                               ),
                             ],
@@ -142,14 +142,14 @@ class _CustomTileState extends State<CustomTile> {
                                       title: widget.text,
                                       color:
                                           AppColors.lightBlack.withOpacity(0.7),
-                                      size: AppSize.verySmall,
+                                      size: AppFontSize.verySmall,
                                       weight: FontWeight.w300,
                                     ),
                                     CustomText(
                                       title: '${data.displayName}',
                                       color:
                                           AppColors.lightBlack.withOpacity(0.6),
-                                      size: AppSize.intermediate,
+                                      size: AppFontSize.intermediate,
                                       weight: FontWeight.w600,
                                     ),
                                   ],

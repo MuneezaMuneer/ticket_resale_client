@@ -89,7 +89,7 @@ class _CommentScreenState extends State<CommentScreen> {
                               children: [
                                 const CustomText(
                                   title: 'Comments',
-                                  size: AppSize.regular,
+                                  size: AppFontSize.regular,
                                   color: AppColors.jetBlack,
                                   weight: FontWeight.w600,
                                 ),
@@ -97,7 +97,7 @@ class _CommentScreenState extends State<CommentScreen> {
                                   children: [
                                     const CustomText(
                                       title: 'Subscribe to comments',
-                                      size: AppSize.medium,
+                                      size: AppFontSize.medium,
                                       weight: FontWeight.w400,
                                       color: AppColors.lightGrey,
                                     ),
@@ -181,7 +181,7 @@ class _CommentScreenState extends State<CommentScreen> {
                                                           CustomText(
                                                             title:
                                                                 '${userData.displayName}',
-                                                            size: AppSize
+                                                            size: AppFontSize
                                                                 .intermediate,
                                                             weight:
                                                                 FontWeight.w600,
@@ -209,8 +209,8 @@ class _CommentScreenState extends State<CommentScreen> {
                                                                     (commentData[
                                                                             index]
                                                                         .time!)),
-                                                            size:
-                                                                AppSize.xsmall,
+                                                            size: AppFontSize
+                                                                .xsmall,
                                                             weight:
                                                                 FontWeight.w400,
                                                             color: AppColors
@@ -232,7 +232,7 @@ class _CommentScreenState extends State<CommentScreen> {
                                                                 color: AppColors
                                                                     .lightGrey,
                                                                 fontSize:
-                                                                    AppSize
+                                                                    AppFontSize
                                                                         .small,
                                                                 fontWeight:
                                                                     FontWeight
@@ -254,7 +254,7 @@ class _CommentScreenState extends State<CommentScreen> {
                                                                 color: AppColors
                                                                     .lightBlack,
                                                                 fontSize:
-                                                                    AppSize
+                                                                    AppFontSize
                                                                         .small,
                                                                 fontWeight:
                                                                     FontWeight
@@ -268,7 +268,7 @@ class _CommentScreenState extends State<CommentScreen> {
                                                         title:
                                                             commentData[index]
                                                                 .comment,
-                                                        size: AppSize
+                                                        size: AppFontSize
                                                             .intermediate,
                                                         weight: FontWeight.w400,
                                                         color:
@@ -394,7 +394,8 @@ class _CommentScreenState extends State<CommentScreen> {
                                                             textColor:
                                                                 AppColors.white,
                                                             textSize:
-                                                                AppSize.medium,
+                                                                AppFontSize
+                                                                    .medium,
                                                             btnText:
                                                                 commentData[
                                                                         index]
@@ -536,7 +537,7 @@ class _CommentScreenState extends State<CommentScreen> {
                                                 child: CustomText(
                                                   title:
                                                       'Your offer is submitted',
-                                                  size: AppSize.regular,
+                                                  size: AppFontSize.regular,
                                                   color: AppColors.jetBlack,
                                                 ),
                                               ),
@@ -561,7 +562,7 @@ class _CommentScreenState extends State<CommentScreen> {
                             title: 'I need help (Alert Rave Trade Staff)',
                             color: AppColors.lightGrey,
                             weight: FontWeight.w400,
-                            size: AppSize.medium,
+                            size: AppFontSize.medium,
                           )
                         ],
                       )

@@ -110,7 +110,7 @@ class _EventScreenState extends State<EventScreen> {
                     const CustomText(
                       title: 'All Events',
                       color: AppColors.jetBlack,
-                      size: AppSize.regular,
+                      size: AppFontSize.regular,
                       weight: FontWeight.w600,
                     ),
                     const Gap(5),
@@ -205,7 +205,7 @@ class _EventScreenState extends State<EventScreen> {
                                                               ),
                                                               color: const Color(
                                                                   0Xff6E4CEE),
-                                                              size: AppSize
+                                                              size: AppFontSize
                                                                   .xxsmall,
                                                               weight: FontWeight
                                                                   .w600,
@@ -216,7 +216,7 @@ class _EventScreenState extends State<EventScreen> {
                                                                     ',${data[index].time}',
                                                                 color: const Color(
                                                                     0Xff6E4CEE),
-                                                                size: AppSize
+                                                                size: AppFontSize
                                                                     .xxsmall,
                                                                 weight:
                                                                     FontWeight
@@ -239,7 +239,7 @@ class _EventScreenState extends State<EventScreen> {
                                                     title: AppUtils.limitTo42Char(
                                                         '${data[index].eventName}'),
                                                     color: AppColors.jetBlack,
-                                                    size: AppSize.xsmall,
+                                                    size: AppFontSize.xsmall,
                                                     weight: FontWeight.w600,
                                                   ),
                                                 ),
@@ -266,7 +266,7 @@ class _EventScreenState extends State<EventScreen> {
                                                           data[index].docId);
                                                 },
                                                 textColor: AppColors.white,
-                                                textSize: AppSize.regular,
+                                                textSize: AppFontSize.regular,
                                                 isSocial: true,
                                                 gradient: customGradient,
                                                 isRounded: false,
@@ -277,7 +277,8 @@ class _EventScreenState extends State<EventScreen> {
                                                     AppColors.white,
                                                 socialTextWeight:
                                                     FontWeight.w600,
-                                                socialTextSize: AppSize.xsmall,
+                                                socialTextSize:
+                                                    AppFontSize.xsmall,
                                               ),
                                             ),
                                           ),
@@ -312,7 +313,7 @@ class _EventScreenState extends State<EventScreen> {
       'No Record Found',
       style: TextStyle(
           color: AppColors.jetBlack,
-          fontSize: AppSize.medium,
+          fontSize: AppFontSize.medium,
           fontWeight: FontWeight.w400),
     ));
   }

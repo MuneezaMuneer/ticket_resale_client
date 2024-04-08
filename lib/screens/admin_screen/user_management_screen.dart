@@ -51,7 +51,7 @@ class _UserManagementState extends State<UserManagement> {
               child: CustomText(
                 title: 'User Management',
                 weight: FontWeight.w600,
-                size: AppSize.regular,
+                size: AppFontSize.regular,
               ),
             ),
             const Gap(25),
@@ -159,7 +159,7 @@ class _UserManagementState extends State<UserManagement> {
                                     child: const Center(
                                       child: CustomText(
                                         title: 'No record found here',
-                                        size: AppSize.regular,
+                                        size: AppFontSize.regular,
                                         color: AppColors.jetBlack,
                                       ),
                                     ),
@@ -183,7 +183,7 @@ DataCell _createDataCell(String text) {
     Text(
       AppUtils.textTo32Characters(text),
       style: const TextStyle(
-        fontSize: AppSize.small,
+        fontSize: AppFontSize.small,
         fontWeight: FontWeight.w400,
         color: AppColors.grey,
       ),
@@ -198,7 +198,7 @@ DataColumn _buildTableCell(String text) {
     label: Center(
       child: Text(AppUtils.textTo32Characters(text),
           style: const TextStyle(
-              fontSize: AppSize.regular,
+              fontSize: AppFontSize.regular,
               fontWeight: FontWeight.w600,
               color: Colors.black)),
     ),
@@ -235,7 +235,7 @@ Widget createTableCell(
           cellText,
           style: TextStyle(
             color: textColor,
-            fontSize: AppSize.small,
+            fontSize: AppFontSize.small,
             fontWeight: FontWeight.w600,
           ),
         ),
