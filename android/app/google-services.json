@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "831456807199",
+    "project_id": "rave-trade-ca544",
+    "storage_bucket": "rave-trade-ca544.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:831456807199:android:6322ce8e2e2724accb882a",
+        "android_client_info": {
+          "package_name": "com.RaveTradeApp.RaveTrade"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "831456807199-2kbnkfs8gnicjhfugqmvqqfu493bfcer.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABWdHcAzfetx405yG6TvZp4MJ6DrVbS_Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "831456807199-2kbnkfs8gnicjhfugqmvqqfu493bfcer.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "831456807199-56rfb40d8h4tvk9lj2ammhk7bc8hqjv7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "ravetrade.com.ticketresale"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

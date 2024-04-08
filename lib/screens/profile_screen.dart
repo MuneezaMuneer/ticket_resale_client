@@ -1,7 +1,14 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:svg_flutter/svg.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:provider/provider.dart';
+import 'package:ticket_resale/components/components.dart';
 import 'package:ticket_resale/constants/constants.dart';
-import 'package:ticket_resale/utils/app_dialouge.dart';
+import 'package:ticket_resale/db_services/db_services.dart';
+import 'package:ticket_resale/providers/providers.dart';
+import 'package:ticket_resale/utils/utils.dart';
 import '../widgets/widgets.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -11,12 +18,29 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  late SwitchProvider switchProvider;
+  String? photoUrl;
+  late Future<Map<String, dynamic>?> profileLevelsFuture;
+  @override
+  void initState() {
+    SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+      Provider.of<SwitchProvider>(context, listen: false).loadPreferences();
+      switchProvider = Provider.of<SwitchProvider>(context, listen: false);
+    });
+    photoUrl = AuthServices.getCurrentUser.photoURL;
+    profileLevelsFuture = FireStoreServicesClient.fetchProfileLevels(
+        userId: AuthServices.getCurrentUser.uid);
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.pastelBlue.withOpacity(0.3),
-      appBar: const CustomAppBar(
+      appBar: const CustomAppBarClient(
         title: 'Profile',
+        isBackButton: false,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -24,34 +48,58 @@ class _ProfileScreenState extends State<ProfileScreen> {
             const SizedBox(
               height: 15,
             ),
-            Stack(
-              children: [
-                const SizedBox(
-                  height: 140,
-                  width: 140,
-                  child: CircleAvatar(
-                    backgroundImage: AssetImage(AppImages.profileImage),
-                  ),
-                ),
-                Positioned(
+            GestureDetector(
+              onTap: () {
+                sellerRatingDialog(
+                    context: context,
+                    networkImage: '${AuthServices.getCurrentUser.photoURL}',
+                    name: '${AuthServices.getCurrentUser.displayName}',
+                    userId: '${AuthServices.getCurrentUser.uid}');
+              },
+              child: Stack(
+                children: [
+                  SizedBox(
+                      height: 140,
+                      width: 140,
+                      child: photoUrl != null
+                          ? ClipRRect(
+                              borderRadius: BorderRadius.circular(100),
+                              child: CachedNetworkImage(
+                                imageUrl: "$photoUrl",
+                                placeholder: (context, url) =>
+                                    const CupertinoActivityIndicator(
+                                  color: AppColors.blueViolet,
+                                ),
+                                fit: BoxFit.cover,
+                              ),
+                            )
+                          : const CircleAvatar(
+                              backgroundImage:
+                                  AssetImage(AppImages.profileImage))),
+                  Positioned(
                     left: 90,
                     top: 70,
-                    child: SvgPicture.asset(AppSvgs.levelOne))
-              ],
+                    child: ProfileLevelImage(
+                        profileLevelsFuture: profileLevelsFuture),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(
-              height: 5,
+              height: 13,
             ),
-            const CustomText(
-              title: 'Samantha Pate',
+            CustomText(
+              title: '${FirebaseAuth.instance.currentUser!.displayName}',
               weight: FontWeight.w600,
-              size: AppSize.large,
+              size: AppFontSize.large,
               color: AppColors.jetBlack,
             ),
             const SizedBox(
               height: 5,
             ),
-            const CustomRow(),
+            CustomRow(
+              userId: AuthServices.getCurrentUser.uid,
+            ),
             const SizedBox(
               height: 3,
             ),
@@ -59,7 +107,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Column(
                 children: [
-                  GestureDetector(
+                  InkWell(
                     onTap: () {
                       Navigator.pushNamed(context, AppRoutes.profileSettings);
                     },
@@ -70,10 +118,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       iconColor: AppColors.lightGrey,
                     ),
                   ),
-                  GestureDetector(
+                  InkWell(
                     onTap: () {
                       Navigator.pushNamed(
-                          context, AppRoutes.profileLevelScreen);
+                        context,
+                        AppRoutes.profileLevelScreen,
+                        arguments: true,
+                      );
                     },
                     child: const CustomProfileRow(
                       svgImage: AppSvgs.level,
@@ -83,14 +134,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       iconColor: AppColors.lightGrey,
                     ),
                   ),
-                  const CustomProfileRow(
-                    leadingIcon: Icons.notifications_none,
-                    title: 'Notification',
-                    color: AppColors.jetBlack,
-                    arrowBack: false,
-                    iconColor: AppColors.lightGrey,
+                  InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(
+                          context, AppRoutes.notificationScreen);
+                    },
+                    child: const CustomProfileRow(
+                      leadingIcon: Icons.notifications_none,
+                      title: 'Notification',
+                      color: AppColors.jetBlack,
+                      arrowBack: false,
+                      iconColor: AppColors.lightGrey,
+                    ),
                   ),
-                  GestureDetector(
+                  InkWell(
                     onTap: () {
                       Navigator.pushNamed(context, AppRoutes.connectScreen);
                     },
@@ -102,27 +159,58 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       iconColor: AppColors.electricBlue,
                     ),
                   ),
-                  const CustomProfileRow(
-                    leadingIcon: Icons.privacy_tip_outlined,
-                    title: 'Privacy Policy',
-                    color: AppColors.jetBlack,
-                    iconColor: AppColors.lightGrey,
+                  InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(
+                          context, AppRoutes.ticketsHistoryScreen);
+                    },
+                    child: const CustomProfileRow(
+                      leadingIcon: Icons.history_toggle_off_outlined,
+                      title: 'Tickets History',
+                      color: AppColors.jetBlack,
+                      iconColor: AppColors.lightGrey,
+                    ),
                   ),
-                  const CustomProfileRow(
-                    svgImage: AppSvgs.termOfUse,
-                    isSvg: true,
-                    title: 'Term of Use',
-                    color: AppColors.jetBlack,
-                    iconColor: AppColors.lightGrey,
+                  InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(context, AppRoutes.privacyScreen);
+                    },
+                    child: const CustomProfileRow(
+                      leadingIcon: Icons.privacy_tip_outlined,
+                      title: 'Privacy Policy',
+                      color: AppColors.jetBlack,
+                      iconColor: AppColors.lightGrey,
+                    ),
                   ),
-                  const CustomProfileRow(
-                    leadingIcon: Icons.logout,
-                    leadingColor: AppColors.blueViolet,
-                    title: 'Logout',
-                    color: AppColors.blueViolet,
-                    iconColor: AppColors.blueViolet,
+                  InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(context, AppRoutes.termOfUseScreen);
+                    },
+                    child: const CustomProfileRow(
+                      svgImage: AppSvgs.termOfUse,
+                      isSvg: true,
+                      title: 'Term of Use',
+                      color: AppColors.jetBlack,
+                      iconColor: AppColors.lightGrey,
+                    ),
                   ),
-                  GestureDetector(
+                  InkWell(
+                    onTap: () {
+                      AuthServices.signOut().then((value) {
+                        AppText.preference!.remove(AppText.isAdminPrefKey);
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, AppRoutes.logIn, (route) => false);
+                      });
+                    },
+                    child: const CustomProfileRow(
+                      leadingIcon: Icons.logout,
+                      leadingColor: AppColors.blueViolet,
+                      title: 'Logout',
+                      color: AppColors.blueViolet,
+                      iconColor: AppColors.blueViolet,
+                    ),
+                  ),
+                  InkWell(
                     onTap: () {
                       deleteDialog(context: context);
                     },

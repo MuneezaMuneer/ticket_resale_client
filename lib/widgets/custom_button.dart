@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:svg_flutter/svg.dart';
-import 'package:ticket_resale/widgets/custom_text.dart';
+import 'package:ticket_resale/widgets/widgets.dart';
 
 class CustomButton extends StatelessWidget {
   final bool isSocial;
@@ -23,8 +23,9 @@ class CustomButton extends StatelessWidget {
   final LinearGradient? gradient;
   final Color? textColor;
   final double fixedHeight;
+  final double? fixedWidth;
   final FontWeight? weight;
-  final bool isLoading;
+  final bool loading;
   const CustomButton({
     super.key,
     required this.onPressed,
@@ -35,7 +36,7 @@ class CustomButton extends StatelessWidget {
     this.textColor,
     this.borderColor = Colors.transparent,
     this.fixedHeight = 50,
-    this.isLoading = false,
+    this.loading = false,
     this.isSvgImage = true,
     this.weight,
     this.isSocial = false,
@@ -48,17 +49,18 @@ class CustomButton extends StatelessWidget {
     this.socialWhiteBg,
     this.isSocialWhiteBg = false,
     this.isRounded = true,
+    this.fixedWidth,
   });
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     double width = size.width;
-    //   double height = size.height;
     return GestureDetector(
       onTap: onPressed,
       child: Container(
         height: fixedHeight,
+        width: fixedWidth,
         decoration: ShapeDecoration(
           color:
               isSocialWhiteBg ? socialWhiteBg ?? Colors.white : backgroundColor,
@@ -80,43 +82,45 @@ class CustomButton extends StatelessWidget {
                   : const BorderRadius.only(
                       bottomLeft: Radius.circular(10),
                       bottomRight: Radius.circular(10))),
-          child: isSocial
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: 25,
-                      child: SizedBox(
-                        width: 24,
-                        height: 24,
-                        child: isSvgImage
-                            ? SvgPicture.asset(
-                                '$imagePath',
-                              )
-                            : Image.asset("$imagePath"),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 8,
-                    ),
-                    CustomText(
-                      title: '$socialText',
-                      size: socialTextSize,
-                      color: socialTextColor,
-                      weight: socialTextWeight,
+          child: loading
+              ? const CupertinoActivityIndicator()
+              : isSocial
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 25,
+                          child: SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: isSvgImage
+                                ? SvgPicture.asset(
+                                    '$imagePath',
+                                  )
+                                : Image.asset("$imagePath"),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 8,
+                        ),
+                        CustomText(
+                          title: '$socialText',
+                          size: socialTextSize,
+                          color: socialTextColor,
+                          weight: socialTextWeight,
+                        )
+                      ],
                     )
-                  ],
-                )
-              : isLoading
-                  ? const CupertinoActivityIndicator()
-                  : Text(
-                      '$btnText',
-                      style: TextStyle(
-                        fontSize: textSize,
-                        color: textColor,
-                        fontWeight: weight,
-                      ),
-                    ),
+                  : loading
+                      ? const CupertinoActivityIndicator()
+                      : Text(
+                          '$btnText',
+                          style: TextStyle(
+                            fontSize: textSize,
+                            color: textColor,
+                            fontWeight: weight,
+                          ),
+                        ),
         ),
       ),
     );

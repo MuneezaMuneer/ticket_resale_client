@@ -1,11 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:provider/provider.dart';
 import 'package:svg_flutter/svg_flutter.dart';
 import 'package:ticket_resale/constants/constants.dart';
+import 'package:ticket_resale/db_services/db_services.dart';
+import 'package:ticket_resale/models/feedback_model.dart';
+import 'package:ticket_resale/providers/providers.dart';
+import 'package:ticket_resale/utils/app_utils.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
-class FeedBackScreen extends StatelessWidget {
-  const FeedBackScreen({super.key});
+class FeedBackScreen extends StatefulWidget {
+  final String sellerImageUrl;
+  final String sellerName;
+  final String sellerId;
+  const FeedBackScreen(
+      {super.key,
+      required this.sellerImageUrl,
+      required this.sellerName,
+      required this.sellerId});
+  @override
+  State<FeedBackScreen> createState() => _FeedBackScreenState();
+}
+
+class _FeedBackScreenState extends State<FeedBackScreen> {
+  late FeedbackProvider feedbackProvider;
+  ValueNotifier<int> selectedStarsNotifier = ValueNotifier<int>(0);
+  ValueNotifier<bool> loadingNotifier = ValueNotifier<bool>(false);
+  TextEditingController commentController = TextEditingController();
+  @override
+  void initState() {
+    feedbackProvider = Provider.of<FeedbackProvider>(context, listen: false);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,8 +39,7 @@ class FeedBackScreen extends StatelessWidget {
     final double height = size.height;
     final double width = size.width;
     return Scaffold(
-      backgroundColor: AppColors.pastelBlue.withOpacity(0.3),
-      appBar: const CustomAppBar(
+      appBar: const CustomAppBarClient(
         title: 'Feedback',
       ),
       body: Stack(
@@ -28,49 +53,99 @@ class FeedBackScreen extends StatelessWidget {
                   child: const CustomText(
                     softWrap: true,
                     title: 'Give Feedback on your recent purchase with',
-                    size: AppSize.large,
+                    size: AppFontSize.large,
                     weight: FontWeight.w700,
                     textAlign: TextAlign.center,
                     color: AppColors.jetBlack,
                   ),
                 ),
                 const Gap(25),
-                const SizedBox(
+                SizedBox(
                   height: 80,
                   width: 80,
-                  child: CircleAvatar(
-                    backgroundImage: AssetImage(AppImages.profile),
-                  ),
+                  child: widget.sellerImageUrl.isNotEmpty
+                      ? CustomDisplayStoryImage(imageUrl: widget.sellerImageUrl)
+                      : const CircleAvatar(
+                          backgroundImage: AssetImage(AppImages.profileImage),
+                        ),
                 ),
                 const Gap(10),
-                const CustomText(
-                  title: 'Leslie Alexander',
+                CustomText(
+                  title: widget.sellerName,
                   size: 18,
                   weight: FontWeight.w600,
                   color: AppColors.jetBlack,
                 ),
-                tileColumn('How was you experience?', 'Negative', 'Neutral',
-                    'Positive', width * 0.24),
-                tileColumn(
-                    'Did your ticket arrive (or was it available digitally) in a timely manner?',
-                    'Yes',
-                    'No',
-                    '',
-                    width * 0.24,
-                    isPositive: false),
-                tileColumn(
-                    'Was the information about the festival (line-up, dates, venue, etc.) accurate and helpful?',
-                    'Yes',
-                    'No',
-                    '',
-                    width * 0.24,
-                    isPositive: false),
-                tileColumn(
-                    'How well did the seller communicate? Consider response time and clarity of information',
-                    'Negative',
-                    'Neutral',
-                    'Positive',
-                    width * 0.24),
+                const Gap(30),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Consumer<FeedbackProvider>(
+                      builder: (context, feedbackProvider, child) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            buildHeaderText('How was your experience?'),
+                            const Gap(10),
+                            buildButtonRow(
+                              width: width,
+                              values: [0, 1, 2],
+                              buttonTexts: ['Negative', 'Neutral', 'Positive'],
+                              onPressed: feedbackProvider.setExperience,
+                              selectedValue: feedbackProvider.getExperience,
+                            ),
+                            const Gap(20),
+                            buildHeaderText(
+                                'Did your ticket arrive (or was it available digitally) in a timely manner?'),
+                            const Gap(10),
+                            buildButtonRow(
+                              width: width,
+                              values: [
+                                3,
+                                4,
+                              ],
+                              buttonTexts: [
+                                'Yes',
+                                'No',
+                              ],
+                              onPressed: feedbackProvider.setTime,
+                              selectedValue: feedbackProvider.getTime,
+                            ),
+                            const Gap(20),
+                            buildHeaderText(
+                                'Was the information about the festival accurate and helpful?'),
+                            const Gap(10),
+                            buildButtonRow(
+                              width: width,
+                              values: [
+                                5,
+                                6,
+                              ],
+                              buttonTexts: [
+                                'Yes',
+                                'No',
+                              ],
+                              onPressed: feedbackProvider.setAccuracy,
+                              selectedValue: feedbackProvider.getAccuracy,
+                            ),
+                            const Gap(20),
+                            buildHeaderText(
+                                'How well did the seller communicate? Consider response time and clarity of information'),
+                            const Gap(10),
+                            buildButtonRow(
+                              width: width,
+                              values: [7, 8, 9],
+                              buttonTexts: ['Negative', 'Neutral', 'Positive'],
+                              onPressed: feedbackProvider.setBehave,
+                              selectedValue: feedbackProvider.getBehave,
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                ),
                 SizedBox(
                   height: height * 0.4,
                 )
@@ -96,60 +171,102 @@ class FeedBackScreen extends StatelessWidget {
                       const Center(
                         child: CustomText(
                           title: 'Rate your overall experience',
-                          size: AppSize.medium,
+                          size: AppFontSize.medium,
                           color: AppColors.jetBlack,
-                          weight: FontWeight.w600,
+                          weight: FontWeight.w900,
                         ),
                       ),
                       Center(
                         child: CustomText(
                           title: 'What do you think of this purchase',
-                          size: AppSize.medium,
+                          size: AppFontSize.medium,
                           color: AppColors.jetBlack.withOpacity(0.5),
                           weight: FontWeight.w400,
                         ),
                       ),
-                      const Gap(5),
+                      const Gap(20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          SvgPicture.asset(AppSvgs.fillStar),
+                          buildStar(1),
                           const Gap(10),
-                          SvgPicture.asset(AppSvgs.fillStar),
+                          buildStar(2),
                           const Gap(10),
-                          SvgPicture.asset(AppSvgs.fillStar),
+                          buildStar(3),
                           const Gap(10),
-                          SvgPicture.asset(AppSvgs.fillStar),
+                          buildStar(4),
                           const Gap(10),
-                          SvgPicture.asset(AppSvgs.star),
+                          buildStar(5),
                           const Gap(10),
                         ],
                       ),
                       const Gap(20),
                       const CustomText(
                         title: 'Comment',
-                        size: AppSize.medium,
+                        size: AppFontSize.medium,
                         weight: FontWeight.w600,
                       ),
                       const Gap(10),
-                      const CustomTextField(
+                      CustomTextField(
+                        controller: commentController,
                         fillColor: AppColors.white,
+                        hintStyle: const TextStyle(color: AppColors.silver),
                         maxLines: 5,
                         isFilled: true,
                         hintText: 'Enter your comment here',
                         isCommentField: true,
                       ),
-                      const Gap(20),
+                      SizedBox(
+                        height: height * 0.07,
+                      ),
                       SizedBox(
                         height: height * 0.07,
                         width: width * 0.9,
-                        child: CustomButton(
-                          onPressed: () {},
-                          textColor: AppColors.white,
-                          textSize: AppSize.regular,
-                          btnText: 'Submit',
-                          gradient: customGradient,
-                          weight: FontWeight.w700,
+                        child: ValueListenableBuilder(
+                          valueListenable: loadingNotifier,
+                          builder: (context, value, child) {
+                            return CustomButton(
+                              onPressed: () async {
+                                loadingNotifier.value = true;
+                                FeedbackModel feedbackModel = FeedbackModel(
+                                  rating: selectedStarsNotifier.value,
+                                  comment: commentController.text,
+                                  experience: AppUtils.mapIndexToFeedbackValue(
+                                      feedbackProvider.getExperience),
+                                  arrivalTime: AppUtils.mapIndexToFeedbackValue(
+                                      feedbackProvider.getTime),
+                                  accurateInfo:
+                                      AppUtils.mapIndexToFeedbackValue(
+                                          feedbackProvider.getAccuracy),
+                                  communicationResponse:
+                                      AppUtils.mapIndexToFeedbackValue(
+                                          feedbackProvider.getBehave),
+                                  buyerId: AuthServices.getCurrentUser.uid,
+                                  sellerId: widget.sellerId,
+                                );
+                                FireStoreServicesClient.storeFeedback(
+                                        feedbackModel: feedbackModel,
+                                        sellerId: widget.sellerId)
+                                    .then((value) {
+                                  loadingNotifier.value = false;
+                                  feedbackProvider.setExperience(0);
+                                  feedbackProvider.setTime(3);
+                                  feedbackProvider.setAccuracy(5);
+                                  feedbackProvider.setBehave(7);
+                                  Navigator.pushNamedAndRemoveUntil(
+                                      context,
+                                      AppRoutes.navigationScreen,
+                                      (route) => false);
+                                });
+                              },
+                              textColor: AppColors.white,
+                              loading: loadingNotifier.value,
+                              textSize: AppFontSize.regular,
+                              btnText: 'Submit',
+                              gradient: customGradient,
+                              weight: FontWeight.w700,
+                            );
+                          },
                         ),
                       ),
                       const Gap(20),
@@ -164,68 +281,60 @@ class FeedBackScreen extends StatelessWidget {
     );
   }
 
-  Widget tileColumn(
-      String title, String text1, String text2, String text3, double width,
-      {bool isPositive = true}) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 30, right: 30, top: 30),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CustomText(
-            title: title,
-            size: AppSize.medium,
-            softWrap: true,
-            weight: FontWeight.w600,
-            color: AppColors.jetBlack.withOpacity(0.7),
-          ),
-          const Gap(10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                height: 40,
-                width: width,
-                child: CustomButton(
-                  onPressed: () {},
-                  btnText: text1,
-                  backgroundColor: AppColors.white,
-                  borderColor: AppColors.lightGrey.withOpacity(0.7),
-                  textColor: AppColors.lightGrey,
-                  weight: FontWeight.w500,
-                  textSize: AppSize.regular,
-                ),
-              ),
-              SizedBox(
-                height: 40,
-                width: width,
-                child: CustomButton(
-                  onPressed: () {},
-                  btnText: text2,
-                  backgroundColor: AppColors.white,
-                  borderColor: AppColors.lightGrey.withOpacity(0.7),
-                  textColor: AppColors.lightGrey,
-                  weight: FontWeight.w500,
-                  textSize: AppSize.regular,
-                ),
-              ),
-              SizedBox(
-                  height: 40,
-                  width: width,
-                  child: isPositive
-                      ? CustomButton(
-                          onPressed: () {},
-                          textColor: AppColors.white,
-                          textSize: AppSize.medium,
-                          btnText: text3,
-                          gradient: customGradient,
-                          weight: FontWeight.w600,
-                        )
-                      : const SizedBox.shrink())
-            ],
-          )
-        ],
+  Widget buildStar(int starNumber) {
+    return GestureDetector(
+      onTap: () {
+        selectedStarsNotifier.value = starNumber;
+      },
+      child: ValueListenableBuilder<int>(
+        valueListenable: selectedStarsNotifier,
+        builder: (context, selectedStars, child) {
+          return starNumber <= selectedStars
+              ? SvgPicture.asset(AppSvgs.fillStar)
+              : SvgPicture.asset(AppSvgs.star);
+        },
       ),
     );
   }
+}
+
+Text buildHeaderText(String text) {
+  return Text(
+    text,
+    style: TextStyle(
+        fontSize: AppFontSize.medium,
+        fontWeight: FontWeight.w600,
+        color: AppColors.jetBlack.withOpacity(0.7)),
+  );
+}
+
+Row buildButtonRow({
+  required double width,
+  required List<int> values,
+  required List<String> buttonTexts,
+  required void Function(int) onPressed,
+  required int selectedValue,
+}) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: List.generate(
+      values.length,
+      (index) => SizedBox(
+        height: 40,
+        width: width * 0.24,
+        child: CustomButton(
+          onPressed: () => onPressed(values[index]),
+          btnText: buttonTexts[index],
+          borderColor: AppColors.lightGrey.withOpacity(0.7),
+          textColor: selectedValue == values[index]
+              ? AppColors.white
+              : AppColors.lightGrey,
+          gradient:
+              selectedValue == values[index] ? customGradient : whiteGradient,
+          weight: FontWeight.w500,
+          textSize: AppFontSize.regular,
+        ),
+      ),
+    ),
+  );
 }

@@ -39,13 +39,45 @@ dependencies:
   gap: ^3.0.1
   avatar_stack: ^1.2.0
   google_fonts: ^6.1.0
-  device_preview: ^1.1.0
   intl_phone_field: ^3.2.0 
-  provider:   
+  provider: ^6.1.2
+  firebase_core: ^2.25.4
+  firebase_auth: ^4.17.4 
+  google_sign_in: ^6.2.1
+  fluttertoast: ^8.2.4
+  email_validator: ^2.1.17
+  image_picker: ^1.0.7
+  bottom_picker: ^2.3.3
+  cloud_firestore: ^4.15.4
+  firebase_storage: ^11.6.5
+  cached_network_image: ^3.3.1
+  shared_preferences: ^2.2.2
+  device_preview: ^1.1.0
+  uuid: ^4.3.3
+  intl: ^0.18.1
+  flutter_otp_text_field: ^1.1.1
+  # twilio_flutter: ^0.3.0
+  webview_flutter: ^4.7.0
+  http: ^1.2.0
+  firebase_messaging: ^14.7.18
+  flutter_local_notifications: ^16.3.3
+  http_auth: ^1.0.4
+  grouped_list: ^5.1.2
+  crypto: ^3.0.3
+  sign_in_with_apple: ^6.0.0
+  flutter_launcher_icons: ^0.13.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/logo.png"
+  min_sdk_android: 21
+  remove_alpha_ios: true
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

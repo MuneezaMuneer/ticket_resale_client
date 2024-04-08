@@ -1,110 +1,216 @@
+import 'dart:developer';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:ticket_resale/constants/constants.dart';
-import 'package:ticket_resale/widgets/custom_appbar.dart';
-import 'package:ticket_resale/widgets/custom_text.dart';
+import 'package:ticket_resale/db_services/db_services.dart';
+import 'package:ticket_resale/models/models.dart';
+import 'package:ticket_resale/utils/utils.dart';
+import 'package:ticket_resale/widgets/widgets.dart';
 
-class NotificationScreen extends StatelessWidget {
+class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    final double height = size.height;
-    final double width = size.width;
+  State<NotificationScreen> createState() => _NotificationScreenState();
+}
 
+class _NotificationScreenState extends State<NotificationScreen> {
+  bool isRead = false;
+  late Stream<List<NotificationModel>> readnotification;
+  late Stream<List<NotificationModel>> unreadnotification;
+  ValueNotifier<bool> isDelete = ValueNotifier<bool>(false);
+  @override
+  void initState() {
+    super.initState();
+    readnotification =
+        FireStoreServicesClient.fetchNotifications(status: 'read');
+    unreadnotification =
+        FireStoreServicesClient.fetchNotifications(status: 'Unread');
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 230, 234, 248),
+      appBar: const CustomAppBarClient(
+        title: 'Notification',
+        isNotification: false,
+      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const CustomAppBar(
-            title: 'Notification',
+          const Gap(20),
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 30,
+            ),
+            child: Text(
+              'Unread',
+              style: _textStyle(),
+            ),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Gap(20),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 30,
-                ),
-                child: Text(
-                  'Unread',
-                  style: _textStyle(),
-                ),
-              ),
-              const Gap(20),
-              Container(
-                  height: height * 0.32,
-                  width: width,
-                  color: AppColors.white.withOpacity(0.2),
-                  child: _builderWidget(FontWeight.w600, AppColors.yellow)),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(30, 20, 30, 0),
-                child: Text(
+          const Gap(20),
+          Expanded(
+            child: Container(
+                decoration: BoxDecoration(color: AppColors.white, boxShadow: [
+                  BoxShadow(
+                      color: AppColors.blueViolet.withOpacity(0.4),
+                      blurRadius: 10)
+                ]),
+                child: _builderWidget(FontWeight.w600, AppColors.yellow,
+                    stream: unreadnotification)),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(30, 20, 30, 0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
                   'Read',
                   style: _textStyle(),
                 ),
-              ),
-              SizedBox(
-                  height: height * 0.36,
-                  child:
-                      _builderWidget(FontWeight.w300, AppColors.vibrantGreen))
-            ],
+                InkWell(
+                  onTap: () {
+                    isDelete.value = true;
+                    FireStoreServicesClient.deleteReadNotifications(
+                      name: 'client_notifications',
+                    ).then((_) {
+                      isDelete.value = false;
+                    });
+                  },
+                  child: const Text(
+                    'Clear All',
+                    style: TextStyle(
+                        color: AppColors.red,
+                        fontSize: AppFontSize.medium,
+                        fontWeight: FontWeight.w600),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const Gap(20),
+          Expanded(
+            child: ValueListenableBuilder<bool>(
+              valueListenable: isDelete,
+              builder: (context, deleting, _) {
+                return deleting
+                    ? const Center(child: CupertinoActivityIndicator())
+                    : _builderWidget(
+                        FontWeight.w300,
+                        AppColors.vibrantGreen,
+                        stream: readnotification,
+                      );
+              },
+            ),
           )
         ],
       ),
     );
   }
 
-  Widget _builderWidget(final FontWeight weight, final Color containerColor) {
-    return ListView.builder(
-      padding: const EdgeInsets.only(top: 10),
-      itemCount: 5,
-      itemBuilder: (context, index) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-          child: Row(
-            children: [
-              Container(
-                height: 10,
-                width: 10,
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle, color: containerColor),
-              ),
-              const Gap(20),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      CustomText(
-                        title: 'Posted! ',
-                        size: AppSize.medium,
-                        weight: weight,
-                        color: AppColors.jetBlack,
+  Widget _builderWidget(final FontWeight weight, final Color containerColor,
+      {required Stream<List<NotificationModel>> stream}) {
+    return StreamBuilder(
+      stream: stream,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CupertinoActivityIndicator());
+        } else if (snapshot.hasData) {
+          final notifications = snapshot.data;
+          if (notifications != null && notifications.isNotEmpty) {
+            return ListView.builder(
+              itemCount: notifications.length,
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () async {
+                    if (notifications[index].status == 'Unread') {
+                      FireStoreServicesClient.updateNotifications(
+                          docId: notifications[index].docId,
+                          name: 'client_notifications');
+                    }
+                    if (notifications[index].notificationType ==
+                            'ticket_listing' &&
+                        notifications[index].status == 'Unread') {
+                      Navigator.popAndPushNamed(
+                          context, AppRoutes.detailFirstScreen,
+                          arguments: notifications[index].id);
+                    } else if (notifications[index].notificationType ==
+                            'offer_confirm' &&
+                        notifications[index].status == 'Unread') {
+                      Navigator.of(context).popAndPushNamed(
+                        AppRoutes.chatDetailScreen,
+                        arguments: {
+                          'receiverId': notifications[index].userId,
+                          'hashKey':
+                              FireStoreServicesClient.getMessagesHashCodeID(
+                                  userIDReceiver: notifications[index].id!),
+                          'isOpened': false,
+                        },
+                      );
+                    } else if (notifications[index].notificationType ==
+                            'paid' &&
+                        notifications[index].status == 'Unread') {
+                      log('---id - ${notifications[index].id} --  userid ${notifications[index].userId} --  current id ${AuthServices.getCurrentUser.uid}');
+                      UserModelClient userModel =
+                          await FireStoreServicesClient.fetchDataOfUser(
+                              userId: notifications[index].userId!);
+                      CustomBottomSheet.showConfirmTicketsSheet(
+                          // ignore: use_build_context_synchronously
+                          context: context,
+                          hashKey:
+                              FireStoreServicesClient.getMessagesHashCodeID(
+                                  userIDReceiver: notifications[index].id!),
+                          //  id: {'seller_uid': notifications[index].userId},
+                          userModel: userModel);
+                    }
+                  },
+                  child: ListTile(
+                      leading: Container(
+                        height: 10,
+                        width: 10,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: notifications[index].status == 'Unread'
+                                ? AppColors.red
+                                : AppColors.blue),
                       ),
-                      CustomText(
-                        title: 'your post successfully uploaded',
-                        size: AppSize.medium,
-                        weight: FontWeight.w300,
-                        color: AppColors.jetBlack.withOpacity(0.7),
-                      )
-                    ],
-                  ),
-                  const Gap(3),
-                  CustomText(
-                    title: 'Today at 9:34 PM',
-                    size: AppSize.small,
-                    weight: FontWeight.w400,
-                    color: AppColors.jetBlack.withOpacity(0.4),
-                  )
-                ],
-              )
-            ],
-          ),
-        );
+                      title: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomText(
+                              title: notifications[index].title,
+                              size: AppFontSize.medium,
+                              weight: weight,
+                              color: AppColors.jetBlack,
+                            ),
+                            CustomText(
+                              title: notifications[index].body,
+                              size: AppFontSize.medium,
+                              weight: FontWeight.w300,
+                              softWrap: true,
+                              color: AppColors.jetBlack.withOpacity(0.7),
+                            )
+                          ]),
+                      subtitle: CustomText(
+                        title: AppUtils.formatTimeStamp(
+                            notifications[index].time!),
+                        size: AppFontSize.small,
+                        weight: FontWeight.w400,
+                        color: AppColors.jetBlack.withOpacity(0.4),
+                      )),
+                );
+              },
+            );
+          } else {
+            return const Center(child: Text('No Notification'));
+          }
+        } else {
+          return const Center(child: Text('No Notification'));
+        }
       },
     );
   }
@@ -112,7 +218,7 @@ class NotificationScreen extends StatelessWidget {
   TextStyle _textStyle() {
     return const TextStyle(
         color: AppColors.jetBlack,
-        fontSize: AppSize.medium,
+        fontSize: AppFontSize.medium,
         fontWeight: FontWeight.w600);
   }
 }

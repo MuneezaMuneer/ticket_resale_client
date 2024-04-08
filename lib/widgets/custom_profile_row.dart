@@ -1,7 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
+import 'package:provider/provider.dart';
 import 'package:svg_flutter/svg.dart';
-import 'package:ticket_resale/constants/app_colors.dart';
-import 'package:ticket_resale/constants/app_textsize.dart';
+import 'package:ticket_resale/constants/constants.dart';
+import 'package:ticket_resale/providers/providers.dart';
 import 'widgets.dart';
 
 class CustomProfileRow extends StatelessWidget {
@@ -63,7 +66,7 @@ class CustomProfileRow extends StatelessWidget {
                 child: Text(
                   '$title',
                   style: TextStyle(
-                    fontSize: AppSize.regular,
+                    fontSize: AppFontSize.regular,
                     fontWeight: FontWeight.w400,
                     color: color,
                   ),
@@ -71,23 +74,38 @@ class CustomProfileRow extends StatelessWidget {
               ),
               const Spacer(),
               SizedBox(
-                child: arrowBack
-                    ? Icon(
-                        Icons.arrow_forward_ios,
-                        size: 15,
-                        color: iconColor,
-                      )
-                    : const CustomSwitch(),
-              ),
+                  child: arrowBack
+                      ? Icon(
+                          Icons.arrow_forward_ios,
+                          size: 15,
+                          color: iconColor,
+                        )
+                      : Transform.scale(
+                          scale: 0.8,
+                          child: Consumer<SwitchProvider>(
+                            builder: (context, provider, child) {
+                              return CupertinoSwitch(
+                                activeColor: AppColors.blueViolet,
+                                thumbColor: Colors.white,
+                                trackColor: AppColors.pastelBlue,
+                                value: provider.getNotification,
+                                onChanged: (bool value) {
+                                  provider.setNotification(value);
+                                },
+                              );
+                            },
+                          ),
+                        )),
             ],
           ),
+          const Gap(5),
           if (!isLastRow!) const CustomDivider(),
           if (isLastRow!)
             const SizedBox(
               height: 20,
             ),
           const SizedBox(
-            height: 3,
+            height: 5,
           ),
         ],
       ),

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:ticket_resale/components/call_back_funs.dart';
+import 'package:flutter/services.dart';
+import 'package:ticket_resale/components/components.dart';
 import 'package:ticket_resale/constants/constants.dart';
-import 'package:ticket_resale/widgets/custom_text.dart';
+import 'package:ticket_resale/widgets/widgets.dart';
 
 class CustomTextField extends StatelessWidget {
   final TextEditingController? controller;
@@ -16,6 +17,8 @@ class CustomTextField extends StatelessWidget {
   final bool isFilled;
   final FontWeight? weight;
   final TextStyle? hintStyle;
+  final bool isSuffixIcon;
+  final Widget? iconWidget;
   final int? maxLines;
   final bool readOnly;
   final bool isCommentField;
@@ -24,6 +27,9 @@ class CustomTextField extends StatelessWidget {
   final String obscuringCharacter;
   final String? trailingText;
   final bool isTrailingText;
+  final String? initialValue;
+  final List<TextInputFormatter>? inputFormatters;
+
   const CustomTextField({
     super.key,
     this.controller,
@@ -46,34 +52,44 @@ class CustomTextField extends StatelessWidget {
     this.isTrailingText = false,
     this.isCommentField = false,
     this.maxLines,
+    this.initialValue,
+    this.isSuffixIcon = true,
+    this.iconWidget,
+    this.inputFormatters,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
+      initialValue: initialValue,
       readOnly: readOnly,
+      inputFormatters: inputFormatters,
       obscuringCharacter: obscuringCharacter,
       cursorColor: AppColors.jetBlack.withOpacity(0.3),
       obscureText: isVisibleText,
+      cursorHeight: 23,
       onChanged: onChanged,
       maxLines: maxLines,
       validator: validator,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       decoration: InputDecoration(
-        contentPadding: const EdgeInsets.only(top: 10, left: 10),
+        contentPadding: const EdgeInsets.only(top: 10, left: 17),
         hintText: hintText,
+        alignLabelWithHint: true,
         suffixIcon: isTrailingText
             ? Padding(
-                padding: const EdgeInsets.only(top: 10, right: 20),
+                padding: const EdgeInsets.only(top: 15, right: 20),
                 child: CustomText(
                   title: '$trailingText',
                   color: AppColors.springGreen,
                   weight: FontWeight.w600,
-                  size: AppSize.medium,
+                  size: AppFontSize.medium,
                 ),
               )
-            : suffixIcon,
+            : isSuffixIcon
+                ? suffixIcon
+                : iconWidget,
         prefixIcon: prefixIcon,
         fillColor: fillColor,
         filled: isFilled,
@@ -98,11 +114,7 @@ class CustomTextField extends StatelessWidget {
             borderSide: const BorderSide(
               color: AppColors.pastelBlue,
             )),
-        hintStyle: const TextStyle(
-          color: AppColors.silver,
-          fontSize: AppSize.medium,
-          fontWeight: FontWeight.w400,
-        ),
+        hintStyle: hintStyle,
         suffixStyle: suffixStyle,
       ),
       keyboardType: keyBoardType,
