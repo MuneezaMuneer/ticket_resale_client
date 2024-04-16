@@ -13,13 +13,12 @@ import 'package:ticket_resale/utils/notification_services.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
 deleteDialog({required BuildContext context}) {
+  ValueNotifier<bool> _valueNotifier = ValueNotifier(false);
   return showAdaptiveDialog(
     context: context,
     builder: (context) {
       return AlertDialog.adaptive(
-        contentPadding: EdgeInsets.symmetric(
-          horizontal: 5,
-        ),
+        contentPadding: EdgeInsets.only(left: 5, right: 5, top: 10),
         title: Image.asset(
           AppImages.personBold,
           fit: BoxFit.cover,
@@ -42,15 +41,22 @@ deleteDialog({required BuildContext context}) {
             ),
           ),
           TextButton(
-            onPressed: () {
-              AuthServices.deleteUserAccount().then((user) {
+            onPressed: () async {
+              _valueNotifier.value = true;
+              await AuthServices.deleteUserAccount().then((user) {
                 Navigator.pushNamedAndRemoveUntil(
                     context, AppRoutes.logIn, (route) => false);
               });
+              _valueNotifier.value = false;
             },
-            child: CustomText(
-              title: 'Delete',
-              color: AppColors.red,
+            child: ValueListenableBuilder(
+              valueListenable: _valueNotifier,
+              builder: (context, value, child) => _valueNotifier.value
+                  ? CupertinoActivityIndicator()
+                  : CustomText(
+                      title: 'Delete',
+                      color: AppColors.red,
+                    ),
             ),
           ),
         ],

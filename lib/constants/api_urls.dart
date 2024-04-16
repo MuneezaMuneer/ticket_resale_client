@@ -18,8 +18,14 @@ class ApiURLS {
   static const fetchPaymentInfoURLById =
       'https://api.sandbox.paypal.com/v1/payments/payment/';
 
-
-      static  const returnURL = 'https://api.sandbox.paypal.com/payment/success';
+  static const returnURL = 'https://api.sandbox.paypal.com/payment/success';
   static const cancelURL = 'https://api.sandbox.paypal.com/payment/cancel';
-  static const fcmServerKey = 'AAAAwZawCR8:APA91bGv744R5IO8MZdhSvTjkzoBgV7nPt33A4DO8F5Oopw8GWuFZEJ3Whnz_mf4NCYf0jOuy4MjiRKSgiUDxmZTyNmsAe7Gf_XdD9jI6wCx0VJ7mcxxl2ABFpQ5XDlu5TAK7c9JTmRR';
+  static const fcmServerKey =
+      'AAAAwZawCR8:APA91bGv744R5IO8MZdhSvTjkzoBgV7nPt33A4DO8F5Oopw8GWuFZEJ3Whnz_mf4NCYf0jOuy4MjiRKSgiUDxmZTyNmsAe7Gf_XdD9jI6wCx0VJ7mcxxl2ABFpQ5XDlu5TAK7c9JTmRR';
+
+  ///Twilio for Phone Number
+  // static const twilioBaseUrl = 'https://verify.twilio.com/v2/Services';
+  static const twilioAccountSID = 'AC85aa66caf8609dffc06b92ede9d7af75';
+  static const twilioAuthToken = 'fb700a8818cfb874b5683efdb4c5d02c';
+  static const twilioAccountNumber = '+17866134009';
 }

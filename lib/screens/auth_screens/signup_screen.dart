@@ -184,11 +184,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       isVisibleText: isVisiblePassword,
                       maxLines: 1,
                       validator: (value) {
-                        if (value == null || value.length < 6) {
-                          return 'Please enter your password again';
-                        } else {
-                          return null;
+                        if (value == null ||
+                            value.length < 6 ||
+                            passwordController.text !=
+                                confirmPasswordController.text) {
+                          return 'Confrim password doesn\'t match';
                         }
+                        return null;
                       },
                       suffixIcon: GestureDetector(
                         onTap: () {
@@ -263,7 +265,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           return null;
                         }
                       },
-                      onChanged: (phone) {},
+                      onChanged: (phone) {
+                        phoneController.text = phone.completeNumber;
+                      },
                       keyboardType: TextInputType.number,
                       inputFormatters: <TextInputFormatter>[
                         FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
@@ -334,7 +338,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     CustomBottomSheet.showOTPBottomSheet(
                                       btnText: 'Verify Email',
                                       context: context,
-                                      onChanged: (code) {
+                                      onSubmit: (code) {
                                         emailVerificationCode = code;
                                         log('The code is : $code');
 
