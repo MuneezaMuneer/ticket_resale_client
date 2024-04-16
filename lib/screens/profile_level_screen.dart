@@ -1,5 +1,7 @@
 // ignore_for_file: must_be_immutable
 
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -180,7 +182,7 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
                                   GestureDetector(
                                     onTap: () {
                                       if (currentUser.profileLevels![
-                                              'isEmailVerified'] ??
+                                              'isinstaVerified'] ??
                                           false) {
                                         CustomBottomSheet.showInstaBottomSheet(
                                           context: context,
@@ -230,11 +232,14 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
                                   ),
                                   GestureDetector(
                                     onTap: () {
+                                      log('message: phone icon is tapped');
                                       if (currentUser.profileLevels![
-                                              'isPaypalVerified'] ??
+                                              'isPhoneNoVerified'] ??
                                           false) {
                                         Navigator.pushNamed(
-                                            context, AppRoutes.profileSettings);
+                                          context,
+                                          AppRoutes.profileSettings,
+                                        );
                                       }
                                     },
                                     child: _buildContainer(
@@ -251,7 +256,7 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
                                   GestureDetector(
                                     onTap: () {
                                       if (currentUser.profileLevels![
-                                              'isPhoneNoVerified'] ??
+                                              'isTransactionVerified'] ??
                                           false) {}
                                     },
                                     child: _buildContainer(
@@ -268,7 +273,7 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
                                   GestureDetector(
                                     onTap: () {
                                       if (currentUser.profileLevels![
-                                              'isTransactionVerified'] ??
+                                              'isSuperVerified'] ??
                                           false) {}
                                     },
                                     child: _buildContainer(

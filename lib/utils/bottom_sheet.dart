@@ -14,12 +14,13 @@ import 'package:ticket_resale/screens/screens.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
 class CustomBottomSheet {
-  static void showOTPBottomSheet(
-      {required BuildContext context,
-      required OnChanged onChanged,
-      required String email,
-      required String btnText,
-      required OnTape onTape}) {
+  static void showOTPBottomSheet({
+    required BuildContext context,
+    required OnChanged onSubmit,
+    required String email,
+    required String btnText,
+    required OnTape onTape,
+  }) {
     showModalBottomSheet(
       isScrollControlled: true,
       isDismissible: false,
@@ -60,7 +61,7 @@ class CustomBottomSheet {
                     focusedBorderColor: AppColors.jetBlack,
                     showFieldAsBox: true,
                     borderWidth: 4.0,
-                    onSubmit: onChanged,
+                    onSubmit: onSubmit,
                   ),
                   const Gap(50),
                   Padding(

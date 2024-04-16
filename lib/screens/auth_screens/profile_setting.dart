@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 import 'dart:developer';
 import 'dart:io';
+import 'dart:math' hide log;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -31,6 +32,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
   TextEditingController instaController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneNoController = TextEditingController();
+  TextEditingController otpController = TextEditingController();
   TextEditingController birthController = TextEditingController();
   ValueNotifier<bool> loading = ValueNotifier<bool>(false);
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -54,6 +56,17 @@ class _ProfileSettingsState extends State<ProfileSettings> {
     nameController.text = '${AuthServices.getCurrentUser.displayName}';
     emailController.text = '${AuthServices.getCurrentUser.email}';
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    emailController.dispose();
+    phoneNoController.dispose();
+    otpController.dispose();
+    birthController.dispose();
+    loading.dispose();
+    super.dispose();
   }
 
   @override
@@ -223,7 +236,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                               dropdownIconPosition: IconPosition.trailing,
                               cursorColor: AppColors.silver,
                               decoration: InputDecoration(
-                                hintText: 'eg.3092829992',
+                                hintText: 'Enter phone number',
                                 hintStyle: const TextStyle(
                                     color: Color(0xFF9E9E9E),
                                     fontSize: 16,
@@ -271,15 +284,8 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                             right: 20,
                             top: 15,
                             child: GestureDetector(
-                              onTap: () async {
-                                CustomBottomSheet.showOTPBottomSheet(
-                                  context: context,
-                                  btnText: 'Verify Number',
-                                  onChanged: (p0) {},
-                                  email:
-                                      '$countryCode${phoneNoController.text}',
-                                  onTape: () {},
-                                );
+                              onTap: () {
+                                _triggerOTP(context);
                               },
                               child: const CustomText(
                                 title: 'Verify',
@@ -332,53 +338,17 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                         valueListenable: loading,
                         builder: (context, value, child) {
                           return CustomButton(
-                            fixedHeight: height * 0.07,
-                            fixedWidth: width,
-                            btnText: 'Save',
-                            loading: loading.value,
-                            weight: FontWeight.w700,
-                            textColor: AppColors.white,
-                            gradient: customGradient,
-                            textSize: AppFontSize.regular,
-                            onPressed: () async {
-                              if (formKey.currentState!.validate()) {
-                                loading.value = true;
-
-                                try {
-                                  String? imageUrl;
-                                  if (imagePickerProvider
-                                      .getImageBytes.isNotEmpty) {
-                                    imageUrl =
-                                        await AuthServices.uploadOrUpdateImage(
-                                      imagePath:
-                                          imagePickerProvider.getImageBytes,
-                                    );
-                                  }
-
-                                  UserModelClient userModel = UserModelClient(
-                                      displayName: nameController.text,
-                                      instaUsername: instaController.text,
-                                      phoneNo: phoneNoController.text,
-                                      birthDate: birthController.text,
-                                      email: AuthServices.getCurrentUser.email,
-                                      photoUrl: imagePickerProvider
-                                              .getImageBytes.isNotEmpty
-                                          ? imageUrl
-                                          : AuthServices
-                                              .getCurrentUser.photoURL,
-                                      status: 'Active');
-
-                                  await AuthServices.storeUserImage(
-                                      userModel: userModel);
-                                  FocusScope.of(context).unfocus();
-                                } catch (e) {
-                                  log('Error storing user data: ${e.toString()}');
-                                } finally {
-                                  loading.value = false;
-                                }
-                              }
-                            },
-                          );
+                              fixedHeight: height * 0.07,
+                              fixedWidth: width,
+                              btnText: 'Save',
+                              loading: loading.value,
+                              weight: FontWeight.w700,
+                              textColor: AppColors.white,
+                              gradient: customGradient,
+                              textSize: AppFontSize.regular,
+                              onPressed: () {
+                                _updateUserInfo();
+                              });
                         },
                       ),
                     ],
@@ -388,6 +358,38 @@ class _ProfileSettingsState extends State<ProfileSettings> {
         ),
       ),
     );
+  }
+
+  Future<void> _updateUserInfo() async {
+    if (formKey.currentState!.validate()) {
+      loading.value = true;
+
+      try {
+        String? imageUrl;
+        if (imagePickerProvider.getImageBytes.isNotEmpty) {
+          imageUrl = await AuthServices.uploadOrUpdateImage(
+            imagePath: imagePickerProvider.getImageBytes,
+          );
+        }
+
+        UserModelClient userModel = UserModelClient(
+            displayName: nameController.text,
+            instaUsername: instaController.text,
+            phoneNo: phoneNoController.text,
+            birthDate: birthController.text,
+            email: AuthServices.getCurrentUser.email,
+            photoUrl: imagePickerProvider.getImageBytes.isNotEmpty
+                ? imageUrl
+                : AuthServices.getCurrentUser.photoURL,
+            status: 'Active');
+
+        await AuthServices.storeUserImage(userModel: userModel);
+      } catch (e) {
+        log('Error storing user data: ${e.toString()}');
+      } finally {
+        loading.value = false;
+      }
+    }
   }
 
   TextStyle _buildstyle() {
@@ -403,5 +405,41 @@ class _ProfileSettingsState extends State<ProfileSettings> {
         color: AppColors.lightBlack.withOpacity(0.8),
         fontWeight: FontWeight.w400,
         fontSize: AppFontSize.medium);
+  }
+
+  _triggerOTP(BuildContext context) async {
+    log('message:$countryCode${phoneNoController.text}');
+    FocusManager.instance.primaryFocus?.unfocus();
+    if (phoneNoController.text.isNotEmpty &&
+        phoneNoController.text.length > 6) {
+      ///otp generation
+      var rnd = new Random();
+      var digits = rnd.nextInt(9000) + 1000;
+      var sentOTP = digits;
+      log('message: $sentOTP');
+      AuthServices.sendSmsOTP(
+        context: context,
+        toNumber: '$countryCode${phoneNoController.text.trim()}',
+        sentOTP: sentOTP.toString(),
+      );
+      CustomBottomSheet.showOTPBottomSheet(
+        context: context,
+        btnText: 'Verify Number',
+        onSubmit: (number) {
+          otpController.text = number;
+        },
+        email: '$countryCode${phoneNoController.text.trim()}',
+        onTape: () async {
+          Navigator.of(context).pop();
+          if (sentOTP.toString() == otpController.text.trim()) {
+            SnackBarHelper.showSnackBar(context, 'Otp verfied successfully');
+          } else {
+            SnackBarHelper.showSnackBar(context, 'Entered OTP is not correct');
+          }
+        },
+      );
+    } else {
+      SnackBarHelper.showSnackBar(context, 'Plase add valid phone number');
+    }
   }
 }

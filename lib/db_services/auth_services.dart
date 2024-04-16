@@ -1,9 +1,9 @@
 // ignore_for_file: use_build_context_synchronously
 import 'dart:convert';
-import 'dart:developer' as logg;
+import 'dart:developer';
 import 'dart:io';
 import 'package:crypto/crypto.dart';
-import 'dart:math';
+import 'dart:math' hide log;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -17,6 +17,7 @@ import 'package:ticket_resale/db_services/firestore_services_admin.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/models/models.dart';
 import 'package:ticket_resale/utils/utils.dart';
+import 'package:twilio_flutter/twilio_flutter.dart';
 
 import '../widgets/custom_navigation_admin.dart';
 
@@ -58,8 +59,7 @@ class AuthServices {
     final givenName = appleCredential.givenName ?? '';
     final familyName = appleCredential.familyName ?? '';
     final fullName = '$givenName $familyName';
-    logg.log(
-        'givenName: $givenName, familyName: $familyName, fullName: $fullName');
+    log('givenName: $givenName, familyName: $familyName, fullName: $fullName');
 
     // Create an `OAuthCredential` from the credential returned by Apple.
     final oauthCredential = OAuthProvider("apple.com").credential(
@@ -77,7 +77,7 @@ class AuthServices {
       await userCredential.user!.updateDisplayName(fullName);
       // await userCredential.user!.updatePhotoURL(photoURL)
     }
-    logg.log('userName: ${FirebaseAuth.instance.currentUser!.displayName}');
+    log('userName: ${FirebaseAuth.instance.currentUser!.displayName}');
     return userCredential;
   }
 
@@ -123,7 +123,7 @@ class AuthServices {
 
       return userCredential;
     } catch (e) {
-      logg.log("Error signing in with Google: $e");
+      log("Error signing in with Google: $e");
       googleNotifier.value = false;
     }
     return null;
@@ -175,7 +175,7 @@ class AuthServices {
         AppUtils.toastMessage('Email already in use');
       }
     } catch (e) {
-      logg.log('Error: ${e.toString()}');
+      log('Error: ${e.toString()}');
     }
     return null;
   }
@@ -212,7 +212,7 @@ class AuthServices {
         });
         return true;
       } else {
-        logg.log('Not Login');
+        log('Not Login');
         return false;
       }
     } on FirebaseAuthException catch (e) {
@@ -233,7 +233,7 @@ class AuthServices {
     await deleteUserData();
     await deleteUserTickets();
     await AuthServices.getCurrentUser.delete().then((value) {
-      logg.log('The user deleted successfully');
+      log('The user deleted successfully');
     });
   }
 
@@ -244,7 +244,7 @@ class AuthServices {
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .delete();
     } catch (e) {
-      logg.log("Error deleting user data: $e");
+      log("Error deleting user data: $e");
     }
   }
 
@@ -261,7 +261,7 @@ class AuthServices {
         await document.reference.delete();
       }
     } catch (e) {
-      logg.log("Error deleting user data: $e");
+      log("Error deleting user data: $e");
     }
   }
 
@@ -280,13 +280,14 @@ class AuthServices {
             ...userData,
             'profile_levels': {
               'isInstaVerified': true,
+              if (userModel.phoneNo!.isNotEmpty) 'isPhoneNoVerified': true,
             },
           },
           SetOptions(
             merge: true,
           ));
     } catch (e) {
-      logg.log('Error storing photo url: ${e.toString()}');
+      log('Error storing photo url: ${e.toString()}');
     }
   }
 
@@ -350,7 +351,7 @@ class AuthServices {
 
       await getCurrentUser.updateDisplayName(userModel.displayName);
     } catch (e) {
-      logg.log('Error storing user data: ${e.toString()}');
+      log('Error storing user data: ${e.toString()}');
     }
   }
 
@@ -367,7 +368,7 @@ class AuthServices {
       return await ref.getDownloadURL();
     } on FirebaseException catch (error) {
       SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-        logg.log('Error: ${error.toString()}');
+        log('Error: ${error.toString()}');
       });
     }
     return null;
@@ -387,7 +388,7 @@ class AuthServices {
       return await ref.getDownloadURL();
     } on FirebaseException catch (error) {
       SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-        logg.log('Error: ${error.toString()}');
+        log('Error: ${error.toString()}');
       });
     }
     return null;
@@ -408,7 +409,7 @@ class AuthServices {
         return null;
       }
     } catch (e) {
-      logg.log('Error fetching user data: ${e.toString()}');
+      log('Error fetching user data: ${e.toString()}');
       return null;
     }
   }
@@ -436,8 +437,27 @@ class AuthServices {
           image, SettableMetadata(contentType: "image/png"));
       return await profileImage.getDownloadURL();
     } on FirebaseException catch (error) {
-      logg.log('Image Uploading Error:$error ');
+      log('Image Uploading Error:$error ');
       return '';
     }
+  }
+
+  static Future<void> sendSmsOTP({
+    required String toNumber,
+    required String sentOTP,
+    required BuildContext context,
+  }) async {
+    final TwilioFlutter twilioFlutter = TwilioFlutter(
+      accountSid: ApiURLS.twilioAccountSID,
+      authToken: ApiURLS.twilioAuthToken,
+      twilioNumber: ApiURLS.twilioAccountNumber,
+      // messagingServiceSid:
+      // '' // optional replace with messaging service sid, required for features like scheduled sms
+    );
+    await twilioFlutter.sendSMS(
+      toNumber: toNumber,
+      messageBody:
+          'Here is your Rave Trade verfication code:\n\n $sentOTP \n\n This code will expire in 10 minutes.',
+    );
   }
 }
