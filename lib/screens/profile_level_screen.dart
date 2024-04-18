@@ -42,7 +42,7 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
     photoUrl = AuthServices.getCurrentUser.photoURL;
     fetchUserLevel = FireStoreServicesClient.fetchUserLevels();
     profileLevelsFuture = FireStoreServicesClient.fetchProfileLevels(
-        userId: AuthServices.getCurrentUser.uid);
+        userId: AuthServices.userUid);
     super.initState();
   }
 
@@ -98,7 +98,8 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
                   left: 90,
                   top: 70,
                   child: ProfileLevelImage(
-                      profileLevelsFuture: profileLevelsFuture),
+                    profileLevelsFuture: profileLevelsFuture,
+                  ),
                 ),
               ],
             ),
@@ -309,8 +310,10 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
   Widget _buildContainer(
     String svgPath,
     String title,
-    String levelText,
-    String leveltext,
+
+    ///muneeza here i changed "leveltext" to "textForVerifiedBadge" & "textForUnverifiedBadge" as these are more descriptive. Please always write descriptive and understandable names, even a junior can learn from your code.
+    String textForVerifiedBadge,
+    String textForUnverifiedBadge,
     double width,
     bool isVerified,
   ) {
@@ -321,9 +324,10 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
         height: 55,
         width: width,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(43),
-            color: AppColors.white,
-            border: Border.all(color: borderColor)),
+          borderRadius: BorderRadius.circular(43),
+          color: AppColors.white,
+          border: Border.all(color: borderColor),
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -366,7 +370,9 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
                     width: 5,
                   ),
                   CustomText(
-                    title: isVerified ? levelText : leveltext,
+                    title: isVerified
+                        ? textForVerifiedBadge
+                        : textForUnverifiedBadge,
                     size: AppFontSize.verySmall,
                     weight: FontWeight.w400,
                     color: isVerified ? AppColors.yellow : AppColors.purple,

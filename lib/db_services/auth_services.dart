@@ -21,9 +21,8 @@ import 'package:twilio_flutter/twilio_flutter.dart';
 import '../widgets/custom_navigation_admin.dart';
 
 class AuthServices {
-  static User get getCurrentUser {
-    return FirebaseAuth.instance.currentUser!;
-  }
+  static User get getCurrentUser => FirebaseAuth.instance.currentUser!;
+  static String get userUid => getCurrentUser.uid;
 
   ///Below data is for apple login/////
   /// Generates a cryptographically secure random nonce, to be included in a redential request.
@@ -74,6 +73,7 @@ class AuthServices {
     fullName.trim();
     if (fullName.length > 2) {
       await userCredential.user!.updateDisplayName(fullName);
+      await verifyBadge(isEmailAuthorized: true);
       // await userCredential.user!.updatePhotoURL(photoURL)
     }
     log('userName: ${FirebaseAuth.instance.currentUser!.displayName}');
@@ -321,14 +321,20 @@ class AuthServices {
     await user.set({'fcm_token': fcmToken}, SetOptions(merge: true));
   }
 
-  static Future<void> storePaypalAuthorization(
-      {required bool paypalAuthorization}) async {
+  static Future<void> verifyBadge({
+    bool isPaypalAuthorized = false,
+    bool isEmailAuthorized = false,
+    bool isInstaAuthorized = false,
+  }) async {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
-    DocumentReference user =
-        firestore.collection('user_data').doc(AuthServices.getCurrentUser.uid);
+    DocumentReference user = firestore.collection('user_data').doc(userUid);
+
+    ///muneeza i think we should do same for rest of badges too
     await user.set({
       'profile_levels': {
-        'isPaypalVerified': paypalAuthorization,
+        if (isPaypalAuthorized) 'isPaypalVerified': isPaypalAuthorized,
+        if (isEmailAuthorized) 'isEmailVerified': isPaypalAuthorized,
+        if (isInstaAuthorized) 'isInstaVerified': isInstaAuthorized,
       }
     }, SetOptions(merge: true));
   }

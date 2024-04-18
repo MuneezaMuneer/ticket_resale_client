@@ -36,8 +36,11 @@ class _ProfileSettingsState extends State<ProfileSettings> {
   TextEditingController birthController = TextEditingController();
   ValueNotifier<bool> loading = ValueNotifier<bool>(false);
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  late ValueNotifier<bool> _phoneVerifyBadgeNotifier;
+
   @override
   void initState() {
+    _phoneVerifyBadgeNotifier = ValueNotifier(false);
     imagePickerProvider =
         Provider.of<ImagePickerProvider>(context, listen: false);
     photoUrl = '${AuthServices.getCurrentUser.photoURL}';
@@ -45,12 +48,15 @@ class _ProfileSettingsState extends State<ProfileSettings> {
       if (userModel != null) {
         instaController.text = '${userModel.instaUsername}';
         phoneNoController.text = userModel.phoneNo ?? '';
+        _phoneVerifyBadgeNotifier.value = phoneNoController.text.isNotEmpty;
         birthController.text = userModel.birthDate ?? '';
       } else {
         instaController.text = '';
         phoneNoController.text = '';
         birthController.text = '';
       }
+
+      log('message init: isPhoneNoVerified: ${_phoneVerifyBadgeNotifier.value}');
       return userModel;
     });
     nameController.text = '${AuthServices.getCurrentUser.displayName}';
@@ -74,6 +80,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
     Size size = MediaQuery.of(context).size;
     final double height = size.height;
     final double width = size.width;
+    log('message build context: isPhoneNoVerified: ${_phoneVerifyBadgeNotifier.value}');
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 230, 234, 248),
@@ -287,11 +294,16 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                               onTap: () {
                                 _triggerOTP(context);
                               },
-                              child: const CustomText(
-                                title: 'Verify',
-                                color: AppColors.springGreen,
-                                weight: FontWeight.w600,
-                                size: AppFontSize.medium,
+                              child: ValueListenableBuilder(
+                                valueListenable: _phoneVerifyBadgeNotifier,
+                                builder: (context, value, child) => CustomText(
+                                  title: _phoneVerifyBadgeNotifier.value
+                                      ? 'Verified'
+                                      : 'Verify',
+                                  color: AppColors.springGreen,
+                                  weight: FontWeight.w600,
+                                  size: AppFontSize.medium,
+                                ),
                               ),
                             ),
                           ),
@@ -416,7 +428,10 @@ class _ProfileSettingsState extends State<ProfileSettings> {
       var rnd = new Random();
       var digits = rnd.nextInt(9000) + 1000;
       var sentOTP = digits;
-      log('message: $sentOTP');
+
+      ///Check code expiration
+      DateTime codeSentTime = DateTime.now();
+
       AuthServices.sendSmsOTP(
         context: context,
         toNumber: '$countryCode${phoneNoController.text.trim()}',
@@ -430,9 +445,15 @@ class _ProfileSettingsState extends State<ProfileSettings> {
         },
         email: '$countryCode${phoneNoController.text.trim()}',
         onTape: () async {
+          DateTime currentTime = DateTime.now();
+          Duration difference = currentTime.difference(codeSentTime);
           Navigator.of(context).pop();
-          if (sentOTP.toString() == otpController.text.trim()) {
-            SnackBarHelper.showSnackBar(context, 'Otp verfied successfully');
+          if (sentOTP.toString() == otpController.text.trim() &&
+              difference.inMinutes < 10) {
+            SnackBarHelper.showSnackBar(
+                context, 'Otp verfied. Click save to verify badge');
+          } else if (difference.inMinutes > 10) {
+            SnackBarHelper.showSnackBar(context, 'Code expired. Try again');
           } else {
             SnackBarHelper.showSnackBar(context, 'Entered OTP is not correct');
           }

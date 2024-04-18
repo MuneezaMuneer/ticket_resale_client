@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -55,6 +57,7 @@ class _CustomNavigationClientState extends State<CustomNavigationClient> {
           body: _widgetOptions[indexValue.selectedIndex],
           bottomNavigationBar: Container(
             height: 70,
+            padding: EdgeInsets.only(bottom: Platform.isIOS ? 10 : 0),
             decoration: const BoxDecoration(color: AppColors.white, boxShadow: [
               BoxShadow(color: AppColors.purple, blurRadius: 10)
             ]),

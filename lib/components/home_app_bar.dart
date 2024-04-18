@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:svg_flutter/svg_flutter.dart';
@@ -151,7 +152,7 @@ class _HomeAppBarState extends State<HomeAppBar> {
                     size: AppFontSize.verylarge,
                     weight: FontWeight.w700,
                   ),
-                  const Gap(12),
+                  Gap(height < 720 ? 0 : 12),
                   Align(
                     alignment: Alignment.center,
                     child: SizedBox(

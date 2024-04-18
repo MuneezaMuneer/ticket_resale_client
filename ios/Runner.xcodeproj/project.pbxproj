@@ -491,11 +491,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/RunnerProfile.entitlements;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
-<<<<<<< HEAD
-				DEVELOPMENT_TEAM = 8JJF374725;
-=======
 				DEVELOPMENT_TEAM = F8A7T9K22V;
->>>>>>> cb04404cea49a0d48ee02bc5e9bb7ee75d0c8635
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
