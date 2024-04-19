@@ -30,7 +30,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   ValueNotifier<bool> loading = ValueNotifier<bool>(false);
   TextEditingController lastNameController = TextEditingController();
   TextEditingController emailController =
-      TextEditingController(text: 'dewap67032@agaseo.com');
+      TextEditingController(text: 'gameg54032@eryod.com');
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
   TextEditingController instaController = TextEditingController();
@@ -154,8 +154,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       hintStyle: const TextStyle(color: AppColors.silver),
                       maxLines: 1,
                       validator: (value) {
+                        ///what is ment by valid password if non technical user is using this. you must code your message that everyone can understand it.
                         if (value == null || value.length < 6) {
-                          return 'Please enter valid password';
+                          // old   // return 'Please enter valid password';
+                          return 'Password\'s characters length can\'t be less than six';
                         } else {
                           return null;
                         }
@@ -360,12 +362,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
         try {
           bool isSent = await EmailServices.sendVerificationEmail(
-            toEmail: emailController.text,
-            subject: 'Here is your verification code',
-            body: 'Hello!\nWe have received your request to verify your Email.'
-                ' Please use the following code to verify your Email:\n\n$otp'
-                '\n\nRave Trade Team',
-          );
+              toEmail: emailController.text,
+              subject: 'Here is your verification code',
+              body: """
+Hello!
+
+We have received your request to verify your Email.
+
+Please use the following code to verify your Email:
+
+$otp
+
+Note: This code will expire in 10 minutes.
+
+Rave Trade Team""");
 
           if (isSent) {
             bool isValidEmail = false;

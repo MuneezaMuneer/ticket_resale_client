@@ -18,7 +18,7 @@ class PrivacyPolicy extends StatelessWidget {
             children: [
               Gap(40),
               CustomText(
-                title: PrivacyPolicyText.privacyPolicy,
+                title: AppText.privacyPolicy,
                 color: AppColors.brown,
                 size: AppFontSize.regular,
                 softWrap: true,

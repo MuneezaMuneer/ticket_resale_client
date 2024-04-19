@@ -241,6 +241,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                                 color: Color(0xFF9E9E9E),
                               ),
                               dropdownIconPosition: IconPosition.trailing,
+                              readOnly: _phoneVerifyBadgeNotifier.value,
                               cursorColor: AppColors.silver,
                               decoration: InputDecoration(
                                 hintText: 'Enter phone number',
@@ -292,7 +293,8 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                             top: 15,
                             child: GestureDetector(
                               onTap: () {
-                                _triggerOTP(context);
+                                if (!_phoneVerifyBadgeNotifier.value)
+                                  _triggerOTP(context);
                               },
                               child: ValueListenableBuilder(
                                 valueListenable: _phoneVerifyBadgeNotifier,
