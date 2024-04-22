@@ -1,5 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:io';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -106,15 +108,20 @@ class _LoginScreenState extends State<LoginScreen> {
                       socialTextWeight: FontWeight.w400,
                       isSocial: true,
                       onPressed: () async {
-                        appleNotifier.value = true;
-                        AuthServices.signInWithApple(context)
-                            .then((credential) {
-                          if (credential != null) {
-                            appleNotifier.value = false;
-                            Navigator.pushNamedAndRemoveUntil(context,
-                                AppRoutes.navigationScreen, (route) => false);
-                          }
-                        });
+                        if (Platform.isIOS) {
+                          appleNotifier.value = true;
+                          AuthServices.signInWithApple(context)
+                              .then((credential) {
+                            if (credential != null) {
+                              appleNotifier.value = false;
+                              Navigator.pushNamedAndRemoveUntil(context,
+                                  AppRoutes.navigationScreen, (route) => false);
+                            }
+                          });
+                        } else {
+                          SnackBarHelper.showSnackBar(context,
+                              'This feature is available on iOS devices only');
+                        }
                       },
                     );
                   },

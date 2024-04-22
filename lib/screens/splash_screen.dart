@@ -13,7 +13,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 3)).then((value) {
+    Future.delayed(const Duration(seconds: 2)).then((value) {
       if (FirebaseAuth.instance.currentUser != null) {
         if (AppText.preference?.getString(AppText.isAdminPrefKey) == null) {
           Navigator.pushNamed(context, AppRoutes.logIn);

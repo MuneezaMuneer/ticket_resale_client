@@ -1,5 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable
 
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:svg_flutter/svg_flutter.dart';
@@ -46,6 +49,7 @@ class _HomeAppBarState extends State<HomeAppBar> {
     Size size = MediaQuery.of(context).size;
     final double height = size.height;
     final double width = size.width;
+    log('height : $height');
 
     return Container(
       width: width,
@@ -55,7 +59,8 @@ class _HomeAppBarState extends State<HomeAppBar> {
               bottomLeft: Radius.circular(40),
               bottomRight: Radius.circular(40))),
       child: Padding(
-        padding: const EdgeInsets.only(left: 20, right: 20, top: 40),
+        padding:
+            EdgeInsets.only(left: 20, right: 20, top: Platform.isIOS ? 60 : 35),
         child: Stack(
           clipBehavior: Clip.none,
           children: [
@@ -136,7 +141,7 @@ class _HomeAppBarState extends State<HomeAppBar> {
               ),
             ),
             Positioned(
-              top: 70,
+              top: 66,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -152,7 +157,15 @@ class _HomeAppBarState extends State<HomeAppBar> {
                     size: AppFontSize.verylarge,
                     weight: FontWeight.w700,
                   ),
-                  Gap(height < 720 ? 0 : 12),
+                  Gap(
+                    height < 720
+                        ? 0
+                        : height > 720 && height < 800
+                            ? 0
+                            : height > 800 && height < 850
+                                ? 7
+                                : 12,
+                  ),
                   Align(
                     alignment: Alignment.center,
                     child: SizedBox(

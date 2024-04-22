@@ -18,8 +18,8 @@ Route onGenerateRoute(RouteSettings settings) {
     return animatePage(const SignUpScreen());
   } else if (settings.name == AppRoutes.navigationScreen) {
     return animatePage(const CustomNavigationClient());
-  } else if (settings.name == AppRoutes.passwordScreen) {
-    return animatePage(const PasswordScreen());
+  } else if (settings.name == AppRoutes.forgotPasswordScreen) {
+    return animatePage(const ForgotPasswordScreen());
   } else if (settings.name == AppRoutes.homeScreen) {
     return animatePage(const HomeScreen());
   } else if (settings.name == AppRoutes.commentScreen) {

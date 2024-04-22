@@ -290,6 +290,7 @@ class AuthServices {
     }
   }
 
+  ///handle cases when email doesn't exits and check other possible cases
   static Future<String> forgotPassword(
       {required String email, required BuildContext context}) async {
     FirebaseAuth firebaseAuth = FirebaseAuth.instance;
