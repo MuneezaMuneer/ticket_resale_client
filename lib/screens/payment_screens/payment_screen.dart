@@ -87,6 +87,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       await PaypalPaymentServices.executePayment(
                               executeUrl, payerID, accessToken)
                           .then((id) async {
+                        await FireStoreServicesClient
+                            .updateNumberOfTransactions(
+                                userId1: AuthServices.userUid,
+                                userId2: widget.userModel.id!);
                         log(".....................Payment Id : $id");
                         print(
                             'The notification of paid ticket is ${widget.userModel.fcmToken}');

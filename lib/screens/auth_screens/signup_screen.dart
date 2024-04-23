@@ -29,8 +29,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController firstNameController = TextEditingController();
   ValueNotifier<bool> loading = ValueNotifier<bool>(false);
   TextEditingController lastNameController = TextEditingController();
-  TextEditingController emailController =
-      TextEditingController(text: 'gameg54032@eryod.com');
+  TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
   TextEditingController instaController = TextEditingController();
@@ -154,9 +153,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       hintStyle: const TextStyle(color: AppColors.silver),
                       maxLines: 1,
                       validator: (value) {
-                        ///what is ment by valid password if non technical user is using this. you must code your message that everyone can understand it.
                         if (value == null || value.length < 6) {
-                          // old   // return 'Please enter valid password';
                           return 'Password\'s characters length can\'t be less than six';
                         } else {
                           return null;
@@ -269,7 +266,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         }
                       },
                       onChanged: (phone) {
-                        phoneController.text = phone.completeNumber;
+                        phoneController.text = phone.number;
                       },
                       keyboardType: TextInputType.number,
                       inputFormatters: <TextInputFormatter>[

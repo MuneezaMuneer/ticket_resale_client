@@ -6,6 +6,7 @@ class EventModalClient {
   String? docId;
   String? time;
   String? location;
+  bool? featuredEvent;
 
   EventModalClient(
       {this.imageUrl,
@@ -14,10 +15,12 @@ class EventModalClient {
       this.description,
       this.docId,
       this.time,
-      this.location});
+      this.location,
+      this.featuredEvent});
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
+      'isFeatured': featuredEvent,
       'image_url': imageUrl,
       'event_name': eventName,
       'date': date,
@@ -32,6 +35,7 @@ class EventModalClient {
     Map<String, dynamic> map,
   ) {
     return EventModalClient(
+      featuredEvent: map['isFeatured'] ?? '',
       imageUrl: map['image_url'] ?? '',
       eventName: map['event_name'] ?? '',
       date: map['date'] ?? '',

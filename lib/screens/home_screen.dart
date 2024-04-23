@@ -178,7 +178,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         final data = snapshot.data;
                         data!.sort((a, b) => a.date!.compareTo(b.date!));
 
-                        final nearestEvent = data.first;
+                        final nearestEvent = data.firstWhere(
+                            (event) => event.featuredEvent == true,
+                            orElse: () => data.first);
                         return Stack(
                           clipBehavior: Clip.none,
                           children: [

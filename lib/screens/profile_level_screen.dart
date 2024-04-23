@@ -183,7 +183,7 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
                                   GestureDetector(
                                     onTap: () {
                                       if (currentUser.profileLevels![
-                                              'isinstaVerified'] ??
+                                              'isEmailVerified'] ??
                                           false) {
                                         CustomBottomSheet.showInstaBottomSheet(
                                           context: context,
@@ -235,7 +235,7 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
                                     onTap: () {
                                       log('message: phone icon is tapped');
                                       if (currentUser.profileLevels![
-                                              'isPhoneNoVerified'] ??
+                                              'isPaypalVerified'] ??
                                           false) {
                                         Navigator.pushNamed(
                                           context,
@@ -254,22 +254,15 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
                                           false,
                                     ),
                                   ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      if (currentUser.profileLevels![
-                                              'isTransactionVerified'] ??
-                                          false) {}
-                                    },
-                                    child: _buildContainer(
-                                      AppSvgs.levelFive,
-                                      'Make 5 Buy/Sell Transaction',
-                                      'Level 5 Verified',
-                                      'Verify for Level 5',
-                                      width,
-                                      currentUser.profileLevels![
-                                              'isTransactionVerified'] ??
-                                          false,
-                                    ),
+                                  _buildContainer(
+                                    AppSvgs.levelFive,
+                                    'Make 5 Buy/Sell Transaction',
+                                    'Level 5 Verified',
+                                    'Verify for Level 5',
+                                    width,
+                                    currentUser.profileLevels![
+                                            'number_of_transactions'] >=
+                                        5,
                                   ),
                                   GestureDetector(
                                     onTap: () {
@@ -310,8 +303,6 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
   Widget _buildContainer(
     String svgPath,
     String title,
-
-    ///muneeza here i changed "leveltext" to "textForVerifiedBadge" & "textForUnverifiedBadge" as these are more descriptive. Please always write descriptive and understandable names, even a junior can learn from your code.
     String textForVerifiedBadge,
     String textForUnverifiedBadge,
     double width,

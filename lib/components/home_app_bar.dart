@@ -11,7 +11,6 @@ class AppBarPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
   final SearchCallBack? setSearchQuery;
   final bool? isExpanded = true;
   AppBarPersistentHeaderDelegate({
-   
     required this.controller,
     required this.setSearchQuery,
   });

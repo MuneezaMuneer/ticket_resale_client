@@ -506,4 +506,39 @@ class FireStoreServicesClient {
       log('Error making connection between users : ${e.toString()}');
     }
   }
+
+  static Future<void> updateNumberOfTransactions({
+    required String userId1,
+    required String userId2,
+  }) async {
+    try {
+      await _updateForUser(userId1);
+      await _updateForUser(userId2);
+
+      log('Number of transactions updated successfully for both users.');
+    } catch (e) {
+      log('Error updating number_of_transactions: $e');
+    }
+  }
+
+  static Future<void> _updateForUser(String userId) async {
+    try {
+      DocumentReference userDocRef =
+          FirebaseFirestore.instance.collection('user_data').doc(userId);
+
+      Map<String, dynamic> profileLevelsUpdate = {
+        'profile_levels': {
+          'number_of_transactions': FieldValue.increment(1),
+        },
+      };
+
+      await userDocRef.set(
+        profileLevelsUpdate,
+        SetOptions(merge: true),
+      );
+    } catch (e) {
+      print('Error updating number_of_transactions for user $userId: $e');
+      throw e;
+    }
+  }
 }
