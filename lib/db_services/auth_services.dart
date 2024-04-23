@@ -229,8 +229,8 @@ class AuthServices {
   }
 
   static Future<void> deleteUserAccount() async {
-    await deleteUserData();
-    await deleteUserTickets();
+    // await deleteUserData();
+    // await deleteUserTickets();
     await AuthServices.getCurrentUser.delete().then((value) {
       log('The user deleted successfully');
     });

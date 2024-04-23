@@ -178,6 +178,7 @@ class AppUtils {
   }) {
     BottomPicker.date(
       backgroundColor: AppColors.paleGrey,
+      // ignore: deprecated_member_use
       title: 'Select date',
       dateOrder: DatePickerDateOrder.dmy,
       initialDateTime: DateTime.now(),
@@ -188,6 +189,7 @@ class AppUtils {
         fontWeight: FontWeight.w700,
         letterSpacing: 1,
       ),
+      // ignore: deprecated_member_use
       titleStyle: const TextStyle(
         fontSize: AppFontSize.regular,
         fontWeight: FontWeight.w600,
