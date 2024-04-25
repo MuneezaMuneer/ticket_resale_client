@@ -40,6 +40,7 @@ class TicketResale extends StatelessWidget {
         ChangeNotifierProvider<ClearProvider>(
           create: (context) => ClearProvider(),
         ),
+       
         ChangeNotifierProvider<EventImagePickerProvider>(
           create: (context) => EventImagePickerProvider(),
         ),

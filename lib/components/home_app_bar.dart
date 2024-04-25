@@ -1,130 +1,76 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable
 
-import 'dart:developer';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:svg_flutter/svg_flutter.dart';
 import 'package:ticket_resale/components/components.dart';
 import 'package:ticket_resale/constants/constants.dart';
-import 'package:ticket_resale/db_services/db_services.dart';
-import 'package:ticket_resale/models/models.dart';
-import 'package:ticket_resale/utils/utils.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
-class HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
+class AppBarPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
   final TextEditingController? controller;
   final SearchCallBack? setSearchQuery;
-  const HomeAppBar({
-    Key? key,
+  final bool? isExpanded = true;
+  AppBarPersistentHeaderDelegate({
     required this.controller,
     required this.setSearchQuery,
-  }) : super(key: key);
+  });
 
   @override
-  State<HomeAppBar> createState() => _HomeAppBarState();
-
-  @override
-  Size get preferredSize => const Size.fromHeight(170);
-}
-
-class _HomeAppBarState extends State<HomeAppBar> {
-  String? displayName;
-  String? photoUrl;
-
-  ValueNotifier<String> searchNotifier = ValueNotifier<String>('');
-  late Stream<List<EventModalClient>> displayEventData;
-
-  @override
-  void initState() {
-    displayName = AuthServices.getCurrentUser.displayName ?? '';
-    photoUrl = AuthServices.getCurrentUser.photoURL ?? '';
-    displayEventData = FireStoreServicesClient.fetchEventData();
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
+    // Calculate the opacity based on the scroll offset
+    double opacity = shrinkOffset / (maxExtent - minExtent);
+    // Interpolate color between white and blue based on opacity
+    Color backgroundColor = AppColors.blueViolet.withOpacity(1 - opacity);
     Size size = MediaQuery.of(context).size;
-    final double height = size.height;
     final double width = size.width;
-    log('height : $height');
 
     return Container(
-      width: width,
       decoration: BoxDecoration(
-          gradient: customGradient,
-          borderRadius: const BorderRadius.only(
-              bottomLeft: Radius.circular(40),
-              bottomRight: Radius.circular(40))),
-      child: Padding(
-        padding:
-            EdgeInsets.only(left: 20, right: 20, top: Platform.isIOS ? 60 : 35),
-        child: Stack(
-          clipBehavior: Clip.none,
+        color: backgroundColor,
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(40),
+          bottomRight: Radius.circular(40),
+        ),
+      ),
+      // Use AnimatedOpacity to animate the visibility
+      child: AnimatedOpacity(
+        opacity: isExpanded! ? 1.0 : 0.0,
+        duration: Duration(milliseconds: 200),
+        child: Column(
           children: [
-            SizedBox(
-                height: 50,
-                width: 50,
-                child: photoUrl != null && photoUrl!.isNotEmpty
-                    ? CustomDisplayStoryImage(
-                        imageUrl: '$photoUrl',
-                        height: 45,
-                        width: 45,
-                      )
-                    : const CircleAvatar(
-                        backgroundImage: AssetImage(AppImages.profileImage))),
-            Padding(
-              padding: const EdgeInsets.only(left: 60),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CustomText(
-                    title: AppUtils.getGreeting(),
-                    color: AppColors.white,
-                    weight: FontWeight.w400,
-                    size: AppFontSize.small,
-                  ),
-                  CustomText(
-                    title: displayName != null ? displayName ?? '' : '',
-                    color: AppColors.white,
-                    weight: FontWeight.w700,
-                    size: AppFontSize.regular,
-                  )
-                ],
-              ),
-            ),
-            Positioned(
-              right: 5,
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    AppRoutes.notificationScreen,
-                  );
-                },
-                child: Container(
-                    height: 40,
-                    width: 40,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AppColors.white.withOpacity(0.1),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Gap(10),
+                    const CustomText(
+                      title: 'Discover Amazing',
+                      color: AppColors.white,
+                      size: AppFontSize.regular,
+                      weight: FontWeight.w400,
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: SvgPicture.asset(AppSvgs.sms),
-                    )),
-              ),
-            ),
-            Positioned(
-              right: 5,
-              top: 50,
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(context, AppRoutes.chatScreen);
-                },
-                child: Container(
+                    const CustomText(
+                      title: 'Events Tickets Now',
+                      color: AppColors.white,
+                      size: AppFontSize.verylarge,
+                      weight: FontWeight.w700,
+                    ),
+                  ],
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      AppRoutes.chatScreen,
+                    );
+                  },
+                  child: Container(
                     height: 40,
                     width: 40,
                     decoration: BoxDecoration(
@@ -137,87 +83,53 @@ class _HomeAppBarState extends State<HomeAppBar> {
                         color: AppColors.white,
                         size: 20,
                       ),
-                    )),
-              ),
-            ),
-            Positioned(
-              top: 66,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const CustomText(
-                    title: 'Discover Amazing',
-                    color: AppColors.white,
-                    size: AppFontSize.regular,
-                    weight: FontWeight.w400,
-                  ),
-                  const CustomText(
-                    title: 'Events Tickets Now',
-                    color: AppColors.white,
-                    size: AppFontSize.verylarge,
-                    weight: FontWeight.w700,
-                  ),
-                  Gap(
-                    height < 720
-                        ? 0
-                        : height > 720 && height < 800
-                            ? 0
-                            : height > 800 && height < 850
-                                ? 7
-                                : 12,
-                  ),
-                  Align(
-                    alignment: Alignment.center,
-                    child: SizedBox(
-                      height: height * 0.08,
-                      width: width * 0.9,
-                      child: ValueListenableBuilder(
-                        valueListenable: widget.controller!,
-                        builder: (context, value, child) {
-                          return CustomTextField(
-                            hintText: 'Search Events, Tickets, or City',
-                            hintStyle: const TextStyle(color: AppColors.silver),
-                            fillColor: AppColors.white,
-                            controller: widget.controller!,
-                            isFilled: true,
-                            onChanged: (query) {
-                              widget.setSearchQuery!(widget.controller!.text);
-                            },
-                            suffixIcon: Padding(
-                              padding: const EdgeInsets.only(right: 8),
-                              child: Container(
-                                height: 35,
-                                width: 35,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  gradient: customGradient,
-                                ),
-                                child: Center(
-                                  child: widget.controller!.text.isEmpty
-                                      ? const Icon(
-                                          Icons.search,
-                                          color: AppColors.white,
-                                        )
-                                      : InkWell(
-                                          onTap: () {
-                                            widget.controller!.clear();
-                                            widget.setSearchQuery!(
-                                                widget.controller!.text);
-                                          },
-                                          child: const Icon(
-                                            Icons.close,
-                                            color: AppColors.white,
-                                          ),
-                                        ),
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
                     ),
                   ),
-                ],
+                ),
+              ],
+            ),
+            const Gap(20),
+            SizedBox(
+              width: width * 0.9,
+              child: CustomTextField(
+                hintText: 'Search Events, Tickets, or City',
+                hintStyle: const TextStyle(
+                  color: AppColors.silver,
+                ),
+                fillColor: AppColors.white,
+                controller: controller!,
+                isFilled: true,
+                onChanged: (query) {
+                  setSearchQuery!(controller!.text);
+                },
+                suffixIcon: Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: Container(
+                    height: 35,
+                    width: 35,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: customGradient,
+                    ),
+                    child: Center(
+                      child: controller!.text.isEmpty
+                          ? const Icon(
+                              Icons.search,
+                              color: AppColors.white,
+                            )
+                          : InkWell(
+                              onTap: () {
+                                controller!.clear();
+                                setSearchQuery!(controller!.text);
+                              },
+                              child: const Icon(
+                                Icons.close,
+                                color: AppColors.white,
+                              ),
+                            ),
+                    ),
+                  ),
+                ),
               ),
             ),
           ],
@@ -225,4 +137,113 @@ class _HomeAppBarState extends State<HomeAppBar> {
       ),
     );
   }
+
+  @override
+  double get minExtent => 10;
+  @override
+  double get maxExtent => 150;
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
+    if (oldDelegate is AppBarPersistentHeaderDelegate) {
+      return controller != oldDelegate.controller ||
+          setSearchQuery != oldDelegate.setSearchQuery;
+    }
+    return false;
+  }
 }
+
+// class SearchQueryHeader extends SliverPersistentHeaderDelegate {
+//   final TextEditingController? controller;
+//   final SearchCallBack? setSearchQuery;
+
+//   SearchQueryHeader({
+//     required this.controller,
+//     required this.setSearchQuery,
+//   });
+
+//   @override
+//   Widget build(
+//     BuildContext context,
+//     double shrinkOffset,
+//     bool overlapsContent,
+//   ) {
+//     Size size = MediaQuery.of(context).size;
+//     final double width = size.width;
+
+//     return Container(
+//       decoration: BoxDecoration(
+//         color: AppColors.blueViolet,
+//         borderRadius: const BorderRadius.only(
+//           bottomLeft: Radius.circular(40),
+//           bottomRight: Radius.circular(40),
+//         ),
+//       ),
+//       child: Align(
+//         alignment: Alignment.center,
+//         child: SizedBox(
+//           width: width * 0.9,
+//           child: ValueListenableBuilder(
+//             valueListenable: controller!,
+//             builder: (context, value, child) {
+//               return CustomTextField(
+//                 hintText: 'Search Events, Tickets, or City',
+//                 hintStyle: const TextStyle(
+//                   color: AppColors.silver,
+//                 ),
+//                 fillColor: AppColors.white,
+//                 controller: controller!,
+//                 isFilled: true,
+//                 onChanged: (query) {
+//                   setSearchQuery!(controller!.text);
+//                 },
+//                 suffixIcon: Padding(
+//                   padding: const EdgeInsets.only(right: 8),
+//                   child: Container(
+//                     height: 35,
+//                     width: 35,
+//                     decoration: BoxDecoration(
+//                       shape: BoxShape.circle,
+//                       gradient: customGradient,
+//                     ),
+//                     child: Center(
+//                       child: controller!.text.isEmpty
+//                           ? const Icon(
+//                               Icons.search,
+//                               color: AppColors.white,
+//                             )
+//                           : InkWell(
+//                               onTap: () {
+//                                 controller!.clear();
+//                                 setSearchQuery!(controller!.text);
+//                               },
+//                               child: const Icon(
+//                                 Icons.close,
+//                                 color: AppColors.white,
+//                               ),
+//                             ),
+//                     ),
+//                   ),
+//                 ),
+//               );
+//             },
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+
+//   @override
+//   double get minExtent => 50;
+//   @override
+//   double get maxExtent => 75;
+
+//   @override
+//   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
+//     if (oldDelegate is SearchQueryHeader) {
+//       return controller != oldDelegate.controller ||
+//           setSearchQuery != oldDelegate.setSearchQuery;
+//     }
+//     return false;
+//   }
+// }

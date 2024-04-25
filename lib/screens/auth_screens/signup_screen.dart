@@ -29,17 +29,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController firstNameController = TextEditingController();
   ValueNotifier<bool> loading = ValueNotifier<bool>(false);
   TextEditingController lastNameController = TextEditingController();
-  TextEditingController emailController =
-      TextEditingController(text: 'gameg54032@eryod.com');
+  TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
   TextEditingController instaController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   ValueNotifier<bool> passwordVisibility = ValueNotifier<bool>(true);
   ValueNotifier<bool> confirmpasswordVisibility = ValueNotifier<bool>(true);
+  late String countryCode;
+  late bool isPhoneNumberExist;
 
   @override
   void initState() {
+    countryCode = '';
     bottomSheetProvider =
         Provider.of<BottomSheetProvider>(context, listen: false);
     instaController.text = '@';
@@ -154,9 +156,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       hintStyle: const TextStyle(color: AppColors.silver),
                       maxLines: 1,
                       validator: (value) {
-                        ///what is ment by valid password if non technical user is using this. you must code your message that everyone can understand it.
                         if (value == null || value.length < 6) {
-                          // old   // return 'Please enter valid password';
                           return 'Password\'s characters length can\'t be less than six';
                         } else {
                           return null;
@@ -269,7 +269,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         }
                       },
                       onChanged: (phone) {
-                        phoneController.text = phone.completeNumber;
+                        phoneController.text = phone.number;
+                        countryCode = phone.countryCode;
                       },
                       keyboardType: TextInputType.number,
                       inputFormatters: <TextInputFormatter>[
@@ -294,7 +295,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           loading: loading.value,
                           textSize: AppFontSize.regular,
                           onPressed: () async {
-                            _triggerSignUp();
+                            bool isInstagramExist =
+                                await FireStoreServicesClient.checUserInstagram(
+                                    instagram: instaController.text);
+                            isPhoneNumberExist = await FireStoreServicesClient
+                                .checkUserPhoneNumber(
+                                    phoneNumber:
+                                        '${countryCode}${phoneController.text}');
+                            if (isPhoneNumberExist) {
+                              SnackBarHelper.showSnackBar(
+                                  context, 'This phone number already exist.');
+                            } else if (isInstagramExist) {
+                              SnackBarHelper.showSnackBar(context,
+                                  'This instagram account already exist.');
+                            } else {
+                              _triggerSignUp();
+                            }
                           },
                         );
                       },

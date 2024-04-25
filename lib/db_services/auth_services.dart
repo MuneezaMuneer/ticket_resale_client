@@ -24,8 +24,9 @@ class AuthServices {
   static User get getCurrentUser => FirebaseAuth.instance.currentUser!;
   static String get userUid => getCurrentUser.uid;
 
-  ///Below data is for apple login/////
-  /// Generates a cryptographically secure random nonce, to be included in a redential request.
+  /*Below data is for apple login
+  Generates a cryptographically secure random nonce,
+  to be included in a redential request.*/
   static String generateNonce([int length = 32]) {
     const charset =
         '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
@@ -228,12 +229,44 @@ class AuthServices {
     }
   }
 
-  static Future<void> deleteUserAccount() async {
-    await deleteUserData();
-    await deleteUserTickets();
-    await AuthServices.getCurrentUser.delete().then((value) {
-      log('The user deleted successfully');
-    });
+  static Future<void> deleteUserAccount(
+      BuildContext context, String password) async {
+    try {
+      User currentUser = AuthServices.getCurrentUser;
+
+      // Check if the user signed in with Google
+      if (currentUser.providerData
+          .any((info) => info.providerId == 'google.com')) {
+        GoogleSignInAccount? googleUser = await GoogleSignIn().signInSilently();
+        GoogleSignInAuthentication googleAuth =
+            await googleUser!.authentication;
+        AuthCredential credential = GoogleAuthProvider.credential(
+          idToken: googleAuth.idToken,
+          accessToken: googleAuth.accessToken,
+        );
+
+        await currentUser.reauthenticateWithCredential(credential);
+      } else {
+        String email = AuthServices.getCurrentUser.email!;
+
+        AuthCredential credential =
+            EmailAuthProvider.credential(email: email, password: password);
+
+        await currentUser.reauthenticateWithCredential(credential);
+      }
+
+      await deleteUserData();
+      await deleteUserTickets();
+
+      await currentUser.delete();
+
+      Navigator.pushNamedAndRemoveUntil(
+          context, AppRoutes.logIn, (route) => false);
+
+      print('The user deleted successfully');
+    } catch (e) {
+      print('Error deleting user account: $e');
+    }
   }
 
   static Future<void> deleteUserData() async {
@@ -458,7 +491,7 @@ class AuthServices {
       authToken: ApiURLS.twilioAuthToken,
       twilioNumber: ApiURLS.twilioAccountNumber,
       // messagingServiceSid:
-      // '' // optional replace with messaging service sid, required for features like scheduled sms
+      // optional replace with messaging service sid, required for features like scheduled sms
     );
     await twilioFlutter.sendSMS(
       toNumber: toNumber,

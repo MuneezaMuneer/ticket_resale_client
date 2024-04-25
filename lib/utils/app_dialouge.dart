@@ -14,6 +14,9 @@ import 'package:ticket_resale/widgets/widgets.dart';
 
 deleteDialog({required BuildContext context}) {
   ValueNotifier<bool> _valueNotifier = ValueNotifier(false);
+  TextEditingController passwordController = TextEditingController();
+  bool loginInWithGoogle = AuthServices.getCurrentUser.providerData
+      .any((info) => info.providerId == 'google.com');
   return showAdaptiveDialog(
     context: context,
     builder: (context) {
@@ -25,11 +28,28 @@ deleteDialog({required BuildContext context}) {
           height: 130,
           width: 250,
         ),
-        content: CustomText(
-          title: 'Your account will be deleted\n permanently.',
-          color: AppColors.jetBlack.withOpacity(0.8),
-          weight: FontWeight.w400,
-          textAlign: TextAlign.center,
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CustomText(
+              title: 'Your account will be deleted\n permanently.',
+              color: AppColors.jetBlack.withOpacity(0.8),
+              weight: FontWeight.w400,
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 20),
+            Visibility(
+              visible: !loginInWithGoogle,
+              child: SizedBox(
+                width: 250,
+                child: CustomTextField(
+                  controller: passwordController,
+                  hintText: 'Password',
+                ),
+              ),
+            ),
+            if (!loginInWithGoogle) Gap(5)
+          ],
         ),
         actions: <Widget>[
           TextButton(
@@ -43,10 +63,8 @@ deleteDialog({required BuildContext context}) {
           TextButton(
             onPressed: () async {
               _valueNotifier.value = true;
-              await AuthServices.deleteUserAccount().then((user) {
-                Navigator.pushNamedAndRemoveUntil(
-                    context, AppRoutes.logIn, (route) => false);
-              });
+              String password = passwordController.text;
+              await AuthServices.deleteUserAccount(context, password);
               _valueNotifier.value = false;
             },
             child: ValueListenableBuilder(
