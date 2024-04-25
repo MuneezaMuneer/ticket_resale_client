@@ -24,8 +24,6 @@ class ProfileSettings extends StatefulWidget {
 }
 
 late ImagePickerProvider imagePickerProvider;
-String? photoUrl;
-String countryCode = '';
 
 class _ProfileSettingsState extends State<ProfileSettings> {
   TextEditingController nameController = TextEditingController();
@@ -37,9 +35,12 @@ class _ProfileSettingsState extends State<ProfileSettings> {
   ValueNotifier<bool> loading = ValueNotifier<bool>(false);
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   late ValueNotifier<bool> _phoneVerifyBadgeNotifier;
-
+  late String countryCode;
+  String? photoUrl;
+  late bool isPhoneNumberExist;
   @override
   void initState() {
+    countryCode = '';
     _phoneVerifyBadgeNotifier = ValueNotifier(false);
     imagePickerProvider =
         Provider.of<ImagePickerProvider>(context, listen: false);
@@ -360,8 +361,23 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                               textColor: AppColors.white,
                               gradient: customGradient,
                               textSize: AppFontSize.regular,
-                              onPressed: () {
-                                _updateUserInfo();
+                              onPressed: () async {
+                                bool isInstagramExist =
+                                    await FireStoreServicesClient
+                                        .doesInstagramExist(
+                                            instaController.text);
+                                isPhoneNumberExist = await FireStoreServicesClient
+                                    .doesPhoneNumberExist(
+                                        '${countryCode}${phoneNoController.text}');
+                                if (isPhoneNumberExist) {
+                                  SnackBarHelper.showSnackBar(context,
+                                      'This phone number already exist.');
+                                } else if (isInstagramExist) {
+                                  SnackBarHelper.showSnackBar(context,
+                                      'This instagram account already exist.');
+                                } else {
+                                  _updateUserInfo();
+                                }
                               });
                         },
                       ),
@@ -390,6 +406,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
             displayName: nameController.text,
             instaUsername: instaController.text,
             phoneNo: phoneNoController.text,
+            completePhoneNo: '${countryCode}${phoneNoController.text}',
             birthDate: birthController.text,
             email: AuthServices.getCurrentUser.email,
             photoUrl: imagePickerProvider.getImageBytes.isNotEmpty

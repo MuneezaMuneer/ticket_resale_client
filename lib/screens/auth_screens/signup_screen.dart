@@ -36,9 +36,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController phoneController = TextEditingController();
   ValueNotifier<bool> passwordVisibility = ValueNotifier<bool>(true);
   ValueNotifier<bool> confirmpasswordVisibility = ValueNotifier<bool>(true);
+  late String countryCode;
+  late bool isPhoneNumberExist;
 
   @override
   void initState() {
+    countryCode = '';
     bottomSheetProvider =
         Provider.of<BottomSheetProvider>(context, listen: false);
     instaController.text = '@';
@@ -267,6 +270,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       },
                       onChanged: (phone) {
                         phoneController.text = phone.number;
+                        countryCode = phone.countryCode;
                       },
                       keyboardType: TextInputType.number,
                       inputFormatters: <TextInputFormatter>[
@@ -291,7 +295,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           loading: loading.value,
                           textSize: AppFontSize.regular,
                           onPressed: () async {
-                            _triggerSignUp();
+                            bool isInstagramExist =
+                                await FireStoreServicesClient.checUserInstagram(
+                                    instagram: instaController.text);
+                            isPhoneNumberExist = await FireStoreServicesClient
+                                .checkUserPhoneNumber(
+                                    phoneNumber:
+                                        '${countryCode}${phoneController.text}');
+                            if (isPhoneNumberExist) {
+                              SnackBarHelper.showSnackBar(
+                                  context, 'This phone number already exist.');
+                            } else if (isInstagramExist) {
+                              SnackBarHelper.showSnackBar(context,
+                                  'This instagram account already exist.');
+                            } else {
+                              _triggerSignUp();
+                            }
                           },
                         );
                       },

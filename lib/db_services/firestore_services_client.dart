@@ -412,6 +412,31 @@ class FireStoreServicesClient {
     }
   }
 
+  static Future<bool> checkUserPhoneNumber(
+      {required String phoneNumber}) async {
+    var user = await FirebaseFirestore.instance
+        .collection('user_data')
+        .where("complete_phone_number", isEqualTo: phoneNumber)
+        .get();
+    if (user.docs.isEmpty) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  static Future<bool> checUserInstagram({required String instagram}) async {
+    var user = await FirebaseFirestore.instance
+        .collection('user_data')
+        .where("instagram_username", isEqualTo: instagram)
+        .get();
+    if (user.docs.isEmpty) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   static String getMessagesHashCodeID({required String userIDReceiver}) {
     String currentUserUID = AuthServices.getCurrentUser.uid;
     String chatHashID = '';
@@ -511,34 +536,74 @@ class FireStoreServicesClient {
     required String userId1,
     required String userId2,
   }) async {
-    try {
-      await _updateForUser(userId1);
-      await _updateForUser(userId2);
-
-      log('Number of transactions updated successfully for both users.');
-    } catch (e) {
-      log('Error updating number_of_transactions: $e');
-    }
+    await _updateForUser(userId1);
+    await _updateForUser(userId2);
   }
 
   static Future<void> _updateForUser(String userId) async {
-    try {
-      DocumentReference userDocRef =
-          FirebaseFirestore.instance.collection('user_data').doc(userId);
+    DocumentReference userDocRef =
+        FirebaseFirestore.instance.collection('user_data').doc(userId);
 
-      Map<String, dynamic> profileLevelsUpdate = {
-        'profile_levels': {
-          'number_of_transactions': FieldValue.increment(1),
-        },
-      };
+    Map<String, dynamic> profileLevelsUpdate = {
+      'profile_levels': {
+        'number_of_transactions': FieldValue.increment(1),
+      },
+    };
 
-      await userDocRef.set(
-        profileLevelsUpdate,
-        SetOptions(merge: true),
-      );
-    } catch (e) {
-      print('Error updating number_of_transactions for user $userId: $e');
-      throw e;
-    }
+    await userDocRef.set(
+      profileLevelsUpdate,
+      SetOptions(merge: true),
+    );
+  }
+
+  static Future<void> storeUserPaypalInfo({required String email}) async {
+    await FirebaseFirestore.instance
+        .collection('user_data')
+        .doc(AuthServices.userUid)
+        .set({
+      'paypal_email': email,
+    }, SetOptions(merge: true));
+  }
+
+  static Future<List<String>> getAllUserPaypalEmails() async {
+    final querySnapshot =
+        await FirebaseFirestore.instance.collection('user_data').get();
+
+    // Extract PayPal emails from user documents
+    return querySnapshot.docs
+        .where((doc) => doc.id != AuthServices.userUid) // Exclude current user
+        .map((doc) => doc.data()['paypal_email'] ?? '')
+        .toList()
+        .cast<String>();
+  }
+
+  // Function to check if a PayPal email is already in use by another user
+  static bool isPaypalEmailAlreadyInUse(
+      String currentUserPaypalEmail, List<String> allUserPaypalEmails) {
+    return allUserPaypalEmails.any((email) => email == currentUserPaypalEmail);
+  }
+
+  static Future<bool> doesPhoneNumberExist(String phoneNumber) async {
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('user_data')
+        .where('complete_phone_number', isEqualTo: phoneNumber)
+        .get();
+
+    final filteredDocs =
+        querySnapshot.docs.where((doc) => doc.id != AuthServices.userUid);
+
+    return filteredDocs.isNotEmpty;
+  }
+
+  static Future<bool> doesInstagramExist(String instagram) async {
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('user_data')
+        .where('instagram_username', isEqualTo: instagram)
+        .get();
+
+    final filteredDocs =
+        querySnapshot.docs.where((doc) => doc.id != AuthServices.userUid);
+
+    return filteredDocs.isNotEmpty;
   }
 }

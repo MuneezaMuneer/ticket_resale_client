@@ -153,21 +153,21 @@ class _CommentScreenState extends State<CommentScreen> {
                                               mainAxisAlignment:
                                                   MainAxisAlignment.start,
                                               children: [
-                                                CircleAvatar(
-                                                  backgroundImage: userData
-                                                                  .photoUrl !=
-                                                              null &&
-                                                          userData.photoUrl !=
-                                                              "null" &&
-                                                          Uri.parse(userData
-                                                                  .photoUrl!)
-                                                              .isAbsolute
-                                                      ? NetworkImage(
-                                                          '${userData.photoUrl}')
-                                                      : AssetImage(AppImages
-                                                              .profileImage)
-                                                          as ImageProvider,
-                                                ),
+                                                userData.photoUrl != null &&
+                                                        userData.photoUrl !=
+                                                            "null" &&
+                                                        Uri.parse(userData
+                                                                .photoUrl!)
+                                                            .isAbsolute
+                                                    ? CustomDisplayStoryImage(
+                                                        height: 43,
+                                                        width: 43,
+                                                        imageUrl:
+                                                            '${userData.photoUrl}')
+                                                    : const CircleAvatar(
+                                                        backgroundImage:
+                                                            AssetImage(AppImages
+                                                                .profileImage)),
                                                 const Gap(7),
                                                 Expanded(
                                                   flex: 9,

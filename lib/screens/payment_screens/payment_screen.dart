@@ -1,15 +1,17 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ticket_resale/constants/constants.dart';
-import 'package:ticket_resale/db_services/auth_services.dart';
-import 'package:ticket_resale/db_services/firestore_services_client.dart';
+import 'package:ticket_resale/db_services/db_services.dart';
 import 'package:ticket_resale/models/models.dart';
 import 'package:ticket_resale/screens/screens.dart';
+import 'package:ticket_resale/utils/custom_snackbar.dart';
 import 'package:ticket_resale/utils/notification_services.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:http/http.dart' as http;
 
 class PaymentScreen extends StatefulWidget {
   final String totalPrice;
@@ -72,69 +74,111 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   if (request.url.contains(ApiURLS.returnURL)) {
                     final uri = Uri.parse(request.url);
                     final payerID = uri.queryParameters['PayerID'];
-                    log(".....................ID for Transaction........$executeUrl");
-                    NotificationModel notificationModel = NotificationModel(
-                      title: 'Payment Done Successfully',
-                      body:
-                          "The offered'\$${widget.totalPrice}' price is paid successfully",
-                      id: AuthServices.getCurrentUser.uid,
-                      userId: widget.userModel.id,
-                      status: 'Unread',
-                      notificationType: 'paid',
-                      docId: AuthServices.getCurrentUser.uid,
+                    final paymentId = uri.queryParameters['paymentId'];
+                    late final paypalEmail;
+                    late final allUserPaypalEmails;
+                    final accessToken =
+                        await PaypalPaymentServices.getAccessToken();
+                    print('Access Token: $accessToken');
+                    final response = await http.get(
+                      Uri.parse('${ApiURLS.fetchPaymentInfoURLById}$paymentId'),
+                      headers: {
+                        'Authorization': 'Bearer $accessToken',
+                        'Content-Type': 'application/json',
+                      },
                     );
-                    if (payerID != null) {
-                      await PaypalPaymentServices.executePayment(
-                              executeUrl, payerID, accessToken)
-                          .then((id) async {
-                        await FireStoreServicesClient
-                            .updateNumberOfTransactions(
-                                userId1: AuthServices.userUid,
-                                userId2: widget.userModel.id!);
-                        log(".....................Payment Id : $id");
-                        print(
-                            'The notification of paid ticket is ${widget.userModel.fcmToken}');
-                        await NotificationServices.sendNotification(
-                            token: widget.userModel.fcmToken!,
-                            title: 'Payment Done Successfully',
-                            body:
-                                "The offered'\$${widget.totalPrice}' price is paid successfully",
-                            data: notificationModel.toMapForNotifications());
-                        TicketsSoldModel soldModel = TicketsSoldModel(
-                          ticketPrice: widget.ticketPrice,
-                          ticketImage: widget.ticketImage,
-                          ticketName: widget.ticketName,
-                          buyerUid: AuthServices.getCurrentUser.uid,
-                        );
-                        await FireStoreServicesClient.storeSoldTickets(
-                          soldModel: soldModel,
-                          userId: widget.userModel.id!,
-                        ).then((value) async {
-                          await FireStoreServicesClient
-                                  .updateStatusInSoldTicketsCollection(
-                                      hashKey: widget.hashKey,
-                                      selectedDocIds: widget.docIds,
-                                      newStatus: 'Paid')
-                              .then((value) async {
-                            await FireStoreServicesClient.storeNotifications(
-                                notificationModel: notificationModel,
-                                name: 'client_notifications');
-                          });
-                        });
 
-                        //  widget.onFinish(id);
-                        if (mounted) {
-                          Navigator.pushReplacementNamed(
-                              context, AppRoutes.feedbackScreen,
-                              arguments: {
-                                'sellerImageUrl': widget.userModel.photoUrl,
-                                'sellerName': widget.userModel.displayName,
-                                'sellerId': widget.userModel.id
-                              });
-                        }
-                      });
+                    if (response.statusCode == 200) {
+                      final responseData = json.decode(response.body);
+                      print('PayPal Response Data: $responseData');
+
+                      final payerInfo = responseData['payer']['payer_info'];
+                      paypalEmail = payerInfo['email'];
+// Function to fetch PayPal email of all users from Firestore
+                      allUserPaypalEmails = await FireStoreServicesClient
+                          .getAllUserPaypalEmails();
+                      ;
+                      if (paypalEmail != null &&
+                          !allUserPaypalEmails.contains(paypalEmail)) {
+                        await FireStoreServicesClient.storeUserPaypalInfo(
+                            email: paypalEmail);
+                      }
+                    }
+
+                    final currentUserPaypalEmail = paypalEmail;
+
+                    if (
+
+// Function to check if a PayPal email is already in use by another user
+                        FireStoreServicesClient.isPaypalEmailAlreadyInUse(
+                            currentUserPaypalEmail, allUserPaypalEmails)) {
+                      SnackBarHelper.showSnackBar(context,
+                          'PayPal email is already in use by another user. Payment cannot proceed.');
                     } else {
-                      Navigator.of(context).pop();
+                      log(".....................ID for Transaction........$executeUrl");
+                      NotificationModel notificationModel = NotificationModel(
+                        title: 'Payment Done Successfully',
+                        body:
+                            "The offered'\$${widget.totalPrice}' price is paid successfully",
+                        id: AuthServices.getCurrentUser.uid,
+                        userId: widget.userModel.id,
+                        status: 'Unread',
+                        notificationType: 'paid',
+                        docId: AuthServices.getCurrentUser.uid,
+                      );
+                      if (payerID != null) {
+                        await PaypalPaymentServices.executePayment(
+                                executeUrl, payerID, accessToken)
+                            .then((id) async {
+                          await FireStoreServicesClient
+                              .updateNumberOfTransactions(
+                                  userId1: AuthServices.userUid,
+                                  userId2: widget.userModel.id!);
+                          log(".....................Payment Id : $id");
+                          print(
+                              'The notification of paid ticket is ${widget.userModel.fcmToken}');
+                          await NotificationServices.sendNotification(
+                              token: widget.userModel.fcmToken!,
+                              title: 'Payment Done Successfully',
+                              body:
+                                  "The offered'\$${widget.totalPrice}' price is paid successfully",
+                              data: notificationModel.toMapForNotifications());
+                          TicketsSoldModel soldModel = TicketsSoldModel(
+                            ticketPrice: widget.ticketPrice,
+                            ticketImage: widget.ticketImage,
+                            ticketName: widget.ticketName,
+                            buyerUid: AuthServices.getCurrentUser.uid,
+                          );
+                          await FireStoreServicesClient.storeSoldTickets(
+                            soldModel: soldModel,
+                            userId: widget.userModel.id!,
+                          ).then((value) async {
+                            await FireStoreServicesClient
+                                    .updateStatusInSoldTicketsCollection(
+                                        hashKey: widget.hashKey,
+                                        selectedDocIds: widget.docIds,
+                                        newStatus: 'Unpaid')
+                                .then((value) async {
+                              await FireStoreServicesClient.storeNotifications(
+                                  notificationModel: notificationModel,
+                                  name: 'client_notifications');
+                            });
+                          });
+
+                          //  widget.onFinish(id);
+                          if (mounted) {
+                            Navigator.pushReplacementNamed(
+                                context, AppRoutes.feedbackScreen,
+                                arguments: {
+                                  'sellerImageUrl': widget.userModel.photoUrl,
+                                  'sellerName': widget.userModel.displayName,
+                                  'sellerId': widget.userModel.id
+                                });
+                          }
+                        });
+                      } else {
+                        Navigator.of(context).pop();
+                      }
                     }
 
                     // Navigator.of(context).pop();

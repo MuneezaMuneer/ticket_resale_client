@@ -255,15 +255,15 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
                                     ),
                                   ),
                                   _buildContainer(
-                                    AppSvgs.levelFive,
-                                    'Make 5 Buy/Sell Transaction',
-                                    'Level 5 Verified',
-                                    'Verify for Level 5',
-                                    width,
-                                    currentUser.profileLevels![
-                                            'number_of_transactions'] >=
-                                        5,
-                                  ),
+                                      AppSvgs.levelFive,
+                                      'Make 5 Buy/Sell Transaction',
+                                      'Level 5 Verified',
+                                      'Verify for Level 5',
+                                      width,
+                                      (currentUser.profileLevels![
+                                                  'number_of_transactions'] ??
+                                              0) >=
+                                          5),
                                   GestureDetector(
                                     onTap: () {
                                       if (currentUser.profileLevels![
