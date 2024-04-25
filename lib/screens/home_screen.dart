@@ -351,13 +351,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildText() {
     return const Center(
-        child: Text(
-      'No Record Found',
-      style: TextStyle(
-          color: AppColors.jetBlack,
-          fontSize: AppFontSize.medium,
-          fontWeight: FontWeight.w400),
-    ));
+      child: Text(
+        'No Record Found',
+        style: TextStyle(
+            color: AppColors.jetBlack,
+            fontSize: AppFontSize.medium,
+            fontWeight: FontWeight.w400),
+      ),
+    );
   }
 }
 
