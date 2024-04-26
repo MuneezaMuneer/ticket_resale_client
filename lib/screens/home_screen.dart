@@ -288,33 +288,31 @@ class _HomeScreenState extends State<HomeScreen> {
                         return SizedBox(
                           height: height * 0.07,
                           width: width * 0.3,
-                          child: Padding(
+                          child: Container(
                             padding: const EdgeInsets.only(right: 10),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color:
-                                          AppColors.pastelBlue.withOpacity(0.7),
-                                      width: 2),
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: const Color(0XffF7F5FF)),
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 10, left: 20, right: 20),
-                                    child: circleAvatar(
-                                        50, 50, AppImages.profileImage),
-                                  ),
-                                  const Gap(10),
-                                  CustomText(
-                                    title: namesDJS[index],
-                                    color: AppColors.jetBlack.withOpacity(0.7),
-                                    size: AppFontSize.verySmall,
-                                    weight: FontWeight.w600,
-                                  )
-                                ],
-                              ),
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                    color:
+                                        AppColors.pastelBlue.withOpacity(0.7),
+                                    width: 2),
+                                borderRadius: BorderRadius.circular(10),
+                                color: const Color(0XffF7F5FF)),
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 10, left: 20, right: 20),
+                                  child: circleAvatar(
+                                      50, 50, AppImages.profileImage),
+                                ),
+                                const Gap(10),
+                                CustomText(
+                                  title: namesDJS[index],
+                                  color: AppColors.jetBlack.withOpacity(0.7),
+                                  size: AppFontSize.verySmall,
+                                  weight: FontWeight.w600,
+                                )
+                              ],
                             ),
                           ),
                         );

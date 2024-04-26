@@ -24,11 +24,12 @@ void main() async {
   await provider.loadPreferences();
   FirebaseMessaging.instance.requestPermission();
   AppText.preference = await SharedPreferences.getInstance();
-  runApp(DevicePreview(
-    enabled: !kReleaseMode,
-    builder: (context) => const TicketResale(),
-  ));
-  // const TicketResale());
+  runApp(
+      //   DevicePreview(
+      //   enabled: !kReleaseMode,
+      //   builder: (context) => const TicketResale(),
+      // ));
+      const TicketResale());
 }
 
 class TicketResale extends StatelessWidget {
@@ -40,7 +41,6 @@ class TicketResale extends StatelessWidget {
         ChangeNotifierProvider<ClearProvider>(
           create: (context) => ClearProvider(),
         ),
-       
         ChangeNotifierProvider<EventImagePickerProvider>(
           create: (context) => EventImagePickerProvider(),
         ),

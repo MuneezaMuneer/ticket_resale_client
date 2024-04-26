@@ -29,6 +29,7 @@ class AppBarPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
     final double width = size.width;
 
     return Container(
+      padding: EdgeInsets.symmetric(horizontal: 13),
       decoration: BoxDecoration(
         color: backgroundColor,
         borderRadius: const BorderRadius.only(
@@ -92,7 +93,7 @@ class AppBarPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
             SizedBox(
               width: width * 0.9,
               child: CustomTextField(
-                hintText: 'Search Events, Tickets, or City',
+                hintText: 'Search by Events, Tickets, or City',
                 hintStyle: const TextStyle(
                   color: AppColors.silver,
                 ),

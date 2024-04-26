@@ -56,8 +56,8 @@ class _CustomNavigationClientState extends State<CustomNavigationClient> {
         return Scaffold(
           body: _widgetOptions[indexValue.selectedIndex],
           bottomNavigationBar: Container(
-            height: 75,
-            padding: EdgeInsets.only(bottom: Platform.isIOS ? 0 : 0),
+            height: 95,
+            padding: EdgeInsets.only(bottom: Platform.isIOS ? 20 : 5),
             decoration: const BoxDecoration(color: AppColors.white, boxShadow: [
               BoxShadow(color: AppColors.purple, blurRadius: 10)
             ]),
