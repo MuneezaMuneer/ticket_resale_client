@@ -131,6 +131,10 @@ class _CommentScreenState extends State<CommentScreen> {
                               child: ListView.builder(
                                 itemCount: commentData.length,
                                 itemBuilder: (context, index) {
+                                  Duration difference = DateTime.now()
+                                      .difference(commentData[index].time!);
+                                  bool isExpired = difference.inHours > 3;
+
                                   return StreamBuilder(
                                     stream:
                                         FireStoreServicesClient.fetchUserData(
@@ -282,130 +286,150 @@ class _CommentScreenState extends State<CommentScreen> {
                                                 Expanded(
                                                   flex: 3,
                                                   child: isCurrentUserTicket
-                                                      ? SizedBox(
-                                                          height: height * 0.04,
-                                                          child: CustomButton(
-                                                            onPressed: () {
-                                                              String? hashKey =
-                                                                  FireStoreServicesClient
-                                                                      .getMessagesHashCodeID(
+                                                      ? isExpired
+                                                          ? SizedBox(
+                                                              height:
+                                                                  height * 0.04,
+                                                              child:
+                                                                  CustomButton(
+                                                                onPressed:
+                                                                    () {},
+                                                                textColor:
+                                                                    AppColors
+                                                                        .white,
+                                                                textSize:
+                                                                    AppFontSize
+                                                                        .medium,
+                                                                btnText:
+                                                                    'Expired',
+                                                                gradient:
+                                                                    customGradient,
+                                                                weight:
+                                                                    FontWeight
+                                                                        .w600,
+                                                              ),
+                                                            )
+                                                          : SizedBox(
+                                                              height:
+                                                                  height * 0.04,
+                                                              child:
+                                                                  CustomButton(
+                                                                onPressed: () {
+                                                                  String?
+                                                                      hashKey =
+                                                                      FireStoreServicesClient.getMessagesHashCodeID(
                                                                           userIDReceiver:
                                                                               '${userData.id}');
-                                                              MessageModel
-                                                                  messageModel =
-                                                                  MessageModel(
-                                                                message:
-                                                                    "Hey, I hope you are good.You have to pay the '\$${commentData[index].offerPrice}' to purchase the '${widget.ticketModal.ticketType} TICKET' for festival '${widget.eventModal.eventName}'",
-                                                                userIDReceiver:
-                                                                    '${userData.id}',
-                                                                userIDSender:
-                                                                    AuthServices
-                                                                        .getCurrentUser
-                                                                        .uid,
-                                                              );
-                                                              NotificationModel notificationModel = NotificationModel(
-                                                                  title:
-                                                                      'Offer Accepted',
-                                                                  body:
-                                                                      "Your offered price'\$${commentData[index].offerPrice}' for '${widget.ticketModal.ticketType} TICKET' is confirmed for festival '${widget.eventModal.eventName}'",
-                                                                  userId:
-                                                                      userData
-                                                                          .id,
-                                                                  id: AuthServices
-                                                                      .getCurrentUser
-                                                                      .uid,
-                                                                  status:
-                                                                      'Unread',
-                                                                  notificationType:
-                                                                      'offer_confirm');
-                                                              TicketsSoldModel
-                                                                  soldModel =
-                                                                  TicketsSoldModel(
-                                                                status:
-                                                                    'Unpaid',
-                                                                ticketPrice:
-                                                                    commentData[
-                                                                            index]
-                                                                        .offerPrice,
-                                                                ticketImage: widget
-                                                                    .ticketModal
-                                                                    .imageUrl,
-                                                                ticketName: widget
-                                                                    .ticketModal
-                                                                    .ticketType,
-                                                                buyerUid:
-                                                                    '${userData.id}',
-                                                              );
-                                                              commentData[index]
-                                                                          .status ==
-                                                                      'Sell'
-                                                                  ? ticketSellDialog(
-                                                                      docId:
-                                                                          '${widget.ticketModal.docId}',
-                                                                      offerId:
-                                                                          '${commentData[index].offerId}',
-                                                                      context:
-                                                                          context,
-                                                                      ticketImage:
-                                                                          '${widget.ticketModal.imageUrl}',
-                                                                      offeredPrice:
-                                                                          '${commentData[index].offerPrice}',
-                                                                      buyerImage:
-                                                                          '${userData.photoUrl}',
-                                                                      buyerName:
-                                                                          '${userData.displayName}',
-                                                                      messageModel:
-                                                                          messageModel,
-                                                                      userModel:
-                                                                          userData,
-                                                                      hashKey:
-                                                                          hashKey,
-                                                                      soldModel:
-                                                                          soldModel,
-                                                                      buyerId:
-                                                                          '${userData.id}',
-                                                                      token:
-                                                                          '${userData.fcmToken}',
+                                                                  MessageModel
+                                                                      messageModel =
+                                                                      MessageModel(
+                                                                    message:
+                                                                        "Hey, I hope you are good.You have to pay the '\$${commentData[index].offerPrice}' to purchase the '${widget.ticketModal.ticketType} TICKET' for festival '${widget.eventModal.eventName}'",
+                                                                    userIDReceiver:
+                                                                        '${userData.id}',
+                                                                    userIDSender:
+                                                                        AuthServices
+                                                                            .getCurrentUser
+                                                                            .uid,
+                                                                  );
+                                                                  NotificationModel notificationModel = NotificationModel(
                                                                       title:
                                                                           'Offer Accepted',
                                                                       body:
                                                                           "Your offered price'\$${commentData[index].offerPrice}' for '${widget.ticketModal.ticketType} TICKET' is confirmed for festival '${widget.eventModal.eventName}'",
-                                                                      notificationModel:
-                                                                          notificationModel)
-                                                                  : Navigator.pushNamedAndRemoveUntil(
-                                                                      context,
-                                                                      AppRoutes
-                                                                          .chatDetailScreen,
-                                                                      (route) =>
-                                                                          false,
-                                                                      arguments: {
-                                                                          'receiverId':
-                                                                              messageModel.userIDReceiver,
-                                                                          'hashKey':
-                                                                              hashKey,
-                                                                          'userModel':
+                                                                      userId:
+                                                                          userData
+                                                                              .id,
+                                                                      id: AuthServices
+                                                                          .getCurrentUser
+                                                                          .uid,
+                                                                      status:
+                                                                          'Unread',
+                                                                      notificationType:
+                                                                          'offer_confirm');
+                                                                  TicketsSoldModel
+                                                                      soldModel =
+                                                                      TicketsSoldModel(
+                                                                    status:
+                                                                        'Unpaid',
+                                                                    ticketPrice:
+                                                                        commentData[index]
+                                                                            .offerPrice,
+                                                                    ticketImage: widget
+                                                                        .ticketModal
+                                                                        .imageUrl,
+                                                                    ticketName: widget
+                                                                        .ticketModal
+                                                                        .ticketType,
+                                                                    buyerUid:
+                                                                        '${userData.id}',
+                                                                  );
+                                                                  commentData[index].status ==
+                                                                          'Sell'
+                                                                      ? ticketSellDialog(
+                                                                          docId:
+                                                                              '${widget.ticketModal.docId}',
+                                                                          offerId:
+                                                                              '${commentData[index].offerId}',
+                                                                          context:
+                                                                              context,
+                                                                          ticketImage:
+                                                                              '${widget.ticketModal.imageUrl}',
+                                                                          offeredPrice:
+                                                                              '${commentData[index].offerPrice}',
+                                                                          buyerImage:
+                                                                              '${userData.photoUrl}',
+                                                                          buyerName:
+                                                                              '${userData.displayName}',
+                                                                          messageModel:
+                                                                              messageModel,
+                                                                          userModel:
                                                                               userData,
-                                                                          'isOpened':
-                                                                              true,
-                                                                          'offeredPrice':
-                                                                              commentData[index].offerPrice
-                                                                        });
-                                                            },
-                                                            textColor:
-                                                                AppColors.white,
-                                                            textSize:
-                                                                AppFontSize
-                                                                    .medium,
-                                                            btnText:
-                                                                commentData[
-                                                                        index]
-                                                                    .status,
-                                                            gradient:
-                                                                customGradient,
-                                                            weight:
-                                                                FontWeight.w600,
-                                                          ),
-                                                        )
+                                                                          hashKey:
+                                                                              hashKey,
+                                                                          soldModel:
+                                                                              soldModel,
+                                                                          buyerId:
+                                                                              '${userData.id}',
+                                                                          token:
+                                                                              '${userData.fcmToken}',
+                                                                          title:
+                                                                              'Offer Accepted',
+                                                                          body:
+                                                                              "Your offered price'\$${commentData[index].offerPrice}' for '${widget.ticketModal.ticketType} TICKET' is confirmed for festival '${widget.eventModal.eventName}'",
+                                                                          notificationModel:
+                                                                              notificationModel)
+                                                                      : Navigator.pushNamedAndRemoveUntil(
+                                                                          context,
+                                                                          AppRoutes
+                                                                              .chatDetailScreen,
+                                                                          (route) =>
+                                                                              false,
+                                                                          arguments: {
+                                                                              'receiverId': messageModel.userIDReceiver,
+                                                                              'hashKey': hashKey,
+                                                                              'userModel': userData,
+                                                                              'isOpened': true,
+                                                                              'offeredPrice': commentData[index].offerPrice
+                                                                            });
+                                                                },
+                                                                textColor:
+                                                                    AppColors
+                                                                        .white,
+                                                                textSize:
+                                                                    AppFontSize
+                                                                        .medium,
+                                                                btnText:
+                                                                    commentData[
+                                                                            index]
+                                                                        .status,
+                                                                gradient:
+                                                                    customGradient,
+                                                                weight:
+                                                                    FontWeight
+                                                                        .w600,
+                                                              ),
+                                                            )
                                                       : const SizedBox.shrink(),
                                                 )
                                               ],

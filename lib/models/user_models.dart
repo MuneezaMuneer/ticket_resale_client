@@ -3,7 +3,7 @@ class UserModelClient {
   final String? email;
   final String? instaUsername;
   final String? phoneNo;
-  final String? completePhoneNo;
+
   final String? birthDate;
   final String? photoUrl;
   Map<String, dynamic>? profileLevels = {};
@@ -22,7 +22,6 @@ class UserModelClient {
     this.birthDate,
     this.photoUrl,
     this.profileLevels,
-    this.completePhoneNo,
   });
 
   Map<String, dynamic> toMap() {
@@ -31,7 +30,6 @@ class UserModelClient {
       'email': email,
       'user_name': displayName,
       'phone_number': phoneNo,
-      'complete_phone_number': completePhoneNo,
       'birth_date': birthDate,
       'profile_levels': profileLevels,
       'status': status,
@@ -47,7 +45,6 @@ class UserModelClient {
       'birth_date': birthDate,
       'profile_levels': profileLevels,
       'status': status,
-      'complete_phone_number': completePhoneNo,
       'image_url': photoUrl,
       'fcm_token': fcmToken,
       'email': email,
@@ -60,7 +57,6 @@ class UserModelClient {
       status: map['status'] ?? '',
       instaUsername: map['instagram_username'] ?? "",
       phoneNo: map['phone_number'] ?? '',
-      completePhoneNo: map['complete_phone_number'] ?? '',
       birthDate: map['birth_date'] ?? '',
       photoUrl: map['image_url'] ?? '',
       profileLevels: map['profile_levels'] ?? Map,

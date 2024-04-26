@@ -6,6 +6,7 @@ class EventModalClient {
   String? docId;
   String? time;
   String? location;
+  String? djName;
   bool? featuredEvent;
 
   EventModalClient(
@@ -16,7 +17,8 @@ class EventModalClient {
       this.docId,
       this.time,
       this.location,
-      this.featuredEvent});
+      this.featuredEvent,
+      this.djName});
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -28,6 +30,7 @@ class EventModalClient {
       'doc_id': docId,
       'time': time,
       'location': location,
+      'dj_name': djName
     };
   }
 
@@ -35,15 +38,15 @@ class EventModalClient {
     Map<String, dynamic> map,
   ) {
     return EventModalClient(
-      featuredEvent: map['isFeatured'] ?? '',
-      imageUrl: map['image_url'] ?? '',
-      eventName: map['event_name'] ?? '',
-      date: map['date'] ?? '',
-      description: map['description'] ?? '',
-      docId: map['doc_id'] ?? '',
-      time: map['time'] ?? '',
-      location: map['location'] ?? '',
-    );
+        featuredEvent: map['isFeatured'] ?? '',
+        imageUrl: map['image_url'] ?? '',
+        eventName: map['event_name'] ?? '',
+        date: map['date'] ?? '',
+        description: map['description'] ?? '',
+        docId: map['doc_id'] ?? '',
+        time: map['time'] ?? '',
+        location: map['location'] ?? '',
+        djName: map['dj_name'] ?? '');
   }
 }
 

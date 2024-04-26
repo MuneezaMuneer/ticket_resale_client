@@ -12,6 +12,7 @@ import 'package:svg_flutter/svg_flutter.dart';
 import 'package:ticket_resale/components/components.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/db_services/db_services.dart';
+import 'package:ticket_resale/db_services/sumsub_services.dart';
 import 'package:ticket_resale/models/user_models.dart';
 import 'package:ticket_resale/providers/providers.dart';
 import 'package:ticket_resale/utils/utils.dart';
@@ -269,6 +270,7 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
                                       if (currentUser.profileLevels![
                                               'isSuperVerified'] ??
                                           false) {}
+                                      SumsubServices.launchSDK();
                                     },
                                     child: _buildContainer(
                                       AppSvgs.levelSix,
