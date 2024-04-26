@@ -88,7 +88,7 @@ sellerRatingDialog(
     required String networkImage,
     required String name,
     required String userId}) {
-  return showDialog(
+  return showAdaptiveDialog(
     context: context,
     builder: (context) {
       return AlertDialog.adaptive(
@@ -274,7 +274,7 @@ ticketSellDialog({
   required String title,
   required String body,
 }) {
-  return showDialog(
+  return showAdaptiveDialog(
     context: context,
     builder: (context) {
       return Consumer<BottomSheetProvider>(

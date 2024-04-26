@@ -269,7 +269,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         }
                       },
                       onChanged: (phone) {
-                        phoneController.text = phone.number;
+                       
                         countryCode = phone.countryCode;
                       },
                       keyboardType: TextInputType.number,
@@ -301,7 +301,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             isPhoneNumberExist = await FireStoreServicesClient
                                 .checkUserPhoneNumber(
                                     phoneNumber:
-                                        '${countryCode}${phoneController.text}');
+                                        '${phoneController.text}');
                             if (isPhoneNumberExist) {
                               SnackBarHelper.showSnackBar(
                                   context, 'This phone number already exist.');

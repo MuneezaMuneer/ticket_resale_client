@@ -43,51 +43,57 @@ class AppBarPersistentHeaderDelegate extends SliverPersistentHeaderDelegate {
         duration: Duration(milliseconds: 200),
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Gap(10),
-                    const CustomText(
-                      title: 'Discover Amazing',
-                      color: AppColors.white,
-                      size: AppFontSize.regular,
-                      weight: FontWeight.w400,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Gap(10),
+                        const CustomText(
+                          title: 'Discover Amazing',
+                          color: AppColors.white,
+                          size: AppFontSize.regular,
+                          weight: FontWeight.w400,
+                        ),
+                        const CustomText(
+                          title: 'Events Tickets Now',
+                          color: AppColors.white,
+                          size: AppFontSize.verylarge,
+                          weight: FontWeight.w700,
+                        ),
+                      ],
                     ),
-                    const CustomText(
-                      title: 'Events Tickets Now',
-                      color: AppColors.white,
-                      size: AppFontSize.verylarge,
-                      weight: FontWeight.w700,
-                    ),
-                  ],
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      AppRoutes.chatScreen,
-                    );
-                  },
-                  child: Container(
-                    height: 40,
-                    width: 40,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AppColors.white.withOpacity(0.1),
-                    ),
-                    child: const Center(
-                      child: Icon(
-                        Icons.comment,
-                        color: AppColors.white,
-                        size: 20,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        AppRoutes.chatScreen,
+                      );
+                    },
+                    child: Container(
+                      height: 40,
+                      width: 40,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: AppColors.white.withOpacity(0.1),
+                      ),
+                      child: const Center(
+                        child: Icon(
+                          Icons.comment,
+                          color: AppColors.white,
+                          size: 20,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             const Gap(20),
             SizedBox(

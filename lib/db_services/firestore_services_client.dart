@@ -185,6 +185,19 @@ class FireStoreServicesClient {
     });
   }
 
+  static Stream<List<DjsModel>> fetchDjs() {
+    return FirebaseFirestore.instance
+        .collection('popular_dj')
+        .snapshots()
+        .map((event) {
+      return event.docs.map((doc) {
+        return DjsModel.fromMap(
+          doc.data(),
+        );
+      }).toList();
+    });
+  }
+
   static Stream<EventModalClient> fetchEventDataBasedOnId(
       {required String eventId}) {
     return FirebaseFirestore.instance
@@ -416,7 +429,7 @@ class FireStoreServicesClient {
       {required String phoneNumber}) async {
     var user = await FirebaseFirestore.instance
         .collection('user_data')
-        .where("complete_phone_number", isEqualTo: phoneNumber)
+        .where("phone_number", isEqualTo: phoneNumber)
         .get();
     if (user.docs.isEmpty) {
       return false;
@@ -586,7 +599,7 @@ class FireStoreServicesClient {
   static Future<bool> doesPhoneNumberExist(String phoneNumber) async {
     final querySnapshot = await FirebaseFirestore.instance
         .collection('user_data')
-        .where('complete_phone_number', isEqualTo: phoneNumber)
+        .where('phone_number', isEqualTo: phoneNumber)
         .get();
 
     final filteredDocs =
@@ -606,4 +619,6 @@ class FireStoreServicesClient {
 
     return filteredDocs.isNotEmpty;
   }
+
+  
 }

@@ -35,12 +35,11 @@ class _ProfileSettingsState extends State<ProfileSettings> {
   ValueNotifier<bool> loading = ValueNotifier<bool>(false);
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   late ValueNotifier<bool> _phoneVerifyBadgeNotifier;
-  late String countryCode;
+  String countryCode = '';
   String? photoUrl;
   late bool isPhoneNumberExist;
   @override
   void initState() {
-    countryCode = '';
     _phoneVerifyBadgeNotifier = ValueNotifier(false);
     imagePickerProvider =
         Provider.of<ImagePickerProvider>(context, listen: false);
@@ -368,7 +367,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                                             instaController.text);
                                 isPhoneNumberExist = await FireStoreServicesClient
                                     .doesPhoneNumberExist(
-                                        '${countryCode}${phoneNoController.text}');
+                                        '${phoneNoController.text}');
                                 if (isPhoneNumberExist) {
                                   SnackBarHelper.showSnackBar(context,
                                       'This phone number already exist.');
@@ -406,7 +405,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
             displayName: nameController.text,
             instaUsername: instaController.text,
             phoneNo: phoneNoController.text,
-            completePhoneNo: '${countryCode}${phoneNoController.text}',
+          
             birthDate: birthController.text,
             email: AuthServices.getCurrentUser.email,
             photoUrl: imagePickerProvider.getImageBytes.isNotEmpty
