@@ -267,10 +267,10 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
                                           5),
                                   GestureDetector(
                                     onTap: () {
-                                      if (currentUser.profileLevels![
-                                              'isSuperVerified'] ??
-                                          false) {}
-                                      SumsubServices.launchSDK();
+                                      // if (currentUser.profileLevels![
+                                      //         'isSuperVerified'] ??
+                                      //     false) {}
+                                      // SumsubServices.launchSDK();
                                     },
                                     child: _buildContainer(
                                       AppSvgs.levelSix,
