@@ -103,8 +103,8 @@ class _HomeDetailFirstScreenState extends State<HomeDetailFirstScreen> {
                                                   .withOpacity(0.6),
                                               fontSize: AppFontSize.xsmall,
                                               fontWeight: FontWeight.w400)),
-                                      const TextSpan(
-                                          text: 'Martin Garrix',
+                                      TextSpan(
+                                          text: eventData.djName,
                                           style: TextStyle(
                                               color: AppColors.blueViolet,
                                               fontSize: AppFontSize.medium,

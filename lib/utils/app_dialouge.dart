@@ -223,9 +223,28 @@ sellerRatingDialog(
                                     'Avg. communication & response time',
                                 trailingTitle: averageCommunicationResponse),
                             const Gap(10),
-                            buildTile(
-                                leadingTitle: 'Total Transactions',
-                                trailingTitle: '23 transactions'),
+                            StreamBuilder(
+                              stream: FireStoreServicesClient.fetchUserLevels(
+                                  userId: userId),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return Center(
+                                      child: CupertinoActivityIndicator());
+                                } else if (snapshot.hasData) {
+                                  UserModelClient user = snapshot.data!;
+                                  final totalTransactions =
+                                      '${user.profileLevels!['number_of_transactions']} transaction${user.profileLevels!['number_of_transactions'] == 1 ? '' : 's'}';
+                                  return buildTile(
+                                      leadingTitle: 'Total Transactions',
+                                      trailingTitle: totalTransactions);
+                                } else {
+                                  return buildTile(
+                                      leadingTitle: 'Total Transactions',
+                                      trailingTitle: '0 transaction');
+                                }
+                              },
+                            ),
                             const Gap(40),
                             CustomButton(
                               onPressed: () {

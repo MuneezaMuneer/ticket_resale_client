@@ -57,6 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
         body: NestedScrollView(
           headerSliverBuilder: (context, innerBoxIsScrolled) => [
             SliverAppBar(
+              automaticallyImplyLeading: false,
               expandedHeight: 60,
               backgroundColor: AppColors.blueViolet,
               title: Row(
@@ -93,26 +94,20 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               actions: [
                 Padding(
-                  padding: const EdgeInsets.only(right: 10),
-                  child: GestureDetector(
-                    onTap: () {
+                  padding: const EdgeInsets.only(right: 6.0),
+                  child: IconButton.filled(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(
+                          Color(0xffFFFFFF).withOpacity(0.1)),
+                      iconColor: MaterialStateProperty.all(Color(0xffFFFFFF)),
+                    ),
+                    onPressed: () {
                       Navigator.pushNamed(
                         context,
                         AppRoutes.notificationScreen,
                       );
                     },
-                    child: Container(
-                      height: 40,
-                      width: 40,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: AppColors.white.withOpacity(0.1),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: SvgPicture.asset(AppSvgs.sms),
-                      ),
-                    ),
+                    icon: Icon(Icons.notifications),
                   ),
                 ),
               ],
@@ -413,14 +408,3 @@ Widget rowText(String title, String svgIcon) {
     ],
   );
 }
-
-
- // SliverPersistentHeader(
-              //     pinned: false,
-              //     floating: true,
-              //     delegate: AppBarPersistentHeaderDelegate(
-              //       controller: searchController,
-              //       setSearchQuery: (query) {
-              //         searchNotifier.value = query;
-              //       },
-              //     )),

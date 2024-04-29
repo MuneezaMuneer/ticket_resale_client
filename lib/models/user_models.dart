@@ -3,7 +3,6 @@ class UserModelClient {
   final String? email;
   final String? instaUsername;
   final String? phoneNo;
-
   final String? birthDate;
   final String? photoUrl;
   Map<String, dynamic>? profileLevels = {};

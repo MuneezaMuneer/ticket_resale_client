@@ -269,10 +269,10 @@ class FireStoreServicesClient {
         .map((event) => event.docs.length);
   }
 
-  static Stream<UserModelClient> fetchUserLevels() {
+  static Stream<UserModelClient> fetchUserLevels({required String userId}) {
     return FirebaseFirestore.instance
         .collection('user_data')
-        .doc(AuthServices.getCurrentUser.uid)
+        .doc(userId)
         .snapshots()
         .map((event) {
       return UserModelClient.fromMap(event.data()!, event.id);
@@ -288,6 +288,7 @@ class FireStoreServicesClient {
         .doc(uid.v4())
         .set(feedbackModel.toMap());
   }
+
 
   static Stream<List<FeedbackModel>> fetchFeedback({required String userId}) {
     return FirebaseFirestore.instance
@@ -619,6 +620,4 @@ class FireStoreServicesClient {
 
     return filteredDocs.isNotEmpty;
   }
-
-  
 }
