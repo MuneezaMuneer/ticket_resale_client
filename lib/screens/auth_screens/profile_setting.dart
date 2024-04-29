@@ -361,13 +361,15 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                               gradient: customGradient,
                               textSize: AppFontSize.regular,
                               onPressed: () async {
+                                FocusScope.of(context).unfocus();
                                 bool isInstagramExist =
                                     await FireStoreServicesClient
                                         .doesInstagramExist(
                                             instaController.text);
-                                isPhoneNumberExist = await FireStoreServicesClient
-                                    .doesPhoneNumberExist(
-                                        '${phoneNoController.text}');
+                                isPhoneNumberExist =
+                                    await FireStoreServicesClient
+                                        .doesPhoneNumberExist(
+                                            '${phoneNoController.text}');
                                 if (isPhoneNumberExist) {
                                   SnackBarHelper.showSnackBar(context,
                                       'This phone number already exist.');
@@ -405,7 +407,6 @@ class _ProfileSettingsState extends State<ProfileSettings> {
             displayName: nameController.text,
             instaUsername: instaController.text,
             phoneNo: phoneNoController.text,
-          
             birthDate: birthController.text,
             email: AuthServices.getCurrentUser.email,
             photoUrl: imagePickerProvider.getImageBytes.isNotEmpty
