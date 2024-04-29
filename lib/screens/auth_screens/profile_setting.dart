@@ -1,4 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
 import 'dart:developer';
 import 'dart:io';
 import 'dart:math' hide log;
@@ -149,7 +148,7 @@ class _ProfileSettingsState extends State<ProfileSettings> {
             const SizedBox(
               height: 5,
             ),
-            CustomRow(
+            ShowTransction(
               userId: AuthServices.getCurrentUser.uid,
             ),
             const SizedBox(height: 30),

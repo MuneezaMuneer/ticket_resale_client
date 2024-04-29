@@ -257,7 +257,6 @@ class AuthServices {
 
       await deleteUserData();
       await deleteUserTickets();
-
       await currentUser.delete();
 
       Navigator.pushNamedAndRemoveUntil(

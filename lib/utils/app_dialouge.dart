@@ -39,16 +39,19 @@ deleteDialog({required BuildContext context}) {
             ),
             SizedBox(height: 20),
             Visibility(
-              visible: !loginInWithGoogle,
+              visible: loginInWithGoogle ? true : true,
               child: SizedBox(
                 width: 250,
-                child: CustomTextField(
-                  controller: passwordController,
-                  hintText: 'Password',
+                child: Material(
+                  color: Colors.transparent,
+                  child: CustomTextField(
+                    controller: passwordController,
+                    hintText: 'Password required',
+                  ),
                 ),
               ),
             ),
-            if (!loginInWithGoogle) Gap(5)
+            if (loginInWithGoogle == false) Gap(5)
           ],
         ),
         actions: <Widget>[
@@ -63,7 +66,7 @@ deleteDialog({required BuildContext context}) {
           TextButton(
             onPressed: () async {
               _valueNotifier.value = true;
-              String password = passwordController.text;
+              String password = passwordController.text.trim();
               await AuthServices.deleteUserAccount(context, password);
               _valueNotifier.value = false;
             },
@@ -141,7 +144,7 @@ sellerRatingDialog(
             const SizedBox(
               height: 5,
             ),
-            CustomRow(
+            ShowTransction(
               userId: userId,
             ),
             const SizedBox(

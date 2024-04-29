@@ -98,7 +98,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             const SizedBox(
               height: 5,
             ),
-            CustomRow(
+            ShowTransction(
               userId: AuthServices.getCurrentUser.uid,
             ),
             const SizedBox(

@@ -1,3 +1,4 @@
+import 'package:device_preview/device_preview.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
@@ -22,12 +23,11 @@ void main() async {
   SwitchProvider provider = SwitchProvider();
   await provider.loadPreferences();
   AppText.preference = await SharedPreferences.getInstance();
-  runApp(
-      //   DevicePreview(
-      //   enabled: !kReleaseMode,
-      //   builder: (context) => const TicketResale(),
-      // ));
-      const TicketResale());
+  runApp(DevicePreview(
+    enabled: !kReleaseMode,
+    builder: (context) => const TicketResale(),
+  ));
+  // const TicketResale());
 }
 
 class TicketResale extends StatelessWidget {

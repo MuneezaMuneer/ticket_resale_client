@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ticket_resale/constants/constants.dart';
@@ -5,15 +7,15 @@ import 'package:ticket_resale/db_services/db_services.dart';
 import 'package:ticket_resale/models/models.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
-class CustomRow extends StatefulWidget {
+class ShowTransction extends StatefulWidget {
   final String userId;
-  CustomRow({super.key, required this.userId});
+  ShowTransction({super.key, required this.userId});
 
   @override
-  State<CustomRow> createState() => _CustomRowState();
+  State<ShowTransction> createState() => _ShowTransctionState();
 }
 
-class _CustomRowState extends State<CustomRow> {
+class _ShowTransctionState extends State<ShowTransction> {
   late Stream<List<FeedbackModel>> fetchRatings;
   late Stream<UserModelClient> fetchUserLevel;
   late String totalTransactions;
@@ -72,8 +74,11 @@ class _CustomRowState extends State<CustomRow> {
                 return Center(child: CupertinoActivityIndicator());
               } else if (snapshot.hasData) {
                 UserModelClient? currentUser = snapshot.data!;
-                totalTransactions =
-                    '${currentUser.profileLevels!['number_of_transactions']} transaction${currentUser.profileLevels!['number_of_transactions'] == 1 ? '' : 's'}';
+                totalTransactions = currentUser
+                            .profileLevels!['number_of_transactions'] !=
+                        null
+                    ? '${currentUser.profileLevels!['number_of_transactions']} transaction${currentUser.profileLevels!['number_of_transactions'] == 1 ? '' : 's'}'
+                    : '(0 Transactions) ';
                 return Padding(
                   padding: EdgeInsets.only(top: 5, left: 7),
                   child: CustomText(
@@ -83,17 +88,8 @@ class _CustomRowState extends State<CustomRow> {
                     color: AppColors.charcoal,
                   ),
                 );
-              } else {
-                return const Padding(
-                  padding: EdgeInsets.only(top: 8),
-                  child: CustomText(
-                    title: '(0 Transactions) ',
-                    weight: FontWeight.w400,
-                    size: AppFontSize.small,
-                    color: AppColors.charcoal,
-                  ),
-                );
               }
+              return SizedBox();
             },
           ),
         ],

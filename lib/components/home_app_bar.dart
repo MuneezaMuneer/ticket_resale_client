@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:ticket_resale/components/components.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
@@ -26,7 +25,7 @@ class SearchAppBar extends StatelessWidget {
     return SliverAppBar(
       pinned: true,
       automaticallyImplyLeading: false,
-      expandedHeight: 150,
+      // expandedHeight: 140,
       actions: [
         Padding(
           padding: const EdgeInsets.only(right: 6.0),
@@ -53,16 +52,18 @@ class SearchAppBar extends StatelessWidget {
       ),
       backgroundColor: AppColors.blueViolet,
       title: Padding(
-        padding: const EdgeInsets.only(left: 10, bottom: 17),
+        padding: const EdgeInsets.only(left: 10, bottom: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Gap(10),
-            const CustomText(
-              title: 'Discover Amazing',
-              color: AppColors.white,
-              size: AppFontSize.regular,
-              weight: FontWeight.w400,
+            Align(
+              alignment: Alignment.centerLeft,
+              child: const CustomText(
+                title: 'Discover Amazing',
+                color: AppColors.white,
+                size: AppFontSize.regular,
+                weight: FontWeight.w400,
+              ),
             ),
             const CustomText(
               title: 'Events Tickets Now',

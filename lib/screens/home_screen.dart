@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:avatar_stack/avatar_stack.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -49,6 +51,9 @@ class _HomeScreenState extends State<HomeScreen> {
     Size size = MediaQuery.of(context).size;
     final double height = size.height;
     final double width = size.width;
+
+    ///muneeza check why build is called too many times. it should be called only once
+    log('message: build is called');
     return GestureDetector(
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
@@ -66,6 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ? CustomDisplayStoryImage(
                           imageUrl: '$photoUrl',
                           width: 50,
+                          height: 50,
                         )
                       : const CircleAvatar(
                           backgroundImage: AssetImage(AppImages.profileImage),
