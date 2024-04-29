@@ -50,7 +50,10 @@ class NotificationServices {
   static Future<bool> requestPermission() async {
     if (Platform.isIOS) {
       messaging.setForegroundNotificationPresentationOptions(
-          alert: true, sound: true, badge: false);
+        alert: true,
+        sound: true,
+        badge: false,
+      );
 
       return true;
     } else {
@@ -113,7 +116,7 @@ class NotificationServices {
             CustomBottomSheet.showConfirmTicketsSheet(
                 context: context,
                 hashKey: hashKey,
-              //  id: {'seller_uid': userId},
+                //  id: {'seller_uid': userId},
                 userModel: userModel);
           }
         }

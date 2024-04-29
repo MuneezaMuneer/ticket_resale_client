@@ -40,79 +40,81 @@ class _NotificationScreenState extends State<NotificationScreen> {
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        children: [const Gap(20), Expanded(child: notificationTiles())],
+      ),
+    );
+  }
+
+  Widget notificationTiles() {
+    return DefaultTabController(
+      length: 2,
+      child: Column(
         children: [
-          const Gap(20),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 30,
-            ),
-            child: Text(
-              'Unread',
-              style: _textStyle(),
-            ),
+          const TabBar(
+            tabs: [
+              Tab(
+                text: 'UnRead Notification',
+              ),
+              Tab(text: 'Read Notification'),
+            ],
           ),
-          const Gap(20),
           Expanded(
-            child: Container(
-                decoration: BoxDecoration(color: AppColors.white, boxShadow: [
-                  BoxShadow(
-                      color: AppColors.blueViolet.withOpacity(0.4),
-                      blurRadius: 10)
-                ]),
-                child: _builderWidget(FontWeight.w600, AppColors.yellow,
-                    stream: unreadnotification)),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(30, 20, 30, 0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            child: TabBarView(
               children: [
-                Text(
-                  'Read',
-                  style: _textStyle(),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: _builderWidget(stream: unreadnotification),
                 ),
-                InkWell(
-                  onTap: () {
-                    isDelete.value = true;
-                    FireStoreServicesClient.deleteReadNotifications(
-                      name: 'client_notifications',
-                    ).then((_) {
-                      isDelete.value = false;
-                    });
-                  },
-                  child: const Text(
-                    'Clear All',
-                    style: TextStyle(
-                        color: AppColors.red,
-                        fontSize: AppFontSize.medium,
-                        fontWeight: FontWeight.w600),
-                  ),
-                ),
+                Stack(
+                  children: [
+                    Positioned(
+                      right: 28,
+                      top: 8,
+                      child: GestureDetector(
+                        onTap: () {
+                          isDelete.value = true;
+                          FireStoreServicesClient.deleteReadNotifications(
+                            name: 'client_notifications',
+                          ).then((_) {
+                            isDelete.value = false;
+                          });
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 10),
+                          child: CustomText(
+                            title: 'Clear All',
+                            size: AppFontSize.medium,
+                            weight: FontWeight.w600,
+                            color: AppColors.red,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 30),
+                      child: ValueListenableBuilder<bool>(
+                        valueListenable: isDelete,
+                        builder: (context, deleting, _) {
+                          return deleting
+                              ? const Center(
+                                  child: CupertinoActivityIndicator())
+                              : _builderWidget(
+                                  stream: readnotification,
+                                );
+                        },
+                      ),
+                    ),
+                  ],
+                )
               ],
             ),
           ),
-          const Gap(20),
-          Expanded(
-            child: ValueListenableBuilder<bool>(
-              valueListenable: isDelete,
-              builder: (context, deleting, _) {
-                return deleting
-                    ? const Center(child: CupertinoActivityIndicator())
-                    : _builderWidget(
-                        FontWeight.w300,
-                        AppColors.vibrantGreen,
-                        stream: readnotification,
-                      );
-              },
-            ),
-          )
         ],
       ),
     );
   }
 
-  Widget _builderWidget(final FontWeight weight, final Color containerColor,
-      {required Stream<List<NotificationModel>> stream}) {
+  Widget _builderWidget({required Stream<List<NotificationModel>> stream}) {
     return StreamBuilder(
       stream: stream,
       builder: (context, snapshot) {
@@ -184,7 +186,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                             CustomText(
                               title: notifications[index].title,
                               size: AppFontSize.medium,
-                              weight: weight,
+                              weight: FontWeight.w600,
                               color: AppColors.jetBlack,
                             ),
                             CustomText(
@@ -213,12 +215,5 @@ class _NotificationScreenState extends State<NotificationScreen> {
         }
       },
     );
-  }
-
-  TextStyle _textStyle() {
-    return const TextStyle(
-        color: AppColors.jetBlack,
-        fontSize: AppFontSize.medium,
-        fontWeight: FontWeight.w600);
   }
 }

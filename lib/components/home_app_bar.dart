@@ -27,32 +27,24 @@ class SearchAppBar extends StatelessWidget {
 
     return SliverAppBar(
       pinned: true,
+      automaticallyImplyLeading: false,
       expandedHeight: 150,
       actions: [
         Padding(
-          padding: const EdgeInsets.only(right: 10),
-          child: GestureDetector(
-            onTap: () {
+          padding: const EdgeInsets.only(right: 6.0),
+          child: IconButton.filled(
+            style: ButtonStyle(
+              backgroundColor:
+                  MaterialStateProperty.all(Color(0xffFFFFFF).withOpacity(0.1)),
+              iconColor: MaterialStateProperty.all(Color(0xffFFFFFF)),
+            ),
+            onPressed: () {
               Navigator.pushNamed(
                 context,
                 AppRoutes.chatScreen,
               );
             },
-            child: Container(
-              height: 40,
-              width: 40,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColors.white.withOpacity(0.1),
-              ),
-              child: const Center(
-                child: Icon(
-                  Icons.comment,
-                  color: AppColors.white,
-                  size: 20,
-                ),
-              ),
-            ),
+            icon: Icon(Icons.comment),
           ),
         ),
       ],

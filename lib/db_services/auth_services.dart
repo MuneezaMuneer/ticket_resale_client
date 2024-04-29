@@ -284,18 +284,50 @@ class AuthServices {
     try {
       String uid = AuthServices.getCurrentUser.uid;
 
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+      QuerySnapshot offersSnapshot = await FirebaseFirestore.instance
           .collection('tickets')
           .where('user_uid', isEqualTo: uid)
           .get();
 
-      for (QueryDocumentSnapshot document in querySnapshot.docs) {
-        await document.reference.delete();
+      for (QueryDocumentSnapshot offerDocument in offersSnapshot.docs) {
+        QuerySnapshot offerDocsSnapshot =
+            await offerDocument.reference.collection('offers').get();
+
+        for (QueryDocumentSnapshot offerDoc in offerDocsSnapshot.docs) {
+          await offerDoc.reference.delete();
+        }
+      }
+
+      // Delete tickets
+      QuerySnapshot ticketsSnapshot = await FirebaseFirestore.instance
+          .collection('tickets')
+          .where('user_uid', isEqualTo: uid)
+          .get();
+
+      for (QueryDocumentSnapshot ticketDocument in ticketsSnapshot.docs) {
+        await ticketDocument.reference.delete();
       }
     } catch (e) {
       log("Error deleting user data: $e");
     }
   }
+
+  // static Future<void> deleteUserTickets() async {
+  //   try {
+  //     String uid = AuthServices.getCurrentUser.uid;
+
+  //     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+  //         .collection('tickets')
+  //         .where('user_uid', isEqualTo: uid)
+  //         .get();
+
+  //     for (QueryDocumentSnapshot document in querySnapshot.docs) {
+  //       await document.reference.delete();
+  //     }
+  //   } catch (e) {
+  //     log("Error deleting user data: $e");
+  //   }
+  // }
 
   static Future<void> storeUserImage(
       {required UserModelClient userModel}) async {

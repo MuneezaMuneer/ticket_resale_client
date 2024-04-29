@@ -15,10 +15,14 @@ class CustomRow extends StatefulWidget {
 
 class _CustomRowState extends State<CustomRow> {
   late Stream<List<FeedbackModel>> fetchRatings;
+  late Stream<UserModelClient> fetchUserLevel;
+  late String totalTransactions;
   @override
   void initState() {
+    totalTransactions = '';
     fetchRatings = FireStoreServicesClient.fetchFeedback(userId: widget.userId);
-
+    fetchUserLevel =
+        FireStoreServicesClient.fetchUserLevels(userId: widget.userId);
     super.initState();
   }
 
@@ -61,14 +65,36 @@ class _CustomRowState extends State<CustomRow> {
               }
             },
           ),
-          const Padding(
-            padding: EdgeInsets.only(top: 8),
-            child: CustomText(
-              title: '(23 Transactions) ',
-              weight: FontWeight.w400,
-              size: AppFontSize.small,
-              color: AppColors.charcoal,
-            ),
+          StreamBuilder(
+            stream: fetchUserLevel,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CupertinoActivityIndicator());
+              } else if (snapshot.hasData) {
+                UserModelClient? currentUser = snapshot.data!;
+                totalTransactions =
+                    '${currentUser.profileLevels!['number_of_transactions']} transaction${currentUser.profileLevels!['number_of_transactions'] == 1 ? '' : 's'}';
+                return Padding(
+                  padding: EdgeInsets.only(top: 5, left: 7),
+                  child: CustomText(
+                    title: totalTransactions,
+                    weight: FontWeight.w400,
+                    size: AppFontSize.small,
+                    color: AppColors.charcoal,
+                  ),
+                );
+              } else {
+                return const Padding(
+                  padding: EdgeInsets.only(top: 8),
+                  child: CustomText(
+                    title: '(0 Transactions) ',
+                    weight: FontWeight.w400,
+                    size: AppFontSize.small,
+                    color: AppColors.charcoal,
+                  ),
+                );
+              }
+            },
           ),
         ],
       ),

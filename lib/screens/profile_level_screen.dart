@@ -41,7 +41,8 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
     bottomSheetProvider =
         Provider.of<BottomSheetProvider>(context, listen: false);
     photoUrl = AuthServices.getCurrentUser.photoURL;
-    fetchUserLevel = FireStoreServicesClient.fetchUserLevels();
+    fetchUserLevel = FireStoreServicesClient.fetchUserLevels(
+        userId: AuthServices.getCurrentUser.uid);
     profileLevelsFuture = FireStoreServicesClient.fetchProfileLevels(
         userId: AuthServices.userUid);
     super.initState();

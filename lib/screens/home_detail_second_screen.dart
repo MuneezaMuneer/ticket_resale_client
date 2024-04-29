@@ -26,7 +26,6 @@ class HomeDetailSecondScreen extends StatefulWidget {
 class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
   final formKey = GlobalKey<FormState>();
   TextEditingController priceController = TextEditingController();
-
   late String networkImage;
   late String userId;
   late String name;
@@ -107,8 +106,8 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                                               .withOpacity(0.6),
                                           fontSize: AppFontSize.xsmall,
                                           fontWeight: FontWeight.w400)),
-                                  const TextSpan(
-                                      text: 'Martin Garrix',
+                                  TextSpan(
+                                      text: '${widget.eventModal.djName}',
                                       style: TextStyle(
                                           color: AppColors.blueViolet,
                                           fontSize: AppFontSize.medium,
@@ -259,6 +258,7 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                           networkImage = userData.photoUrl ?? '';
                           name = userData.displayName ?? '';
                           userId = userData.id ?? '';
+
                           return StreamBuilder(
                             stream: FireStoreServicesClient.fetchFeedback(
                                 userId: userId),

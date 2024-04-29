@@ -89,8 +89,13 @@ class CustomProfileRow extends StatelessWidget {
                                 thumbColor: Colors.white,
                                 trackColor: AppColors.pastelBlue,
                                 value: provider.getNotification,
-                                onChanged: (bool value) {
+                                onChanged: (bool value)async {
                                   provider.setNotification(value);
+                                   if (value) {
+                                  
+                                } else {
+                                 
+                                }
                                 },
                               );
                             },
