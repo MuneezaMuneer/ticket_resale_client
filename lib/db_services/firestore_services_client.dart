@@ -289,7 +289,6 @@ class FireStoreServicesClient {
         .set(feedbackModel.toMap());
   }
 
-
   static Stream<List<FeedbackModel>> fetchFeedback({required String userId}) {
     return FirebaseFirestore.instance
         .collection('feedback')

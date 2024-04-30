@@ -7,47 +7,54 @@ import 'package:ticket_resale/widgets/widgets.dart';
 
 import '../providers/dj_provider.dart';
 
-
 class DJsListWidget extends StatelessWidget {
+  final Function(String) onDjTapped;
+
+  const DJsListWidget({Key? key, required this.onDjTapped}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return Consumer<SelectedDJProvider>(
-      builder: (context, selectedDJProvider, child) {
-        return SizedBox(
-          height: 100,
-          child: StreamBuilder<List<DjsModel>>(
-            stream: FireStoreServicesClient.fetchDjs(),
-            builder: (context, djSnapshot) {
-              if (djSnapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
-              } else if (djSnapshot.hasData) {
-                final djs = djSnapshot.data!;
+    Size size = MediaQuery.of(context).size;
 
-                return StreamBuilder<List<EventModalClient>>(
-                  stream: FireStoreServicesClient.fetchEventData(),
-                  builder: (context, eventSnapshot) {
-                    if (eventSnapshot.connectionState ==
-                        ConnectionState.waiting) {
-                      return Center(child: CircularProgressIndicator());
-                    } else if (eventSnapshot.hasData) {
-                      final events = eventSnapshot.data!;
+    final double width = size.width;
+    return SizedBox(
+      height: 100,
+      width: width,
+      child: StreamBuilder<List<DjsModel>>(
+        stream: FireStoreServicesClient.fetchDjs(),
+        builder: (context, djSnapshot) {
+          if (djSnapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (djSnapshot.hasData) {
+            final djs = djSnapshot.data!;
 
-                      Map<String, int> djCounts = {};
-                      for (var event in events) {
-                        if (djCounts.containsKey(event.djName)) {
-                          djCounts[event.djName!] = djCounts[event.djName]! + 1;
-                        } else {
-                          djCounts[event.djName!] = 1;
-                        }
-                      }
-                      print('DJ Counts: $djCounts');
-                      List<String> sortedDjNames = djCounts.keys.toList()
-                        ..sort((a, b) => djCounts[b]!.compareTo(djCounts[a]!));
-                      print('Sorted DJ Names: $sortedDjNames');
-                      if (sortedDjNames.isEmpty) {
-                        return _buildText();
-                      } else {
+            return StreamBuilder<List<EventModalClient>>(
+              stream: FireStoreServicesClient.fetchEventData(),
+              builder: (context, eventSnapshot) {
+                if (eventSnapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (eventSnapshot.hasData) {
+                  final events = eventSnapshot.data!;
+
+                  Map<String, int> djCounts = {};
+                  for (var event in events) {
+                    if (djCounts.containsKey(event.djName)) {
+                      djCounts[event.djName!] = djCounts[event.djName]! + 1;
+                    } else {
+                      djCounts[event.djName!] = 1;
+                    }
+                  }
+                  print('DJ Counts: $djCounts');
+                  List<String> sortedDjNames = djCounts.keys.toList()
+                    ..sort((a, b) => djCounts[b]!.compareTo(djCounts[a]!));
+                  print('Sorted DJ Names: $sortedDjNames');
+                  if (sortedDjNames.isEmpty) {
+                    return _buildText();
+                  } else {
+                    return Consumer<SelectedDJProvider>(
+                      builder: (context, selectedDJProvider, child) {
                         return ListView.builder(
+                          itemExtent: 120,
                           scrollDirection: Axis.horizontal,
                           itemCount: sortedDjNames.length,
                           itemBuilder: (context, index) {
@@ -58,6 +65,7 @@ class DJsListWidget extends StatelessWidget {
                                 djName == selectedDJProvider.selectedDJName;
                             return GestureDetector(
                               onTap: () {
+                                onDjTapped(djName);
                                 selectedDJProvider.setSelectedDJName(djName);
                               },
                               child: SizedBox(
@@ -104,21 +112,21 @@ class DJsListWidget extends StatelessWidget {
                             );
                           },
                         );
-                      }
-                    } else {
-                      print('No Event Data');
-                      return _buildText();
-                    }
-                  },
-                );
-              } else {
-                print('No DJ Data');
-                return _buildText();
-              }
-            },
-          ),
-        );
-      },
+                      },
+                    );
+                  }
+                } else {
+                  print('No Event Data');
+                  return _buildText();
+                }
+              },
+            );
+          } else {
+            print('No DJ Data');
+            return _buildText();
+          }
+        },
+      ),
     );
   }
 

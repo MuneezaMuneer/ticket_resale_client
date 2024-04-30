@@ -56,27 +56,19 @@ Route onGenerateRoute(RouteSettings settings) {
   } else if (settings.name == AppRoutes.detailSecondScreen) {
     final Map<String, dynamic> arguments =
         settings.arguments as Map<String, dynamic>;
-    final EventModalClient eventModal =
-        arguments['eventModal'] as EventModalClient;
-    final TicketModelClient ticketModel =
-        arguments['ticketModel'] as TicketModelClient;
-
+    final String eventId = arguments['eventId'] as String;
+    final String ticketId = arguments['ticketId'] as String;
+  final String ticketUserId = arguments['ticketUserId'] as String;
     return animatePage(HomeDetailSecondScreen(
-      eventModal: eventModal,
-      ticketModel: ticketModel,
+      eventId: eventId,
+      ticketId: ticketId,
+      ticketUserId: ticketUserId,
     ));
   } else if (settings.name == AppRoutes.ticketScreen) {
     return animatePage(const TicketScreen());
   } else if (settings.name == AppRoutes.logoutAdmin) {
     return animatePage(const SignInScreen());
-    // final Map<String, dynamic> arguments =
-    //     settings.arguments as Map<String, dynamic>;
-    // final EventModal eventModal = arguments['eventModal'] as EventModal;
-    // final TicketModel ticketModal = arguments['ticketModel'] as TicketModel;
-    // return animatePage(HomeDetailSecondScreen(
-    //   eventModal: eventModal,
-    //   ticketModel: ticketModal,
-    // ));
+    
   } else if (settings.name == AppRoutes.ticketScreen) {
     return animatePage(const TicketScreen());
   } else if (settings.name == AppRoutes.chatScreen) {

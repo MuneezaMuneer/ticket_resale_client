@@ -28,7 +28,7 @@ class SearchAppBar extends StatelessWidget {
     return SliverAppBar(
       pinned: true,
       automaticallyImplyLeading: false,
-      expandedHeight: 150,
+      expandedHeight: 100,
       actions: [
         Padding(
           padding: const EdgeInsets.only(right: 6.0),
@@ -55,11 +55,11 @@ class SearchAppBar extends StatelessWidget {
       ),
       backgroundColor: AppColors.blueViolet,
       title: Padding(
-        padding: const EdgeInsets.only(left: 10, bottom: 17),
+        padding: const EdgeInsets.only(left: 10, bottom: 22),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Gap(10),
+            Gap(8),
             const CustomText(
               title: 'Discover Amazing',
               color: AppColors.white,
