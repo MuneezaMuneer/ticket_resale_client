@@ -7,9 +7,8 @@ import 'package:ticket_resale/constants/constants.dart';
 class EmailServices {
   static Future<bool> sendVerificationEmail({
     required String toEmail,
-    // required String fromEmail,
+    required String verificationCode,
     required String subject,
-    required String body,
     String? toEmailName,
     String? fromEmailName = 'Rave Trade',
   }) async {
@@ -22,7 +21,11 @@ class EmailServices {
       ..from = Address(ApiURLS.email, fromEmailName)
       ..subject = subject
       ..recipients = [toEmail]
-      ..text = body;
+      ..text = """Hey Fam! 🙌
+
+Your email verification code for Rave Trade is: $verificationCode. Just enter it to get verified and you’ll be ready to go! 
+
+PLUR 💗 - The Rave Trade Team""";
 
     try {
       final sendReport = await send(message, smtpServer);

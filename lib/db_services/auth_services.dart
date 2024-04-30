@@ -81,11 +81,12 @@ class AuthServices {
     return userCredential;
   }
 
-  static Future<UserCredential?> signInWithGoogle(
-      {required BuildContext context,
-      required ValueNotifier<bool> googleNotifier,
-      required String fcmToken,
-      required UserModelClient userModel}) async {
+  static Future<UserCredential?> signInWithGoogle({
+    required BuildContext context,
+    required ValueNotifier<bool> googleNotifier,
+    required String fcmToken,
+    required UserModelClient userModel,
+  }) async {
     try {
       googleNotifier.value = true;
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
@@ -112,6 +113,8 @@ class AuthServices {
 
       final userCredential =
           await FirebaseAuth.instance.signInWithCredential(credential);
+      log('message: ${userCredential.additionalUserInfo!.isNewUser.toString()}');
+      log('message: ${userCredential.user!.displayName.toString()}');
 
       //store user google credentials to firestore
 
@@ -230,41 +233,51 @@ class AuthServices {
   }
 
   static Future<void> deleteUserAccount(
-      BuildContext context, String password) async {
+      {required BuildContext context, required String password}) async {
     try {
       User currentUser = AuthServices.getCurrentUser;
-
-      // Check if the user signed in with Google
-      if (currentUser.providerData
-          .any((info) => info.providerId == 'google.com')) {
-        GoogleSignInAccount? googleUser = await GoogleSignIn().signInSilently();
-        GoogleSignInAuthentication googleAuth =
-            await googleUser!.authentication;
-        AuthCredential credential = GoogleAuthProvider.credential(
-          idToken: googleAuth.idToken,
-          accessToken: googleAuth.accessToken,
-        );
-
-        await currentUser.reauthenticateWithCredential(credential);
-      } else {
-        String email = AuthServices.getCurrentUser.email!;
-
-        AuthCredential credential =
-            EmailAuthProvider.credential(email: email, password: password);
-
-        await currentUser.reauthenticateWithCredential(credential);
-      }
-
-      await deleteUserData();
-      await deleteUserTickets();
-      await currentUser.delete();
-
+      await deleteUserData()
+          .then((value) => log('message:deleteed User Data '));
+      await deleteUserTickets()
+          .then((value) => log('message:deleteed User tickets '));
+      await currentUser
+          .delete()
+          .then((value) => log('message:deleteed current user'));
       Navigator.pushNamedAndRemoveUntil(
           context, AppRoutes.logIn, (route) => false);
-
-      print('The user deleted successfully');
+      log('done with routing');
+    } on FirebaseAuthException catch (e) {
+      if (e.code == "requires-recent-login") {
+        log('Error: requires-recent-login: ');
+        await AuthServices._reauthenticateAndDelete(password);
+      }
     } catch (e) {
-      print('Error deleting user account: $e');
+      log('Error: ${e.toString()} ');
+
+      ///handle general exception
+    }
+  }
+
+  static Future<void> _reauthenticateAndDelete(String password) async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+      final providerData = user!.providerData.first;
+      if (AppleAuthProvider().providerId == providerData.providerId) {
+        await user.reauthenticateWithProvider(AppleAuthProvider());
+      } else if (GoogleAuthProvider().providerId == providerData.providerId) {
+        await user.reauthenticateWithProvider(GoogleAuthProvider());
+      } else if (EmailAuthProvider.PROVIDER_ID == providerData.providerId) {
+        String email = user.email!;
+        AuthCredential credential = EmailAuthProvider.credential(
+          email: email,
+          password: password,
+        );
+        await user.reauthenticateWithCredential(credential);
+      }
+
+      await user.delete();
+    } catch (e) {
+      // Handle exceptions
     }
   }
 

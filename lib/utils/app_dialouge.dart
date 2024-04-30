@@ -15,8 +15,10 @@ import 'package:ticket_resale/widgets/widgets.dart';
 deleteDialog({required BuildContext context}) {
   ValueNotifier<bool> _valueNotifier = ValueNotifier(false);
   TextEditingController passwordController = TextEditingController();
-  bool loginInWithGoogle = AuthServices.getCurrentUser.providerData
-      .any((info) => info.providerId == 'google.com');
+
+  ///prompt user for password if ProviderID is password
+  bool isVisible = AuthServices.getCurrentUser.providerData
+      .any((info) => info.providerId == 'password');
   return showAdaptiveDialog(
     context: context,
     builder: (context) {
@@ -39,7 +41,7 @@ deleteDialog({required BuildContext context}) {
             ),
             SizedBox(height: 20),
             Visibility(
-              visible: loginInWithGoogle ? true : true,
+              visible: isVisible,
               child: SizedBox(
                 width: 250,
                 child: Material(
@@ -51,7 +53,7 @@ deleteDialog({required BuildContext context}) {
                 ),
               ),
             ),
-            if (loginInWithGoogle == false) Gap(5)
+            if (isVisible == false) Gap(5)
           ],
         ),
         actions: <Widget>[
@@ -67,7 +69,10 @@ deleteDialog({required BuildContext context}) {
             onPressed: () async {
               _valueNotifier.value = true;
               String password = passwordController.text.trim();
-              await AuthServices.deleteUserAccount(context, password);
+              await AuthServices.deleteUserAccount(
+                context: context,
+                password: password,
+              );
               _valueNotifier.value = false;
             },
             child: ValueListenableBuilder(

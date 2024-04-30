@@ -269,7 +269,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         }
                       },
                       onChanged: (phone) {
-                       
                         countryCode = phone.countryCode;
                       },
                       keyboardType: TextInputType.number,
@@ -300,8 +299,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     instagram: instaController.text);
                             isPhoneNumberExist = await FireStoreServicesClient
                                 .checkUserPhoneNumber(
-                                    phoneNumber:
-                                        '${phoneController.text}');
+                                    phoneNumber: '${phoneController.text}');
                             if (isPhoneNumberExist) {
                               SnackBarHelper.showSnackBar(
                                   context, 'This phone number already exist.');
@@ -380,18 +378,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           bool isSent = await EmailServices.sendVerificationEmail(
               toEmail: emailController.text,
               subject: 'Here is your verification code',
-              body: """
-Hello!
-
-We have received your request to verify your Email.
-
-Please use the following code to verify your Email:
-
-$otp
-
-Note: This code will expire in 10 minutes.
-
-Rave Trade Team""");
+              verificationCode: otp.toString());
 
           if (isSent) {
             bool isValidEmail = false;
