@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:ticket_resale/screens/tickets_history_screen.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 import '../constants/constants.dart';
-import '../models/models.dart';
 import '../screens/screens.dart';
 
 Route onGenerateRoute(RouteSettings settings) {
@@ -25,16 +24,17 @@ Route onGenerateRoute(RouteSettings settings) {
   } else if (settings.name == AppRoutes.commentScreen) {
     final Map<String, dynamic> arguments =
         settings.arguments as Map<String, dynamic>;
-    final EventModalClient eventModal =
-        arguments['eventModal'] as EventModalClient;
-    final TicketModelClient ticketModal =
-        arguments['ticketModal'] as TicketModelClient;
+    final String eventId = arguments['eventId'] as String;
+    final String ticketId = arguments['ticketId'] as String;
+    final String ticketUserId = arguments['ticketUserId'] as String;
+
     final String price = arguments['price'] as String;
 
     return animatePage(CommentScreen(
-      eventModal: eventModal,
-      ticketModal: ticketModal,
+      eventId: eventId,
       price: price,
+      ticketId: ticketId,
+      ticketUserId: ticketUserId,
     ));
   } else if (settings.name == AppRoutes.feedbackScreen) {
     final Map<String, dynamic> arguments =
@@ -58,7 +58,7 @@ Route onGenerateRoute(RouteSettings settings) {
         settings.arguments as Map<String, dynamic>;
     final String eventId = arguments['eventId'] as String;
     final String ticketId = arguments['ticketId'] as String;
-  final String ticketUserId = arguments['ticketUserId'] as String;
+    final String ticketUserId = arguments['ticketUserId'] as String;
     return animatePage(HomeDetailSecondScreen(
       eventId: eventId,
       ticketId: ticketId,
@@ -68,7 +68,6 @@ Route onGenerateRoute(RouteSettings settings) {
     return animatePage(const TicketScreen());
   } else if (settings.name == AppRoutes.logoutAdmin) {
     return animatePage(const SignInScreen());
-    
   } else if (settings.name == AppRoutes.ticketScreen) {
     return animatePage(const TicketScreen());
   } else if (settings.name == AppRoutes.chatScreen) {

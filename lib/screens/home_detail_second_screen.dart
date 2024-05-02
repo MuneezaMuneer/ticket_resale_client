@@ -593,8 +593,9 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                                           context,
                                           AppRoutes.commentScreen,
                                           arguments: {
-                                            // 'eventModal': widget.eventModal,
-                                            //   'ticketModal': widget.ticketModel,
+                                           'ticketId':widget.ticketId,
+                                           'eventId':widget.eventId,
+                                           'ticketUserId':widget.ticketUserId,
                                             'price': priceController.text.trim()
                                           },
                                         );
