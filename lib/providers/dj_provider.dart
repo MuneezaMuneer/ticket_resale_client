@@ -9,4 +9,9 @@ class SelectedDJProvider extends ChangeNotifier {
     _selectedDJName = djName;
     notifyListeners();
   }
+
+  void clearSelectedDJName() {
+    _selectedDJName = null;
+    notifyListeners();
+  }
 }

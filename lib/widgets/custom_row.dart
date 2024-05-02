@@ -28,70 +28,77 @@ class _ShowTransctionState extends State<ShowTransction> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 160,
-      child: Row(
-        children: [
-          const Icon(
-            Icons.star,
-            color: AppColors.amber,
-            size: 20,
-          ),
-          StreamBuilder<List<FeedbackModel>>(
-            stream: fetchRatings,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return FutureBuilder<Map<String, dynamic>>(
-                  future:
-                      FireStoreServicesClient.calculateAverages(snapshot.data),
-                  builder: (context, averageRatingSnapshot) {
-                    if (averageRatingSnapshot.hasData) {
-                      final Map<String, dynamic> averages =
-                          averageRatingSnapshot.data!;
-                      final double averageRating = averages['rating'] ?? 0.0;
-                      return CustomText(
-                        title: averageRating.toStringAsFixed(1),
-                        weight: FontWeight.w600,
-                        size: AppFontSize.large,
-                        color: AppColors.charcoal,
-                      );
-                    } else {
-                      return CupertinoActivityIndicator();
-                    }
-                  },
-                );
-              } else {
-                return CupertinoActivityIndicator();
-              }
-            },
-          ),
-          StreamBuilder(
-            stream: fetchUserLevel,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CupertinoActivityIndicator());
-              } else if (snapshot.hasData) {
-                UserModelClient? currentUser = snapshot.data!;
-                totalTransactions = currentUser
-                            .profileLevels!['number_of_transactions'] !=
-                        null
-                    ? '${currentUser.profileLevels!['number_of_transactions']} transaction${currentUser.profileLevels!['number_of_transactions'] == 1 ? '' : 's'}'
-                    : '(0 Transactions) ';
-                return Padding(
-                  padding: EdgeInsets.only(top: 5, left: 7),
-                  child: CustomText(
-                    title: totalTransactions,
-                    weight: FontWeight.w400,
-                    size: AppFontSize.small,
-                    color: AppColors.charcoal,
-                  ),
-                );
-              }
-              return SizedBox();
-            },
-          ),
-        ],
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Icon(
+          Icons.star,
+          color: AppColors.amber,
+          size: 20,
+        ),
+        StreamBuilder<List<FeedbackModel>>(
+          stream: fetchRatings,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return FutureBuilder<Map<String, dynamic>>(
+                future:
+                    FireStoreServicesClient.calculateAverages(snapshot.data),
+                builder: (context, averageRatingSnapshot) {
+                  if (averageRatingSnapshot.hasData) {
+                    final Map<String, dynamic> averages =
+                        averageRatingSnapshot.data!;
+                    final double averageRating = averages['rating'] ?? 0.0;
+                    return CustomText(
+                      title: averageRating.toStringAsFixed(1),
+                      weight: FontWeight.w600,
+                      size: AppFontSize.large,
+                      color: AppColors.charcoal,
+                    );
+                  } else {
+                    return CupertinoActivityIndicator();
+                  }
+                },
+              );
+            } else {
+              return CupertinoActivityIndicator();
+            }
+          },
+        ),
+        StreamBuilder(
+          stream: fetchUserLevel,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CupertinoActivityIndicator());
+            } else if (snapshot.hasData) {
+              UserModelClient? currentUser = snapshot.data!;
+              final numberOfTransactions =
+                  currentUser.profileLevels?['number_of_transactions'];
+              totalTransactions = numberOfTransactions != null
+                  ? '${numberOfTransactions} transaction${numberOfTransactions == 1 ? '' : 's'}'
+                  : '0 transaction';
+              return Padding(
+                padding: EdgeInsets.only(top: 5, left: 7),
+                child: CustomText(
+                  title: totalTransactions,
+                  weight: FontWeight.w400,
+                  size: AppFontSize.small,
+                  color: AppColors.charcoal,
+                ),
+              );
+            } else {
+              return const Padding(
+                padding: EdgeInsets.only(top: 8),
+                child: CustomText(
+                  title: '(0 Transactions) ',
+                  weight: FontWeight.w400,
+                  size: AppFontSize.small,
+                  color: AppColors.charcoal,
+                ),
+              );
+            }
+          },
+        ),
+      ],
     );
   }
 }

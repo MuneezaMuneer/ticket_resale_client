@@ -241,8 +241,12 @@ sellerRatingDialog(
                                       child: CupertinoActivityIndicator());
                                 } else if (snapshot.hasData) {
                                   UserModelClient user = snapshot.data!;
-                                  final totalTransactions =
-                                      '${user.profileLevels!['number_of_transactions']} transaction${user.profileLevels!['number_of_transactions'] == 1 ? '' : 's'}';
+                                  final numberOfTransactions = user
+                                      .profileLevels?['number_of_transactions'];
+                                  final totalTransactions = numberOfTransactions !=
+                                          null
+                                      ? '${numberOfTransactions} transaction${numberOfTransactions == 1 ? '' : 's'}'
+                                      : '0 transaction';
                                   return buildTile(
                                       leadingTitle: 'Total Transactions',
                                       trailingTitle: totalTransactions);
