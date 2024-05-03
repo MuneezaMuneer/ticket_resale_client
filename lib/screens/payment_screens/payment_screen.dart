@@ -120,11 +120,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         title: 'Payment Done Successfully',
                         body:
                             "The offered'\$${widget.totalPrice}' price is paid successfully",
-                        id: AuthServices.getCurrentUser.uid,
+                        eventId: AuthServices.getCurrentUser.uid,
                         userId: widget.userModel.id,
                         status: 'Unread',
                         notificationType: 'paid',
-                        docId: AuthServices.getCurrentUser.uid,
+                        // docId: AuthServices.getCurrentUser.uid,
                       );
                       if (payerID != null) {
                         await PaypalPaymentServices.executePayment(

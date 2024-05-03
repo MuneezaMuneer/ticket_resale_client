@@ -58,6 +58,7 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
     Size size = MediaQuery.of(context).size;
     final double height = size.height;
     final double width = size.width;
+
     return Scaffold(
       backgroundColor: AppColors.pastelBlue.withOpacity(0.3),
       body: StreamBuilder(
@@ -528,7 +529,7 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                               const Gap(25),
                               SizedBox(
                                 child: AuthServices.getCurrentUser.uid !=
-                                        widget.ticketId
+                                        widget.ticketUserId
                                     ? StreamBuilder(
                                         stream: FireStoreServicesClient
                                             .fetchCommentUserLength(
@@ -593,8 +594,9 @@ class _HomeDetailSecondScreenState extends State<HomeDetailSecondScreen> {
                                           context,
                                           AppRoutes.commentScreen,
                                           arguments: {
-                                            // 'eventModal': widget.eventModal,
-                                            //   'ticketModal': widget.ticketModel,
+                                            'ticketId': widget.ticketId,
+                                            'eventId': widget.eventId,
+                                            'ticketUserId': widget.ticketUserId,
                                             'price': priceController.text.trim()
                                           },
                                         );

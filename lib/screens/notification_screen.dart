@@ -139,7 +139,21 @@ class _NotificationScreenState extends State<NotificationScreen> {
                         notifications[index].status == 'Unread') {
                       Navigator.popAndPushNamed(
                           context, AppRoutes.detailFirstScreen,
-                          arguments: notifications[index].id);
+                          arguments: notifications[index].eventId);
+                    } else if (notifications[index].notificationType ==
+                            'offered_price' &&
+                        notifications[index].status == 'Unread' &&
+                        notifications[index].eventId != null) {
+                      Navigator.popAndPushNamed(
+                        context,
+                        AppRoutes.commentScreen,
+                        arguments: {
+                          'ticketId': notifications[index].ticketId,
+                          'ticketUserId': notifications[index].userId,
+                          'eventId': notifications[index].eventId,
+                          'price': notifications[index].price,
+                        },
+                      );
                     } else if (notifications[index].notificationType ==
                             'offer_confirm' &&
                         notifications[index].status == 'Unread') {
@@ -149,14 +163,15 @@ class _NotificationScreenState extends State<NotificationScreen> {
                           'receiverId': notifications[index].userId,
                           'hashKey':
                               FireStoreServicesClient.getMessagesHashCodeID(
-                                  userIDReceiver: notifications[index].id!),
+                                  userIDReceiver:
+                                      notifications[index].eventId!),
                           'isOpened': false,
                         },
                       );
                     } else if (notifications[index].notificationType ==
                             'paid' &&
                         notifications[index].status == 'Unread') {
-                      log('---id - ${notifications[index].id} --  userid ${notifications[index].userId} --  current id ${AuthServices.getCurrentUser.uid}');
+                      log('---id - ${notifications[index].eventId} --  userid ${notifications[index].userId} --  current id ${AuthServices.getCurrentUser.uid}');
                       UserModelClient userModel =
                           await FireStoreServicesClient.fetchDataOfUser(
                               userId: notifications[index].userId!);
@@ -165,7 +180,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                           context: context,
                           hashKey:
                               FireStoreServicesClient.getMessagesHashCodeID(
-                                  userIDReceiver: notifications[index].id!),
+                                  userIDReceiver:
+                                      notifications[index].eventId!),
                           //  id: {'seller_uid': notifications[index].userId},
                           userModel: userModel);
                     }

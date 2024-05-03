@@ -237,8 +237,6 @@ class _HomeDetailFirstScreenState extends State<HomeDetailFirstScreen> {
                                     padding: const EdgeInsets.only(top: 15),
                                     child: InkWell(
                                       onTap: () {
-                                        log('The event id is ${widget.eventId}');
-                                        log('The ticket id is ${tickets[index].docId}');
                                         Navigator.pushNamed(
                                           context,
                                           AppRoutes.detailSecondScreen,

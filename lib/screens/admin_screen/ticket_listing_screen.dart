@@ -275,7 +275,7 @@ class _TicketListingState extends State<TicketListing> {
                     notificationType: 'ticket_listing',
                     body:
                         'Your $ticketType ticket is $currentStatus for "$eventName"',
-                    id: eventId,
+                    eventId: eventId,
                     status: 'Unread',
                     userId: userID);
                 NotificationServices.sendNotification(

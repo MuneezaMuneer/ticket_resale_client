@@ -1,8 +1,11 @@
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 import 'package:ticket_resale/db_services/db_services.dart';
 import 'package:ticket_resale/models/models.dart';
+import 'package:ticket_resale/providers/providers.dart';
 import 'package:uuid/uuid.dart';
 
 class FireStoreServicesClient {
@@ -15,13 +18,25 @@ class FireStoreServicesClient {
         .set(ticketModel.toMap());
   }
 
+ static Future<void> updateUserSubscribeCommentValue(
+      {required bool commentValue,required BuildContext context}) async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    DocumentReference user =
+        firestore.collection('user_data').doc(AuthServices.userUid);
+    await user.update({'comment_value': commentValue});
+    // Notify listeners after updating value
+    Provider.of<SwitchProvider>(context, listen: false)
+        .fetchCommentValueFromFirebase();
+}
+
+
   static Future<void> createChatSystem(
       {required CommentModel commentModel, required String docId}) async {
     FirebaseFirestore.instance
         .collection('tickets')
         .doc(docId)
         .collection('offers')
-        .doc()
+        .doc(uid.v4())
         .set(commentModel.toMap(), SetOptions(merge: true));
   }
 
@@ -32,7 +47,7 @@ class FireStoreServicesClient {
         .collection('notifications')
         .doc(name)
         .collection(name)
-        .doc()
+        .doc(uid.v6())
         .set(notificationModel.toMap());
   }
 
