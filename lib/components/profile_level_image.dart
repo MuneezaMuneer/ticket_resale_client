@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:svg_flutter/svg_flutter.dart';
 import 'package:ticket_resale/constants/constants.dart';
-import 'package:ticket_resale/models/models.dart';
 
 class ProfileLevelImage extends StatelessWidget {
   final Future<Map<String, dynamic>?> profileLevelsFuture;
@@ -20,27 +19,40 @@ class ProfileLevelImage extends StatelessWidget {
           return CupertinoActivityIndicator();
         } else if (snapshot.hasData) {
           Map<String, dynamic>? profileLevels = snapshot.data;
-          int? profileLevelsLength;
           if (profileLevels != null) {
-            UserModelClient user =
-                UserModelClient(profileLevels: profileLevels);
-            profileLevelsLength =
-                user.getProfileLevelsLength(user.profileLevels);
-            switch (profileLevelsLength) {
-              case 1:
-                return SvgPicture.asset(AppSvgs.levelOne);
-              case 2:
-                return SvgPicture.asset(AppSvgs.levelTwo);
-              case 3:
-                return SvgPicture.asset(AppSvgs.levelThree);
-              case 4:
-                return SvgPicture.asset(AppSvgs.levelFour);
-              case 5:
-                return SvgPicture.asset(AppSvgs.levelFive);
-              case 6:
-                return SvgPicture.asset(AppSvgs.levelSix);
-              default:
-                return SizedBox.shrink();
+            bool isEmailVerified = profileLevels['isEmailVerified'] ?? false;
+            bool isInstaVerified = profileLevels['isInstaVerified'] ?? false;
+            bool isPaypalVerified = profileLevels['isPaypalVerified'] ?? false;
+            bool isPhoneNoVerified =
+                profileLevels['isPhoneNoVerified'] ?? false;
+            int numberOfTransactions =
+                profileLevels['number_of_transactions'] ?? 0;
+            bool isSuperVerified = profileLevels['isSuperVerified'] ?? false;
+
+            if (isEmailVerified &&
+                isInstaVerified &&
+                isPaypalVerified &&
+                isPhoneNoVerified &&
+                numberOfTransactions >= 5 &&
+                isSuperVerified) {
+              return SvgPicture.asset(AppSvgs.levelSix);
+            } else if (isEmailVerified &&
+                isInstaVerified &&
+                isPaypalVerified &&
+                isPhoneNoVerified &&
+                numberOfTransactions >= 5) {
+              return SvgPicture.asset(AppSvgs.levelFive);
+            } else if (isEmailVerified &&
+                isInstaVerified &&
+                isPaypalVerified &&
+                isPhoneNoVerified) {
+              return SvgPicture.asset(AppSvgs.levelFour);
+            } else if (isEmailVerified && isInstaVerified && isPaypalVerified) {
+              return SvgPicture.asset(AppSvgs.levelThree);
+            } else if (isEmailVerified && isInstaVerified) {
+              return SvgPicture.asset(AppSvgs.levelTwo);
+            } else if (isEmailVerified) {
+              return SvgPicture.asset(AppSvgs.levelOne);
             }
           }
         }

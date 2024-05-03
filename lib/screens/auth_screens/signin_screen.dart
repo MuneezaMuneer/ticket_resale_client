@@ -112,7 +112,10 @@ class _SignInScreenState extends State<SignInScreen> {
                     alignment: Alignment.centerRight,
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.pushNamed(context, AppRoutes.passwordScreen);
+                        Navigator.pushNamed(
+                          context,
+                          AppRoutes.forgotPasswordScreen,
+                        );
                       },
                       child: const CustomText(
                         title: 'Forgot Password?',

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -19,27 +21,33 @@ class CustomNavigationClient extends StatefulWidget {
 
 class _CustomNavigationClientState extends State<CustomNavigationClient> {
   late NavigationProvider navigationProvider;
+  late SwitchProvider switchProvider;
 
   @override
   void initState() {
     super.initState();
+    switchProvider = SwitchProvider();
+    switchProvider.loadPreferences();
     NotificationServices.getFCMCurrentDeviceToken().then((token) {
       AuthServices.storeFCMToken(fcmToken: '$token');
     });
 
     NotificationServices.requestPermission().then((granted) {
       if (granted) {
-        NotificationServices.forGroundNotifications(context);
-        NotificationServices.appOpenInBackground(context: context);
+        if (switchProvider.getNotification) {
+          NotificationServices.forGroundNotifications(context);
+          NotificationServices.appOpenInBackground(context: context);
+          FirebaseMessaging.instance
+              .getInitialMessage()
+              .then((RemoteMessage? message) {
+            if (message != null) {
+              NotificationServices.handleNotificationResponse(context, message);
+            }
+          });
+        }
       }
     });
-    FirebaseMessaging.instance
-        .getInitialMessage()
-        .then((RemoteMessage? message) {
-      if (message != null) {
-        NotificationServices.handleNotificationResponse(context, message);
-      }
-    });
+
     Future.delayed(Duration.zero, () {
       navigationProvider =
           Provider.of<NavigationProvider>(context, listen: false);
@@ -54,7 +62,8 @@ class _CustomNavigationClientState extends State<CustomNavigationClient> {
         return Scaffold(
           body: _widgetOptions[indexValue.selectedIndex],
           bottomNavigationBar: Container(
-            height: 70,
+            height: 95,
+            padding: EdgeInsets.only(bottom: Platform.isIOS ? 20 : 5),
             decoration: const BoxDecoration(color: AppColors.white, boxShadow: [
               BoxShadow(color: AppColors.purple, blurRadius: 10)
             ]),

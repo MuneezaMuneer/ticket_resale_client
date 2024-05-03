@@ -1,12 +1,14 @@
+import 'package:device_preview/device_preview.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/firebase_options.dart';
+import 'package:ticket_resale/providers/dj_provider.dart';
 import 'package:ticket_resale/providers/providers.dart';
 import 'package:ticket_resale/screens/screens.dart';
 import 'package:ticket_resale/utils/utils.dart';
@@ -17,17 +19,15 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  FirebaseMessaging.instance.requestPermission();
+
   SwitchProvider provider = SwitchProvider();
   await provider.loadPreferences();
-  FirebaseMessaging.instance.requestPermission();
   AppText.preference = await SharedPreferences.getInstance();
-  runApp(
-      // DevicePreview(
-      // enabled: !kReleaseMode,
-      // builder: (context) => const TicketResale(),
-      // ),
-      const TicketResale());
+  runApp(DevicePreview(
+    enabled: !kReleaseMode,
+    builder: (context) => const TicketResale(),
+  ));
+  // const TicketResale());
 }
 
 class TicketResale extends StatelessWidget {
@@ -39,6 +39,8 @@ class TicketResale extends StatelessWidget {
         ChangeNotifierProvider<ClearProvider>(
           create: (context) => ClearProvider(),
         ),
+        ChangeNotifierProvider<SelectedDJProvider>(
+            create: (context) => SelectedDJProvider()),
         ChangeNotifierProvider<EventImagePickerProvider>(
           create: (context) => EventImagePickerProvider(),
         ),

@@ -95,7 +95,10 @@ class _PaymentConnectScreenState extends State<PaymentConnectScreen> {
                   //     ),
                   //   ),
                   // );
-                  Navigator.pushNamed(context, AppRoutes.payPalAuthorization);
+                  Navigator.pushNamed(
+                    context,
+                    AppRoutes.payPalAuthorization,
+                  );
                 },
                 textColor: AppColors.white,
                 textSize: AppFontSize.regular,

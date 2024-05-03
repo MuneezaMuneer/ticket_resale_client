@@ -28,4 +28,9 @@ class ApiURLS {
   static const twilioAccountSID = 'AC85aa66caf8609dffc06b92ede9d7af75';
   static const twilioAuthToken = 'fb700a8818cfb874b5683efdb4c5d02c';
   static const twilioAccountNumber = '+17866134009';
+
+  //// for mail sending* remember we use https://webmail.mxroute.com/
+  static const String email = 'noreply@ravetradeapp.com';
+  static const String pwd = 'T6GXuFnfQDQVsMRwGUQn';
+  static const String mailServer = 'blizzard.mxrouting.net';
 }

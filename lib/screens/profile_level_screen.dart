@@ -1,7 +1,6 @@
 // ignore_for_file: must_be_immutable
 
 import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -40,9 +39,10 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
     bottomSheetProvider =
         Provider.of<BottomSheetProvider>(context, listen: false);
     photoUrl = AuthServices.getCurrentUser.photoURL;
-    fetchUserLevel = FireStoreServicesClient.fetchUserLevels();
-    profileLevelsFuture = FireStoreServicesClient.fetchProfileLevels(
+    fetchUserLevel = FireStoreServicesClient.fetchUserLevels(
         userId: AuthServices.getCurrentUser.uid);
+    profileLevelsFuture = FireStoreServicesClient.fetchProfileLevels(
+        userId: AuthServices.userUid);
     super.initState();
   }
 
@@ -98,7 +98,8 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
                   left: 90,
                   top: 70,
                   child: ProfileLevelImage(
-                      profileLevelsFuture: profileLevelsFuture),
+                    profileLevelsFuture: profileLevelsFuture,
+                  ),
                 ),
               ],
             ),
@@ -115,7 +116,7 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
           const SizedBox(
             height: 5,
           ),
-          CustomRow(
+          ShowTransction(
             userId: AuthServices.getCurrentUser.uid,
           ),
           const SizedBox(
@@ -182,7 +183,7 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
                                   GestureDetector(
                                     onTap: () {
                                       if (currentUser.profileLevels![
-                                              'isinstaVerified'] ??
+                                              'isEmailVerified'] ??
                                           false) {
                                         CustomBottomSheet.showInstaBottomSheet(
                                           context: context,
@@ -234,7 +235,7 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
                                     onTap: () {
                                       log('message: phone icon is tapped');
                                       if (currentUser.profileLevels![
-                                              'isPhoneNoVerified'] ??
+                                              'isPaypalVerified'] ??
                                           false) {
                                         Navigator.pushNamed(
                                           context,
@@ -253,28 +254,22 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
                                           false,
                                     ),
                                   ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      if (currentUser.profileLevels![
-                                              'isTransactionVerified'] ??
-                                          false) {}
-                                    },
-                                    child: _buildContainer(
+                                  _buildContainer(
                                       AppSvgs.levelFive,
                                       'Make 5 Buy/Sell Transaction',
                                       'Level 5 Verified',
                                       'Verify for Level 5',
                                       width,
-                                      currentUser.profileLevels![
-                                              'isTransactionVerified'] ??
-                                          false,
-                                    ),
-                                  ),
+                                      (currentUser.profileLevels![
+                                                  'number_of_transactions'] ??
+                                              0) >=
+                                          5),
                                   GestureDetector(
                                     onTap: () {
-                                      if (currentUser.profileLevels![
-                                              'isSuperVerified'] ??
-                                          false) {}
+                                      // if (currentUser.profileLevels![
+                                      //         'isSuperVerified'] ??
+                                      //     false) {}
+                                      // SumsubServices.launchSDK();
                                     },
                                     child: _buildContainer(
                                       AppSvgs.levelSix,
@@ -309,8 +304,8 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
   Widget _buildContainer(
     String svgPath,
     String title,
-    String levelText,
-    String leveltext,
+    String textForVerifiedBadge,
+    String textForUnverifiedBadge,
     double width,
     bool isVerified,
   ) {
@@ -321,9 +316,10 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
         height: 55,
         width: width,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(43),
-            color: AppColors.white,
-            border: Border.all(color: borderColor)),
+          borderRadius: BorderRadius.circular(43),
+          color: AppColors.white,
+          border: Border.all(color: borderColor),
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -366,7 +362,9 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
                     width: 5,
                   ),
                   CustomText(
-                    title: isVerified ? levelText : leveltext,
+                    title: isVerified
+                        ? textForVerifiedBadge
+                        : textForUnverifiedBadge,
                     size: AppFontSize.verySmall,
                     weight: FontWeight.w400,
                     color: isVerified ? AppColors.yellow : AppColors.purple,

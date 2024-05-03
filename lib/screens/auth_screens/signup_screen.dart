@@ -29,16 +29,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController firstNameController = TextEditingController();
   ValueNotifier<bool> loading = ValueNotifier<bool>(false);
   TextEditingController lastNameController = TextEditingController();
-  TextEditingController gmailController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
   TextEditingController instaController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   ValueNotifier<bool> passwordVisibility = ValueNotifier<bool>(true);
   ValueNotifier<bool> confirmpasswordVisibility = ValueNotifier<bool>(true);
+  late String countryCode;
+  late bool isPhoneNumberExist;
 
   @override
   void initState() {
+    countryCode = '';
     bottomSheetProvider =
         Provider.of<BottomSheetProvider>(context, listen: false);
     instaController.text = '@';
@@ -49,7 +52,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   void dispose() {
     firstNameController.dispose();
     lastNameController.dispose();
-    gmailController.dispose();
+    emailController.dispose();
     passwordController.dispose();
     confirmPasswordController.dispose();
     phoneController.dispose();
@@ -131,7 +134,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     height: 12,
                   ),
                   CustomTextField(
-                    controller: gmailController,
+                    controller: emailController,
                     hintStyle: const TextStyle(color: AppColors.silver),
                     hintText: 'Email',
                     keyBoardType: TextInputType.emailAddress,
@@ -154,7 +157,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       maxLines: 1,
                       validator: (value) {
                         if (value == null || value.length < 6) {
-                          return 'Please enter valid password';
+                          return 'Password\'s characters length can\'t be less than six';
                         } else {
                           return null;
                         }
@@ -266,7 +269,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         }
                       },
                       onChanged: (phone) {
-                        phoneController.text = phone.completeNumber;
+                        countryCode = phone.countryCode;
                       },
                       keyboardType: TextInputType.number,
                       inputFormatters: <TextInputFormatter>[
@@ -291,127 +294,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           loading: loading.value,
                           textSize: AppFontSize.regular,
                           onPressed: () async {
-                            if (formKey.currentState!.validate()) {
-                              FocusScope.of(context).unfocus();
-                              bool isEmailExist =
-                                  await FireStoreServicesClient.checkUserEmail(
-                                email: gmailController.text,
-                              );
-                              loading.value = true;
-
-                              if (isEmailExist) {
-                                AppUtils.toastMessage('Email already in use');
-                                loading.value = false;
-                              } else {
-                                loading.value = true;
-                                String? fcmToken = await NotificationServices
-                                    .getFCMCurrentDeviceToken();
-                                UserModelClient userModel = UserModelClient(
-                                  displayName:
-                                      '${firstNameController.text} ${lastNameController.text}',
-                                  email: gmailController.text,
-                                  instaUsername: instaController.text,
-                                  phoneNo: phoneController.text,
-                                  status: 'Active',
-                                  fcmToken: fcmToken,
-                                );
-                                DateTime codeSentTime = DateTime
-                                    .now(); // Record the current time when sending the code
-                                int otp = EmailServices.generateRandomNumber();
-                                log('Email of user ==  ${gmailController.text}');
-
-                                try {
-                                  bool isSend = await EmailServices.sendEmail(
-                                    toEmail: gmailController.text,
-                                    fromEmail: 'info@flutterstudio.dev',
-                                    subject: 'Here is your verification code',
-                                    body:
-                                        'Hello!\nWe have received your request to verify your Email.'
-                                        ' Please use the following code to verify your Email:\n\n$otp'
-                                        '\n\nIf you have not requested this, you can simply ignore this email.'
-                                        '\nRave Trade',
-                                  );
-
-                                  if (isSend) {
-                                    bool isValidEmail = false;
-
-                                    CustomBottomSheet.showOTPBottomSheet(
-                                      btnText: 'Verify Email',
-                                      context: context,
-                                      onSubmit: (code) {
-                                        emailVerificationCode = code;
-                                        log('The code is : $code');
-
-                                        if (code == otp.toString()) {
-                                          isValidEmail = true;
-                                        } else {
-                                          isValidEmail = false;
-                                        }
-                                      },
-                                      email: gmailController.text,
-                                      onTape: () async {
-                                        if (emailVerificationCode.length == 4 &&
-                                            isValidEmail) {
-                                          bottomSheetProvider
-                                              .setLoadingProgress = true;
-                                          DateTime currentTime = DateTime.now();
-                                          Duration difference = currentTime
-                                              .difference(codeSentTime);
-                                          if (difference.inMinutes < 1) {
-                                            try {
-                                              await AuthServices.signUp(
-                                                email: gmailController.text,
-                                                password:
-                                                    passwordController.text,
-                                                context: context,
-                                              ).then((userCredentials) async {
-                                                if (userCredentials != null) {
-                                                  await AuthServices
-                                                      .storeUserData(
-                                                    userModel: userModel,
-                                                  );
-                                                  loading.value = false;
-                                                  Navigator
-                                                      .pushNamedAndRemoveUntil(
-                                                          context,
-                                                          AppRoutes
-                                                              .navigationScreen,
-                                                          (route) => false);
-                                                }
-                                              });
-                                            } catch (e) {
-                                              log('Error: $e');
-                                              AppUtils.toastMessage(
-                                                  'An error occurred. Please try again.');
-                                            } finally {
-                                              bottomSheetProvider
-                                                  .setLoadingProgress = false;
-                                            }
-                                          } else {
-                                            // Show toast indicating code expiration
-                                            bottomSheetProvider
-                                                .setLoadingProgress = false;
-                                            AppUtils.toastMessage(
-                                                'Verification code has expired. Please resend.');
-                                          }
-                                        } else {
-                                          AppUtils.toastMessage(
-                                              'Please enter a valid OTP');
-                                        }
-                                      },
-                                    );
-                                  } else {
-                                    AppUtils.toastMessage(
-                                        'Failed to send verification email');
-                                  }
-                                } catch (e) {
-                                  log('Error: $e');
-                                  AppUtils.toastMessage(
-                                      'An error occurred. Please try again.');
-                                } finally {
-                                  loading.value = false;
-                                }
-                              }
+                            bool isInstagramExist =
+                                await FireStoreServicesClient.checUserInstagram(
+                                    instagram: instaController.text);
+                            isPhoneNumberExist = await FireStoreServicesClient
+                                .checkUserPhoneNumber(
+                                    phoneNumber: '${phoneController.text}');
+                            if (isPhoneNumberExist) {
+                              SnackBarHelper.showSnackBar(
+                                  context, 'This phone number already exist.');
+                            } else if (isInstagramExist) {
+                              SnackBarHelper.showSnackBar(context,
+                                  'This instagram account already exist.');
+                            } else {
+                              _triggerSignUp();
                             }
                           },
                         );
@@ -450,5 +346,106 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> _triggerSignUp() async {
+    if (formKey.currentState!.validate()) {
+      FocusScope.of(context).unfocus();
+      bool isEmailExist = await FireStoreServicesClient.checkUserEmail(
+        email: emailController.text,
+      );
+      loading.value = true;
+      if (isEmailExist) {
+        AppUtils.toastMessage('Email already in use');
+        loading.value = false;
+      } else {
+        loading.value = true;
+        String? fcmToken =
+            await NotificationServices.getFCMCurrentDeviceToken();
+        UserModelClient userModel = UserModelClient(
+          displayName: '${firstNameController.text} ${lastNameController.text}',
+          email: emailController.text,
+          instaUsername: instaController.text,
+          phoneNo: phoneController.text,
+          status: 'Active',
+          fcmToken: fcmToken,
+        );
+        DateTime codeSentTime = DateTime.now();
+        final int otp = EmailServices.generateRandomNumber();
+        log('Email of user ==  ${emailController.text}');
+
+        try {
+          bool isSent = await EmailServices.sendVerificationEmail(
+              toEmail: emailController.text,
+              subject: 'Here is your verification code',
+              verificationCode: otp.toString());
+
+          if (isSent) {
+            bool isValidEmail = false;
+
+            CustomBottomSheet.showOTPBottomSheet(
+              btnText: 'Verify Email',
+              context: context,
+              onSubmit: (code) {
+                emailVerificationCode = code;
+                log('The code is : $code');
+
+                if (code == otp.toString()) {
+                  isValidEmail = true;
+                } else {
+                  isValidEmail = false;
+                }
+              },
+              email: emailController.text,
+              onTape: () async {
+                if (emailVerificationCode.length == 4 && isValidEmail) {
+                  bottomSheetProvider.setLoadingProgress = true;
+                  DateTime currentTime = DateTime.now();
+                  Duration difference = currentTime.difference(codeSentTime);
+                  if (difference.inMinutes < 10) {
+                    try {
+                      await AuthServices.signUp(
+                        email: emailController.text,
+                        password: passwordController.text,
+                        context: context,
+                      ).then((userCredentials) async {
+                        if (userCredentials != null) {
+                          await AuthServices.storeUserData(
+                            userModel: userModel,
+                          );
+                          loading.value = false;
+                          Navigator.pushNamedAndRemoveUntil(context,
+                              AppRoutes.navigationScreen, (route) => false);
+                        }
+                      });
+                    } catch (e) {
+                      log('Error: $e');
+                      AppUtils.toastMessage(
+                          'An error occurred. Please try again.');
+                    } finally {
+                      bottomSheetProvider.setLoadingProgress = false;
+                    }
+                  } else {
+                    // Show toast indicating code expiration
+                    bottomSheetProvider.setLoadingProgress = false;
+                    AppUtils.toastMessage(
+                        'Verification code has expired. Please resend.');
+                  }
+                } else {
+                  AppUtils.toastMessage('Please enter a valid OTP');
+                }
+              },
+            );
+          } else {
+            AppUtils.toastMessage('Failed to send verification email');
+          }
+        } catch (e) {
+          log('Error: $e');
+          AppUtils.toastMessage('An error occurred. Please try again.');
+        } finally {
+          loading.value = false;
+        }
+      }
+    }
   }
 }

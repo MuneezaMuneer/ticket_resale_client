@@ -35,6 +35,7 @@ class CustomAppBarClient extends StatelessWidget
     return Container(
       height: height * 0.13,
       width: width,
+      padding: const EdgeInsets.only(top: 25),
       decoration: BoxDecoration(
           gradient: customGradient,
           borderRadius: const BorderRadius.only(
@@ -42,83 +43,80 @@ class CustomAppBarClient extends StatelessWidget
               bottomLeft: Radius.circular(40),
               topLeft: Radius.circular(5),
               topRight: Radius.circular(5))),
-      child: Padding(
-        padding: const EdgeInsets.only(top: 25),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 25),
-              child: Row(
-                children: [
-                  InkWell(
-                      onTap: () {
-                        if (isOpenedFromDialog == true) {
-                          Navigator.pushNamedAndRemoveUntil(context,
-                              AppRoutes.navigationScreen, (route) => false);
-                        } else {
-                          Navigator.pop(context);
-                        }
-                      },
-                      child: isBackButton
-                          ? const Icon(
-                              Icons.arrow_back_ios,
-                              color: AppColors.white,
-                              size: 18,
-                            )
-                          : const SizedBox.shrink()),
-                  SizedBox(
-                      child: isNetworkImage
-                          ? Padding(
-                              padding: const EdgeInsets.only(top: 8, left: 10),
-                              child: SizedBox(
-                                  child: (networkImage != null) &&
-                                          networkImage!.isNotEmpty &&
-                                          networkImage != 'null'
-                                      ? CustomDisplayStoryImage(
-                                          imageUrl: '$networkImage',
-                                          height: 43,
-                                          width: 43,
-                                        )
-                                      : const CircleAvatar(
-                                          backgroundImage: AssetImage(
-                                              AppImages.profileImage))),
-                            )
-                          : const SizedBox.shrink()),
-                  const Gap(15),
-                  CustomText(
-                    title: '$title',
-                    weight: FontWeight.w600,
-                    size: AppFontSize.regular,
-                    color: AppColors.white,
-                  )
-                ],
-              ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 25),
+            child: Row(
+              children: [
+                InkWell(
+                    onTap: () {
+                      if (isOpenedFromDialog == true) {
+                        Navigator.pushNamedAndRemoveUntil(context,
+                            AppRoutes.navigationScreen, (route) => false);
+                      } else {
+                        Navigator.pop(context);
+                      }
+                    },
+                    child: isBackButton
+                        ? const Icon(
+                            Icons.arrow_back_ios,
+                            color: AppColors.white,
+                            size: 18,
+                          )
+                        : const SizedBox.shrink()),
+                SizedBox(
+                    child: isNetworkImage
+                        ? Padding(
+                            padding: const EdgeInsets.only(top: 8, left: 10),
+                            child: SizedBox(
+                                child: (networkImage != null) &&
+                                        networkImage!.isNotEmpty &&
+                                        networkImage != 'null'
+                                    ? CustomDisplayStoryImage(
+                                        imageUrl: '$networkImage',
+                                        height: 43,
+                                        width: 43,
+                                      )
+                                    : const CircleAvatar(
+                                        backgroundImage: AssetImage(
+                                            AppImages.profileImage))),
+                          )
+                        : const SizedBox.shrink()),
+                const Gap(15),
+                CustomText(
+                  title: '$title',
+                  weight: FontWeight.w600,
+                  size: AppFontSize.regular,
+                  color: AppColors.white,
+                )
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.only(right: 25, top: 10),
-              child: SizedBox(
-                  child: isNotification
-                      ? InkWell(
-                          onTap: () {
-                            Navigator.pushNamed(
-                                context, AppRoutes.notificationScreen);
-                          },
-                          child: Container(
-                              height: 40,
-                              width: 40,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: AppColors.white.withOpacity(0.1),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: SvgPicture.asset(AppSvgs.sms),
-                              )))
-                      : const SizedBox.shrink()),
-            )
-          ],
-        ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 25, top: 10),
+            child: SizedBox(
+                child: isNotification
+                    ? InkWell(
+                        onTap: () {
+                          Navigator.pushNamed(
+                              context, AppRoutes.notificationScreen);
+                        },
+                        child: Container(
+                            height: 40,
+                            width: 40,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: AppColors.white.withOpacity(0.1),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: SvgPicture.asset(AppSvgs.sms),
+                            )))
+                    : const SizedBox.shrink()),
+          )
+        ],
       ),
     );
   }

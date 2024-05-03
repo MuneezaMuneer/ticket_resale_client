@@ -9,9 +9,11 @@ class UserModelClient {
   final String? id;
   final String? status;
   final String? fcmToken;
+  final bool? commentValue;
 
   UserModelClient({
     this.fcmToken,
+    this.commentValue,
     this.status,
     this.displayName,
     this.email,
@@ -33,6 +35,7 @@ class UserModelClient {
       'profile_levels': profileLevels,
       'status': status,
       'image_url': photoUrl,
+      'comment_value': true
     };
   }
 
@@ -47,21 +50,22 @@ class UserModelClient {
       'image_url': photoUrl,
       'fcm_token': fcmToken,
       'email': email,
+      'comment_value': true
     };
   }
 
   factory UserModelClient.fromMap(Map<String, dynamic> map, String id) {
     return UserModelClient(
-      id: id,
-      status: map['status'] ?? '',
-      instaUsername: map['instagram_username'] ?? "",
-      phoneNo: map['phone_number'] ?? '',
-      birthDate: map['birth_date'] ?? '',
-      photoUrl: map['image_url'] ?? '',
-      profileLevels: map['profile_levels'] ?? Map,
-      displayName: map['user_name'] ?? '',
-      fcmToken: map['fcm_token'] ?? '',
-    );
+        id: id,
+        status: map['status'] ?? '',
+        instaUsername: map['instagram_username'] ?? "",
+        phoneNo: map['phone_number'] ?? '',
+        birthDate: map['birth_date'] ?? '',
+        photoUrl: map['image_url'] ?? '',
+        profileLevels: map['profile_levels'] ?? Map,
+        displayName: map['user_name'] ?? '',
+        fcmToken: map['fcm_token'] ?? '',
+        commentValue: map['comment_value'] ?? false);
   }
   int getProfileLevelsLength(Map<String, dynamic>? profileLevels) {
     return profileLevels?.length ?? 0;

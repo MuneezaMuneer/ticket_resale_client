@@ -326,9 +326,9 @@ class CustomBottomSheet {
                                                             "currency": 'USD'
                                                           });
                                                         }
-                                                        Navigator.pop(context);
+
                                                         Navigator.of(context)
-                                                            .push(
+                                                            .pushReplacement(
                                                           MaterialPageRoute(
                                                             builder: (BuildContext
                                                                     context) =>

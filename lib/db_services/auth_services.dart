@@ -21,12 +21,12 @@ import 'package:twilio_flutter/twilio_flutter.dart';
 import '../widgets/custom_navigation_admin.dart';
 
 class AuthServices {
-  static User get getCurrentUser {
-    return FirebaseAuth.instance.currentUser!;
-  }
+  static User get getCurrentUser => FirebaseAuth.instance.currentUser!;
+  static String get userUid => getCurrentUser.uid;
 
-  ///Below data is for apple login/////
-  /// Generates a cryptographically secure random nonce, to be included in a redential request.
+  /*Below data is for apple login
+  Generates a cryptographically secure random nonce,
+  to be included in a redential request.*/
   static String generateNonce([int length = 32]) {
     const charset =
         '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
@@ -74,17 +74,19 @@ class AuthServices {
     fullName.trim();
     if (fullName.length > 2) {
       await userCredential.user!.updateDisplayName(fullName);
+      await verifyBadge(isEmailAuthorized: true);
       // await userCredential.user!.updatePhotoURL(photoURL)
     }
     log('userName: ${FirebaseAuth.instance.currentUser!.displayName}');
     return userCredential;
   }
 
-  static Future<UserCredential?> signInWithGoogle(
-      {required BuildContext context,
-      required ValueNotifier<bool> googleNotifier,
-      required String fcmToken,
-      required UserModelClient userModel}) async {
+  static Future<UserCredential?> signInWithGoogle({
+    required BuildContext context,
+    required ValueNotifier<bool> googleNotifier,
+    required String fcmToken,
+    required UserModelClient userModel,
+  }) async {
     try {
       googleNotifier.value = true;
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
@@ -111,6 +113,8 @@ class AuthServices {
 
       final userCredential =
           await FirebaseAuth.instance.signInWithCredential(credential);
+      log('message: ${userCredential.additionalUserInfo!.isNewUser.toString()}');
+      log('message: ${userCredential.user!.displayName.toString()}');
 
       //store user google credentials to firestore
 
@@ -139,6 +143,7 @@ class AuthServices {
       'status': 'Active',
       'fcm_token': fcmToken,
       'image_url': user.photoURL,
+      'comment_value': true,
       'profile_levels': {
         'isEmailVerified': true,
       },
@@ -228,12 +233,53 @@ class AuthServices {
     }
   }
 
-  static Future<void> deleteUserAccount() async {
-    await deleteUserData();
-    await deleteUserTickets();
-    await AuthServices.getCurrentUser.delete().then((value) {
-      log('The user deleted successfully');
-    });
+  static Future<void> deleteUserAccount(
+      {required BuildContext context, required String password}) async {
+    try {
+      User currentUser = AuthServices.getCurrentUser;
+      await deleteUserData()
+          .then((value) => log('message:deleteed User Data '));
+      await deleteUserTickets()
+          .then((value) => log('message:deleteed User tickets '));
+      await currentUser
+          .delete()
+          .then((value) => log('message:deleteed current user'));
+      Navigator.pushNamedAndRemoveUntil(
+          context, AppRoutes.logIn, (route) => false);
+      log('done with routing');
+    } on FirebaseAuthException catch (e) {
+      if (e.code == "requires-recent-login") {
+        log('Error: requires-recent-login: ');
+        await AuthServices._reauthenticateAndDelete(password);
+      }
+    } catch (e) {
+      log('Error: ${e.toString()} ');
+
+      ///handle general exception
+    }
+  }
+
+  static Future<void> _reauthenticateAndDelete(String password) async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+      final providerData = user!.providerData.first;
+      if (AppleAuthProvider().providerId == providerData.providerId) {
+        await user.reauthenticateWithProvider(AppleAuthProvider());
+      } else if (GoogleAuthProvider().providerId == providerData.providerId) {
+        await user.reauthenticateWithProvider(GoogleAuthProvider());
+      } else if (EmailAuthProvider.PROVIDER_ID == providerData.providerId) {
+        String email = user.email!;
+        AuthCredential credential = EmailAuthProvider.credential(
+          email: email,
+          password: password,
+        );
+        await user.reauthenticateWithCredential(credential);
+      }
+
+      await user.delete();
+    } catch (e) {
+      // Handle exceptions
+    }
   }
 
   static Future<void> deleteUserData() async {
@@ -251,13 +297,28 @@ class AuthServices {
     try {
       String uid = AuthServices.getCurrentUser.uid;
 
-      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+      QuerySnapshot offersSnapshot = await FirebaseFirestore.instance
           .collection('tickets')
           .where('user_uid', isEqualTo: uid)
           .get();
 
-      for (QueryDocumentSnapshot document in querySnapshot.docs) {
-        await document.reference.delete();
+      for (QueryDocumentSnapshot offerDocument in offersSnapshot.docs) {
+        QuerySnapshot offerDocsSnapshot =
+            await offerDocument.reference.collection('offers').get();
+
+        for (QueryDocumentSnapshot offerDoc in offerDocsSnapshot.docs) {
+          await offerDoc.reference.delete();
+        }
+      }
+
+      // Delete tickets
+      QuerySnapshot ticketsSnapshot = await FirebaseFirestore.instance
+          .collection('tickets')
+          .where('user_uid', isEqualTo: uid)
+          .get();
+
+      for (QueryDocumentSnapshot ticketDocument in ticketsSnapshot.docs) {
+        await ticketDocument.reference.delete();
       }
     } catch (e) {
       log("Error deleting user data: $e");
@@ -321,14 +382,19 @@ class AuthServices {
     await user.set({'fcm_token': fcmToken}, SetOptions(merge: true));
   }
 
-  static Future<void> storePaypalAuthorization(
-      {required bool paypalAuthorization}) async {
+  static Future<void> verifyBadge({
+    bool isPaypalAuthorized = false,
+    bool isEmailAuthorized = false,
+    bool isInstaAuthorized = false,
+  }) async {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
-    DocumentReference user =
-        firestore.collection('user_data').doc(AuthServices.getCurrentUser.uid);
+    DocumentReference user = firestore.collection('user_data').doc(userUid);
+
     await user.set({
       'profile_levels': {
-        'isPaypalVerified': paypalAuthorization,
+        if (isPaypalAuthorized) 'isPaypalVerified': isPaypalAuthorized,
+        if (isEmailAuthorized) 'isEmailVerified': isPaypalAuthorized,
+        if (isInstaAuthorized) 'isInstaVerified': isInstaAuthorized,
       }
     }, SetOptions(merge: true));
   }
@@ -451,7 +517,7 @@ class AuthServices {
       authToken: ApiURLS.twilioAuthToken,
       twilioNumber: ApiURLS.twilioAccountNumber,
       // messagingServiceSid:
-      // '' // optional replace with messaging service sid, required for features like scheduled sms
+      // optional replace with messaging service sid, required for features like scheduled sms
     );
     await twilioFlutter.sendSMS(
       toNumber: toNumber,

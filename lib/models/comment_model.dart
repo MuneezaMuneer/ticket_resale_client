@@ -7,15 +7,15 @@ class CommentModel {
   String? comment;
   String? status;
   String? offerId;
-
+ 
   CommentModel(
       {this.userId,
       required this.time,
       this.offerPrice,
       this.comment,
       this.status,
-      this.offerId
-      });
+      this.offerId,
+    S  });
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -23,7 +23,8 @@ class CommentModel {
       'time': FieldValue.serverTimestamp(),
       'offer_price': offerPrice,
       'comment': comment,
-      'status': status
+      'status': status,
+   
     };
   }
 

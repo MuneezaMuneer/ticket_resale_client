@@ -1,212 +1,141 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:svg_flutter/svg_flutter.dart';
 import 'package:ticket_resale/components/components.dart';
 import 'package:ticket_resale/constants/constants.dart';
-import 'package:ticket_resale/db_services/db_services.dart';
-import 'package:ticket_resale/models/models.dart';
-import 'package:ticket_resale/utils/utils.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
-class HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
-  final TextEditingController? controller;
-  final SearchCallBack? setSearchQuery;
-  const HomeAppBar({
+class SearchAppBar extends StatelessWidget {
+  final TextEditingController searchController;
+  final double width;
+  final SearchCallBack setSearchQuery;
+  final ValueNotifier<String> searchNotifier;
+
+  const SearchAppBar({
     Key? key,
-    required this.controller,
+    required this.searchController,
+    required this.width,
     required this.setSearchQuery,
+    required this.searchNotifier,
   }) : super(key: key);
 
   @override
-  State<HomeAppBar> createState() => _HomeAppBarState();
-
-  @override
-  Size get preferredSize => const Size.fromHeight(170);
-}
-
-class _HomeAppBarState extends State<HomeAppBar> {
-  String? displayName;
-  String? photoUrl;
-
-  ValueNotifier<String> searchNotifier = ValueNotifier<String>('');
-  late Stream<List<EventModalClient>> displayEventData;
-
-  @override
-  void initState() {
-    displayName = AuthServices.getCurrentUser.displayName ?? '';
-    photoUrl = AuthServices.getCurrentUser.photoURL ?? '';
-    displayEventData = FireStoreServicesClient.fetchEventData();
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    final double height = size.height;
-    final double width = size.width;
+    double deviceHeight = MediaQuery.of(context).size.height;
+    double bottomPadding = deviceHeight <= 640 ? 17 : 20;
 
-    return Container(
-      width: width,
-      decoration: BoxDecoration(
-          gradient: customGradient,
-          borderRadius: const BorderRadius.only(
-              bottomLeft: Radius.circular(40),
-              bottomRight: Radius.circular(40))),
-      child: Padding(
-        padding: const EdgeInsets.only(left: 20, right: 20, top: 40),
-        child: Stack(
-          clipBehavior: Clip.none,
+    return SliverAppBar(
+      pinned: true,
+      automaticallyImplyLeading: false,
+      expandedHeight: 100,
+      actions: [
+        Padding(
+          padding: const EdgeInsets.only(right: 6.0),
+          child: IconButton.filled(
+            style: ButtonStyle(
+              backgroundColor:
+                  MaterialStateProperty.all(Color(0xffFFFFFF).withOpacity(0.1)),
+              iconColor: MaterialStateProperty.all(Color(0xffFFFFFF)),
+            ),
+            onPressed: () {
+              Navigator.pushNamed(
+                context,
+                AppRoutes.chatScreen,
+              );
+            },
+            icon: Icon(Icons.comment),
+          ),
+        ),
+      ],
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          bottom: Radius.circular(40),
+        ),
+      ),
+      backgroundColor: AppColors.blueViolet,
+      title: Padding(
+        padding: const EdgeInsets.only(left: 10, bottom: 22),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-                height: 50,
-                width: 50,
-                child: photoUrl != null && photoUrl!.isNotEmpty
-                    ? CustomDisplayStoryImage(
-                        imageUrl: '$photoUrl',
-                        height: 45,
-                        width: 45,
-                      )
-                    : const CircleAvatar(
-                        backgroundImage: AssetImage(AppImages.profileImage))),
-            Padding(
-              padding: const EdgeInsets.only(left: 60),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CustomText(
-                    title: AppUtils.getGreeting(),
-                    color: AppColors.white,
-                    weight: FontWeight.w400,
-                    size: AppFontSize.small,
-                  ),
-                  CustomText(
-                    title: displayName != null ? displayName ?? '' : '',
-                    color: AppColors.white,
-                    weight: FontWeight.w700,
-                    size: AppFontSize.regular,
-                  )
-                ],
+            Gap(8),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: const CustomText(
+                title: 'Discover Amazing',
+                color: AppColors.white,
+                size: AppFontSize.regular,
+                weight: FontWeight.w400,
               ),
             ),
-            Positioned(
-              right: 5,
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    AppRoutes.notificationScreen,
-                  );
-                },
-                child: Container(
-                    height: 40,
-                    width: 40,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AppColors.white.withOpacity(0.1),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: SvgPicture.asset(AppSvgs.sms),
-                    )),
-              ),
-            ),
-            Positioned(
-              right: 5,
-              top: 50,
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(context, AppRoutes.chatScreen);
-                },
-                child: Container(
-                    height: 40,
-                    width: 40,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AppColors.white.withOpacity(0.1),
-                    ),
-                    child: const Center(
-                      child: Icon(
-                        Icons.comment,
-                        color: AppColors.white,
-                        size: 20,
-                      ),
-                    )),
-              ),
-            ),
-            Positioned(
-              top: 70,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const CustomText(
-                    title: 'Discover Amazing',
-                    color: AppColors.white,
-                    size: AppFontSize.regular,
-                    weight: FontWeight.w400,
-                  ),
-                  const CustomText(
-                    title: 'Events Tickets Now',
-                    color: AppColors.white,
-                    size: AppFontSize.verylarge,
-                    weight: FontWeight.w700,
-                  ),
-                  const Gap(12),
-                  Align(
-                    alignment: Alignment.center,
-                    child: SizedBox(
-                      height: height * 0.08,
-                      width: width * 0.9,
-                      child: ValueListenableBuilder(
-                        valueListenable: widget.controller!,
-                        builder: (context, value, child) {
-                          return CustomTextField(
-                            hintText: 'Search Events, Tickets, or City',
-                            hintStyle: const TextStyle(color: AppColors.silver),
-                            fillColor: AppColors.white,
-                            controller: widget.controller!,
-                            isFilled: true,
-                            onChanged: (query) {
-                              widget.setSearchQuery!(widget.controller!.text);
-                            },
-                            suffixIcon: Padding(
-                              padding: const EdgeInsets.only(right: 8),
-                              child: Container(
-                                height: 35,
-                                width: 35,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  gradient: customGradient,
-                                ),
-                                child: Center(
-                                  child: widget.controller!.text.isEmpty
-                                      ? const Icon(
-                                          Icons.search,
-                                          color: AppColors.white,
-                                        )
-                                      : InkWell(
-                                          onTap: () {
-                                            widget.controller!.clear();
-                                            widget.setSearchQuery!(
-                                                widget.controller!.text);
-                                          },
-                                          child: const Icon(
-                                            Icons.close,
-                                            color: AppColors.white,
-                                          ),
-                                        ),
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                ],
+            Align(
+              alignment: Alignment.centerLeft,
+              child: const CustomText(
+                title: 'Events Tickets Now',
+                color: AppColors.white,
+                size: AppFontSize.verylarge,
+                weight: FontWeight.w700,
               ),
             ),
           ],
+        ),
+      ),
+      bottom: PreferredSize(
+        preferredSize: Size.fromHeight(80.0),
+        child: Padding(
+          padding: EdgeInsets.only(bottom: bottomPadding),
+          child: Container(
+            decoration: BoxDecoration(
+                boxShadow: [BoxShadow(color: AppColors.purple, blurRadius: 20)],
+                borderRadius: BorderRadius.all(Radius.circular(25))),
+            width: width * 0.9,
+            child: ValueListenableBuilder<String>(
+              valueListenable: searchNotifier,
+              builder: (context, searchText, _) {
+                return CustomTextField(
+                  hintText: 'Search Events, Tickets, or City',
+                  hintStyle: const TextStyle(
+                    color: AppColors.silver,
+                  ),
+                  fillColor: AppColors.white,
+                  controller: searchController,
+                  isFilled: true,
+                  onChanged: (query) {
+                    setSearchQuery(query);
+                    searchNotifier.value = query;
+                  },
+                  suffixIcon: Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: Container(
+                      height: 35,
+                      width: 35,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        gradient: customGradient,
+                      ),
+                      child: Center(
+                        child: searchText.isEmpty
+                            ? const Icon(
+                                Icons.search,
+                                color: AppColors.white,
+                              )
+                            : InkWell(
+                                onTap: () {
+                                  searchController.clear();
+                                  setSearchQuery('');
+                                  searchNotifier.value = '';
+                                },
+                                child: const Icon(
+                                  Icons.close,
+                                  color: AppColors.white,
+                                ),
+                              ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
         ),
       ),
     );

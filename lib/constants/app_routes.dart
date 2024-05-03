@@ -17,7 +17,7 @@ class AppRoutes {
   static const eventScreen = '/eventScreen';
   static const profileLevelScreen = '/profileLevelScreen';
   static const navigationScreen = '/navigationScreen';
-  static const passwordScreen = '/passwordScreen';
+  static const forgotPasswordScreen = '/forgotPasswordScreen';
   static const termOfUseScreen = '/termUseScreen';
   static const signInAdmin = '/adminSignIn';
   static const logoutAdmin = '/logoutAdmin';

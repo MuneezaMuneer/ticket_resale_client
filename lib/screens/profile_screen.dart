@@ -25,6 +25,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void initState() {
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
       Provider.of<SwitchProvider>(context, listen: false).loadPreferences();
+
       switchProvider = Provider.of<SwitchProvider>(context, listen: false);
     });
     photoUrl = AuthServices.getCurrentUser.photoURL;
@@ -97,7 +98,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             const SizedBox(
               height: 5,
             ),
-            CustomRow(
+            ShowTransction(
               userId: AuthServices.getCurrentUser.uid,
             ),
             const SizedBox(

@@ -29,7 +29,7 @@ class CustomTextField extends StatelessWidget {
   final bool isTrailingText;
   final String? initialValue;
   final List<TextInputFormatter>? inputFormatters;
-
+  final double? maxBoxConstraintsWidth;
   const CustomTextField({
     super.key,
     this.controller,
@@ -56,6 +56,7 @@ class CustomTextField extends StatelessWidget {
     this.isSuffixIcon = true,
     this.iconWidget,
     this.inputFormatters,
+    this.maxBoxConstraintsWidth,
   });
 
   @override
@@ -75,6 +76,9 @@ class CustomTextField extends StatelessWidget {
       autovalidateMode: AutovalidateMode.onUserInteraction,
       decoration: InputDecoration(
         contentPadding: const EdgeInsets.only(top: 10, left: 17),
+        constraints: BoxConstraints(
+          maxWidth: maxBoxConstraintsWidth ?? double.infinity,
+        ),
         hintText: hintText,
         alignLabelWithHint: true,
         suffixIcon: isTrailingText

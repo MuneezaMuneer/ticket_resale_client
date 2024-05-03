@@ -8,7 +8,7 @@ class TermsOfUseScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       appBar: CustomAppBarClient(
         title: 'Terms of Use',
       ),
@@ -19,7 +19,7 @@ class TermsOfUseScreen extends StatelessWidget {
             children: [
               Gap(40),
               CustomText(
-                title: TermOfUseText.termOfUse,
+                title: AppText.termOfUse,
                 color: AppColors.brown,
                 size: AppFontSize.regular,
                 softWrap: true,

@@ -7,13 +7,13 @@ import 'package:ticket_resale/db_services/db_services.dart';
 import 'package:ticket_resale/utils/utils.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
-class PasswordScreen extends StatefulWidget {
-  const PasswordScreen({super.key});
+class ForgotPasswordScreen extends StatefulWidget {
+  const ForgotPasswordScreen({super.key});
   @override
-  State<PasswordScreen> createState() => _PasswordScreenState();
+  State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
 }
 
-class _PasswordScreenState extends State<PasswordScreen> {
+class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   GlobalKey<FormState> key = GlobalKey<FormState>();
   final ValueNotifier<bool> loadingNotifier = ValueNotifier(false);
   TextEditingController emailController = TextEditingController();

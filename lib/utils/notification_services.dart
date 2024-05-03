@@ -50,7 +50,10 @@ class NotificationServices {
   static Future<bool> requestPermission() async {
     if (Platform.isIOS) {
       messaging.setForegroundNotificationPresentationOptions(
-          alert: true, sound: true, badge: false);
+        alert: true,
+        sound: true,
+        badge: false,
+      );
 
       return true;
     } else {
@@ -86,10 +89,11 @@ class NotificationServices {
       BuildContext context, RemoteMessage message) async {
     if (AuthServices.getCurrentUser.uid.isNotEmpty) {
       if (FirebaseAuth.instance.currentUser != null) {
-        String? id = message.data['id'];
+        String? id = message.data['event_id'];
         String? userId = message.data['user_id'];
         String? notificationType = message.data['notification_type'];
-
+        String? price = message.data['price'];
+        String? ticketId = message.data['ticket_id'];
         if (id != null && userId != null) {
           String hashKey =
               FireStoreServicesClient.getMessagesHashCodeID(userIDReceiver: id);
@@ -99,6 +103,17 @@ class NotificationServices {
           if (notificationType == 'ticket_listing') {
             Navigator.pushNamed(context, AppRoutes.detailFirstScreen,
                 arguments: id);
+          } else if (notificationType == 'offered_price') {
+            Navigator.pushNamed(
+              context,
+              AppRoutes.commentScreen,
+              arguments: {
+                'ticketId': ticketId,
+                'ticketUserId': userId,
+                'eventId': id,
+                'price': price,
+              },
+            );
           } else if (notificationType == 'offer_confirm') {
             Navigator.pushNamed(
               context,
@@ -113,7 +128,7 @@ class NotificationServices {
             CustomBottomSheet.showConfirmTicketsSheet(
                 context: context,
                 hashKey: hashKey,
-              //  id: {'seller_uid': userId},
+                //  id: {'seller_uid': userId},
                 userModel: userModel);
           }
         }

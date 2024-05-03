@@ -1,8 +1,11 @@
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 import 'package:ticket_resale/db_services/db_services.dart';
 import 'package:ticket_resale/models/models.dart';
+import 'package:ticket_resale/providers/providers.dart';
 import 'package:uuid/uuid.dart';
 
 class FireStoreServicesClient {
@@ -15,13 +18,25 @@ class FireStoreServicesClient {
         .set(ticketModel.toMap());
   }
 
+ static Future<void> updateUserSubscribeCommentValue(
+      {required bool commentValue,required BuildContext context}) async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    DocumentReference user =
+        firestore.collection('user_data').doc(AuthServices.userUid);
+    await user.update({'comment_value': commentValue});
+    // Notify listeners after updating value
+    Provider.of<SwitchProvider>(context, listen: false)
+        .fetchCommentValueFromFirebase();
+}
+
+
   static Future<void> createChatSystem(
       {required CommentModel commentModel, required String docId}) async {
     FirebaseFirestore.instance
         .collection('tickets')
         .doc(docId)
         .collection('offers')
-        .doc()
+        .doc(uid.v4())
         .set(commentModel.toMap(), SetOptions(merge: true));
   }
 
@@ -32,7 +47,7 @@ class FireStoreServicesClient {
         .collection('notifications')
         .doc(name)
         .collection(name)
-        .doc()
+        .doc(uid.v6())
         .set(notificationModel.toMap());
   }
 
@@ -185,6 +200,19 @@ class FireStoreServicesClient {
     });
   }
 
+  static Stream<List<DjsModel>> fetchDjs() {
+    return FirebaseFirestore.instance
+        .collection('popular_dj')
+        .snapshots()
+        .map((event) {
+      return event.docs.map((doc) {
+        return DjsModel.fromMap(
+          doc.data(),
+        );
+      }).toList();
+    });
+  }
+
   static Stream<EventModalClient> fetchEventDataBasedOnId(
       {required String eventId}) {
     return FirebaseFirestore.instance
@@ -256,10 +284,10 @@ class FireStoreServicesClient {
         .map((event) => event.docs.length);
   }
 
-  static Stream<UserModelClient> fetchUserLevels() {
+  static Stream<UserModelClient> fetchUserLevels({required String userId}) {
     return FirebaseFirestore.instance
         .collection('user_data')
-        .doc(AuthServices.getCurrentUser.uid)
+        .doc(userId)
         .snapshots()
         .map((event) {
       return UserModelClient.fromMap(event.data()!, event.id);
@@ -412,6 +440,31 @@ class FireStoreServicesClient {
     }
   }
 
+  static Future<bool> checkUserPhoneNumber(
+      {required String phoneNumber}) async {
+    var user = await FirebaseFirestore.instance
+        .collection('user_data')
+        .where("phone_number", isEqualTo: phoneNumber)
+        .get();
+    if (user.docs.isEmpty) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  static Future<bool> checUserInstagram({required String instagram}) async {
+    var user = await FirebaseFirestore.instance
+        .collection('user_data')
+        .where("instagram_username", isEqualTo: instagram)
+        .get();
+    if (user.docs.isEmpty) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   static String getMessagesHashCodeID({required String userIDReceiver}) {
     String currentUserUID = AuthServices.getCurrentUser.uid;
     String chatHashID = '';
@@ -505,5 +558,80 @@ class FireStoreServicesClient {
     } catch (e) {
       log('Error making connection between users : ${e.toString()}');
     }
+  }
+
+  static Future<void> updateNumberOfTransactions({
+    required String userId1,
+    required String userId2,
+  }) async {
+    await _updateForUser(userId1);
+    await _updateForUser(userId2);
+  }
+
+  static Future<void> _updateForUser(String userId) async {
+    DocumentReference userDocRef =
+        FirebaseFirestore.instance.collection('user_data').doc(userId);
+
+    Map<String, dynamic> profileLevelsUpdate = {
+      'profile_levels': {
+        'number_of_transactions': FieldValue.increment(1),
+      },
+    };
+
+    await userDocRef.set(
+      profileLevelsUpdate,
+      SetOptions(merge: true),
+    );
+  }
+
+  static Future<void> storeUserPaypalInfo({required String email}) async {
+    await FirebaseFirestore.instance
+        .collection('user_data')
+        .doc(AuthServices.userUid)
+        .set({
+      'paypal_email': email,
+    }, SetOptions(merge: true));
+  }
+
+  static Future<List<String>> getAllUserPaypalEmails() async {
+    final querySnapshot =
+        await FirebaseFirestore.instance.collection('user_data').get();
+
+    // Extract PayPal emails from user documents
+    return querySnapshot.docs
+        .where((doc) => doc.id != AuthServices.userUid) // Exclude current user
+        .map((doc) => doc.data()['paypal_email'] ?? '')
+        .toList()
+        .cast<String>();
+  }
+
+  // Function to check if a PayPal email is already in use by another user
+  static bool isPaypalEmailAlreadyInUse(
+      String currentUserPaypalEmail, List<String> allUserPaypalEmails) {
+    return allUserPaypalEmails.any((email) => email == currentUserPaypalEmail);
+  }
+
+  static Future<bool> doesPhoneNumberExist(String phoneNumber) async {
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('user_data')
+        .where('phone_number', isEqualTo: phoneNumber)
+        .get();
+
+    final filteredDocs =
+        querySnapshot.docs.where((doc) => doc.id != AuthServices.userUid);
+
+    return filteredDocs.isNotEmpty;
+  }
+
+  static Future<bool> doesInstagramExist(String instagram) async {
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('user_data')
+        .where('instagram_username', isEqualTo: instagram)
+        .get();
+
+    final filteredDocs =
+        querySnapshot.docs.where((doc) => doc.id != AuthServices.userUid);
+
+    return filteredDocs.isNotEmpty;
   }
 }

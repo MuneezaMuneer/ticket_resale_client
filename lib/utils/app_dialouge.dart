@@ -14,6 +14,11 @@ import 'package:ticket_resale/widgets/widgets.dart';
 
 deleteDialog({required BuildContext context}) {
   ValueNotifier<bool> _valueNotifier = ValueNotifier(false);
+  TextEditingController passwordController = TextEditingController();
+
+  ///prompt user for password if ProviderID is password
+  bool isVisible = AuthServices.getCurrentUser.providerData
+      .any((info) => info.providerId == 'password');
   return showAdaptiveDialog(
     context: context,
     builder: (context) {
@@ -25,11 +30,31 @@ deleteDialog({required BuildContext context}) {
           height: 130,
           width: 250,
         ),
-        content: CustomText(
-          title: 'Your account will be deleted\n permanently.',
-          color: AppColors.jetBlack.withOpacity(0.8),
-          weight: FontWeight.w400,
-          textAlign: TextAlign.center,
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CustomText(
+              title: 'Your account will be deleted\n permanently.',
+              color: AppColors.jetBlack.withOpacity(0.8),
+              weight: FontWeight.w400,
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 20),
+            Visibility(
+              visible: isVisible,
+              child: SizedBox(
+                width: 250,
+                child: Material(
+                  color: Colors.transparent,
+                  child: CustomTextField(
+                    controller: passwordController,
+                    hintText: 'Password required',
+                  ),
+                ),
+              ),
+            ),
+            if (isVisible == false) Gap(5)
+          ],
         ),
         actions: <Widget>[
           TextButton(
@@ -43,10 +68,11 @@ deleteDialog({required BuildContext context}) {
           TextButton(
             onPressed: () async {
               _valueNotifier.value = true;
-              await AuthServices.deleteUserAccount().then((user) {
-                Navigator.pushNamedAndRemoveUntil(
-                    context, AppRoutes.logIn, (route) => false);
-              });
+              String password = passwordController.text.trim();
+              await AuthServices.deleteUserAccount(
+                context: context,
+                password: password,
+              );
               _valueNotifier.value = false;
             },
             child: ValueListenableBuilder(
@@ -70,7 +96,7 @@ sellerRatingDialog(
     required String networkImage,
     required String name,
     required String userId}) {
-  return showDialog(
+  return showAdaptiveDialog(
     context: context,
     builder: (context) {
       return AlertDialog.adaptive(
@@ -123,7 +149,7 @@ sellerRatingDialog(
             const SizedBox(
               height: 5,
             ),
-            CustomRow(
+            ShowTransction(
               userId: userId,
             ),
             const SizedBox(
@@ -205,9 +231,32 @@ sellerRatingDialog(
                                     'Avg. communication & response time',
                                 trailingTitle: averageCommunicationResponse),
                             const Gap(10),
-                            buildTile(
-                                leadingTitle: 'Total Transactions',
-                                trailingTitle: '23 transactions'),
+                            StreamBuilder(
+                              stream: FireStoreServicesClient.fetchUserLevels(
+                                  userId: userId),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return Center(
+                                      child: CupertinoActivityIndicator());
+                                } else if (snapshot.hasData) {
+                                  UserModelClient user = snapshot.data!;
+                                  final numberOfTransactions = user
+                                      .profileLevels?['number_of_transactions'];
+                                  final totalTransactions = numberOfTransactions !=
+                                          null
+                                      ? '${numberOfTransactions} transaction${numberOfTransactions == 1 ? '' : 's'}'
+                                      : '0 transaction';
+                                  return buildTile(
+                                      leadingTitle: 'Total Transactions',
+                                      trailingTitle: totalTransactions);
+                                } else {
+                                  return buildTile(
+                                      leadingTitle: 'Total Transactions',
+                                      trailingTitle: '0 transaction');
+                                }
+                              },
+                            ),
                             const Gap(40),
                             CustomButton(
                               onPressed: () {
@@ -256,7 +305,7 @@ ticketSellDialog({
   required String title,
   required String body,
 }) {
-  return showDialog(
+  return showAdaptiveDialog(
     context: context,
     builder: (context) {
       return Consumer<BottomSheetProvider>(

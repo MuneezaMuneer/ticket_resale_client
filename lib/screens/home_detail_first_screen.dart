@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -11,7 +10,7 @@ import 'package:ticket_resale/widgets/widgets.dart';
 import '../components/components.dart';
 
 class HomeDetailFirstScreen extends StatefulWidget {
-  String eventId;
+  final String eventId;
   HomeDetailFirstScreen({
     Key? key,
     required this.eventId,
@@ -103,8 +102,8 @@ class _HomeDetailFirstScreenState extends State<HomeDetailFirstScreen> {
                                                   .withOpacity(0.6),
                                               fontSize: AppFontSize.xsmall,
                                               fontWeight: FontWeight.w400)),
-                                      const TextSpan(
-                                          text: 'Martin Garrix',
+                                      TextSpan(
+                                          text: eventData.djName,
                                           style: TextStyle(
                                               color: AppColors.blueViolet,
                                               fontSize: AppFontSize.medium,
@@ -235,26 +234,13 @@ class _HomeDetailFirstScreenState extends State<HomeDetailFirstScreen> {
                                     padding: const EdgeInsets.only(top: 15),
                                     child: InkWell(
                                       onTap: () {
-                                        TicketModelClient ticketModel =
-                                            TicketModelClient(
-                                                docId: tickets[index].docId,
-                                                imageUrl:
-                                                    tickets[index].imageUrl,
-                                                ticketType:
-                                                    tickets[index].ticketType,
-                                                description:
-                                                    tickets[index].description,
-                                                status: tickets[index].status,
-                                                price: tickets[index].price,
-                                                uid: tickets[index].uid,
-                                                eventId:
-                                                    tickets[index].eventId);
                                         Navigator.pushNamed(
                                           context,
                                           AppRoutes.detailSecondScreen,
                                           arguments: {
-                                            'eventModal': eventData,
-                                            'ticketModel': ticketModel,
+                                            'eventId': widget.eventId,
+                                            'ticketId': tickets[index].docId,
+                                            'ticketUserId': tickets[index].uid
                                           },
                                         );
                                       },
