@@ -140,6 +140,7 @@ class AuthServices {
       'status': 'Active',
       'fcm_token': fcmToken,
       'image_url': user.photoURL,
+      'comment_value': true,
       'profile_levels': {
         'isEmailVerified': true,
       },
@@ -312,23 +313,6 @@ class AuthServices {
     }
   }
 
-  // static Future<void> deleteUserTickets() async {
-  //   try {
-  //     String uid = AuthServices.getCurrentUser.uid;
-
-  //     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-  //         .collection('tickets')
-  //         .where('user_uid', isEqualTo: uid)
-  //         .get();
-
-  //     for (QueryDocumentSnapshot document in querySnapshot.docs) {
-  //       await document.reference.delete();
-  //     }
-  //   } catch (e) {
-  //     log("Error deleting user data: $e");
-  //   }
-  // }
-
   static Future<void> storeUserImage(
       {required UserModelClient userModel}) async {
     try {
@@ -355,7 +339,6 @@ class AuthServices {
     }
   }
 
-  ///handle cases when email doesn't exits and check other possible cases
   static Future<String> forgotPassword(
       {required String email, required BuildContext context}) async {
     FirebaseAuth firebaseAuth = FirebaseAuth.instance;
@@ -395,7 +378,6 @@ class AuthServices {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     DocumentReference user = firestore.collection('user_data').doc(userUid);
 
-    ///muneeza i think we should do same for rest of badges too
     await user.set({
       'profile_levels': {
         if (isPaypalAuthorized) 'isPaypalVerified': isPaypalAuthorized,

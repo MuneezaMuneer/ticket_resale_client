@@ -398,7 +398,7 @@ class _TicketScreenState extends State<TicketScreen> {
                                             title: 'Ticket listing request!',
                                             body:
                                                 '${ticketTypeController.text} TICKET is created for festival "$selectedFestivalName" by ${AuthServices.getCurrentUser.displayName}',
-                                            id: docId,
+                                            eventId: docId,
                                             notificationType:
                                                 'Ticket Listing Request!',
                                             userId:
