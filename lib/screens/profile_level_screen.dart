@@ -16,6 +16,8 @@ import 'package:ticket_resale/providers/providers.dart';
 import 'package:ticket_resale/utils/utils.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
 
+import '../db_services/sumsub_services.dart';
+
 class ProfileLevelScreen extends StatefulWidget {
   bool isBackButton;
   ProfileLevelScreen({
@@ -265,11 +267,19 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
                                               0) >=
                                           5),
                                   GestureDetector(
-                                    onTap: () {
-                                      // if (currentUser.profileLevels![
-                                      //         'isSuperVerified'] ??
-                                      //     false) {}
-                                      // SumsubServices.launchSDK();
+                                    onTap: () async {
+                                      if (currentUser.profileLevels![
+                                              'isSuperVerified'] ??
+                                          false) {}
+                                      try {
+                                        var accessToken = await SumsubServices()
+                                            .fetchNewAccessToken(
+                                                "6640e2aa1f8d1169713c7d85");
+                                        SumsubServices.launchSDK(accessToken,
+                                            SumsubServices().onTokenExpiration);
+                                      } catch (e) {
+                                        log("exception: ${e.toString()}");
+                                      }
                                     },
                                     child: _buildContainer(
                                       AppSvgs.levelSix,

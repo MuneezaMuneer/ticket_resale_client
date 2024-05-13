@@ -7,7 +7,7 @@ import 'package:ticket_resale/db_services/auth_services.dart';
 class SwitchProvider extends ChangeNotifier {
   bool _notification = true;
   bool get getNotification => _notification;
-  bool _commentValue = false;
+  bool _commentValue = true;
 
   bool get getComment => _commentValue;
 
@@ -21,6 +21,7 @@ class SwitchProvider extends ChangeNotifier {
           (snapshot.data() as Map<String, dynamic>)['comment_value'] ?? false;
 
       _commentValue = commentValue;
+     
       notifyListeners();
     }
   }

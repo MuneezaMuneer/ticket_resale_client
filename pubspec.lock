@@ -398,6 +398,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.3.1"
+  flutter_idensic_mobile_sdk_plugin:
+    dependency: "direct main"
+    description:
+      name: flutter_idensic_mobile_sdk_plugin
+      sha256: "103c310f088cd3697dc9e4473b599fcbc32c48bb028d261a645809d3bab737ef"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.31.1"
   flutter_launcher_icons:
     dependency: "direct main"
     description:
