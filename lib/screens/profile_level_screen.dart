@@ -272,11 +272,11 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
                                               'isSuperVerified'] ??
                                           false) {}
                                       try {
-                                        var accessToken = await SumsubServices()
-                                            .fetchNewAccessToken(
-                                                "6640e2aa1f8d1169713c7d85");
-                                        SumsubServices.launchSDK(accessToken,
-                                            SumsubServices().onTokenExpiration);
+                                        // var accessToken = await SumsubServices()
+                                        //     .fetchNewAccessToken(
+                                        //         "6640e2aa1f8d1169713c7d85");
+                                        // SumsubServices.launchSDK(accessToken,
+                                        //     SumsubServices().onTokenExpiration);
                                       } catch (e) {
                                         log("exception: ${e.toString()}");
                                       }

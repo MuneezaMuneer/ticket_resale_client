@@ -7,6 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:ticket_resale/constants/constants.dart';
+import 'package:ticket_resale/widgets/widgets.dart';
 
 class AppUtils {
   static Future<String> getImageFromGallery() async {
@@ -178,8 +179,7 @@ class AppUtils {
   }) {
     BottomPicker.date(
       backgroundColor: AppColors.paleGrey,
-      // ignore: deprecated_member_use
-      title: 'Select date',
+      pickerTitle: CustomText(title: 'Select date'),
       dateOrder: DatePickerDateOrder.dmy,
       initialDateTime: DateTime.now(),
       minDateTime: DateTime(1900),
@@ -189,12 +189,11 @@ class AppUtils {
         fontWeight: FontWeight.w700,
         letterSpacing: 1,
       ),
-      // ignore: deprecated_member_use
-      titleStyle: const TextStyle(
-        fontSize: AppFontSize.regular,
-        fontWeight: FontWeight.w600,
-        color: AppColors.jetBlack,
-      ),
+      // titleStyle: const TextStyle(
+      //   fontSize: AppFontSize.regular,
+      //   fontWeight: FontWeight.w600,
+      //   color: AppColors.jetBlack,
+      // ),
       onChange: (index) {
         // print(index);
       },

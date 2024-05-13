@@ -39,15 +39,15 @@ dependencies:
   gap: ^3.0.1
   avatar_stack: ^1.2.0
   google_fonts: ^6.1.0
-  intl_phone_field: ^3.2.0 
+  intl_phone_field: ^3.2.0
   provider: ^6.1.2
   firebase_core: ^2.25.4
-  firebase_auth: ^4.17.4 
+  firebase_auth: ^4.17.4
   google_sign_in: ^6.2.1
   fluttertoast: ^8.2.4
   email_validator: ^2.1.17
   image_picker: ^1.0.7
-  bottom_picker: ^2.3.3
+  bottom_picker: ^2.7.0
   cloud_firestore: ^4.15.4
   firebase_storage: ^11.6.5
   cached_network_image: ^3.3.1
@@ -81,12 +81,12 @@ flutter_launcher_icons:
   image_path: "assets/images/logo.png"
   min_sdk_android: 21
   remove_alpha_ios: true
-  
+
 flutter_native_splash:
-  color: "#8462f1"   
+  color: "#8462f1"
   image: assets/images/logo.png
   android: true
-  ios: true
+  ios: trueub
   web: false
 
 
