@@ -1,5 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, must_be_immutable, use_build_context_synchronously
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -20,7 +19,6 @@ class CommentScreen extends StatefulWidget {
   final String ticketUserId;
   final String ticketId;
   final String price;
-
   const CommentScreen({
     Key? key,
     required this.eventId,
@@ -28,7 +26,6 @@ class CommentScreen extends StatefulWidget {
     required this.price,
     required this.ticketUserId,
   }) : super(key: key);
-
   @override
   State<CommentScreen> createState() => _CommentScreenState();
 }

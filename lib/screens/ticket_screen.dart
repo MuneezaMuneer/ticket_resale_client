@@ -367,8 +367,9 @@ class _TicketScreenState extends State<TicketScreen> {
                                 );
                               } else {
                                 notifier.value = true;
-                                String? imageUrl =
-                                    await AuthServices.uploadEventImage(
+                                String? imageUrl = await AuthServices
+                                    .uploadImageToFirebaseStorage(
+                                        pathName: 'ticket_images',
                                         imagePath:
                                             imagePickerProvider.getImageUrl);
                                 TicketModelClient ticketModel =

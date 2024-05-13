@@ -1,61 +1,62 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter_idensic_mobile_sdk_plugin/flutter_idensic_mobile_sdk_plugin.dart';
 import 'dart:ui';
 import 'package:http/http.dart' as http;
 
-
 class SumsubServices {
-  static void launchSDK() async {
-    final String accessToken =
-        "sbx:jQ4mHrvbwDCDx6xMrdg0dYAL.NJXWzbSqabhGkgxxe4Aaeo5kV3NHIJHc"; // Replace with your actual access token
+  Future<String> fetchNewAccessToken(String idCard) async {
+    print('The id card is $idCard');
+    final response = await http.post(
+      Uri.parse('https://api.sumsub.com/resources/accessTokens?userId=$idCard&levelName=id-verify'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer sbx:463eKfxrFsvrvYAmaCyuquiH.krrsBzMrjXpcW5Qd1yFgP4xWVZn9d2DY',
+      },
+    );
+    log("statusCode: ${response.statusCode} body : ${response.body}");
 
-
-
-  // Function to fetch a new access token from your backend
-  Future<String> fetchNewAccessToken() async {
-    final response = await http.get(Uri.parse('your_backend_endpoint')); // Replace 'your_backend_endpoint' with the actual URL of your backend endpoint
     if (response.statusCode == 200) {
-      // If the request is successful, parse the response and return the new access token
-      return response.body;
+      var result = jsonDecode(response.body);
+      return result["token"];
     } else {
-      // If the request fails, handle the error accordingly (e.g., retry, show an error message)
       throw Exception('Failed to fetch new access token');
     }
   }
 
-  // Function to handle token expiration and fetch a new access token
-  final onTokenExpiration = () async {
+  Future<String> onTokenExpiration() async {
     try {
-      // Call the function to fetch a new access token from your backend
-      String newAccessToken = await fetchNewAccessToken();
+      String newAccessToken = await fetchNewAccessToken("6640e2aa1f8d1169713c7d85");
       return newAccessToken;
     } catch (error) {
-      // Handle any errors that occur during the token expiration handling
       print('Error fetching new access token: $error');
-      // Return null or throw an error if unable to fetch a new access token
-      return null;
+      return ""; // Or handle the error accordingly
     }
-  };
-    // final onTokenExpiration = () async {
-    //   // You may implement logic here to fetch a new access token from your backend
-    //   return Future<String>.delayed(
-    //       Duration(seconds: 2), () => "your_new_access_token");
-    // };
+  }
 
+  static void launchSDK(String accessToken, Future<String?> Function() tokenExpiration) async {
     final SNSStatusChangedHandler onStatusChanged =
         (SNSMobileSDKStatus newStatus, SNSMobileSDKStatus prevStatus) {
       print("The SDK status was changed: $prevStatus -> $newStatus");
     };
 
-    final snsMobileSDK = SNSMobileSDK.init(accessToken, onTokenExpiration)
-        .withHandlers(
-          onStatusChanged: onStatusChanged,
-        )
-        .withDebug(true)
-        .withLocale(Locale("en"))
-        .build();
+    try {
+      final snsMobileSDK = SNSMobileSDK.init(accessToken, tokenExpiration)
+          .withHandlers(
+            onStatusChanged: onStatusChanged,
+          )
+          .withDebug(true)
+          .withLocale(Locale("en"))
+          .build();
 
-    final SNSMobileSDKResult result = await snsMobileSDK.launch();
+      final SNSMobileSDKResult result = await snsMobileSDK.launch();
 
-    print("Completed with result: $result");
+      print("Completed with result: $result");
+    } catch (error) {
+      print('Error launching SDK: $error');
+      // Handle the error accordingly
+    }
   }
 }

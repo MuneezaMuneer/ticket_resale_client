@@ -427,12 +427,13 @@ class AuthServices {
     return null;
   }
 
-  static Future<String?> uploadEventImage({
+  static Future<String?> uploadImageToFirebaseStorage({
     required String imagePath,
+    required String pathName,
   }) async {
     try {
       Reference ref = FirebaseStorage.instance
-          .ref('ticket_image')
+          .ref(pathName)
           .child(AuthServices.getCurrentUser.uid)
           .child(
               '${AuthServices.getCurrentUser.uid}${DateTime.timestamp().millisecond}');
