@@ -154,11 +154,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
                             userId: widget.userModel.id!,
                           ).then((value) async {
                             await FireStoreServicesClient
-                                    .updateStatusInSoldTicketsCollection(
-                                        hashKey: widget.hashKey,
-                                        selectedDocIds: widget.docIds,
-                                        newStatus: 'Unpaid')
-                                .then((value) async {
+                                .updateStatusInSoldTicketsCollection(
+                              hashKey: widget.hashKey,
+                              selectedDocIds: widget.docIds,
+                              newStatus: 'Unpaid',
+                            ).then((value) async {
                               await FireStoreServicesClient.storeNotifications(
                                   notificationModel: notificationModel,
                                   name: 'client_notifications');

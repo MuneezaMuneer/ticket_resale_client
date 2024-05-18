@@ -11,12 +11,11 @@ import 'package:svg_flutter/svg_flutter.dart';
 import 'package:ticket_resale/components/components.dart';
 import 'package:ticket_resale/constants/constants.dart';
 import 'package:ticket_resale/db_services/db_services.dart';
+import 'package:ticket_resale/db_services/sumsub_services.dart';
 import 'package:ticket_resale/models/user_models.dart';
 import 'package:ticket_resale/providers/providers.dart';
 import 'package:ticket_resale/utils/utils.dart';
 import 'package:ticket_resale/widgets/widgets.dart';
-
-import '../db_services/sumsub_services.dart';
 
 class ProfileLevelScreen extends StatefulWidget {
   bool isBackButton;
@@ -272,11 +271,14 @@ class _ProfileLevelScreenState extends State<ProfileLevelScreen> {
                                               'isSuperVerified'] ??
                                           false) {}
                                       try {
-                                        // var accessToken = await SumsubServices()
-                                        //     .fetchNewAccessToken(
-                                        //         "6640e2aa1f8d1169713c7d85");
-                                        // SumsubServices.launchSDK(accessToken,
-                                        //     SumsubServices().onTokenExpiration);
+                                        var accessToken = await SumsubServices()
+                                            .fetchNewAccessToken(
+                                          "6640e2aa1f8d1169713c7d85",
+                                        );
+                                        SumsubServices.launchSDK(
+                                          accessToken,
+                                          SumsubServices().onTokenExpiration,
+                                        );
                                       } catch (e) {
                                         log("exception: ${e.toString()}");
                                       }

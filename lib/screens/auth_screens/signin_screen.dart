@@ -49,9 +49,10 @@ class _SignInScreenState extends State<SignInScreen> {
                     text: TextSpan(
                         text: 'Sign in ',
                         style: const TextStyle(
-                            color: AppColors.darkpurple,
-                            fontSize: AppFontSize.verylarge,
-                            fontWeight: FontWeight.w700),
+                          color: AppColors.darkpurple,
+                          fontSize: AppFontSize.verylarge,
+                          fontWeight: FontWeight.w700,
+                        ),
                         children: <TextSpan>[
                           TextSpan(
                               text: 'to Continue',
