@@ -128,9 +128,9 @@ class _UserManagementState extends State<UserManagement> {
                                             : AppColors.white;
 
                                         return DataRow(
-                                          color: MaterialStateProperty
+                                          color: WidgetStateProperty
                                               .resolveWith<Color?>(
-                                                  (Set<MaterialState> states) {
+                                                  (Set<WidgetState> states) {
                                             return rowColor;
                                           }),
                                           cells: [

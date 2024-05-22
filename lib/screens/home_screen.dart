@@ -110,9 +110,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: const EdgeInsets.only(right: 6.0),
                     child: IconButton.filled(
                       style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
+                        backgroundColor: WidgetStateProperty.all(
                             Color(0xffFFFFFF).withOpacity(0.1)),
-                        iconColor: MaterialStateProperty.all(Color(0xffFFFFFF)),
+                        iconColor: WidgetStateProperty.all(Color(0xffFFFFFF)),
                       ),
                       onPressed: () {
                         Navigator.pushNamed(

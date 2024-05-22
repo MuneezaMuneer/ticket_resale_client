@@ -35,9 +35,6 @@ target 'Runner' do
   target 'RunnerTests' do
     inherit! :search_paths
   end
-  
-  # Add the following line to specify the IdensicMobileSDK dependency
-  pod 'IdensicMobileSDK', '1.31.2'
 end
 
 post_install do |installer|

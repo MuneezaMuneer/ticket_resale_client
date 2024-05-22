@@ -81,7 +81,9 @@ class CustomAppBarClient extends StatelessWidget
                                       )
                                     : const CircleAvatar(
                                         backgroundImage: AssetImage(
-                                            AppImages.profileImage))),
+                                          AppImages.profileImage,
+                                        ),
+                                      )),
                           )
                         : const SizedBox.shrink()),
                 const Gap(15),

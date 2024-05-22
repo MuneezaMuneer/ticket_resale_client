@@ -33,8 +33,8 @@ class SearchAppBar extends StatelessWidget {
           child: IconButton.filled(
             style: ButtonStyle(
               backgroundColor:
-                  MaterialStateProperty.all(Color(0xffFFFFFF).withOpacity(0.1)),
-              iconColor: MaterialStateProperty.all(Color(0xffFFFFFF)),
+                  WidgetStateProperty.all(Color(0xffFFFFFF).withOpacity(0.1)),
+              iconColor: WidgetStateProperty.all(Color(0xffFFFFFF)),
             ),
             onPressed: () {
               Navigator.pushNamed(

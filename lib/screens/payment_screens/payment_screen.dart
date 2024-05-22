@@ -201,7 +201,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     if (checkoutUrl != null) {
       return Scaffold(
         appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.background,
+          backgroundColor: Theme.of(context).colorScheme.surface,
           leading: GestureDetector(
             child: const Icon(Icons.arrow_back_ios),
             onTap: () => Navigator.pop(context),
